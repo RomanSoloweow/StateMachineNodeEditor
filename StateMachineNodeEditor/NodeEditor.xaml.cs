@@ -20,82 +20,31 @@ namespace StateMachineNodeEditor
     /// </summary>
     public partial class NodeEditor : UserControl
     {
-
-        private double _ScaleX;
-        private double _ScaleY;
-        private double _TransformX;
-        private double _TransformY;
-        private string _test;
-        public string Test
-        {
-            get
-            {
-                return _test;
-            }
-            set
-            {
-                _test = value;
-                // OnPropertyChanged("ScaleX");
-            }
-        }
-        public double ScaleX
-        {
-            get
-            {
-                return _ScaleX;
-            }
-            set
-            {
-                _ScaleX = value;
-                // OnPropertyChanged("ScaleX");
-            }
-        }
-        public double ScaleY
-        {
-            get
-            {
-                return _ScaleY;
-            }
-            set
-            {
-                _ScaleY = value;
-                // OnPropertyChanged("ScaleX");
-            }
-        }
-        public double TransformX
-        {
-            get
-            {
-                return _TransformX;
-            }
-            set
-            {
-                _TransformX = value;
-                // OnPropertyChanged("ScaleX");
-            }
-        }
-        public double TransformY
-        {
-            get
-            {
-                return _TransformY;
-            }
-            set
-            {
-                _TransformY = value;
-                // OnPropertyChanged("ScaleX");
-            }
-        }
-
+        public Transform transform;
         private Point? _movePoint;
         private double zoom = 1;
         private double scale = 0.05;
         private double MaxScale = 3;
         private double MinScale = 0.1;
+        public TranslateTransform translateTransform = new TranslateTransform();
         public NodeEditor()
         {
             InitializeComponent();
+            transform = new Transform(Container);
             _movePoint = null;
+            Line line = new Line();
+            line.X1 = 0;
+            line.X2 = 500;
+            line.Y1 = 0;
+            line.Y2 = 500;
+            line.Stroke = Brushes.Red;
+            Container.Children.Add(line);      
+            translateTransform.X = 0;
+            translateTransform.Y = 0;
+            TransformGroup transformGroup = new TransformGroup();
+            transformGroup.Children.Add(translateTransform);
+            El.RenderTransform = transformGroup;
+
         }
 
         private void GridMain_MouseDown(object sender, MouseButtonEventArgs e)
@@ -115,10 +64,14 @@ namespace StateMachineNodeEditor
             if ((e.Delta == 0) || ((e.Delta > 0) && (zoom > MaxScale)) || ((e.Delta < 0) && (zoom < MinScale)))
                 return;
             zoom += (e.Delta > 0) ? scale : -scale;
-            GridScale.ScaleX = zoom;
-            GridScale.ScaleY = zoom;
-            GridScale.CenterX = e.GetPosition(this).X;
-            GridScale.CenterY = e.GetPosition(this).Y;
+            transform.scale.ScaleX = zoom;
+            transform.scale.ScaleY = zoom;
+            transform.scale.CenterX = e.GetPosition(this).X;
+            transform.scale.CenterY = e.GetPosition(this).Y;
+            //GridScale.ScaleX = zoom;
+            //GridScale.ScaleY = zoom;
+            //GridScale.CenterX = e.GetPosition(this).X;
+            //GridScale.CenterY = e.GetPosition(this).Y;
         }
 
         private void GridMain_MouseMove(object sender, MouseEventArgs e)
@@ -130,11 +83,28 @@ namespace StateMachineNodeEditor
                 if (_movePoint != null)
                 {
                     this.Cursor = Cursors.Hand;
-                    GridTranslate.X += (e.GetPosition(Container).X - _movePoint.Value.X) * GridScale.ScaleX;
-                    GridTranslate.Y += (e.GetPosition(Container).Y - _movePoint.Value.Y) * GridScale.ScaleY;
+                    transform.translate.X += (e.GetPosition(Container).X - _movePoint.Value.X);
+                    transform.translate.Y += (e.GetPosition(Container).Y - _movePoint.Value.Y);
+                    //GridTranslate.X += (e.GetPosition(Container).X - _movePoint.Value.X) * GridScale.ScaleX;
+                    //GridTranslate.Y += (e.GetPosition(Container).Y - _movePoint.Value.Y) * GridScale.ScaleY;
                 }
                 _movePoint = e.GetPosition(Container);
             }
+        }
+
+        private void El_MouseEnter(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void El_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            translateTransform.X += 10;
+        }
+
+        private void El_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            translateTransform.X += 100;
         }
     }
 }

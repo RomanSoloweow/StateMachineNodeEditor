@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Colors.cs" />
+    <Compile Include="Connect.cs" />
+    <Compile Include="ConnectNode.cs" />
+    <Compile Include="Connector.cs" />
     <Compile Include="Editor.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Resource1.Designer.cs">
@@ -67,6 +71,7 @@
     <Compile Include="NodeEditor.xaml.cs">
       <DependentUpon>NodeEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Transform.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

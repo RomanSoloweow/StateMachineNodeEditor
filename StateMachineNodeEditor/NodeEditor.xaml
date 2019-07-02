@@ -7,14 +7,16 @@
              mc:Ignorable="d" Width="1059.32" Height="722.876">
     <Grid x:Name="GridMain" x:FieldModifier="public" ClipToBounds="True" Background="#FFDA17EE" MouseDown="GridMain_MouseDown" MouseUp="GridMain_MouseUp" MouseWheel="GridMain_MouseWheel" MouseMove="GridMain_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
         <Grid x:Name="Container" OpacityMask="Black" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" UseLayoutRounding="False" Background="#FF46E536">
-            <Grid.RenderTransform>
+            <!--<Grid.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform x:Name="GridScale" ScaleX="1" ScaleY="1"/>
                     <SkewTransform/>
                     <RotateTransform/>
                     <TranslateTransform x:Name="GridTranslate" X="0" Y="0" />
                 </TransformGroup>
-            </Grid.RenderTransform>
+            </Grid.RenderTransform>-->
+            <Ellipse x:Name="El" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="220" Margin="380,228,0,0" Stroke="Black" VerticalAlignment="Top" Width="319" RenderTransformOrigin="0.5,0.5" MouseEnter="El_MouseEnter" MouseUp="El_MouseUp" MouseLeftButtonDown="El_MouseLeftButtonDown">
+            </Ellipse>
         </Grid>
     </Grid>
 </UserControl>

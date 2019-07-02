@@ -5,12 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StateMachineNodeEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Background="#FF2D2D30" d:DesignWidth="808.96" d:DesignHeight="657.092" >
+        Title="MainWindow" Background="#FF2D2D30" d:DesignWidth="808.96" Height="738.592" >
     <Window.Resources>
 
     </Window.Resources>
-    <DockPanel LastChildFill="False">
+    <DockPanel LastChildFill="False" Margin="0,0,0,8">
         <TextBox x:Name="Textbox" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" DockPanel.Dock="Top"/>
         <local:NodeEditor Height="495" Width="Auto" DockPanel.Dock="Top"/>
+        <Ellipse Fill="#FFF4F4F5" Height="161" Margin="0,0,0,-44.5" Stroke="Black" VerticalAlignment="Top" Width="176"/>
+        <Ellipse Fill="#FFF4F4F5" Height="189" Stroke="Black" VerticalAlignment="Top" Width="234" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="4">
+            <Ellipse.RenderTransform>
+                <MatrixTransform Matrix="Identity"/>
+            </Ellipse.RenderTransform>
+        </Ellipse>
     </DockPanel>
 </Window>
