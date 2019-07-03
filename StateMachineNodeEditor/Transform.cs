@@ -16,8 +16,22 @@ namespace StateMachineNodeEditor
         public ScaleTransform scale = new ScaleTransform();
         public SkewTransform skew= new SkewTransform();
         public MatrixTransform matrix= new MatrixTransform();
-        public Transform(UIElement parent)
+        public UIElement parent;
+        public Point Origin
         {
+            get
+            {
+                return parent.RenderTransformOrigin;
+            }
+
+            set
+            {
+                parent.RenderTransformOrigin = value;
+            }
+        }
+    public Transform(UIElement _parent)
+        {
+            parent = _parent;
             _transformGroup.Children.Add(translate);
             _transformGroup.Children.Add(rotate);
             _transformGroup.Children.Add(scale);

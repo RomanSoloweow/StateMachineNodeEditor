@@ -56,12 +56,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Colors.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Connect.cs" />
     <Compile Include="ConnectNode.cs" />
     <Compile Include="Connector.cs" />
+    <Compile Include="Control.cs" />
     <Compile Include="Editor.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="MouseMove.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="NodeEditor2.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
