@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyriller, Version=0.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Miyconst.Cyriller.0.0.2\lib\net45\Cyriller.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -63,9 +66,12 @@
     <Compile Include="Control.cs" />
     <Compile Include="Editor.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Management.cs" />
     <Compile Include="MouseMove.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodeEditor2.cs" />
+    <Compile Include="Parametrs.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -75,7 +81,13 @@
     <Compile Include="NodeEditor.xaml.cs">
       <DependentUpon>NodeEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Styles.cs" />
+    <Compile Include="Test.cs" />
+    <Compile Include="Text.cs" />
     <Compile Include="Transform.cs" />
+    <Compile Include="UserControl1.xaml.cs">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,6 +109,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NodeEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +140,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

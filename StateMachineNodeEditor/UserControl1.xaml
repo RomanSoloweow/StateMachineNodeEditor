@@ -1,0 +1,23 @@
+﻿<UserControl x:Name="grid" x:Class="StateMachineNodeEditor.UserControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StateMachineNodeEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400">
+    <Grid HorizontalAlignment="Stretch" Width="Auto" Height="Auto">
+        <Path  StrokeThickness="1" Fill="DarkGray"   Margin="110,120,80,95" HorizontalAlignment="Center" VerticalAlignment="Center" Height="185" Width="210" Stretch="Fill">
+            <Path.Data>
+                <GeometryGroup FillRule="Nonzero">
+                    <RectangleGeometry Rect="0,0 500,500"  RadiusX="5" RadiusY="5"/>
+                    <EllipseGeometry RadiusY="20" Center="0,250" RadiusX="20" />
+                    <EllipseGeometry RadiusY="20" Center="0,250" RadiusX="20" />
+                </GeometryGroup>
+            </Path.Data>
+        </Path>
+        <TextBox TextWrapping="Wrap" Text="TextBox" Background="{x:Null}" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{x:Null}" Foreground="#FFD10B0B" RenderTransformOrigin="0.883,-0.043" Margin="194,160,165,222" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{DynamicResource TextBoxNode}"/>
+        <Rectangle Fill="DarkGray" HorizontalAlignment="Left" Height="145" Margin="350,195,-170,0" RadiusY="5" RadiusX="5" StrokeThickness="1" VerticalAlignment="Top" Width="220"/>
+
+    </Grid>
+</UserControl>

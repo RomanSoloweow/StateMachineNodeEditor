@@ -5,23 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StateMachineNodeEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Background="#FF2D2D30" d:DesignWidth="808.96" Height="738.592" >
-    <Window.Resources>
-
-    </Window.Resources>
-    <Grid>
+        Title="MainWindow" Background="#FFE14444" d:DesignWidth="808.96" Height="738.592" >
+    <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--<DockPanel x:Name="Dock" LastChildFill="False" Margin="0,0,0,8">-->
-        <TextBox x:Name="Textbox" TextWrapping="Wrap" Text="TextBox" Margin="348,118,332,555" BorderBrush="{x:Null}" ClipToBounds="True" Background="{x:Null}" SelectionBrush="{x:Null}" BorderThickness="0"/>
         <!--<local:NodeEditor Height="495" Width="Auto" DockPanel.Dock="Top"/>-->
-        <Ellipse Fill="#FFF4F4F5" Height="162" Margin="520,274,108,0" Stroke="Black" VerticalAlignment="Top" Width="176"/>
-        <Ellipse Fill="#FFF4F4F5" Height="190" Stroke="Black" VerticalAlignment="Top" Width="234" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="4" MouseEnter="Ellipse_MouseEnter" Margin="220,338,350,0">
-            <Ellipse.RenderTransform>
-                <MatrixTransform Matrix="Identity"/>
-            </Ellipse.RenderTransform>
+        <Ellipse Fill="#FFF4F4F5" Height="162" Margin="575,550,53,-1" Stroke="Black" VerticalAlignment="Top" Width="176"/>
+        <Ellipse Fill="#FFF4F4F5" Height="190" Stroke="Black" VerticalAlignment="Top" Width="234" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="4" Margin="25,475,545,0">
         </Ellipse>
+        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="102" Margin="570,-5,0,0" Stroke="Black" VerticalAlignment="Top" Width="186" RadiusX="10" RadiusY="10"/>
+        <TextBox HorizontalAlignment="Center" Height="80" Margin="305,165,384,466" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="115" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CaretBrush="#FF1AAB0C"/>
     </Grid>
     <!--</DockPanel>-->
 </Window>

@@ -30,11 +30,11 @@ namespace StateMachineNodeEditor
 
             transform = new Transform(grid);
             Size panelDesiredSize = new Size();
-            Node node = new Node();
-            node.HorizontalAlignment = HorizontalAlignment.Center;
-            node.VerticalAlignment = VerticalAlignment.Center;
-            this.Children.Add(grid);
-            grid.Children.Add(node);
+            //Node node = new Node();
+            //node.HorizontalAlignment = HorizontalAlignment.Center;
+            //node.VerticalAlignment = VerticalAlignment.Center;
+            //this.Children.Add(grid);
+            //grid.Children.Add(node);
             this.MouseDown += _MouseDown;
             this.MouseUp += _MouseUp;
             this.MouseMove += _MouseMove;
