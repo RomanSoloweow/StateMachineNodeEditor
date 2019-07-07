@@ -14,8 +14,11 @@ namespace StateMachineNodeEditor
 {
     public static class Constants
     {
-        
-        
+
+        public static Pen nodeLine = new Pen()
+        {
+            Brush=Brushes.Black
+        };
         public static Brush nodeBrushSelection = Brushes.White;
         public static Brush nodeBrushHeader = new SolidColorBrush(Color.FromRgb(18, 61, 106));
         public static Brush nodeBrushBody = new SolidColorBrush(Color.FromRgb(45, 45, 48));

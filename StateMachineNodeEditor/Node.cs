@@ -11,11 +11,23 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Effects;
 using System.Globalization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 namespace StateMachineNodeEditor
 {
     public class Node: Text
     {
-
 
         public bool inputVisible = true;
         public bool outputVisible = true;
@@ -29,19 +41,18 @@ namespace StateMachineNodeEditor
         public static readonly DependencyProperty RadiusProperty;
 
         Manager management;
+
         private Rect body   =  new Rect();
         private Rect body2 = new Rect();
         private Rect header = new Rect();
         private Rect header2 = new Rect();
         private Rect input = new Rect();
         private Rect output = new Rect();
+        Point point;
         public Node(string text, Style textStyle):base(text, textStyle)
         {
             management = new Manager(this);
             base.MinWidth = 60;
-            //inputVisible = false;
-            //this.ContextMenu=null;
-           // t.Items.de
         }
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -53,26 +64,34 @@ namespace StateMachineNodeEditor
             else
               base.Text= this._text;
         }
+
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            if (header.Contains(e.GetPosition(this)))
+            Point position = e.GetPosition(this);
+            if (header.Contains(position))
             {
                 base.OnMouseDown(e);
                 return;
             }
 
-            if (input.Contains(e.GetPosition(this)))
+            if (input.Contains(position))
             {
                 management.canMove = false;
                 return;
             }
-            if (output.Contains(e.GetPosition(this)))
+            if (output.Contains(position))
             {
                 management.canMove = false;
+                Point point = new Point(100, 100);
+                DataObject data = new DataObject();
+                data.SetData(DataFormats.StringFormat, point.ToString());
+                data.SetData("Object", this);
+                point = position;
+                //DragDrop.DoDragDrop(this, point, DragDropEffects.Move);
                 return;
             }
 
-            if (body.Contains(e.GetPosition(this)))
+            if (body.Contains(position))
             {
                 management.canMove = true;
                 return;
@@ -87,45 +106,57 @@ namespace StateMachineNodeEditor
             }
             management.canMove = false;
         }
-        protected override void OnContextMenuOpening(ContextMenuEventArgs e)
-        {          
-            if (header.Contains(Mouse.GetPosition(this)))
-            {
-                base.OnContextMenuOpening(e);
-            }
-        }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (input.Contains(e.GetPosition(this)))
+            Point position = e.GetPosition(this);
+            if (input.Contains(position))
             {
                 this.Cursor = Cursors.Arrow;
+                
                 return;
             }
-            if (output.Contains(e.GetPosition(this)))
+            if (output.Contains(position))
             {
-                this.Cursor = Cursors.Arrow;
+                this.Cursor = Cursors.Arrow;            
                 return;
             }
-            if (body.Contains(e.GetPosition(this)))
+            if (body.Contains(position))
             {
               this.Cursor = Cursors.SizeAll;
                 return;
             }
 
-            if (header.Contains(e.GetPosition(this)))
-            {           
+            if (header.Contains(position))
+            {
                this.Cursor = Cursors.IBeam;          
                base.OnMouseMove(e);
                 return;
             }
+            if(Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                DrawingVisual visual = new DrawingVisual();
+                DrawingContext dc = visual.RenderOpen();
+                Constants.nodeLine.Brush = Brushes.Green;
+                dc.DrawLine(Constants.nodeLine, point, position);
+                AddVisualChild(visual);
+                dc.Close();                        
+            }
         }
         protected override void OnRender(DrawingContext drawingContext)
         {         
-            base.OnRender(drawingContext);      
+            base.OnRender(drawingContext);
             this._width = Constants.nodeTextBorder.Left + base.ActualWidth + Constants.nodeTextBorder.Right;
             this._height = Constants.nodeTextBorder.Top + base.ActualHeight + Constants.nodeTextBorder.Bottom;
             Draw(ref drawingContext);
+        }
+        protected override void OnDrop(DragEventArgs e)
+        {
+            if (e.Data.GetData("Object") ==this)
+                return;
+            
+            if ((int)e.Effects== 3)
+            base.OnDrop(e);            
         }
 
         private void Draw(ref DrawingContext drawingContext)

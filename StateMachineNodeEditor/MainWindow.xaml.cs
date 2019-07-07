@@ -38,9 +38,10 @@ namespace StateMachineNodeEditor
          
             management = new Manager(this,grid);
 
-           // Node nod = new Node("State", TextStyle);
-            grid.Children.Add(new Node("State", TextStyle));
-            //grid.Children.Add(new Node("State", TextStyle));
+           //Node nod = new Node("State", TextStyle);
+            grid.Children.Add(new Node("State1", TextStyle));
+            grid.Children.Add(new Node("State2", TextStyle));
+            this.AllowDrop = true;
             this.MouseWheel += _MouseWheel;
             this.MouseMove += mouseMove;
         }
