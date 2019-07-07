@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -12,7 +11,7 @@ namespace StateMachineNodeEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        Manager management;
+        private Manager management;
         private double zoom = 1;
         public MainWindow()
         {

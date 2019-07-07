@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Media;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Controls;
 

@@ -14,8 +14,7 @@ namespace StateMachineNodeEditor
     public class NodeEditor2:Grid
     {
         Transform transform;
-        private VisualCollection _children;
-        public Point? _movePoint = null;
+        //public Point? _movePoint = null;
         private double zoom = 1;
         Grid grid = new Grid();
         public NodeEditor2()
@@ -29,7 +28,7 @@ namespace StateMachineNodeEditor
 
 
             transform = new Transform(grid);
-            Size panelDesiredSize = new Size();
+            //Size panelDesiredSize = new Size();
             //Node node = new Node();
             //node.HorizontalAlignment = HorizontalAlignment.Center;
             //node.VerticalAlignment = VerticalAlignment.Center;
@@ -49,7 +48,7 @@ namespace StateMachineNodeEditor
         {
             this.ReleaseMouseCapture();
             this.Cursor = Cursors.Arrow;
-            _movePoint = null;
+            //_movePoint = null;
         }
         public void _MouseMove(object sender, MouseEventArgs e)
         {
@@ -57,21 +56,21 @@ namespace StateMachineNodeEditor
                 return;
             if (Mouse.Captured == this)
             {
-                if (_movePoint != null)
-                {
-                    this.Cursor = Cursors.Hand;
-                  double deltaX = (e.GetPosition(transform.parent).X - _movePoint.Value.X);
-                  double deltaY = (e.GetPosition(transform.parent).Y - _movePoint.Value.Y);
-                  bool XMax = ((deltaX > 0) && (transform.translate.X > Constants.TranslateXMax));
-                  bool XMin = ((deltaX < 0) && (transform.translate.X < Constants.TranslateXMin));
-                  bool YMax = ((deltaY > 0) && (transform.translate.Y > Constants.TranslateYMax));
-                  bool YMin = ((deltaY < 0) && (transform.translate.Y < Constants.TranslateXMin));
-                    if (XMax||XMin||YMax|| YMin)
-                        return;
-                    transform.translate.X += deltaX;
-                    transform.translate.Y += deltaY;
-                }
-                _movePoint = e.GetPosition(transform.parent);
+                //if (_movePoint != null)
+                //{
+                //    this.Cursor = Cursors.Hand;
+                //  double deltaX = (e.GetPosition(transform.parent).X - _movePoint.Value.X);
+                //  double deltaY = (e.GetPosition(transform.parent).Y - _movePoint.Value.Y);
+                //  bool XMax = ((deltaX > 0) && (transform.translate.X > Constants.TranslateXMax));
+                //  bool XMin = ((deltaX < 0) && (transform.translate.X < Constants.TranslateXMin));
+                //  bool YMax = ((deltaY > 0) && (transform.translate.Y > Constants.TranslateYMax));
+                //  bool YMin = ((deltaY < 0) && (transform.translate.Y < Constants.TranslateXMin));
+                //    if (XMax||XMin||YMax|| YMin)
+                //        return;
+                //    transform.translate.X += deltaX;
+                //    transform.translate.Y += deltaY;
+                //}
+                //_movePoint = e.GetPosition(transform.parent);
             }
         }
         private void _MouseWheel(object sender, MouseWheelEventArgs e)

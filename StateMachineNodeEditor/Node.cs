@@ -4,31 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Media;
-using System.Windows.Media;
-using System.Windows.Shapes;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Input;
+
 using System.Windows.Media.Effects;
-using System.Globalization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Shapes;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 namespace StateMachineNodeEditor
 {
     public class Node: Text
     {
-
         public bool inputVisible = true;
         public bool outputVisible = true;
 
@@ -42,13 +33,14 @@ namespace StateMachineNodeEditor
 
         Manager management;
 
-        private Rect body   =  new Rect();
+        private Rect body = new Rect();
         private Rect body2 = new Rect();
         private Rect header = new Rect();
         private Rect header2 = new Rect();
         private Rect input = new Rect();
         private Rect output = new Rect();
-        Point point;
+
+        Point point=new Point(0,0);
         public Node(string text, Style textStyle):base(text, textStyle)
         {
             management = new Manager(this);
@@ -73,7 +65,6 @@ namespace StateMachineNodeEditor
                 base.OnMouseDown(e);
                 return;
             }
-
             if (input.Contains(position))
             {
                 management.canMove = false;
@@ -90,17 +81,16 @@ namespace StateMachineNodeEditor
                 //DragDrop.DoDragDrop(this, point, DragDropEffects.Move);
                 return;
             }
-
             if (body.Contains(position))
             {
                 management.canMove = true;
                 return;
-            }
-                    
+            }                 
         }
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            if (header.Contains(e.GetPosition(this)))
+            Point position = e.GetPosition(this);
+            if (header.Contains(position))
             {
                 base.OnMouseUp(e);               
             }
@@ -112,8 +102,7 @@ namespace StateMachineNodeEditor
             Point position = e.GetPosition(this);
             if (input.Contains(position))
             {
-                this.Cursor = Cursors.Arrow;
-                
+                this.Cursor = Cursors.Arrow;              
                 return;
             }
             if (output.Contains(position))
@@ -158,7 +147,7 @@ namespace StateMachineNodeEditor
             if ((int)e.Effects== 3)
             base.OnDrop(e);            
         }
-
+      
         private void Draw(ref DrawingContext drawingContext)
         {
             double space = 10;
@@ -199,8 +188,7 @@ namespace StateMachineNodeEditor
                 input.Height = 10;
                 input.X = (body.X - input.Width / 2);
                 input.Y = (body.Y + space);
-                
-                FormattedText formattedText = new FormattedText("Input", CultureInfo.CurrentCulture, this.FlowDirection, this.FontFamily.GetTypefaces().ElementAt(4), this.FontSize, Brushes.White);
+                FormattedText formattedText = new FormattedText("Input", CultureInfo.CurrentCulture, this.FlowDirection, this.FontFamily.GetTypefaces().ElementAt(4), FontSize, Brushes.White, this.FontSize);
                 Point point = new Point(input.X + input.Width + 2, input.Y - Math.Abs(formattedText.Height - input.Height));
           
                 drawingContext.DrawRoundedRectangle(Brushes.DarkGray, Constants.nodePen, input, input.Width, input.Height);
@@ -209,14 +197,13 @@ namespace StateMachineNodeEditor
 
             if (outputVisible)
             {
-            output.Width = 10;
-            output.Height = 10;
-            output.X = (body.X + body.Width - output.Width/2);
-            output.Y = (body.Y + body.Height - space - output.Height);
+                output.Width = 10;
+                output.Height = 10;
+                output.X = (body.X + body.Width - output.Width/2);
+                output.Y = (body.Y + body.Height - space - output.Height);
             
-
-                    FormattedText formattedText2 = new FormattedText("Output", CultureInfo.CurrentCulture, this.FlowDirection, this.FontFamily.GetTypefaces().ElementAt(4), this.FontSize, Brushes.White);
-                    Point point2 = new Point(output.X - formattedText2.Width - output .Width - 2, output.Y - Math.Abs(formattedText2.Height - output.Height));
+                FormattedText formattedText2 = new FormattedText("Output", CultureInfo.CurrentCulture, this.FlowDirection, this.FontFamily.GetTypefaces().ElementAt(4), this.FontSize, Brushes.White, this.FontSize);
+                Point point2 = new Point(output.X - formattedText2.Width - output .Width - 2, output.Y - Math.Abs(formattedText2.Height - output.Height));
             
                 drawingContext.DrawRoundedRectangle(Brushes.DarkGray, Constants.nodePen, output, output.Width, output.Height);
                 drawingContext.DrawText(formattedText2, point2);

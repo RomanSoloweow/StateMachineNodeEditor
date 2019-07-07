@@ -10,7 +10,6 @@ namespace StateMachineNodeEditor
     {
        static public void GridMain_MouseMove(object sender, MouseEventArgs e)
         {
-            int k = 1;
             //if (Mouse.LeftButton != MouseButtonState.Pressed)
             //    return;
             //if (Mouse.Captured == Container)

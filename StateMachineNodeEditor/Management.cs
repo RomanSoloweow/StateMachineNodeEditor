@@ -7,7 +7,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows;
 namespace StateMachineNodeEditor
 {
     public class Manager
