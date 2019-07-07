@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows;
 namespace StateMachineNodeEditor
 {
-    public class Management
+    public class Manager
     {
         private TransformGroup _transformGroup = new TransformGroup();
         public TranslateTransform translate = new TranslateTransform();
@@ -35,7 +35,7 @@ namespace StateMachineNodeEditor
             }
         }
 
-        public Management(UIElement _parentEvent, UIElement _parentTransform)
+        public Manager(UIElement _parentEvent, UIElement _parentTransform)
         {
             objectEvent = _parentEvent;
             objectTransform = _parentTransform;
@@ -50,7 +50,7 @@ namespace StateMachineNodeEditor
             objectEvent.MouseUp += mouseUp;
             objectEvent.MouseMove += mouseMove;
         }
-        public Management(UIElement parent):this(parent, parent)
+        public Manager(UIElement parent) : this(parent, parent)
         {
         }
 
@@ -68,12 +68,11 @@ namespace StateMachineNodeEditor
             _movePoint = null;
             
             ((UIElement)sender).ReleaseMouseCapture();
-            ((FrameworkElement)sender).Cursor = Cursors.Arrow;
-            
+            ((FrameworkElement)sender).Cursor = Cursors.Arrow;            
         }
-
+   
         public void mouseMove(object sender, MouseEventArgs e)
-        {
+        {            
             if ((Mouse.LeftButton != MouseButtonState.Pressed)||(!canMove))
                 return;
             if (Mouse.Captured == objectEvent)

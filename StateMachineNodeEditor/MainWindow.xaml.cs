@@ -12,7 +12,7 @@ namespace StateMachineNodeEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        Management management;
+        Manager management;
         private double zoom = 1;
         public MainWindow()
         {
@@ -33,15 +33,22 @@ namespace StateMachineNodeEditor
             TextStyle.Setters.Add(new Setter { Property = TextBox.SelectionBrushProperty, Value = new SolidColorBrush(Color.FromRgb(0, 120, 215)) });
             TextStyle.Setters.Add(new Setter { Property = TextBox.CaretBrushProperty, Value = Brushes.DarkGray });
             TextStyle.Setters.Add(new Setter { Property = TextBox.ForegroundProperty, Value = Brushes.White });
+            //TextStyle.Setters.Add(new Setter { Property = TextBox.ContextMenuProperty, Value = null });
             //this.Resources.Add("TextStyle", TextStyle);
          
-            management = new Management(this,grid);
+            management = new Manager(this,grid);
 
-            Node nod = new Node("State", TextStyle);
-            grid.Children.Add(nod);
+           // Node nod = new Node("State", TextStyle);
+            grid.Children.Add(new Node("State", TextStyle));
+            //grid.Children.Add(new Node("State", TextStyle));
             this.MouseWheel += _MouseWheel;
+            this.MouseMove += mouseMove;
         }
-
+        public void mouseMove(object sender, MouseEventArgs e)
+        {
+            //if (Mouse.Captured == null)
+              //  this.Cursor = Cursors.SizeAll;
+        }
         private void _MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Mouse.Captured != null)

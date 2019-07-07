@@ -18,7 +18,7 @@ namespace StateMachineNodeEditor
         {
             base.Style = textStyle;
             base.Text = text;
-            
+            base.ContextMenu = null;
         }
     }
 }

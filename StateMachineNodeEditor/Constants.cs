@@ -25,10 +25,10 @@ namespace StateMachineNodeEditor
         public static Pen nodePen = new Pen();
         public static double nodeRadius = 5;
         public static int nodeMaxLength = 100;
-        public static Thickness nodeTextBorder = new Thickness(30, 2, 30, 2);
+        public static Thickness nodeTextBorder = new Thickness(10, 2, 10, 2);
 
         public static double scale = 0.05;
-        public static double ScaleMax = 3;
+        public static double ScaleMax = 5;
         public static double ScaleMin = 0.1;
         public static double TranslateXMax = 10000;
         public static double TranslateXMin = -10000;
