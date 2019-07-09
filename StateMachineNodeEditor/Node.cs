@@ -18,12 +18,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 namespace StateMachineNodeEditor
 {
-    public class Node : Text
+    public class Node : Text, ManagedElement
     {
         private double _width;
         private double _height;
         private string _text;
-
+        #region property
         public static readonly DependencyProperty RadiusProperty = DependencyProperty.Register("Radius", typeof(double), typeof(Node), new PropertyMetadata((double)5));
         public double Radius
         {
@@ -127,7 +127,7 @@ namespace StateMachineNodeEditor
             get { return (Pen)GetValue(OutputPenProperty); }
             set { SetValue(OutputPenProperty, value); }
         }
-
+        #endregion 
         public Rect Body
         {
             get
@@ -157,7 +157,7 @@ namespace StateMachineNodeEditor
             }
         }
 
-        Manager management;
+        public Managers Manager { get; set; }
         private Rect _body = new Rect();
         private Rect _body2 = new Rect();
         private Rect _header = new Rect();
@@ -168,7 +168,7 @@ namespace StateMachineNodeEditor
         public Node(string text, Style textStyle) : base(text, textStyle)
         {
             this.Style = textStyle;
-            management = new Manager(this);
+            Manager = new Managers(this);
         }
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -191,12 +191,12 @@ namespace StateMachineNodeEditor
             }
             if (_input.Contains(position))
             {
-                management.canMove = false;
+                Manager.canMove = false;
                 return;
             }
             if (_output.Contains(position))
             {
-                management.canMove = false;
+                Manager.canMove = false;
                 //DataObject data = new DataObject();
                 //data.SetData(DataFormats.StringFormat, position.ToString());
                 //data.SetData("Object", this);
@@ -205,7 +205,7 @@ namespace StateMachineNodeEditor
             }
             if (_body.Contains(position))
             {
-                management.canMove = true;
+                Manager.canMove = true;
                 return;
             }
         }
@@ -216,7 +216,7 @@ namespace StateMachineNodeEditor
             {
                 base.OnMouseUp(e);
             }
-            management.canMove = false;
+            Manager.canMove = false;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

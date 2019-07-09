@@ -7,16 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Background="#FFE14444" d:DesignWidth="808.96" Height="738.592" >
     <Grid x:Name="grid">
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <!--<DockPanel x:Name="Dock" LastChildFill="False" Margin="0,0,0,8">-->
-        <!--<local:NodeEditor Height="495" Width="Auto" DockPanel.Dock="Top"/>-->
+        --><!--<DockPanel x:Name="Dock" LastChildFill="False" Margin="0,0,0,8">-->
+        <!--<local:NodeEditor Height="495" Width="Auto" DockPanel.Dock="Top"/>--><!--
         <Ellipse Fill="#FFF4F4F5" Height="162" Margin="575,550,53,-1" Stroke="Black" VerticalAlignment="Top" Width="176"/>
         <Ellipse Fill="#FFF4F4F5" Height="190" Stroke="Black" VerticalAlignment="Top" Width="234" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="4" Margin="25,475,545,0">
         </Ellipse>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="102" Margin="570,-5,0,0" Stroke="Black" VerticalAlignment="Top" Width="186" RadiusX="10" RadiusY="10"/>
-        <TextBox HorizontalAlignment="Center" Height="80" Margin="305,165,384,466" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="115" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CaretBrush="#FF1AAB0C" TextDecorations="{x:Null}" FontFamily="Segoe UI"/>
+        <TextBox HorizontalAlignment="Center" Height="80" Margin="305,165,384,466" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="115" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CaretBrush="#FF1AAB0C" TextDecorations="{x:Null}" FontFamily="Segoe UI"/>-->
     </Grid>
     <!--</DockPanel>-->
 </Window>
