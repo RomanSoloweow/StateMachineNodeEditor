@@ -14,6 +14,10 @@ namespace StateMachineNodeEditor
 {
     public class Text:TextBox
     {
+        static Text()
+        {
+
+        }
         public Text(string text, Style textStyle)
         {
             base.Style = textStyle;

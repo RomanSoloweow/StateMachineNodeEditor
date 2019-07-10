@@ -38,6 +38,9 @@
     <Reference Include="Cyriller, Version=0.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Miyconst.Cyriller.0.0.2\lib\net45\Cyriller.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.5.0.4\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -69,6 +72,7 @@
     <Compile Include="ManagedElement.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="MouseMove.cs" />
+    <Compile Include="myTest.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodesCanvas.cs" />
     <Compile Include="Resource1.Designer.cs">
@@ -77,6 +81,7 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="Styles.cs" />
+    <Compile Include="test.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="Transform.cs" />
     <Page Include="MainWindow.xaml">

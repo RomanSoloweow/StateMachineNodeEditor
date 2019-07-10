@@ -103,16 +103,16 @@ namespace StateMachineNodeEditor
                     if (XMax || XMin || YMax || YMin)
                         return;
 
-                    foreach (var children in childrens)
-                    {
-                        children.Manager.translate.X += deltaX / children.Manager.scale.ScaleX;
-                        children.Manager.translate.Y += deltaY / children.Manager.scale.ScaleY;
-                    }
-                    if (test)
-                    {
+                    //foreach (var children in childrens)
+                    //{
+                    //    children.Manager.translate.X += deltaX / children.Manager.scale.ScaleX;
+                    //    children.Manager.translate.Y += deltaY / children.Manager.scale.ScaleY;
+                    //}
+                    //if (test)
+                    //{
                         translate.X += deltaX;
                         translate.Y += deltaY;
-                    }
+                   // }
                 }
                 _movePoint = e.GetPosition(parent);
             }
@@ -128,13 +128,13 @@ namespace StateMachineNodeEditor
                 return;
 
             zoom += (e.Delta > 0) ? scales : -scales;
-            foreach (var children in childrens)
-            {
-                children.Manager.scale.ScaleX = zoom;
-                children.Manager.scale.ScaleY = zoom;
-            }
-            //Manager.scale.ScaleX = zoom;
-            //Manager.scale.ScaleY = zoom;
+            //foreach (var children in childrens)
+            //{
+            //    children.Manager.scale.ScaleX = zoom;
+            //    children.Manager.scale.ScaleY = zoom;
+            //}
+            scale.ScaleX = zoom;
+            scale.ScaleY = zoom;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace StateMachineNodeEditor
             //grid.ClipToBounds = true;
             #region TextStyle
             Styles TextStyle = new Styles();
-            TextStyle.AddSetter(TextBox.BorderBrushProperty, null);
+            TextStyle.AddSetter(Text.BorderBrushProperty, null);
             TextStyle.AddSetter(TextBox.BackgroundProperty, null);
             TextStyle.AddSetter(TextBox.TextWrappingProperty, TextWrapping.NoWrap);
             TextStyle.AddSetter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center);
@@ -71,10 +71,14 @@ namespace StateMachineNodeEditor
             node1.Manager.test = true;
             var node2 = new Node("State2", NodeStyle);
             node2.Manager.test = true;
+            var t = new Txt();
+            t.Width = 100;
+            t.Height = 100;
             this.Children.Add(node1);
             this.Children.Add(node2);
-            Manager.AddChildren(node1);
-            Manager.AddChildren(node2);
+            // this.Children.Add(t);
+            //Manager.AddChildren(node1);
+            // Manager.AddChildren(node2);
         }
     }
 }
