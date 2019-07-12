@@ -17,7 +17,6 @@ namespace StateMachineNodeEditor
         public ScaleTransform scale = new ScaleTransform();
         public SkewTransform skew = new SkewTransform();
         public MatrixTransform matrix = new MatrixTransform();
-        public List<ManagedElement> childrens = new List<ManagedElement>();
 
         public Point? _movePoint = null;
         private double zoom = 1;
@@ -45,10 +44,6 @@ namespace StateMachineNodeEditor
                 parent.RenderTransformOrigin = value;
             }
         }
-        public void AddChildren(ManagedElement children)
-        {
-            childrens.Add(children);
-        }
         public Managers(UIElement _parent)
         {
             _transformGroup.Children.Add(translate);
@@ -59,11 +54,13 @@ namespace StateMachineNodeEditor
 
             parent = _parent;
             parent.RenderTransform = _transformGroup;
-            parent.MouseDown += mouseDown;
-            parent.MouseUp += mouseUp;
-            parent.MouseMove += mouseMove;
-            parent.MouseWheel += _MouseWheel;
             Origin = new Point(0.5, 0.5);
+
+            //parent.MouseDown += mouseDown;
+            //parent.MouseUp += mouseUp;
+            //parent.MouseMove += mouseMove;
+            //parent.MouseWheel += _MouseWheel;
+
 
         }
 
@@ -110,7 +107,7 @@ namespace StateMachineNodeEditor
                     //}
                     //if (test)
                     //{
-                        translate.X += deltaX;
+                       translate.X += deltaX;
                         translate.Y += deltaY;
                    // }
                 }

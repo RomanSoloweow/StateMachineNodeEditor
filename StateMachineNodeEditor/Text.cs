@@ -16,13 +16,17 @@ namespace StateMachineNodeEditor
     {
         static Text()
         {
-
+            
         }
-        public Text(string text, Style textStyle)
+        public Text(bool setStyle=true)
         {
-            base.Style = textStyle;
-            base.Text = text;
             base.ContextMenu = null;
+            if(setStyle)
+            this.Style = Application.Current.FindResource(typeof(Text)) as Style;
+        }
+        public Text(string text,bool setStyle = true):this(setStyle)
+        {
+            this.Text = text;
         }
     }
 }

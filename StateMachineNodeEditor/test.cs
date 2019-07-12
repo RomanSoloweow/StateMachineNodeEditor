@@ -11,7 +11,6 @@ using System.Windows.Automation.Peers;
 using System.Windows.Input; // CanExecuteRoutedEventArgs, ExecuteRoutedEventArgs
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Controls.Primitives; // TextBoxBase
 using System.Windows.Navigation;
 using System.Windows.Markup; // IAddChild, XamlDesignerSerializer, ContentPropertyAttribute
 using MS.Utility;
@@ -56,5 +55,9 @@ class Txt : TextBox
         int k = 4;
         if(k>8)
         base.OnMouseEnter(e);
+    }
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
     }
 }

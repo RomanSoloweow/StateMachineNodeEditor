@@ -72,7 +72,6 @@
     <Compile Include="ManagedElement.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="MouseMove.cs" />
-    <Compile Include="myTest.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodesCanvas.cs" />
     <Compile Include="Resource1.Designer.cs">
