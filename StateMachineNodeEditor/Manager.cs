@@ -56,10 +56,10 @@ namespace StateMachineNodeEditor
             parent.RenderTransform = _transformGroup;
             Origin = new Point(0.5, 0.5);
 
-            //parent.MouseDown += mouseDown;
-            //parent.MouseUp += mouseUp;
-            //parent.MouseMove += mouseMove;
-            //parent.MouseWheel += _MouseWheel;
+            parent.MouseDown += mouseDown;
+            parent.MouseUp += mouseUp;
+            parent.MouseMove += mouseMove;
+            parent.MouseWheel += _MouseWheel;
 
 
         }
