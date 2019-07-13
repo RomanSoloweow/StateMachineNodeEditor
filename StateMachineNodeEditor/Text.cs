@@ -20,7 +20,7 @@ namespace StateMachineNodeEditor
         }
         public Text(bool setStyle=true)
         {
-            base.ContextMenu = null;
+           // base.ContextMenu = null;
             if(setStyle)
             this.Style = Application.Current.FindResource(typeof(Text)) as Style;
         }

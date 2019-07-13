@@ -22,6 +22,7 @@ namespace StateMachineNodeEditor
         private double zoom = 1;
         public UIElement parent;
         public bool canMove = true;
+        public bool canScale = true;
         public double scales = 0.05;
         public double ScaleMax = 5;
         public double ScaleMin = 0.1;
@@ -116,7 +117,7 @@ namespace StateMachineNodeEditor
         }
         private void _MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Mouse.Captured != null)
+            if ((Mouse.Captured != null)||(!canScale))
                 return;
             bool Delta0 = (e.Delta == 0);
             bool DeltaMax = ((e.Delta > 0) && (zoom > ScaleMax));

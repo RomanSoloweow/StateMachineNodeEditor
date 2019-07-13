@@ -10,8 +10,10 @@
         <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        --><!--<DockPanel x:Name="Dock" LastChildFill="False" Margin="0,0,0,8">-->
-        <!--<local:NodeEditor Height="495" Width="Auto" DockPanel.Dock="Top"/>--><!--
+        -->
+        <!--<DockPanel x:Name="Dock" LastChildFill="False" Margin="0,0,0,8">-->
+        <!--<local:NodeEditor Height="495" Width="Auto" DockPanel.Dock="Top"/>-->
+        <!--
         <Ellipse Fill="#FFF4F4F5" Height="162" Margin="575,550,53,-1" Stroke="Black" VerticalAlignment="Top" Width="176"/>
         <Ellipse Fill="#FFF4F4F5" Height="190" Stroke="Black" VerticalAlignment="Top" Width="234" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="4" Margin="25,475,545,0">
         </Ellipse>

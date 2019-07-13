@@ -13,9 +13,10 @@ namespace StateMachineNodeEditor
 {
     public class NodesCanvas : Grid, ManagedElement
     {
-     
+        public List<Node> nodes = new List<Node>();
         static NodesCanvas()
         {
+           // ControlTemplate 
             #region Style for class Text (TextBox)
             Styles TextStyle = new Styles();
             TextStyle.AddSetter(Text.BorderBrushProperty, null);
@@ -41,8 +42,8 @@ namespace StateMachineNodeEditor
             NodeStyle.AddSetter(Node.BorderBrushProperty, null);
             NodeStyle.AddSetter(Node.BackgroundProperty, null);
             NodeStyle.AddSetter(Node.TextWrappingProperty, TextWrapping.NoWrap);
-            NodeStyle.AddSetter(Node.HorizontalAlignmentProperty, HorizontalAlignment.Center);
-            NodeStyle.AddSetter(Node.VerticalAlignmentProperty, VerticalAlignment.Center);
+            NodeStyle.AddSetter(Node.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+            NodeStyle.AddSetter(Node.VerticalAlignmentProperty, VerticalAlignment.Top);
             NodeStyle.AddSetter(Node.HorizontalContentAlignmentProperty, HorizontalAlignment.Center);
             NodeStyle.AddSetter(Node.VerticalContentAlignmentProperty, VerticalAlignment.Center);
             NodeStyle.AddSetter(Node.HorizontalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
@@ -69,6 +70,7 @@ namespace StateMachineNodeEditor
             NodeStyle.AddSetter(Node.BorderProperty, new Thickness(10, 2, 10, 2));
             NodeStyle.AddSetter(Node.InOutTextCultureProperty, new System.Globalization.CultureInfo("en-US"));
             NodeStyle.AddSetter(Node.InOutSpaceProperty, (double)10);
+            ///NodeStyle.AddSetter(Node.TemplateProperty, (double)10);
             #region Input
             #region Figure
             NodeStyle.AddSetter(Node.InputVisibleProperty, true);
@@ -100,26 +102,49 @@ namespace StateMachineNodeEditor
         public Managers Manager { get; set; }
         public NodesCanvas()
         {
+            ContextMenu contex = new ContextMenu();
+            MenuItem add = new MenuItem();
+            add.Name = "Add";
+            add.Header = "Add";
+            add.Click += Add_Click;
+            contex.Items.Add(add);
+            contex.Margin = new Thickness(10, 0, 0, 0);
+            add.Icon = null;
+            this.ContextMenu = contex;
             Manager = new Managers(this);
             this.ClipToBounds = true;
+            this.MouseDown += mouseDown;
         }
         public UIElement parent;
+        public void NodeOutputClick(object sender, RoutedEventArgs e)
+        {
+
+        }
         public NodesCanvas(UIElement _parent):this()
         {
             parent = _parent;
             this.Background = Brushes.Red;
-            this.Children.Add(new Node("State1"));
-            this.Children.Add(new Node("State2"));
+          //  this.Children.Add(new Node("State1"));
+          //  this.Children.Add(new Node("State2"));
         }
-        //public void mouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    _movePoint = null;
-        //    if (Mouse.Captured == null)
-        //    {
-        //        Keyboard.ClearFocus();
-        //        parent.CaptureMouse();
-        //    }
-        //}
+        public void Add_Click(object sender, RoutedEventArgs e)
+        {
+            Node node = new Node("State " + this.Children.Count.ToString());
+            node.OutputMouseUpEvent += NodeOutputClick;
+            Point position = Mouse.GetPosition(this.parent);
+            node.Manager.translate.X = position.X;
+            node.Manager.translate.Y = position.Y;
+            this.Children.Add(node);
+        }
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //_movePoint = null;
+            //if (Mouse.Captured == null)
+            //{
+            //    Keyboard.ClearFocus();
+            //    parent.CaptureMouse();
+            //}
+        }
         //public void mouseUp(object sender, MouseButtonEventArgs e)
         //{
         //    _movePoint = null;
