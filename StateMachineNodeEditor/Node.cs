@@ -232,7 +232,8 @@ namespace StateMachineNodeEditor
         private double _width;
         private double _height;
         private string _text;
-        private Rect currentFIgure;
+        private Rect? currentFigure;
+        private Rect? pressedFigure;
         #endregion Private  Fields
         #region Constructors
 
@@ -286,18 +287,26 @@ namespace StateMachineNodeEditor
             HeaderMouseDownEvent +=HeaderMouseDown;
             HeaderMouseUpEvent += HeaderMouseUp;
             HeaderMouseMoveEvent += HeaderMouseMove;
+            HeaderMouseEnterEvent += HeaderMouseEnter;
+            HeaderMouseLeaveEvent += HeaderMouseLeave;
 
             InputMouseDownEvent += InputMouseDown;
             InputMouseUpEvent += InputMouseUp;
             InputMouseMoveEvent += InputMouseMove;
+            InputMouseEnterEvent += InputMouseEnter;
+            InputMouseLeaveEvent += InputMouseLeave;
 
             OutputMouseDownEvent += OutputMouseDown;
             OutputMouseUpEvent += OutputMouseUp;
             OutputMouseMoveEvent += OutputMouseMove;
+            OutputMouseEnterEvent += OutputMouseEnter;
+            OutputMouseLeaveEvent += OutputMouseLeave;
 
             BodyMouseDownEvent += BodyMouseDown;
             BodyMouseUpEvent += BodyMouseUp;
             BodyMouseMoveEvent += BodyMouseMove;
+            BodyMouseEnterEvent += BodyMouseEnter;
+            BodyMouseLeaveEvent += BodyMouseLeave;
         }
         public Node(string text):this()
         {
@@ -385,10 +394,19 @@ namespace StateMachineNodeEditor
             base.OnMouseUp(e);
         }
         public void HeaderMouseMove(object sender, MouseEventArgs e)
-        {
-            this.Cursor = Cursors.IBeam;
+        {           
             base.OnMouseMove(e);
         }
+        public void HeaderMouseEnter(object sender, MouseEventArgs e)
+        {
+            this.Cursor = Cursors.IBeam;
+            base.OnMouseEnter(e);
+        }
+        public void HeaderMouseLeave(object sender, MouseEventArgs e)
+        {
+            base.OnMouseLeave(e);
+        }
+
         public void InputMouseDown(object sender, MouseButtonEventArgs e)
         {
             this.Cursor = Cursors.Arrow;
@@ -399,8 +417,18 @@ namespace StateMachineNodeEditor
         }
         public void InputMouseMove(object sender, MouseEventArgs e)
         {
-            this.Cursor = Cursors.Arrow;
+           
         }
+        public void InputMouseEnter(object sender, MouseEventArgs e)
+        {
+            this.Cursor = Cursors.Arrow;
+            InputBrush = Brushes.Green;
+        }
+        public void InputMouseLeave(object sender, MouseEventArgs e)
+        {
+            InputBrush = Brushes.DarkGray;
+        }
+
         public void OutputMouseDown(object sender, MouseButtonEventArgs e)
         {
 
@@ -411,8 +439,19 @@ namespace StateMachineNodeEditor
         }
         public void OutputMouseMove(object sender, MouseEventArgs e)
         {
-            this.Cursor = Cursors.Arrow;
+            
         }
+        public void OutputMouseEnter(object sender, MouseEventArgs e)
+        {
+            this.Cursor = Cursors.Arrow;
+            OutputBrush = Brushes.Green;
+        }
+        public void OutputMouseLeave(object sender, MouseEventArgs e)
+        {
+            OutputBrush = Brushes.DarkGray;
+        }
+   
+        
         public void BodyMouseDown(object sender, MouseButtonEventArgs e)
         {
             Manager.canMove = true;
@@ -423,9 +462,16 @@ namespace StateMachineNodeEditor
         }
         public void BodyMouseMove(object sender, MouseEventArgs e)
         {
+         
+        }
+        public void BodyMouseLeave(object sender, MouseEventArgs e)
+        {
+
+        }
+        public void BodyMouseEnter(object sender, MouseEventArgs e)
+        {
             this.Cursor = Cursors.SizeAll;
         }
-        
         #region Protected Methods
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -439,33 +485,6 @@ namespace StateMachineNodeEditor
                 base.Text = this._text;
             }
         }
-        protected override void OnMouseLeave(MouseEventArgs e)
-        {
-            Point position = e.GetPosition(this);
-            int k = 1;
-            // this.OutputBrush = Brushes.DarkGray;
-            if (_input.Contains(position))
-            {
-                k = 2;
-               // InputMouseMoveEvent.Invoke(this, e);
-            }
-            else if (_output.Contains(position))
-            {
-                k = 2;
-                //OutputMouseMoveEvent.Invoke(this, e);
-            }
-            else if (_header.Contains(position))
-            {
-                k = 2;
-                //HeaderMouseMoveEvent.Invoke(this, e);
-            }
-            else if (_body.Contains(position))
-            {
-                k = 2;
-                // BodyMouseMoveEvent.Invoke(this, e);
-            }
-            //base.OnMouseLeave(e);
-        }
         protected override void OnPreviewTextInput(TextCompositionEventArgs e)
         {
             base.OnPreviewTextInput(e);
@@ -476,45 +495,51 @@ namespace StateMachineNodeEditor
 
             if (_input.Contains(position))
             {
+                pressedFigure = _input;
                 InputMouseDownEvent.Invoke(this, e);
             }
             else if (_output.Contains(position))
             {
+                pressedFigure = _output;
                 OutputMouseDownEvent.Invoke(this, e);
             }
             else if (_header.Contains(position))
             {
+                pressedFigure = _header;
                 HeaderMouseDownEvent.Invoke(this, e);
             }
             else if (_body.Contains(position))
             {
+                pressedFigure = _body;
                 BodyMouseDownEvent.Invoke(this, e);
             }
         }
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             Manager.canMove = false;
-            Point position = e.GetPosition(this);
-            if (_input.Contains(position))
-            {
-               InputMouseUpEvent.Invoke(this, e);
-            }
-            else if (_output.Contains(position))
-            {
-                OutputMouseUpEvent.Invoke(this, e);
-            }
-            else if (_header.Contains(position))
+            if (_header==pressedFigure)
             {
                 HeaderMouseUpEvent.Invoke(this, e);
             }
-            else if (_body.Contains(position))
+            else if (_input==pressedFigure)
             {
+                InputMouseUpEvent.Invoke(this, e);               
+            }
+            else if (_output==pressedFigure)
+            {
+                OutputMouseUpEvent.Invoke(this, e);               
+            }        
+            else if (_body==pressedFigure)
+            {
+                currentFigure = _body;
                 BodyMouseUpEvent.Invoke(this, e);
             }
-        }
+            pressedFigure = null;
+        }        
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Point position = e.GetPosition(this);
+            bool same = false;
             #region test visual
             //DrawingVisual visual = new DrawingVisual();
             //using (DrawingContext dc = visual.RenderOpen())
@@ -527,25 +552,92 @@ namespace StateMachineNodeEditor
             //}
             //this.AddVisualChild(visual);
             #endregion
-            if (_input.Contains(position))
+            if (_header.Contains(position))
             {
-                InputMouseMoveEvent.Invoke(this, e);
+                if (currentFigure == _header)
+                {
+                    HeaderMouseMoveEvent.Invoke(this, e);
+                    same = true;
+                }
+              
+            }
+            else if (_input.Contains(position))
+            {
+                if (currentFigure == _input)
+                {
+                    InputMouseMoveEvent.Invoke(this, e);
+                    same = true;
+                }
             }
             else if (_output.Contains(position))
             {
-                OutputMouseMoveEvent.Invoke(this, e);
+                if (currentFigure == _output)
+                {
+                    OutputMouseMoveEvent.Invoke(this, e);
+                    same = true;
+                }
+            }           
+            else if (_body.Contains(position))
+            {
+                if (currentFigure == _body)
+                {
+                    BodyMouseMoveEvent.Invoke(this, e);
+                    same = true;
+                }
+            }     
+            if(!same)
+            {
+                OnMouseLeave(e);
+                OnMouseEnter(e);
+            }
+        }
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            Point position = e.GetPosition(this);
+            if (_input.Contains(position))
+            {
+                currentFigure = _input;
+                 InputMouseEnterEvent.Invoke(this, e);
+            }
+            else if (_output.Contains(position))
+            {
+                currentFigure = _output;
+                OutputMouseEnterEvent.Invoke(this, e);
             }
             else if (_header.Contains(position))
             {
-                HeaderMouseMoveEvent.Invoke(this, e);
+                currentFigure = _header;
+                HeaderMouseEnterEvent.Invoke(this, e);
             }
             else if (_body.Contains(position))
             {
-                BodyMouseMoveEvent.Invoke(this, e);
-            }                       
+                currentFigure = _body;
+                BodyMouseEnterEvent.Invoke(this, e);
+            }
         }
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            if (currentFigure == _header) 
+            {
+                HeaderMouseLeaveEvent.Invoke(this, e);
+            }
+            else if (currentFigure == _input)
+            {
+                InputMouseLeaveEvent.Invoke(this, e);
+            }
+            else if (currentFigure == _output)
+            {
+                OutputMouseLeaveEvent.Invoke(this, e);
+            }
+            else if (currentFigure == _body)
+            {
+                BodyMouseLeaveEvent.Invoke(this, e);
+            }
+        }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
+            Console.WriteLine("OnRender");
             base.OnRender(drawingContext);
             this._width = Border.Left + base.ActualWidth + Border.Right;
             this._height = Border.Top + base.ActualHeight + Border.Bottom;
