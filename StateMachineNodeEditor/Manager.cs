@@ -108,9 +108,9 @@ namespace StateMachineNodeEditor
                     //}
                     //if (test)
                     //{
-                       translate.X += deltaX;
-                        translate.Y += deltaY;
-                   // }
+                    translate.X += deltaX;
+                    translate.Y += deltaY;
+                    // }
                 }
                 _movePoint = e.GetPosition(parent);
             }

@@ -101,6 +101,18 @@ namespace StateMachineNodeEditor
             get { return (Brush)GetValue(InputBrushProperty); }
             set { SetValue(InputBrushProperty, value); }
         }
+        public static readonly DependencyProperty InputSelectBrushProperty;
+        public Brush InputSelectBrush
+        {
+            get { return (Brush)GetValue(InputSelectBrushProperty); }
+            set { SetValue(InputSelectBrushProperty, value); }
+        }
+        private static readonly DependencyProperty InputIsSelectProperty;
+        private bool InputIsSelect
+        {
+            get { return (bool)GetValue(InputIsSelectProperty); }
+            set { SetValue(InputIsSelectProperty, value); }
+        }
         public static readonly DependencyProperty InputPenProperty;
         public Pen InputPen
         {
@@ -142,6 +154,18 @@ namespace StateMachineNodeEditor
         {
             get { return (Brush)GetValue(OutputBrushProperty); }
             set { SetValue(OutputBrushProperty, value); }
+        }
+        public static readonly DependencyProperty OutputSelectBrushProperty;
+        public Brush OutputSelectBrush
+        {
+            get { return (Brush)GetValue(OutputSelectBrushProperty); }
+            set { SetValue(OutputSelectBrushProperty, value); }
+        }
+        private static readonly DependencyProperty OutputIsSelectProperty;
+        private bool OutputIsSelect
+        {
+            get { return (bool)GetValue(OutputIsSelectProperty); }
+            set { SetValue(OutputIsSelectProperty, value); }
         }
         public static readonly DependencyProperty OutputPenProperty;
         public Pen OutputPen
@@ -258,6 +282,8 @@ namespace StateMachineNodeEditor
             InputVisibleProperty = DependencyProperty.Register("InputVisible", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(true));
             InputSizeProperty = DependencyProperty.Register("InputSize", typeof(Size), typeof(Node), new FrameworkPropertyMetadata(new Size(10, 10), FrameworkPropertyMetadataOptions.AffectsRender));
             InputBrushProperty = DependencyProperty.Register("InputBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(92, 83, 83)), FrameworkPropertyMetadataOptions.AffectsRender));
+            InputSelectBrushProperty = DependencyProperty.Register("InputSelectBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(Brushes.Green, FrameworkPropertyMetadataOptions.AffectsRender));
+            InputIsSelectProperty = DependencyProperty.Register(" InputIsSelect", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
             InputPenProperty = DependencyProperty.Register("InputPen", typeof(Pen), typeof(Node), new FrameworkPropertyMetadata(new Pen()));
             #endregion
             #region Text
@@ -270,6 +296,8 @@ namespace StateMachineNodeEditor
             OutputVisibleProperty = DependencyProperty.Register("OutputVisible", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(true));
             OutputSizeProperty = DependencyProperty.Register("OutputSize", typeof(Size), typeof(Node), new FrameworkPropertyMetadata(new Size(10, 10)));
             OutputBrushProperty = DependencyProperty.Register("OutputBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(92, 83, 83)), FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputSelectBrushProperty = DependencyProperty.Register("OutputSelectBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(Brushes.Green, FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputIsSelectProperty = DependencyProperty.Register("OutputIsSelect", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
             OutputPenProperty = DependencyProperty.Register("OutputPen", typeof(Pen), typeof(Node), new FrameworkPropertyMetadata(new Pen()));
             #endregion
             #region Text
@@ -413,7 +441,6 @@ namespace StateMachineNodeEditor
         }
         public void InputMouseUp(object sender, MouseButtonEventArgs e)
         {
-
         }
         public void InputMouseMove(object sender, MouseEventArgs e)
         {
@@ -422,11 +449,11 @@ namespace StateMachineNodeEditor
         public void InputMouseEnter(object sender, MouseEventArgs e)
         {
             this.Cursor = Cursors.Arrow;
-            InputBrush = Brushes.Green;
+            InputIsSelect = true;
         }
         public void InputMouseLeave(object sender, MouseEventArgs e)
         {
-            InputBrush = Brushes.DarkGray;
+            InputIsSelect = false;
         }
 
         public void OutputMouseDown(object sender, MouseButtonEventArgs e)
@@ -435,7 +462,6 @@ namespace StateMachineNodeEditor
         }
         public void OutputMouseUp(object sender, MouseButtonEventArgs e)
         {
-
         }
         public void OutputMouseMove(object sender, MouseEventArgs e)
         {
@@ -444,11 +470,11 @@ namespace StateMachineNodeEditor
         public void OutputMouseEnter(object sender, MouseEventArgs e)
         {
             this.Cursor = Cursors.Arrow;
-            OutputBrush = Brushes.Green;
+            OutputIsSelect = true;
         }
         public void OutputMouseLeave(object sender, MouseEventArgs e)
         {
-            OutputBrush = Brushes.DarkGray;
+            OutputIsSelect = false;
         }
    
         
@@ -458,8 +484,8 @@ namespace StateMachineNodeEditor
         }
         public void BodyMouseUp(object sender, MouseButtonEventArgs e)
         {
-
         }
+
         public void BodyMouseMove(object sender, MouseEventArgs e)
         {
          
@@ -584,8 +610,9 @@ namespace StateMachineNodeEditor
                     BodyMouseMoveEvent.Invoke(this, e);
                     same = true;
                 }
-            }     
-            if(!same)
+            }
+
+            if ((pressedFigure == null) && (!same))
             {
                 OnMouseLeave(e);
                 OnMouseEnter(e);
@@ -633,23 +660,16 @@ namespace StateMachineNodeEditor
             {
                 BodyMouseLeaveEvent.Invoke(this, e);
             }
+
+            this.Cursor = Cursors.Arrow;
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            Console.WriteLine("OnRender");
             base.OnRender(drawingContext);
             this._width = Border.Left + base.ActualWidth + Border.Right;
             this._height = Border.Top + base.ActualHeight + Border.Bottom;
             Draw(drawingContext);      
-        }
-        protected override void OnDrop(DragEventArgs e)
-        {
-            if (e.Data.GetData("Object") == this)
-                return;
-
-            if ((int)e.Effects == 3)
-                base.OnDrop(e);
         }
         #endregion Protected Methods
         #region Private Methods
@@ -698,7 +718,7 @@ namespace StateMachineNodeEditor
                 _input.Height = InputSize.Height;
                 _input.X = (_body.X - _input.Width / 2);
                 _input.Y = (_body.Y + InOutSpace);
-                drawingContext.DrawRoundedRectangle(InputBrush, InputPen, _input, _input.Width, _input.Height);
+                drawingContext.DrawRoundedRectangle(InputIsSelect?InputSelectBrush:InputBrush, InputPen, _input, _input.Width, _input.Height);
                 #endregion
                 #region Text
                 FormattedText inputText = new FormattedText(InputText, InOutTextCulture, this.FlowDirection, typeface, this.FontSize, InputTextBrush, this.FontSize);
@@ -713,7 +733,7 @@ namespace StateMachineNodeEditor
                 _output.Height = OutputSize.Height;
                 _output.X = (_body.X + _body.Width - _output.Width / 2);
                 _output.Y = (_body.Y + _body.Height - InOutSpace - _output.Height);
-                drawingContext.DrawRoundedRectangle(OutputBrush, OutputPen, _output, _output.Width, _output.Height);
+                drawingContext.DrawRoundedRectangle(OutputIsSelect ? OutputSelectBrush : OutputBrush, OutputPen, _output, _output.Width, _output.Height);
                 #endregion
                 #region Text
                 FormattedText outputText = new FormattedText(OutputText, InOutTextCulture, this.FlowDirection, typeface, this.FontSize, OutputTextBrush, this.FontSize);

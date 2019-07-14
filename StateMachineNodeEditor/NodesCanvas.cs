@@ -76,7 +76,9 @@ namespace StateMachineNodeEditor
             NodeStyle.AddSetter(Node.InputVisibleProperty, true);
             NodeStyle.AddSetter(Node.InputSizeProperty, new Size(10, 10));
             NodeStyle.AddSetter(Node.InputBrushProperty, new SolidColorBrush(Color.FromRgb(92, 83, 83)));
+            NodeStyle.AddSetter(Node.InputSelectBrushProperty, Brushes.Green);
             NodeStyle.AddSetter(Node.InputPenProperty, new Pen());
+
             #endregion Figure
             #region Text
             NodeStyle.AddSetter(Node.InputTextProperty, "Input");
@@ -88,6 +90,7 @@ namespace StateMachineNodeEditor
             NodeStyle.AddSetter(Node.OutputVisibleProperty, true);
             NodeStyle.AddSetter(Node.OutputSizeProperty, new Size(10, 10));
             NodeStyle.AddSetter(Node.OutputBrushProperty, new SolidColorBrush(Color.FromRgb(92, 83, 83)));
+            NodeStyle.AddSetter(Node.OutputSelectBrushProperty, Brushes.Green);
             NodeStyle.AddSetter(Node.OutputPenProperty, new Pen());
             #endregion Figure
             #region Text
@@ -124,12 +127,17 @@ namespace StateMachineNodeEditor
         {
             parent = _parent;
             this.Background = Brushes.Red;
+            this.AllowDrop = true;;
+     
           //  this.Children.Add(new Node("State1"));
           //  this.Children.Add(new Node("State2"));
         }
+
+
         public void Add_Click(object sender, RoutedEventArgs e)
         {
             Node node = new Node("State " + this.Children.Count.ToString());
+            this.Name = "State" + this.Children.Count.ToString();
             node.OutputMouseUpEvent += NodeOutputClick;
             Point position = Mouse.GetPosition(this.parent);
             node.Manager.translate.X = position.X;
