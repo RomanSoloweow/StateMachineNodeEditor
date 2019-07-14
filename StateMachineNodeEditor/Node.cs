@@ -564,6 +564,9 @@ namespace StateMachineNodeEditor
         }        
         protected override void OnMouseMove(MouseEventArgs e)
         {
+
+
+
             Point position = e.GetPosition(this);
             bool same = false;
             #region test visual
@@ -584,8 +587,7 @@ namespace StateMachineNodeEditor
                 {
                     HeaderMouseMoveEvent.Invoke(this, e);
                     same = true;
-                }
-              
+                }              
             }
             else if (_input.Contains(position))
             {
