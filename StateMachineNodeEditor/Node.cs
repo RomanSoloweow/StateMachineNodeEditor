@@ -196,24 +196,28 @@ namespace StateMachineNodeEditor
         public MouseEventHandler HeaderMouseMoveEvent;
         public MouseEventHandler HeaderMouseEnterEvent;
         public MouseEventHandler HeaderMouseLeaveEvent;
+        public MouseEventHandler HeaderWithMouseMoveEvent;
 
         public MouseButtonEventHandler InputMouseDownEvent;
         public MouseButtonEventHandler InputMouseUpEvent;
         public MouseEventHandler InputMouseMoveEvent;
         public MouseEventHandler InputMouseEnterEvent;
         public MouseEventHandler InputMouseLeaveEvent;
+        public MouseEventHandler InputWithMouseMoveEvent;
 
         public MouseButtonEventHandler OutputMouseDownEvent;
         public MouseButtonEventHandler OutputMouseUpEvent;
         public MouseEventHandler OutputMouseMoveEvent;
         public MouseEventHandler OutputMouseEnterEvent;
         public MouseEventHandler OutputMouseLeaveEvent;
+        public MouseEventHandler OutputWithMouseMoveEvent;
 
         public MouseButtonEventHandler BodyMouseDownEvent;
         public MouseButtonEventHandler BodyMouseUpEvent;
         public MouseEventHandler BodyMouseMoveEvent;
         public MouseEventHandler BodyMouseEnterEvent;
         public MouseEventHandler BodyMouseLeaveEvent;
+        public MouseEventHandler BodyWithMouseMoveEvent;
 
         #region Public properties
         public Rect Body
@@ -332,24 +336,28 @@ namespace StateMachineNodeEditor
             HeaderMouseMoveEvent += HeaderMouseMove;
             HeaderMouseEnterEvent += HeaderMouseEnter;
             HeaderMouseLeaveEvent += HeaderMouseLeave;
+            HeaderWithMouseMoveEvent += HeaderWithMouseMove;
 
             InputMouseDownEvent += InputMouseDown;
             InputMouseUpEvent += InputMouseUp;
             InputMouseMoveEvent += InputMouseMove;
             InputMouseEnterEvent += InputMouseEnter;
             InputMouseLeaveEvent += InputMouseLeave;
+            InputWithMouseMoveEvent += InputWithMouseMove;
 
             OutputMouseDownEvent += OutputMouseDown;
             OutputMouseUpEvent += OutputMouseUp;
             OutputMouseMoveEvent += OutputMouseMove;
             OutputMouseEnterEvent += OutputMouseEnter;
             OutputMouseLeaveEvent += OutputMouseLeave;
+            OutputWithMouseMoveEvent += OutputWithMouseMove;
 
             BodyMouseDownEvent += BodyMouseDown;
             BodyMouseUpEvent += BodyMouseUp;
             BodyMouseMoveEvent += BodyMouseMove;
             BodyMouseEnterEvent += BodyMouseEnter;
             BodyMouseLeaveEvent += BodyMouseLeave;
+            BodyWithMouseMoveEvent += BodyWithMouseMove;
 
             parent.MouseDown += mouseDown;
             parent.MouseUp += mouseUp;
@@ -460,6 +468,10 @@ namespace StateMachineNodeEditor
         {
             base.OnMouseLeave(e);
         }
+        public void HeaderWithMouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
 
         public void InputMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -480,6 +492,10 @@ namespace StateMachineNodeEditor
         public void InputMouseLeave(object sender, MouseEventArgs e)
         {
             InputIsSelect = false;
+        }
+        public void InputWithMouseMove(object sender, MouseEventArgs e)
+        {
+
         }
 
         public void OutputMouseDown(object sender, MouseButtonEventArgs e)
@@ -502,7 +518,10 @@ namespace StateMachineNodeEditor
         {
             OutputIsSelect = false;
         }
-
+        public void OutputWithMouseMove(object sender, MouseEventArgs e)
+        {
+            //Console.WriteLine("OutputWithMouseMove");
+        }
 
         public void BodyMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -526,6 +545,25 @@ namespace StateMachineNodeEditor
         {
             this.Cursor = Cursors.SizeAll;
         }
+        public void BodyWithMouseMove(object sender, MouseEventArgs e)
+        {
+            if (_moveStartPoint != null)
+            {
+                ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
+                Point Position = e.GetPosition(parent);
+                double deltaX = (Position.X - _moveStartPoint.Value.X);
+                double deltaY = (Position.Y - _moveStartPoint.Value.Y);
+                bool XMax = ((deltaX > 0) && (Manager.translate.X > TranslateXMax));
+                bool XMin = ((deltaX < 0) && (Manager.translate.X < TranslateXMin));
+                bool YMax = ((deltaY > 0) && (Manager.translate.Y > TranslateYMax));
+                bool YMin = ((deltaY < 0) && (Manager.translate.Y < TranslateXMin));
+                if (XMax || XMin || YMax || YMin)
+                    return;
+                Manager.translate.X += deltaX;
+                Manager.translate.Y += deltaY;
+            }
+            _moveStartPoint = e.GetPosition(parent);
+        }
 
         public void mouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -536,6 +574,7 @@ namespace StateMachineNodeEditor
                 parent.CaptureMouse();
             }
         }
+
         public void mouseUp(object sender, MouseButtonEventArgs e)
         {
             _moveStartPoint = null;
@@ -570,22 +609,22 @@ namespace StateMachineNodeEditor
             if ((Mouse.LeftButton != MouseButtonState.Pressed) || (!canMove)|| (Mouse.Captured!= parent))
                 return;
 
-                if (_moveStartPoint != null)
-                {
-                    ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
-                    Point Position = e.GetPosition(parent);
-                    double deltaX = (Position.X - _moveStartPoint.Value.X);
-                    double deltaY = (Position.Y - _moveStartPoint.Value.Y);
-                    bool XMax = ((deltaX > 0) && (Manager.translate.X > TranslateXMax));
-                    bool XMin = ((deltaX < 0) && (Manager.translate.X < TranslateXMin));
-                    bool YMax = ((deltaY > 0) && (Manager.translate.Y > TranslateYMax));
-                    bool YMin = ((deltaY < 0) && (Manager.translate.Y < TranslateXMin));
-                    if (XMax || XMin || YMax || YMin)
-                        return;
-                    Manager.translate.X += deltaX;
-                    Manager.translate.Y += deltaY;
-                }
-                _moveStartPoint = e.GetPosition(parent);
+                //if (_moveStartPoint != null)
+                //{
+                //    ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
+                //    Point Position = e.GetPosition(parent);
+                //    double deltaX = (Position.X - _moveStartPoint.Value.X);
+                //    double deltaY = (Position.Y - _moveStartPoint.Value.Y);
+                //    bool XMax = ((deltaX > 0) && (Manager.translate.X > TranslateXMax));
+                //    bool XMin = ((deltaX < 0) && (Manager.translate.X < TranslateXMin));
+                //    bool YMax = ((deltaY > 0) && (Manager.translate.Y > TranslateYMax));
+                //    bool YMin = ((deltaY < 0) && (Manager.translate.Y < TranslateXMin));
+                //    if (XMax || XMin || YMax || YMin)
+                //        return;
+                //    Manager.translate.X += deltaX;
+                //    Manager.translate.Y += deltaY;
+                //}
+                //_moveStartPoint = e.GetPosition(parent);
         }
         //private void _MouseWheel(object sender, MouseWheelEventArgs e)
         //{
@@ -734,6 +773,25 @@ namespace StateMachineNodeEditor
             {
                 OnMouseLeave(e);
                 OnMouseEnter(e);
+            }
+             else
+            {
+                if (_header == _pressedFigure)
+                {
+                    HeaderWithMouseMoveEvent.Invoke(this, e);
+                }
+                else if (_input == _pressedFigure)
+                {
+                    InputWithMouseMoveEvent.Invoke(this, e);
+                }
+                else if (_output == _pressedFigure)
+                {
+                    OutputWithMouseMoveEvent.Invoke(this, e);
+                }
+                else if (_body == _pressedFigure)
+                {
+                    BodyWithMouseMoveEvent.Invoke(this, e);
+                }
             }
         }
         protected override void OnMouseEnter(MouseEventArgs e)
