@@ -22,7 +22,7 @@ namespace StateMachineNodeEditor
     {
         #region DependencyProperties
         #region Form
-        public static readonly DependencyProperty BorderProperty;  
+        public static readonly DependencyProperty BorderProperty;
         public Thickness Border
         {
             get { return (Thickness)GetValue(BorderProperty); }
@@ -47,7 +47,7 @@ namespace StateMachineNodeEditor
         {
             get { return (Pen)GetValue(HeaderPenProperty); }
             set { SetValue(HeaderPenProperty, value); }
-    }
+        }
         #endregion Header
         #region Body
         public static readonly DependencyProperty BodyRadiusProperty;
@@ -256,8 +256,23 @@ namespace StateMachineNodeEditor
         private double _width;
         private double _height;
         private string _text;
-        private Rect? currentFigure;
-        private Rect? pressedFigure;
+        private Rect? _currentFigure;
+        private Rect? _pressedFigure;
+
+        public Point? _moveStartPoint = null;
+        public Point test = new Point();
+        private double zoom = 1;
+        public UIElement parent;
+        public IInputElement per;
+        public bool canMove = true;
+        public bool canScale = true;
+        public double scales = 0.05;
+        public double ScaleMax = 5;
+        public double ScaleMin = 0.1;
+        public double TranslateXMax = 10000;
+        public double TranslateXMin = -10000;
+        public double TranslateYMax = 10000;
+        public double TranslateYMin = -10000;
         #endregion Private  Fields
         #region Constructors
 
@@ -307,12 +322,12 @@ namespace StateMachineNodeEditor
             #endregion
             #endregion
         }
-        public Node():base(false)
+        public Node() : base(false)
         {
             this.Style = Application.Current.FindResource(typeof(Node)) as Style;
             Manager = new Managers(this);
-
-            HeaderMouseDownEvent +=HeaderMouseDown;
+            parent = this;
+            HeaderMouseDownEvent += HeaderMouseDown;
             HeaderMouseUpEvent += HeaderMouseUp;
             HeaderMouseMoveEvent += HeaderMouseMove;
             HeaderMouseEnterEvent += HeaderMouseEnter;
@@ -335,8 +350,19 @@ namespace StateMachineNodeEditor
             BodyMouseMoveEvent += BodyMouseMove;
             BodyMouseEnterEvent += BodyMouseEnter;
             BodyMouseLeaveEvent += BodyMouseLeave;
+
+            parent.MouseDown += mouseDown;
+            parent.MouseUp += mouseUp;
+            parent.MouseMove += mouseMove;
+            parent.PreviewMouseMove += PrevmouseMove;
+            per = (IInputElement)VisualParent;
+            // parent.MouseWheel += _MouseWheel;
+
+            // MouseDown += mouseDown;
+            // MouseUp += mouseUp;
+            //MouseMove += mouseMove;
         }
-        public Node(string text):this()
+        public Node(string text) : this()
         {
             this.Text = text;
         }
@@ -422,7 +448,7 @@ namespace StateMachineNodeEditor
             base.OnMouseUp(e);
         }
         public void HeaderMouseMove(object sender, MouseEventArgs e)
-        {           
+        {
             base.OnMouseMove(e);
         }
         public void HeaderMouseEnter(object sender, MouseEventArgs e)
@@ -444,7 +470,7 @@ namespace StateMachineNodeEditor
         }
         public void InputMouseMove(object sender, MouseEventArgs e)
         {
-           
+
         }
         public void InputMouseEnter(object sender, MouseEventArgs e)
         {
@@ -465,7 +491,7 @@ namespace StateMachineNodeEditor
         }
         public void OutputMouseMove(object sender, MouseEventArgs e)
         {
-            
+
         }
         public void OutputMouseEnter(object sender, MouseEventArgs e)
         {
@@ -476,19 +502,21 @@ namespace StateMachineNodeEditor
         {
             OutputIsSelect = false;
         }
-   
-        
+
+
         public void BodyMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Manager.canMove = true;
+            //Manager.canMove = true;
+            canMove = true;
+            test = e.GetPosition(this);
         }
         public void BodyMouseUp(object sender, MouseButtonEventArgs e)
         {
-        }
 
+        }
         public void BodyMouseMove(object sender, MouseEventArgs e)
         {
-         
+
         }
         public void BodyMouseLeave(object sender, MouseEventArgs e)
         {
@@ -498,6 +526,86 @@ namespace StateMachineNodeEditor
         {
             this.Cursor = Cursors.SizeAll;
         }
+
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _moveStartPoint = null;
+            if (Mouse.Captured == null)
+            {
+                Keyboard.ClearFocus();
+                parent.CaptureMouse();
+            }
+        }
+        public void mouseUp(object sender, MouseButtonEventArgs e)
+        {
+            _moveStartPoint = null;
+
+            ((UIElement)sender).ReleaseMouseCapture();
+            ((FrameworkElement)sender).Cursor = Cursors.Arrow;
+        }
+        public void PrevmouseMove(object sender, MouseEventArgs e)
+        {
+            //_movePoint = e.GetPosition((IInputElement)VisualParent);
+        }
+        //    public void mouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if ((Mouse.LeftButton != MouseButtonState.Pressed) || (!canMove))
+        //        return;
+        //    if (Mouse.Captured == parent)
+        //    {
+        //        Point Position = e.GetPosition((IInputElement)VisualParent);
+        //        bool XMax = (Manager.translate.X > TranslateXMax);
+        //        bool XMin = (Manager.translate.X < TranslateXMin);
+        //        bool YMax = (Manager.translate.Y > TranslateYMax);
+        //        bool YMin = (Manager.translate.Y < TranslateXMin);
+        //        if (XMax || XMin || YMax || YMin)
+        //            return;
+
+        //        Manager.translate.X = _movePoint.Value.X - test.X;
+        //        Manager.translate.Y = _movePoint.Value.Y - test.Y;
+        //    }
+        //}
+        public void mouseMove(object sender, MouseEventArgs e)
+        {
+            if ((Mouse.LeftButton != MouseButtonState.Pressed) || (!canMove)|| (Mouse.Captured!= parent))
+                return;
+
+                if (_moveStartPoint != null)
+                {
+                    ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
+                    Point Position = e.GetPosition(parent);
+                    double deltaX = (Position.X - _moveStartPoint.Value.X);
+                    double deltaY = (Position.Y - _moveStartPoint.Value.Y);
+                    bool XMax = ((deltaX > 0) && (Manager.translate.X > TranslateXMax));
+                    bool XMin = ((deltaX < 0) && (Manager.translate.X < TranslateXMin));
+                    bool YMax = ((deltaY > 0) && (Manager.translate.Y > TranslateYMax));
+                    bool YMin = ((deltaY < 0) && (Manager.translate.Y < TranslateXMin));
+                    if (XMax || XMin || YMax || YMin)
+                        return;
+                    Manager.translate.X += deltaX;
+                    Manager.translate.Y += deltaY;
+                }
+                _moveStartPoint = e.GetPosition(parent);
+        }
+        //private void _MouseWheel(object sender, MouseWheelEventArgs e)
+        //{
+        //    if ((Mouse.Captured != null)||(!canScale))
+        //        return;
+        //    bool Delta0 = (e.Delta == 0);
+        //    bool DeltaMax = ((e.Delta > 0) && (zoom > ScaleMax));
+        //    bool DeltaMin = ((e.Delta < 0) && (zoom < ScaleMin));
+        //    if (Delta0 || DeltaMax || DeltaMin)
+        //        return;
+
+        //    zoom += (e.Delta > 0) ? scales : -scales;
+        //    //foreach (var children in childrens)
+        //    //{
+        //    //    children.Manager.scale.ScaleX = zoom;
+        //    //    children.Manager.scale.ScaleY = zoom;
+        //    //}
+        //    scale.ScaleX = zoom;
+        //    scale.ScaleY = zoom;
+        //}
         #region Protected Methods
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -517,56 +625,64 @@ namespace StateMachineNodeEditor
         }
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
+
+            //_movePoint = null;
+            //if (Mouse.Captured == null)
+            //{
+            //    Keyboard.ClearFocus();
+            //    this.CaptureMouse();
+            //}
+
             Point position = e.GetPosition(this);
 
             if (_input.Contains(position))
             {
-                pressedFigure = _input;
+                _pressedFigure = _input;
                 InputMouseDownEvent.Invoke(this, e);
             }
             else if (_output.Contains(position))
             {
-                pressedFigure = _output;
+                _pressedFigure = _output;
                 OutputMouseDownEvent.Invoke(this, e);
             }
             else if (_header.Contains(position))
             {
-                pressedFigure = _header;
+                _pressedFigure = _header;
                 HeaderMouseDownEvent.Invoke(this, e);
             }
             else if (_body.Contains(position))
             {
-                pressedFigure = _body;
+                _pressedFigure = _body;
                 BodyMouseDownEvent.Invoke(this, e);
             }
         }
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            Manager.canMove = false;
-            if (_header==pressedFigure)
+            //Manager.canMove = false;
+            canMove = false;
+            if (_header==_pressedFigure)
             {
                 HeaderMouseUpEvent.Invoke(this, e);
             }
-            else if (_input==pressedFigure)
+            else if (_input==_pressedFigure)
             {
                 InputMouseUpEvent.Invoke(this, e);               
             }
-            else if (_output==pressedFigure)
+            else if (_output==_pressedFigure)
             {
                 OutputMouseUpEvent.Invoke(this, e);               
             }        
-            else if (_body==pressedFigure)
+            else if (_body==_pressedFigure)
             {
-                currentFigure = _body;
+                _currentFigure = _body;
                 BodyMouseUpEvent.Invoke(this, e);
             }
-            pressedFigure = null;
+            _pressedFigure = null;
+            //_movePoint = null;
+            //this.ReleaseMouseCapture();
         }        
         protected override void OnMouseMove(MouseEventArgs e)
         {
-
-
-
             Point position = e.GetPosition(this);
             bool same = false;
             #region test visual
@@ -583,7 +699,7 @@ namespace StateMachineNodeEditor
             #endregion
             if (_header.Contains(position))
             {
-                if (currentFigure == _header)
+                if (_currentFigure == _header)
                 {
                     HeaderMouseMoveEvent.Invoke(this, e);
                     same = true;
@@ -591,7 +707,7 @@ namespace StateMachineNodeEditor
             }
             else if (_input.Contains(position))
             {
-                if (currentFigure == _input)
+                if (_currentFigure == _input)
                 {
                     InputMouseMoveEvent.Invoke(this, e);
                     same = true;
@@ -599,7 +715,7 @@ namespace StateMachineNodeEditor
             }
             else if (_output.Contains(position))
             {
-                if (currentFigure == _output)
+                if (_currentFigure == _output)
                 {
                     OutputMouseMoveEvent.Invoke(this, e);
                     same = true;
@@ -607,14 +723,14 @@ namespace StateMachineNodeEditor
             }           
             else if (_body.Contains(position))
             {
-                if (currentFigure == _body)
+                if (_currentFigure == _body)
                 {
                     BodyMouseMoveEvent.Invoke(this, e);
                     same = true;
                 }
             }
 
-            if ((pressedFigure == null) && (!same))
+            if ((_pressedFigure == null) && (!same))
             {
                 OnMouseLeave(e);
                 OnMouseEnter(e);
@@ -625,40 +741,40 @@ namespace StateMachineNodeEditor
             Point position = e.GetPosition(this);
             if (_input.Contains(position))
             {
-                currentFigure = _input;
+                _currentFigure = _input;
                  InputMouseEnterEvent.Invoke(this, e);
             }
             else if (_output.Contains(position))
             {
-                currentFigure = _output;
+                _currentFigure = _output;
                 OutputMouseEnterEvent.Invoke(this, e);
             }
             else if (_header.Contains(position))
             {
-                currentFigure = _header;
+                _currentFigure = _header;
                 HeaderMouseEnterEvent.Invoke(this, e);
             }
             else if (_body.Contains(position))
             {
-                currentFigure = _body;
+                _currentFigure = _body;
                 BodyMouseEnterEvent.Invoke(this, e);
             }
         }
         protected override void OnMouseLeave(MouseEventArgs e)
         {
-            if (currentFigure == _header) 
+            if (_currentFigure == _header) 
             {
                 HeaderMouseLeaveEvent.Invoke(this, e);
             }
-            else if (currentFigure == _input)
+            else if (_currentFigure == _input)
             {
                 InputMouseLeaveEvent.Invoke(this, e);
             }
-            else if (currentFigure == _output)
+            else if (_currentFigure == _output)
             {
                 OutputMouseLeaveEvent.Invoke(this, e);
             }
-            else if (currentFigure == _body)
+            else if (_currentFigure == _body)
             {
                 BodyMouseLeaveEvent.Invoke(this, e);
             }

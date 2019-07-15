@@ -16,7 +16,6 @@ namespace StateMachineNodeEditor
         public List<Node> nodes = new List<Node>();
         static NodesCanvas()
         {
-           // ControlTemplate 
             #region Style for class Text (TextBox)
             Styles TextStyle = new Styles();
             TextStyle.AddSetter(Text.BorderBrushProperty, null);
@@ -116,7 +115,6 @@ namespace StateMachineNodeEditor
             this.ContextMenu = contex;
             Manager = new Managers(this);
             this.ClipToBounds = true;
-            this.MouseDown += mouseDown;
         }
         public UIElement parent;
         public void NodeOutputClick(object sender, RoutedEventArgs e)
@@ -128,9 +126,6 @@ namespace StateMachineNodeEditor
             parent = _parent;
             this.Background = Brushes.Red;
             this.AllowDrop = true;;
-     
-          //  this.Children.Add(new Node("State1"));
-          //  this.Children.Add(new Node("State2"));
         }
 
 
@@ -144,74 +139,5 @@ namespace StateMachineNodeEditor
             node.Manager.translate.Y = position.Y;
             this.Children.Add(node);
         }
-        public void mouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //_movePoint = null;
-            //if (Mouse.Captured == null)
-            //{
-            //    Keyboard.ClearFocus();
-            //    parent.CaptureMouse();
-            //}
-        }
-        //public void mouseUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    _movePoint = null;
-
-        //    ((UIElement)sender).ReleaseMouseCapture();
-        //    ((FrameworkElement)sender).Cursor = Cursors.Arrow;
-        //}
-
-        //public void mouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if ((Mouse.LeftButton != MouseButtonState.Pressed) || (!canMove))
-        //        return;
-        //    if (Mouse.Captured == parent)
-        //    {
-        //        if (_movePoint != null)
-        //        {
-        //            ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
-        //            Point Position = e.GetPosition(parent);
-        //            double deltaX = (e.GetPosition(parent).X - _movePoint.Value.X);
-        //            double deltaY = (e.GetPosition(parent).Y - _movePoint.Value.Y);
-        //            bool XMax = ((deltaX > 0) && (translate.X > TranslateXMax));
-        //            bool XMin = ((deltaX < 0) && (translate.X < TranslateXMin));
-        //            bool YMax = ((deltaY > 0) && (translate.Y > TranslateYMax));
-        //            bool YMin = ((deltaY < 0) && (translate.Y < TranslateXMin));
-        //            if (XMax || XMin || YMax || YMin)
-        //                return;
-
-        //            //foreach (var children in childrens)
-        //            //{
-        //            //    children.Manager.translate.X += deltaX / children.Manager.scale.ScaleX;
-        //            //    children.Manager.translate.Y += deltaY / children.Manager.scale.ScaleY;
-        //            //}
-        //            //if (test)
-        //            //{
-        //            translate.X += deltaX;
-        //            translate.Y += deltaY;
-        //            // }
-        //        }
-        //        _movePoint = e.GetPosition(parent);
-        //    }
-        //}
-        //private void _MouseWheel(object sender, MouseWheelEventArgs e)
-        //{
-        //    if (Mouse.Captured != null)
-        //        return;
-        //    bool Delta0 = (e.Delta == 0);
-        //    bool DeltaMax = ((e.Delta > 0) && (zoom > ScaleMax));
-        //    bool DeltaMin = ((e.Delta < 0) && (zoom < ScaleMin));
-        //    if (Delta0 || DeltaMax || DeltaMin)
-        //        return;
-
-        //    zoom += (e.Delta > 0) ? scales : -scales;
-        //    //foreach (var children in childrens)
-        //    //{
-        //    //    children.Manager.scale.ScaleX = zoom;
-        //    //    children.Manager.scale.ScaleY = zoom;
-        //    //}
-        //    scale.ScaleX = zoom;
-        //    scale.ScaleY = zoom;
-        //}
     }
 }
