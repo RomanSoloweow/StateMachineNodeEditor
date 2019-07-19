@@ -249,6 +249,19 @@ namespace StateMachineNodeEditor
                 return _output;
             }
         }
+        public Point Location
+        {
+            get
+            {
+                return new Point(Manager.translate.X,Manager.translate.Y);
+            }
+            set
+            {
+                Manager.translate.X = value.X;
+                Manager.translate.Y = value.Y;
+            }
+        }
+
         public Managers Manager { get; set; }
         #endregion Public properties   
         #region Private  Fields
@@ -267,8 +280,6 @@ namespace StateMachineNodeEditor
         public Point? _moveStartPoint = null;
         public Point test = new Point();
         private double zoom = 1;
-        public UIElement parent;
-        public IInputElement per;
         public bool canMove = true;
         public bool canScale = true;
         public double scales = 0.05;
@@ -331,7 +342,6 @@ namespace StateMachineNodeEditor
         {
             this.Style = Application.Current.FindResource(typeof(Node)) as Style;
             Manager = new Managers(this);
-            parent = this;
             Manager.translate.Changed += TransformChange;
             HeaderMouseDownEvent += HeaderMouseDown;
             HeaderMouseUpEvent += HeaderMouseUp;
@@ -361,9 +371,8 @@ namespace StateMachineNodeEditor
             BodyMouseLeaveEvent += BodyMouseLeave;
             BodyWithMouseMoveEvent += BodyWithMouseMove;
 
-            parent.MouseDown += mouseDown;
-            parent.MouseUp += mouseUp;
-            per = (IInputElement)VisualParent;
+            this.MouseDown += mouseDown;
+            this.MouseUp += mouseUp;
             // parent.MouseWheel += _MouseWheel;
 
             // MouseDown += mouseDown;
@@ -550,7 +559,7 @@ namespace StateMachineNodeEditor
             if (_moveStartPoint != null)
             {
                 ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
-                Point Position = e.GetPosition(parent);
+                Point Position = e.GetPosition(this);
                 double deltaX = (Position.X - _moveStartPoint.Value.X);
                 double deltaY = (Position.Y - _moveStartPoint.Value.Y);
                 bool XMax = ((deltaX > 0) && (Manager.translate.X > TranslateXMax));
@@ -562,7 +571,7 @@ namespace StateMachineNodeEditor
                 Manager.translate.X += deltaX;
                 Manager.translate.Y += deltaY;
             }
-            _moveStartPoint = e.GetPosition(parent);
+            _moveStartPoint = e.GetPosition(this);
         }
 
         public void mouseDown(object sender, MouseButtonEventArgs e)
@@ -571,7 +580,7 @@ namespace StateMachineNodeEditor
             if (Mouse.Captured == null)
             {
                 Keyboard.ClearFocus();
-                parent.CaptureMouse();
+                this.CaptureMouse();
             }
         }
 

@@ -13,15 +13,8 @@ using System.Windows.Media.Effects;
 using System.Globalization;
 namespace StateMachineNodeEditor
 {
-   public class Connect: UIElement
+   public class Connect: Text
     {
-      
-        public static readonly DependencyProperty TextProperty;
-        public string Text
-        {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
-        }
         public static readonly DependencyProperty InputNodeProperty;
         public Node InputNode
         {
@@ -37,9 +30,16 @@ namespace StateMachineNodeEditor
 
         static Connect()
         {
-            TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(Connect), new FrameworkPropertyMetadata("Connect", FrameworkPropertyMetadataOptions.AffectsRender));
             InputNodeProperty = DependencyProperty.Register("InputNode", typeof(Node), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
             OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(Node), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
+        }
+        public Connect() : base(false)
+        {
+            this.Style = Application.Current.FindResource(typeof(Connect)) as Style;
+        }
+        public Connect(string text) : this()
+        {
+            this.Text = text;
         }
         public static void InputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {

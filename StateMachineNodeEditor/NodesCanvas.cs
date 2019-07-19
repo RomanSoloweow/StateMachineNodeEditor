@@ -9,11 +9,15 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 namespace StateMachineNodeEditor
 {
     public class NodesCanvas : Grid, ManagedElement
     {
-        public List<Node> nodes = new List<Node>();
+        public ObservableCollection<Node> nodes = new ObservableCollection<Node>();
+        public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
+
         static NodesCanvas()
         {
             #region Style for class Text (TextBox)
@@ -100,10 +104,32 @@ namespace StateMachineNodeEditor
             NodeStyle.TargetType = typeof(Node);
             Application.Current.Resources.Add(typeof(Node), NodeStyle);
             #endregion Style for class Node
+
+            #region Style for class Connect
+            Styles ConnectStyle = new Styles();
+            ConnectStyle.AddSetter(Connect.BorderBrushProperty, null);
+            ConnectStyle.AddSetter(Connect.BackgroundProperty, null);
+            ConnectStyle.AddSetter(Connect.TextWrappingProperty, TextWrapping.NoWrap);
+            ConnectStyle.AddSetter(Connect.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+            ConnectStyle.AddSetter(Connect.VerticalAlignmentProperty, VerticalAlignment.Center);
+            ConnectStyle.AddSetter(Connect.HorizontalContentAlignmentProperty, HorizontalAlignment.Center);
+            ConnectStyle.AddSetter(Connect.VerticalContentAlignmentProperty, VerticalAlignment.Center);
+            ConnectStyle.AddSetter(Connect.HorizontalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
+            ConnectStyle.AddSetter(Connect.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
+            ConnectStyle.AddSetter(Connect.BorderThicknessProperty, new Thickness(0, 0, 0, 0));
+            ConnectStyle.AddSetter(Connect.MaxLengthProperty, 100);
+            ConnectStyle.AddSetter(Connect.SelectionBrushProperty, new SolidColorBrush(Color.FromRgb(0, 120, 215)));
+            ConnectStyle.AddSetter(Connect.CaretBrushProperty, Brushes.DarkGray);
+            ConnectStyle.AddSetter(Connect.ForegroundProperty, Brushes.White);
+            ConnectStyle.TargetType = typeof(Connect);
+            Application.Current.Resources.Add(typeof(Connect), ConnectStyle);
+            #endregion Style for class Connect
         }
         public Managers Manager { get; set; }
         public NodesCanvas()
         {
+            nodes.CollectionChanged += NodesChange;
+            connects.CollectionChanged += ConnectsChange;           
             ContextMenu contex = new ContextMenu();
             MenuItem add = new MenuItem();
             add.Name = "Add";
@@ -116,38 +142,97 @@ namespace StateMachineNodeEditor
             Manager = new Managers(this);
             this.ClipToBounds = true;
         }
+        public NodesCanvas(UIElement _parent) : this()
+        {
+            parent = _parent;
+            this.Background = Brushes.Red;
+            this.AllowDrop = true;
+        }
         public UIElement parent;
         public void NodeOutputClick(object sender, RoutedEventArgs e)
         {
             // bool t = this.CaptureMouse();
-            Connect connect = new Connect();
-
-            this.Children.Add(connect);
-            connect.InputNode = (sender as Node);
 
         }
         public void NodeMove(object sender, EventArgs e)
         {
             Console.WriteLine("Изменилась Локация");
         }
-        public NodesCanvas(UIElement _parent):this()
+        public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
-            parent = _parent;
-            this.Background = Brushes.Red;
-            this.AllowDrop = true;;
+            if(e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var element in e.NewItems)
+                {
+                    if(element is Node node)
+                    this.Children.Add(node);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var element in e.OldItems)
+                {
+                    if (element is Node node)
+                        this.Children.Remove(node);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                this.Children.Clear();
+            }
         }
+        public void ConnectsChange(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var element in e.NewItems)
+                {
+                    if (element is Connect node)
+                        this.Children.Add(node);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var element in e.OldItems)
+                {
+                    if (element is Connect node)
+                        this.Children.Remove(node);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                foreach (var element in this.Children)
+                {
+                    if (element is Connect connect)
+                        this.Children.Remove(connect);
+                }
+            }
+        }
+      
 
 
         public void Add_Click(object sender, RoutedEventArgs e)
         {
-            Node node = new Node("State " + this.Children.Count.ToString());
-            this.Name = "State" + this.Children.Count.ToString();
+            Point position = Mouse.GetPosition(this.parent);
+            AddNode(position);
+        }
+        public Node AddNode(Point position)
+        {
+            Node node = new Node("State " + this.nodes.Count.ToString());
+            this.Name = "State" + this.nodes.Count.ToString();
             node.OutputMouseUpEvent += NodeOutputClick;
             node.LocationChangeEvent += NodeMove;
-            Point position = Mouse.GetPosition(this.parent);
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
-            this.Children.Add(node);
+            nodes.Add(node);
+            return node;
+        }
+        public Connect AddConnect()
+        {
+            Connect connect = new Connect("Connect " + this.connects.Count.ToString());
+            this.Name = "Connect" + this.connects.Count.ToString();
+            connects.Add(connect);
+            return connect;
         }
     }
 }
