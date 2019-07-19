@@ -219,6 +219,7 @@ namespace StateMachineNodeEditor
         public MouseEventHandler BodyMouseLeaveEvent;
         public MouseEventHandler BodyWithMouseMoveEvent;
 
+        public EventHandler LocationChangeEvent;
         #region Public properties
         public Rect Body
         {
@@ -331,6 +332,7 @@ namespace StateMachineNodeEditor
             this.Style = Application.Current.FindResource(typeof(Node)) as Style;
             Manager = new Managers(this);
             parent = this;
+            Manager.translate.Changed += TransformChange;
             HeaderMouseDownEvent += HeaderMouseDown;
             HeaderMouseUpEvent += HeaderMouseUp;
             HeaderMouseMoveEvent += HeaderMouseMove;
@@ -361,8 +363,6 @@ namespace StateMachineNodeEditor
 
             parent.MouseDown += mouseDown;
             parent.MouseUp += mouseUp;
-            parent.MouseMove += mouseMove;
-            parent.PreviewMouseMove += PrevmouseMove;
             per = (IInputElement)VisualParent;
             // parent.MouseWheel += _MouseWheel;
 
@@ -582,69 +582,6 @@ namespace StateMachineNodeEditor
             ((UIElement)sender).ReleaseMouseCapture();
             ((FrameworkElement)sender).Cursor = Cursors.Arrow;
         }
-        public void PrevmouseMove(object sender, MouseEventArgs e)
-        {
-            //_movePoint = e.GetPosition((IInputElement)VisualParent);
-        }
-        //    public void mouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if ((Mouse.LeftButton != MouseButtonState.Pressed) || (!canMove))
-        //        return;
-        //    if (Mouse.Captured == parent)
-        //    {
-        //        Point Position = e.GetPosition((IInputElement)VisualParent);
-        //        bool XMax = (Manager.translate.X > TranslateXMax);
-        //        bool XMin = (Manager.translate.X < TranslateXMin);
-        //        bool YMax = (Manager.translate.Y > TranslateYMax);
-        //        bool YMin = (Manager.translate.Y < TranslateXMin);
-        //        if (XMax || XMin || YMax || YMin)
-        //            return;
-
-        //        Manager.translate.X = _movePoint.Value.X - test.X;
-        //        Manager.translate.Y = _movePoint.Value.Y - test.Y;
-        //    }
-        //}
-        public void mouseMove(object sender, MouseEventArgs e)
-        {
-            if ((Mouse.LeftButton != MouseButtonState.Pressed) || (!canMove)|| (Mouse.Captured!= parent))
-                return;
-
-                //if (_moveStartPoint != null)
-                //{
-                //    ((FrameworkElement)sender).Cursor = Cursors.SizeAll;
-                //    Point Position = e.GetPosition(parent);
-                //    double deltaX = (Position.X - _moveStartPoint.Value.X);
-                //    double deltaY = (Position.Y - _moveStartPoint.Value.Y);
-                //    bool XMax = ((deltaX > 0) && (Manager.translate.X > TranslateXMax));
-                //    bool XMin = ((deltaX < 0) && (Manager.translate.X < TranslateXMin));
-                //    bool YMax = ((deltaY > 0) && (Manager.translate.Y > TranslateYMax));
-                //    bool YMin = ((deltaY < 0) && (Manager.translate.Y < TranslateXMin));
-                //    if (XMax || XMin || YMax || YMin)
-                //        return;
-                //    Manager.translate.X += deltaX;
-                //    Manager.translate.Y += deltaY;
-                //}
-                //_moveStartPoint = e.GetPosition(parent);
-        }
-        //private void _MouseWheel(object sender, MouseWheelEventArgs e)
-        //{
-        //    if ((Mouse.Captured != null)||(!canScale))
-        //        return;
-        //    bool Delta0 = (e.Delta == 0);
-        //    bool DeltaMax = ((e.Delta > 0) && (zoom > ScaleMax));
-        //    bool DeltaMin = ((e.Delta < 0) && (zoom < ScaleMin));
-        //    if (Delta0 || DeltaMax || DeltaMin)
-        //        return;
-
-        //    zoom += (e.Delta > 0) ? scales : -scales;
-        //    //foreach (var children in childrens)
-        //    //{
-        //    //    children.Manager.scale.ScaleX = zoom;
-        //    //    children.Manager.scale.ScaleY = zoom;
-        //    //}
-        //    scale.ScaleX = zoom;
-        //    scale.ScaleY = zoom;
-        //}
         #region Protected Methods
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -664,14 +601,6 @@ namespace StateMachineNodeEditor
         }
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-
-            //_movePoint = null;
-            //if (Mouse.Captured == null)
-            //{
-            //    Keyboard.ClearFocus();
-            //    this.CaptureMouse();
-            //}
-
             Point position = e.GetPosition(this);
 
             if (_input.Contains(position))
@@ -696,9 +625,7 @@ namespace StateMachineNodeEditor
             }
         }
         protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            //Manager.canMove = false;
-            canMove = false;
+        {      
             if (_header==_pressedFigure)
             {
                 HeaderMouseUpEvent.Invoke(this, e);
@@ -713,82 +640,72 @@ namespace StateMachineNodeEditor
             }        
             else if (_body==_pressedFigure)
             {
-                _currentFigure = _body;
                 BodyMouseUpEvent.Invoke(this, e);
             }
+
+            canMove = false;
             _pressedFigure = null;
-            //_movePoint = null;
-            //this.ReleaseMouseCapture();
         }        
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Point position = e.GetPosition(this);
             bool same = false;
-            #region test visual
-            //DrawingVisual visual = new DrawingVisual();
-            //using (DrawingContext dc = visual.RenderOpen())
-            //{
-            //    Typeface typeface = new Typeface("Normal");
-            //    FormattedText ft = new FormattedText("Input", InOutTextCulture, this.FlowDirection, typeface, this.FontSize, Brushes.Blue, 100);
-            //    dc.DrawText(ft, position);
-            //    Geometry geometry = ft.BuildGeometry(position);
-            //    dc.DrawGeometry(Brushes.Blue, new Pen(BorderBrush, 30), geometry);
-            //}
-            //this.AddVisualChild(visual);
-            #endregion
-            if (_header.Contains(position))
+            if (_pressedFigure == null)
             {
-                if (_currentFigure == _header)
+                if (_header.Contains(position))
                 {
-                    HeaderMouseMoveEvent.Invoke(this, e);
-                    same = true;
-                }              
-            }
-            else if (_input.Contains(position))
-            {
-                if (_currentFigure == _input)
-                {
-                    InputMouseMoveEvent.Invoke(this, e);
-                    same = true;
+                    if (_currentFigure == _header)
+                    {
+                        HeaderMouseMoveEvent.Invoke(this, e);
+                        same = true;
+                    }
                 }
-            }
-            else if (_output.Contains(position))
-            {
-                if (_currentFigure == _output)
+                else if (_input.Contains(position))
                 {
-                    OutputMouseMoveEvent.Invoke(this, e);
-                    same = true;
+                    if (_currentFigure == _input)
+                    {
+                        InputMouseMoveEvent.Invoke(this, e);
+                        same = true;
+                    }
                 }
-            }           
-            else if (_body.Contains(position))
-            {
-                if (_currentFigure == _body)
+                else if (_output.Contains(position))
                 {
-                    BodyMouseMoveEvent.Invoke(this, e);
-                    same = true;
+                    if (_currentFigure == _output)
+                    {
+                        OutputMouseMoveEvent.Invoke(this, e);
+                        same = true;
+                    }
                 }
-            }
+                else if (_body.Contains(position))
+                {
+                    if (_currentFigure == _body)
+                    {
+                        BodyMouseMoveEvent.Invoke(this, e);
+                        same = true;
+                    }
+                }
 
-            if ((_pressedFigure == null) && (!same))
-            {
-                OnMouseLeave(e);
-                OnMouseEnter(e);
+                if(!same)
+                {
+                    OnMouseLeave(e);
+                    OnMouseEnter(e);
+                }
             }
-             else
+            else
             {
-                if (_header == _pressedFigure)
+                if (_pressedFigure == _header)
                 {
                     HeaderWithMouseMoveEvent.Invoke(this, e);
                 }
-                else if (_input == _pressedFigure)
+                else if (_pressedFigure == _input)
                 {
                     InputWithMouseMoveEvent.Invoke(this, e);
                 }
-                else if (_output == _pressedFigure)
+                else if (_pressedFigure == _output)
                 {
                     OutputWithMouseMoveEvent.Invoke(this, e);
                 }
-                else if (_body == _pressedFigure)
+                else if (_pressedFigure == _body)
                 {
                     BodyWithMouseMoveEvent.Invoke(this, e);
                 }
@@ -930,6 +847,14 @@ namespace StateMachineNodeEditor
                 #endregion
             }
             #endregion
+        }
+        private void LocationChange(object sender, EventArgs e)
+        {
+
+        }
+        private void TransformChange(object sender, EventArgs e)
+        {
+            LocationChangeEvent.Invoke(sender, e);
         }
         #endregion Private Methods
     }

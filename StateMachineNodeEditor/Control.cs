@@ -13,12 +13,9 @@ namespace StateMachineNodeEditor
 {
     public class Control : UIElement
     {
-        public UIElement parent;
-        public Transform transform;
-        public Control(UIElement _parent)
+        protected override void OnRender(DrawingContext drawingContext)
         {
-            parent = _parent;
-            transform = new Transform(this);
+            base.OnRender(drawingContext);
         }
     }
 }

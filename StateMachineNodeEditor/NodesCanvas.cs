@@ -119,7 +119,16 @@ namespace StateMachineNodeEditor
         public UIElement parent;
         public void NodeOutputClick(object sender, RoutedEventArgs e)
         {
+            // bool t = this.CaptureMouse();
+            Connect connect = new Connect();
 
+            this.Children.Add(connect);
+            connect.InputNode = (sender as Node);
+
+        }
+        public void NodeMove(object sender, EventArgs e)
+        {
+            Console.WriteLine("Изменилась Локация");
         }
         public NodesCanvas(UIElement _parent):this()
         {
@@ -134,6 +143,7 @@ namespace StateMachineNodeEditor
             Node node = new Node("State " + this.Children.Count.ToString());
             this.Name = "State" + this.Children.Count.ToString();
             node.OutputMouseUpEvent += NodeOutputClick;
+            node.LocationChangeEvent += NodeMove;
             Point position = Mouse.GetPosition(this.parent);
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
