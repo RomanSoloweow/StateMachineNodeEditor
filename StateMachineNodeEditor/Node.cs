@@ -261,7 +261,10 @@ namespace StateMachineNodeEditor
                 Manager.translate.Y = value.Y;
             }
         }
-
+        public Point InputCenterLocation { get; protected set; }
+     
+        public Point OutputCenterLocation { get; protected set; }
+       
         public Managers Manager { get; set; }
         #endregion Public properties   
         #region Private  Fields
@@ -343,6 +346,7 @@ namespace StateMachineNodeEditor
             this.Style = Application.Current.FindResource(typeof(Node)) as Style;
             Manager = new Managers(this);
             Manager.translate.Changed += TransformChange;
+            LocationChangeEvent += LocationChange;
             HeaderMouseDownEvent += HeaderMouseDown;
             HeaderMouseUpEvent += HeaderMouseUp;
             HeaderMouseMoveEvent += HeaderMouseMove;
@@ -859,7 +863,8 @@ namespace StateMachineNodeEditor
         }
         private void LocationChange(object sender, EventArgs e)
         {
-
+            InputCenterLocation = new Point(this.Location.X + Input.Location.X + Input.Width / 2, this.Location.Y + Input.Location.Y + Input.Height / 2);
+            OutputCenterLocation = new Point(this.Location.X + Output.Location.X + Output.Width / 2, this.Location.Y + Output.Location.Y + Output.Height / 2);
         }
         private void TransformChange(object sender, EventArgs e)
         {

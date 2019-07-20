@@ -110,18 +110,22 @@ namespace StateMachineNodeEditor
             ConnectStyle.AddSetter(Connect.BorderBrushProperty, null);
             ConnectStyle.AddSetter(Connect.BackgroundProperty, null);
             ConnectStyle.AddSetter(Connect.TextWrappingProperty, TextWrapping.NoWrap);
-            ConnectStyle.AddSetter(Connect.HorizontalAlignmentProperty, HorizontalAlignment.Center);
-            ConnectStyle.AddSetter(Connect.VerticalAlignmentProperty, VerticalAlignment.Center);
+            ConnectStyle.AddSetter(Connect.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+            ConnectStyle.AddSetter(Connect.VerticalAlignmentProperty, VerticalAlignment.Top);
             ConnectStyle.AddSetter(Connect.HorizontalContentAlignmentProperty, HorizontalAlignment.Center);
             ConnectStyle.AddSetter(Connect.VerticalContentAlignmentProperty, VerticalAlignment.Center);
             ConnectStyle.AddSetter(Connect.HorizontalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
             ConnectStyle.AddSetter(Connect.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
             ConnectStyle.AddSetter(Connect.BorderThicknessProperty, new Thickness(0, 0, 0, 0));
             ConnectStyle.AddSetter(Connect.MaxLengthProperty, 100);
+            ConnectStyle.AddSetter(Connect.MinWidthProperty, (double)60);
             ConnectStyle.AddSetter(Connect.SelectionBrushProperty, new SolidColorBrush(Color.FromRgb(0, 120, 215)));
+            ConnectStyle.AddSetter(Connect.ContextMenuProperty, null);
+            ConnectStyle.AddSetter(Connect.DataContextProperty, null);
             ConnectStyle.AddSetter(Connect.CaretBrushProperty, Brushes.DarkGray);
             ConnectStyle.AddSetter(Connect.ForegroundProperty, Brushes.White);
             ConnectStyle.TargetType = typeof(Connect);
+
             Application.Current.Resources.Add(typeof(Connect), ConnectStyle);
             #endregion Style for class Connect
         }
@@ -152,6 +156,8 @@ namespace StateMachineNodeEditor
         public void NodeOutputClick(object sender, RoutedEventArgs e)
         {
             // bool t = this.CaptureMouse();
+          Connect connect=  AddConnect((sender as Node).OutputCenterLocation);
+            connect.InputNode = sender as Node;
 
         }
         public void NodeMove(object sender, EventArgs e)
@@ -208,7 +214,7 @@ namespace StateMachineNodeEditor
                 }
             }
         }
-      
+
 
 
         public void Add_Click(object sender, RoutedEventArgs e)
@@ -227,9 +233,9 @@ namespace StateMachineNodeEditor
             nodes.Add(node);
             return node;
         }
-        public Connect AddConnect()
+        public Connect AddConnect(Point position)
         {
-            Connect connect = new Connect("Connect " + this.connects.Count.ToString());
+            Connect connect = new Connect(position, "Connect " + this.connects.Count.ToString());
             this.Name = "Connect" + this.connects.Count.ToString();
             connects.Add(connect);
             return connect;

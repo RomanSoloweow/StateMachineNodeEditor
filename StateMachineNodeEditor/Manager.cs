@@ -56,28 +56,28 @@ namespace StateMachineNodeEditor
             parent.RenderTransform = _transformGroup;
             Origin = new Point(0.5, 0.5);
 
-            //parent.MouseDown += mouseDown;
-            //parent.MouseUp += mouseUp;
+            parent.MouseDown += mouseDown;
+            parent.MouseUp += mouseUp;
             //parent.MouseMove += mouseMove;
             parent.MouseWheel += _MouseWheel;
         }
 
-        //public void mouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    _movePoint = null;
-        //    if (Mouse.Captured == null)
-        //    {
-        //        Keyboard.ClearFocus();
-        //        parent.CaptureMouse();
-        //    }
-        //}
-        //public void mouseUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    _movePoint = null;
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+           // _movePoint = null;
+            if (Mouse.Captured == null)
+            {
+                Keyboard.ClearFocus();
+                parent.CaptureMouse();
+            }
+        }
+        public void mouseUp(object sender, MouseButtonEventArgs e)
+        {
+           // _movePoint = null;
 
-        //    ((UIElement)sender).ReleaseMouseCapture();
-        //    ((FrameworkElement)sender).Cursor = Cursors.Arrow;
-        //}
+            parent.ReleaseMouseCapture();
+           // ((FrameworkElement)sender).Cursor = Cursors.Arrow;
+        }
 
         //public void mouseMove(object sender, MouseEventArgs e)
         //{
