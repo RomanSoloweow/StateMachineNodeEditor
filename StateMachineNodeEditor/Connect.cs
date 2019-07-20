@@ -16,15 +16,15 @@ namespace StateMachineNodeEditor
    public class Connect: Text
     {
         public static readonly DependencyProperty InputNodeProperty;
-        public Node InputNode
+        public Nodess InputNode
         {
-            get { return (Node)GetValue(InputNodeProperty); }
+            get { return (Nodess)GetValue(InputNodeProperty); }
             set { SetValue(InputNodeProperty, value); }
         }
         public static readonly DependencyProperty OutputNodeProperty;
-        public Node OutputNode
+        public Nodess OutputNode
         {
-            get { return (Node)GetValue(OutputNodeProperty); }
+            get { return (Nodess)GetValue(OutputNodeProperty); }
             set { SetValue(OutputNodeProperty, value); }
         }
         public static readonly DependencyProperty EndPointProperty;
@@ -45,8 +45,8 @@ namespace StateMachineNodeEditor
         public Managers Manager { get; set; }
         static Connect()
         {       
-            InputNodeProperty = DependencyProperty.Register("InputNode", typeof(Node), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
-            OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(Node), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
+            InputNodeProperty = DependencyProperty.Register("InputNode", typeof(Nodess), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
+            OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(Nodess), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
             EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0,0), FrameworkPropertyMetadataOptions.AffectsRender));
             StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsRender));
         }
@@ -58,6 +58,7 @@ namespace StateMachineNodeEditor
             Manager = new Managers(this);
             Manager.translate.X = point.X;
             Manager.translate.Y = point.Y;
+            Manager.canScale = false;
         }
         public Connect(Point point,string text) : this(point)
         {
@@ -78,8 +79,8 @@ namespace StateMachineNodeEditor
         public static void InputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Connect connect = (obj as Connect);
-            Node oldNode = (e.OldValue as Node);
-            Node newNode = (e.NewValue as Node);
+            Nodess oldNode = (e.OldValue as Nodess);
+            Nodess newNode = (e.NewValue as Nodess);
 
             if(oldNode!=null)
                 oldNode.LocationChangeEvent -= connect.InputLocationChange;
@@ -97,8 +98,8 @@ namespace StateMachineNodeEditor
         private static void OutputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Connect connect = (obj as Connect);
-            Node oldNode = (e.OldValue as Node);
-            Node newNode = (e.NewValue as Node);
+            Nodess oldNode = (e.OldValue as Nodess);
+            Nodess newNode = (e.NewValue as Nodess);
         }
         protected override void OnRender(DrawingContext drawingContext)
         {

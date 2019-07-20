@@ -18,7 +18,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 namespace StateMachineNodeEditor
 {
-    public class Node : Text, ManagedElement
+    public class Nodess : Text, ManagedElement
     {
         #region DependencyProperties
         #region Form
@@ -295,56 +295,57 @@ namespace StateMachineNodeEditor
         #endregion Private  Fields
         #region Constructors
 
-        static Node()
+        static Nodess()
         {
             #region Inicial properties           
             #region Header
-            HeaderRadiusProperty = DependencyProperty.Register("HeaderCornerRadius", typeof(double), typeof(Node), new FrameworkPropertyMetadata((double)5));
-            HeaderBrushProperty = DependencyProperty.Register("HeaderBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(18, 61, 106)), FrameworkPropertyMetadataOptions.AffectsRender));
-            HeaderPenProperty = DependencyProperty.Register("HeaderPen", typeof(Pen), typeof(Node), new FrameworkPropertyMetadata(new Pen(), FrameworkPropertyMetadataOptions.AffectsRender));
+            HeaderRadiusProperty = DependencyProperty.Register("HeaderCornerRadius", typeof(double), typeof(Nodess), new FrameworkPropertyMetadata((double)5));
+            HeaderBrushProperty = DependencyProperty.Register("HeaderBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(18, 61, 106)), FrameworkPropertyMetadataOptions.AffectsRender));
+            HeaderPenProperty = DependencyProperty.Register("HeaderPen", typeof(Pen), typeof(Nodess), new FrameworkPropertyMetadata(new Pen(), FrameworkPropertyMetadataOptions.AffectsRender));
             #endregion
             #region Body
-            BodyRadiusProperty = DependencyProperty.Register("BodyCornerRadius", typeof(double), typeof(Node), new FrameworkPropertyMetadata((double)5, FrameworkPropertyMetadataOptions.AffectsRender));
-            BodyBrushProperty = DependencyProperty.Register("BodyBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(45, 45, 48)), FrameworkPropertyMetadataOptions.AffectsRender));
-            BodyPenProperty = DependencyProperty.Register("BodyPen", typeof(Pen), typeof(Node), new FrameworkPropertyMetadata(new Pen(), FrameworkPropertyMetadataOptions.AffectsRender));
+            BodyRadiusProperty = DependencyProperty.Register("BodyCornerRadius", typeof(double), typeof(Nodess), new FrameworkPropertyMetadata((double)5, FrameworkPropertyMetadataOptions.AffectsRender));
+            BodyBrushProperty = DependencyProperty.Register("BodyBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(45, 45, 48)), FrameworkPropertyMetadataOptions.AffectsRender));
+            BodyPenProperty = DependencyProperty.Register("BodyPen", typeof(Pen), typeof(Nodess), new FrameworkPropertyMetadata(new Pen(), FrameworkPropertyMetadataOptions.AffectsRender));
             #endregion
-            InOutTextCultureProperty = DependencyProperty.Register("InOutTextCulture", typeof(CultureInfo), typeof(Node), new FrameworkPropertyMetadata(new System.Globalization.CultureInfo("en-US"), FrameworkPropertyMetadataOptions.AffectsRender));
-            InOutSpaceProperty = DependencyProperty.Register("InOutSpace", typeof(double), typeof(Node), new FrameworkPropertyMetadata((double)10, FrameworkPropertyMetadataOptions.AffectsRender));
-            BorderProperty = DependencyProperty.Register("Border", typeof(Thickness), typeof(Node), new FrameworkPropertyMetadata(new Thickness(10, 2, 10, 2), FrameworkPropertyMetadataOptions.AffectsRender));
+            InOutTextCultureProperty = DependencyProperty.Register("InOutTextCulture", typeof(CultureInfo), typeof(Nodess), new FrameworkPropertyMetadata(new System.Globalization.CultureInfo("en-US"), FrameworkPropertyMetadataOptions.AffectsRender));
+            InOutSpaceProperty = DependencyProperty.Register("InOutSpace", typeof(double), typeof(Nodess), new FrameworkPropertyMetadata((double)10, FrameworkPropertyMetadataOptions.AffectsRender));
+            BorderProperty = DependencyProperty.Register("Border", typeof(Thickness), typeof(Nodess), new FrameworkPropertyMetadata(new Thickness(10, 2, 10, 2), FrameworkPropertyMetadataOptions.AffectsRender));
             #region Input
             #region Figure
-            InputVisibleProperty = DependencyProperty.Register("InputVisible", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(true));
-            InputSizeProperty = DependencyProperty.Register("InputSize", typeof(Size), typeof(Node), new FrameworkPropertyMetadata(new Size(10, 10), FrameworkPropertyMetadataOptions.AffectsRender));
-            InputBrushProperty = DependencyProperty.Register("InputBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(92, 83, 83)), FrameworkPropertyMetadataOptions.AffectsRender));
-            InputSelectBrushProperty = DependencyProperty.Register("InputSelectBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(Brushes.Green, FrameworkPropertyMetadataOptions.AffectsRender));
-            InputIsSelectProperty = DependencyProperty.Register(" InputIsSelect", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
-            InputPenProperty = DependencyProperty.Register("InputPen", typeof(Pen), typeof(Node), new FrameworkPropertyMetadata(new Pen()));
+            InputVisibleProperty = DependencyProperty.Register("InputVisible", typeof(bool), typeof(Nodess), new FrameworkPropertyMetadata(true));
+            InputSizeProperty = DependencyProperty.Register("InputSize", typeof(Size), typeof(Nodess), new FrameworkPropertyMetadata(new Size(10, 10), FrameworkPropertyMetadataOptions.AffectsRender));
+            InputBrushProperty = DependencyProperty.Register("InputBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(92, 83, 83)), FrameworkPropertyMetadataOptions.AffectsRender));
+            InputSelectBrushProperty = DependencyProperty.Register("InputSelectBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(Brushes.Green, FrameworkPropertyMetadataOptions.AffectsRender));
+            InputIsSelectProperty = DependencyProperty.Register(" InputIsSelect", typeof(bool), typeof(Nodess), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
+            InputPenProperty = DependencyProperty.Register("InputPen", typeof(Pen), typeof(Nodess), new FrameworkPropertyMetadata(new Pen()));
             #endregion
             #region Text
-            InputTextProperty = DependencyProperty.Register("InputText", typeof(string), typeof(Node), new FrameworkPropertyMetadata("Input", FrameworkPropertyMetadataOptions.AffectsRender));
-            InputTextBrushProperty = DependencyProperty.Register("InputTextBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(255, 255, 255)), FrameworkPropertyMetadataOptions.AffectsRender));
+            InputTextProperty = DependencyProperty.Register("InputText", typeof(string), typeof(Nodess), new FrameworkPropertyMetadata("Input", FrameworkPropertyMetadataOptions.AffectsRender));
+            InputTextBrushProperty = DependencyProperty.Register("InputTextBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(255, 255, 255)), FrameworkPropertyMetadataOptions.AffectsRender));
             #endregion
             #endregion
             #region Output
             #region Figure
-            OutputVisibleProperty = DependencyProperty.Register("OutputVisible", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(true));
-            OutputSizeProperty = DependencyProperty.Register("OutputSize", typeof(Size), typeof(Node), new FrameworkPropertyMetadata(new Size(10, 10)));
-            OutputBrushProperty = DependencyProperty.Register("OutputBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(92, 83, 83)), FrameworkPropertyMetadataOptions.AffectsRender));
-            OutputSelectBrushProperty = DependencyProperty.Register("OutputSelectBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(Brushes.Green, FrameworkPropertyMetadataOptions.AffectsRender));
-            OutputIsSelectProperty = DependencyProperty.Register("OutputIsSelect", typeof(bool), typeof(Node), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
-            OutputPenProperty = DependencyProperty.Register("OutputPen", typeof(Pen), typeof(Node), new FrameworkPropertyMetadata(new Pen()));
+            OutputVisibleProperty = DependencyProperty.Register("OutputVisible", typeof(bool), typeof(Nodess), new FrameworkPropertyMetadata(true));
+            OutputSizeProperty = DependencyProperty.Register("OutputSize", typeof(Size), typeof(Nodess), new FrameworkPropertyMetadata(new Size(10, 10)));
+            OutputBrushProperty = DependencyProperty.Register("OutputBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(92, 83, 83)), FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputSelectBrushProperty = DependencyProperty.Register("OutputSelectBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(Brushes.Green, FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputIsSelectProperty = DependencyProperty.Register("OutputIsSelect", typeof(bool), typeof(Nodess), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputPenProperty = DependencyProperty.Register("OutputPen", typeof(Pen), typeof(Nodess), new FrameworkPropertyMetadata(new Pen()));
             #endregion
             #region Text
-            OutputTextProperty = DependencyProperty.Register("OutputText", typeof(string), typeof(Node), new FrameworkPropertyMetadata("Output", FrameworkPropertyMetadataOptions.AffectsRender));
-            OutputTextBrushProperty = DependencyProperty.Register("OutputTextBrush", typeof(Brush), typeof(Node), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(255, 255, 255)), FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputTextProperty = DependencyProperty.Register("OutputText", typeof(string), typeof(Nodess), new FrameworkPropertyMetadata("Output", FrameworkPropertyMetadataOptions.AffectsRender));
+            OutputTextBrushProperty = DependencyProperty.Register("OutputTextBrush", typeof(Brush), typeof(Nodess), new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromRgb(255, 255, 255)), FrameworkPropertyMetadataOptions.AffectsRender));
             #endregion
             #endregion
             #endregion
         }
-        public Node() : base(false)
+        public Nodess() : base(false)
         {
-            this.Style = Application.Current.FindResource(typeof(Node)) as Style;
+            this.Style = Application.Current.FindResource(typeof(Nodess)) as Style;
             Manager = new Managers(this);
+            Manager.canScale = false;
             Manager.translate.Changed += TransformChange;
             LocationChangeEvent += LocationChange;
             HeaderMouseDownEvent += HeaderMouseDown;
@@ -383,7 +384,7 @@ namespace StateMachineNodeEditor
             // MouseUp += mouseUp;
             //MouseMove += mouseMove;
         }
-        public Node(string text) : this()
+        public Nodess(string text) : this()
         {
             this.Text = text;
         }
@@ -658,13 +659,20 @@ namespace StateMachineNodeEditor
 
             canMove = false;
             _pressedFigure = null;
-        }        
+        }
+        protected override void OnContextMenuOpening(ContextMenuEventArgs e)
+        {           
+            Point position = new Point(e.CursorLeft,e.CursorTop);
+            if (!_header.Contains(position))
+                e.Handled = true;
+             base.OnContextMenuOpening(e);
+        }
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Point position = e.GetPosition(this);
             bool same = false;
-            if (_pressedFigure == null)
-            {
+            //if (_pressedFigure == null)
+            //{
                 if (_header.Contains(position))
                 {
                     if (_currentFigure == _header)
@@ -698,14 +706,15 @@ namespace StateMachineNodeEditor
                     }
                 }
 
-                if(!same)
-                {
-                    OnMouseLeave(e);
-                    OnMouseEnter(e);
-                }
+
+            if ((!same)&& (_pressedFigure==null))
+            {
+                OnMouseLeave(e);
+                OnMouseEnter(e);
             }
             else
             {
+
                 if (_pressedFigure == _header)
                 {
                     HeaderWithMouseMoveEvent.Invoke(this, e);
@@ -723,6 +732,8 @@ namespace StateMachineNodeEditor
                     BodyWithMouseMoveEvent.Invoke(this, e);
                 }
             }
+
+ 
         }
         protected override void OnMouseEnter(MouseEventArgs e)
         {
@@ -769,7 +780,12 @@ namespace StateMachineNodeEditor
 
             this.Cursor = Cursors.Arrow;
         }
-
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            Console.WriteLine("OnRenderSizeChanged");
+            base.OnRenderSizeChanged(sizeInfo);
+            LocationChangeEvent.Invoke(this, new EventArgs());
+        }
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
@@ -863,8 +879,16 @@ namespace StateMachineNodeEditor
         }
         private void LocationChange(object sender, EventArgs e)
         {
-            InputCenterLocation = new Point(this.Location.X + Input.Location.X + Input.Width / 2, this.Location.Y + Input.Location.Y + Input.Height / 2);
+            UpdateOutputCenterLocation();
+            UpdateInputCenterLocation();
+        }
+        public void UpdateOutputCenterLocation()
+        {
             OutputCenterLocation = new Point(this.Location.X + Output.Location.X + Output.Width / 2, this.Location.Y + Output.Location.Y + Output.Height / 2);
+        }
+        public void UpdateInputCenterLocation()
+        {
+            InputCenterLocation = new Point(this.Location.X + Input.Location.X + Input.Width / 2, this.Location.Y + Input.Location.Y + Input.Height / 2);
         }
         private void TransformChange(object sender, EventArgs e)
         {

@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace StateMachineNodeEditor
 {
-    public class Control : UIElement
+    public class Control : StackPanel
     {
         protected override void OnRender(DrawingContext drawingContext)
         {

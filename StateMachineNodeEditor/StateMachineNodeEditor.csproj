@@ -73,6 +73,7 @@
     <Compile Include="Manager.cs" />
     <Compile Include="MouseMove.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="NodeIsPanel.cs" />
     <Compile Include="NodesCanvas.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -83,9 +84,6 @@
     <Compile Include="test.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="Transform.cs" />
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,10 +101,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StyleNodePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
