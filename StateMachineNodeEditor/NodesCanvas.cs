@@ -145,7 +145,7 @@ namespace StateMachineNodeEditor
             this.ContextMenu = contex;
             Manager = new Managers(this);
             this.ClipToBounds = true;
-            this.Children.Add(new NodeIsPanel());
+            this.Children.Add(new UserControl1());
         }
         public NodesCanvas(UIElement _parent) : this()
         {

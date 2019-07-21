@@ -1,0 +1,13 @@
+﻿<UserControl x:Name="Connect" x:Class="StateMachineNodeEditor.UserControl2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StateMachineNodeEditor"
+             mc:Ignorable="d" 
+          HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+        <TextBox x:Name="Text" Text="TextBox" HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="10,0,10,0" BorderThickness="0,0,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"/>
+        <Ellipse x:Name="Form" Fill="#FFF4F4F5" HorizontalAlignment="Right" Height="12" Stroke="Black" VerticalAlignment="Top" Width="12" Margin="0,2,-6,0"/>
+    </Grid>
+</UserControl>

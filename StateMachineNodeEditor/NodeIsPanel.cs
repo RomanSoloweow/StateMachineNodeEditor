@@ -26,6 +26,7 @@ namespace StateMachineNodeEditor
             TextBox textBox = new TextBox();
             textBox.Text = "Text";
             Button button = new Button();
+            Managers manager = new Managers(this);
             this.Height = 500;
             button.Content = "Button";
             this.Children.Add(textBox);

@@ -7,4 +7,5 @@
         <RotateTransform/>
         <TranslateTransform X="{Binding ElementName=TransformX, Path=TransformX}" Y="{Binding ElementName=TransformY, Path=TransformY}" />
     </TransformGroup>
+    <Style x:Key="NodeStyles" TargetType="{x:Type StackPanel}"/>
 </ResourceDictionary>

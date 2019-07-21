@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Background="#FFE14444" d:DesignWidth="808.96" Height="738.592" >
     <Grid x:Name="grid">
+        <Button Content="Button" HorizontalAlignment="Left" Height="90" Margin="190,160,0,0" VerticalAlignment="Top" Width="195" Background="{x:Null}" BorderBrush="#FFBB2121"/>
+        <Ellipse Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="340,375,0,0" Stroke="Black" VerticalAlignment="Top" Width="110"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="205,90,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Style="{DynamicResource NodeHeader}"/>
         <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>

@@ -8,6 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="StyleMenuItem.xaml"/>
                 <ResourceDictionary Source="StyleNodePanel.xaml"/>
+                <ResourceDictionary Source="NodeHeader.xaml"/>
+                <ResourceDictionary Source="NodeButtonRollUp.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
