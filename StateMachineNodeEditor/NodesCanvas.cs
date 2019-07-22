@@ -15,7 +15,8 @@ namespace StateMachineNodeEditor
 {
     public class NodesCanvas : Grid, ManagedElement
     {
-        public ObservableCollection<Nodess> nodes = new ObservableCollection<Nodess>();
+        //public ObservableCollection<Nodess> nodes = new ObservableCollection<Nodess>();
+        public ObservableCollection<UserControl> nodes = new ObservableCollection<UserControl>();
         public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
 
         static NodesCanvas()
@@ -145,7 +146,7 @@ namespace StateMachineNodeEditor
             this.ContextMenu = contex;
             Manager = new Managers(this);
             this.ClipToBounds = true;
-            this.Children.Add(new UserControl1());
+            //this.Children.Add(new UserControl1());
         }
         public NodesCanvas(UIElement _parent) : this()
         {
@@ -154,32 +155,65 @@ namespace StateMachineNodeEditor
             this.AllowDrop = true;
         }
         public UIElement parent;
+        //public void NodeOutputClick(object sender, RoutedEventArgs e)
+        //{
+        //   Nodess outputNode = sender as Nodess;
+        //   outputNode.UpdateOutputCenterLocation();
+        //   Connect connect= AddConnect(outputNode.OutputCenterLocation);
+        //   connect.InputNode = outputNode;
+        //}
         public void NodeOutputClick(object sender, RoutedEventArgs e)
         {
-           Nodess outputNode = sender as Nodess;
-           outputNode.UpdateOutputCenterLocation();
-           Connect connect= AddConnect(outputNode.OutputCenterLocation);
-           connect.InputNode = outputNode;
+            Ellipse ellipse = sender as Ellipse;
+            //UserControl1 outputNode = sender as UserControl1;
+          
+            var t = Mouse.GetPosition(this);
+            // outputNode.UpdateOutputCenterLocation();
+            Connect connect = AddConnect(t);
+           // connect.InputNode = outputNode;
         }
         public void NodeMove(object sender, EventArgs e)
         {
             Console.WriteLine("Изменилась Локация");
         }
+        //public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    if(e.Action == NotifyCollectionChangedAction.Add)
+        //    {
+        //        foreach (var element in e.NewItems)
+        //        {
+        //            if(element is Nodess node)
+        //            this.Children.Add(node);
+        //        }
+        //    }
+        //    else if (e.Action == NotifyCollectionChangedAction.Remove)
+        //    {
+        //        foreach (var element in e.OldItems)
+        //        {
+        //            if (element is Nodess node)
+        //                this.Children.Remove(node);
+        //        }
+        //    }
+        //    else if (e.Action == NotifyCollectionChangedAction.Reset)
+        //    {
+        //        this.Children.Clear();
+        //    }
+        //}
         public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 foreach (var element in e.NewItems)
                 {
-                    if(element is Nodess node)
-                    this.Children.Add(node);
+                    if (element is UserControl1 node)
+                        this.Children.Add(node);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 foreach (var element in e.OldItems)
                 {
-                    if (element is Nodess node)
+                    if (element is UserControl1 node)
                         this.Children.Remove(node);
                 }
             }
@@ -221,7 +255,8 @@ namespace StateMachineNodeEditor
         public void Add_Click(object sender, RoutedEventArgs e)
         {
             Point position = Mouse.GetPosition(this.parent);
-            AddNode(position);
+            //AddNode(position);
+            AddNodes(position);
         }
         public Nodess AddNode(Point position)
         {
@@ -229,6 +264,17 @@ namespace StateMachineNodeEditor
             this.Name = "State" + this.nodes.Count.ToString();
             node.OutputMouseUpEvent += NodeOutputClick;
             node.LocationChangeEvent += NodeMove;
+            node.Manager.translate.X = position.X;
+            node.Manager.translate.Y = position.Y;
+           // nodes.Add(node);
+            return node;
+        }
+        public UserControl1 AddNodes(Point position)
+        {
+            UserControl1 node = new UserControl1("State " + this.nodes.Count.ToString());
+            this.Name = "State" + this.nodes.Count.ToString();
+            node.OutputForm.MouseDown += NodeOutputClick;
+            //node.LocationChangeEvent += NodeMove;
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
             nodes.Add(node);

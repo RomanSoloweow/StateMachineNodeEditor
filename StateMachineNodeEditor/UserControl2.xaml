@@ -5,9 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
-          HorizontalAlignment="Left" VerticalAlignment="Top">
-    <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
-        <TextBox x:Name="Text" Text="TextBox" HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="10,0,10,0" BorderThickness="0,0,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"/>
-        <Ellipse x:Name="Form" Fill="#FFF4F4F5" HorizontalAlignment="Right" Height="12" Stroke="Black" VerticalAlignment="Top" Width="12" Margin="0,2,-6,0"/>
+          HorizontalAlignment="Right" VerticalAlignment="Top" >
+    <Grid Name="grid" HorizontalAlignment="Right" VerticalAlignment="Top">
+
+        <TextBox Name="Text" Text="TextBox" HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="10,0,10,0" BorderThickness="0,0,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"/>
+        <Ellipse Name="Form" Fill="#FFF4F4F5" HorizontalAlignment="Right" Height="12" Stroke="Black" VerticalAlignment="Top" Width="12" Margin="0,2,-6,0"/>
+        <Path x:Name="path" Stroke="Red" HorizontalAlignment="Right">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure x:Name="test"  IsClosed="False" >
+                        <BezierSegment x:Name="line" Point1="0,0" Point2="0,0" Point3="0,0" />
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
     </Grid>
 </UserControl>
