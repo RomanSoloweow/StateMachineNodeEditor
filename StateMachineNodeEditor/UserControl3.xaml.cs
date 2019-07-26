@@ -58,15 +58,23 @@ namespace StateMachineNodeEditor
         {
             InputNode = userControl2;
         }
+        protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
+        {
+            base.OnGiveFeedback(e);
+        }
+        public void update()
+        {
+            EndPoint = Mouse.GetPosition(InputNode.node.nodesCanvas);
+            Console.WriteLine(EndPoint.ToString());
+        }
         public void HeaderMouseMove(object sender, MouseEventArgs e)
         {
             EndPoint = e.GetPosition(InputNode.node.nodesCanvas);
+         
         }
         protected void Update()
         {
             Vector different = EndPoint - StartPoint;
-            Console.WriteLine("EndPoint = "+EndPoint.ToString());
-            Console.WriteLine("StartPoint = " + StartPoint.ToString());
             bezierSegment.Point1 = new Point(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
             bezierSegment.Point2 = new Point(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
         }

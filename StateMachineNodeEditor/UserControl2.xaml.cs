@@ -52,6 +52,11 @@ namespace StateMachineNodeEditor
         {
             base.OnMouseUp(e);
         }
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+          
+        }
         private void LocationChange(object sender, RoutedEventArgs e)
         {
             UpdateCenterLocation();

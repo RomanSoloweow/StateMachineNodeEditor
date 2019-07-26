@@ -68,7 +68,7 @@ namespace StateMachineNodeEditor
             if (Mouse.Captured == null)
             {
                 Keyboard.ClearFocus();
-               parent.CaptureMouse();
+              parent.CaptureMouse();
             }
         }
         public void mouseUp(object sender, MouseButtonEventArgs e)

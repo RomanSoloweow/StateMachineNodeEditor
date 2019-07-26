@@ -41,8 +41,8 @@ namespace StateMachineNodeEditor
             Manager = new Managers(this);
             Manager.translate.Changed += TransformChange;
             LocationChange += LocationChanges;
-             
-          
+            this.InputForm.Drop += txtTarget_Drop;
+
             this.OutputForm.MouseEnter += OutputMouseEnter;
             this.OutputForm.MouseDown += NewConnect;        
             this.Header.TextChanged+= TextBox_TextChanged;
@@ -54,6 +54,10 @@ namespace StateMachineNodeEditor
         {
             Header.Text = text;
             nodesCanvas = _nodesCanvas;
+        }
+        private void txtTarget_Drop(object sender, DragEventArgs e)
+        {
+
         }
         private void LocationChanges(object sender, RoutedEventArgs e)
         {
@@ -101,13 +105,17 @@ namespace StateMachineNodeEditor
 
         public void NewConnect(object sender, MouseButtonEventArgs e)
         {
-           
+          
+            e.Handled = true;
             UserControl2 control = new UserControl2("Transition "+Transitions.Children.Count.ToString(), this);
+            UserControl3 connect = nodesCanvas.AddConnect(control, MainTransitions.CenterLocation);
+            this.MouseMove += connect.HeaderMouseMove;
             this.Transitions.Children.Insert(1, control);
-            nodesCanvas.AddConnect(control, MainTransitions.CenterLocation);
-            //Transitions.Children.Add(control);
+            DataObject data = new DataObject();
+            data.SetData("control", control);
+            data.SetData("connect", connect);
+            DragDrop.DoDragDrop(connect, data,DragDropEffects.Move);
 
-            // control.Rera = "Stop";
         }
         public void OutputMouseEnter(object sender, MouseEventArgs e)
         {

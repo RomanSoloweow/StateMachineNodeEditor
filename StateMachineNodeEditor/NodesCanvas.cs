@@ -134,6 +134,7 @@ namespace StateMachineNodeEditor
         public Managers Manager { get; set; }
         public NodesCanvas()
         {
+            AllowDrop = true;
             nodes.CollectionChanged += NodesChange;
             connects.CollectionChanged += ConnectsChange;           
             ContextMenu contex = new ContextMenu();
@@ -157,6 +158,14 @@ namespace StateMachineNodeEditor
             
 
             //this.Children.Add(new UserControl1());
+        }
+        protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
+        {
+       
+            (e.OriginalSource as UserControl3).update();
+            base.OnGiveFeedback(e);
+            
+           // Console.WriteLine("Canvas feedback");
         }
         public NodesCanvas(UIElement _parent) : this()
         {
@@ -310,8 +319,8 @@ namespace StateMachineNodeEditor
 
             connect.StartPoint = position;
             connect.Stroke = Brushes.White;
-            this.MouseMove += connect.HeaderMouseMove;  
-            
+            //this.MouseMove += connect.HeaderMouseMove;  
+            ////this.MouseUp+=
             connects.Add(connect);
             return connect;
         }
@@ -322,6 +331,10 @@ namespace StateMachineNodeEditor
                 Moves.Invoke(this, e);
 
         }
-       
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnMouseUp(e);
+        }
+
     }
 }
