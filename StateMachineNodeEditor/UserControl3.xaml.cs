@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.ComponentModel;
+namespace StateMachineNodeEditor
+{
+    public  partial class UserControl3 : UserControl
+    {
+        public static readonly DependencyProperty InputNodeProperty;
+        public UserControl2 InputNode
+        {
+            get { return (UserControl2)GetValue(InputNodeProperty); }
+            set { SetValue(InputNodeProperty, value); }
+        }
+        public static readonly DependencyProperty OutputNodeProperty;
+        public UserControl2 OutputNode
+        {
+            get { return (UserControl2)GetValue(OutputNodeProperty); }
+            set { SetValue(OutputNodeProperty, value); }
+        }
+        public Point StartPoint
+        {
+            get { return pathFigure.StartPoint; }
+            set { pathFigure.StartPoint = value; Update();}
+        }
+        public Brush Stroke
+        {
+            get { return path.Stroke; }
+            set { path.Stroke = value; }
+        }
+        public Point EndPoint
+        {
+            get { return bezierSegment.Point3; }
+            set { bezierSegment.Point3 = value; Update(); }
+        }
+        static UserControl3()
+        {
+            InputNodeProperty = DependencyProperty.Register("InputNode", typeof(UserControl2), typeof(UserControl3), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
+            OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(UserControl2), typeof(UserControl3), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
+        }
+
+        public UserControl3()
+        {
+            InitializeComponent();
+        }
+        public UserControl3(UserControl2 userControl2):this()
+        {
+            InputNode = userControl2;
+        }
+        public void HeaderMouseMove(object sender, MouseEventArgs e)
+        {
+            EndPoint = e.GetPosition(InputNode.node.nodesCanvas);
+        }
+        protected void Update()
+        {
+            Vector different = EndPoint - StartPoint;
+            Console.WriteLine("EndPoint = "+EndPoint.ToString());
+            Console.WriteLine("StartPoint = " + StartPoint.ToString());
+            bezierSegment.Point1 = new Point(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
+            bezierSegment.Point2 = new Point(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
+        }
+        public static void InputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            //Connect connect = (obj as Connect);
+            //Nodess oldNode = (e.OldValue as Nodess);
+            //Nodess newNode = (e.NewValue as Nodess);
+
+            //if (oldNode != null)
+            //    oldNode.LocationChangeEvent -= connect.InputLocationChange;
+            //if (newNode != null)
+            //    newNode.LocationChangeEvent += connect.InputLocationChange;
+        }
+        private static void OutputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            //Connect connect = (obj as Connect);
+            //Nodess oldNode = (e.OldValue as Nodess);
+            //Nodess newNode = (e.NewValue as Nodess);
+
+            //if (oldNode != null)
+            //    oldNode.LocationChangeEvent -= connect.InputLocationChange;
+            //if (newNode != null)
+            //    newNode.LocationChangeEvent += connect.InputLocationChange;
+        }
+        private void InputLocationChange(object sender, EventArgs e)
+        {
+ 
+        }
+        private void OutputLocationChange(object sender, EventArgs e)
+        {
+
+        }
+        
+    }
+}

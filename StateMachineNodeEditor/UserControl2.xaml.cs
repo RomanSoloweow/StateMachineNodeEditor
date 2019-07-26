@@ -24,37 +24,43 @@ namespace StateMachineNodeEditor
     /// </summary>
     public partial class UserControl2 : UserControl
     {
-        public static readonly DependencyProperty ReraProperty;
-        public string Rera
-        {
-            get { return (string)GetValue(ReraProperty); }
-            set { SetValue(ReraProperty, value); }
-        }
-        public string tt;
+       
+        public Point CenterLocation { get; protected set; }
+        public UserControl1 node;
         static UserControl2()
-        {
-            
-            ReraProperty = DependencyProperty.Register("Rera", typeof(string), typeof(Nodess), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        {          
         }
         public UserControl2()
         {
-           
             InitializeComponent();
-
         }
-
+        public void SetNode(UserControl1 userControl1)
+        {
+            node = userControl1;
+            node.LocationChange += LocationChange;
+        }
+        public UserControl2(string text,UserControl1 userControl1):this()
+        {
+            this.Text.Text = text;
+            SetNode(userControl1);
+        }
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
-            Rera = "Privet";
         }
-        protected override void OnMouseLeave(MouseEventArgs e)
+        protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            base.OnMouseLeave(e);
-            Rera = "Poka";
+            base.OnMouseUp(e);
         }
-
-
+        private void LocationChange(object sender, RoutedEventArgs e)
+        {
+            UpdateCenterLocation();
+        }
+        public void UpdateCenterLocation()
+        {
+            Point InputCenter = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
+            CenterLocation = node.TranslatePoint(this.TranslatePoint(InputCenter, node), node.nodesCanvas);
+        }
 
     }
 }

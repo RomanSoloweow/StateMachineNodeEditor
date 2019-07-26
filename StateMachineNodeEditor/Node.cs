@@ -192,6 +192,7 @@ namespace StateMachineNodeEditor
         #endregion DependencyProperties
 
         public MouseButtonEventHandler HeaderMouseDownEvent;
+        
         public MouseButtonEventHandler HeaderMouseUpEvent;
         public MouseEventHandler HeaderMouseMoveEvent;
         public MouseEventHandler HeaderMouseEnterEvent;
@@ -361,7 +362,6 @@ namespace StateMachineNodeEditor
             InputMouseEnterEvent += InputMouseEnter;
             InputMouseLeaveEvent += InputMouseLeave;
             InputWithMouseMoveEvent += InputWithMouseMove;
-
             OutputMouseDownEvent += OutputMouseDown;
             OutputMouseUpEvent += OutputMouseUp;
             OutputMouseMoveEvent += OutputMouseMove;
@@ -384,6 +384,7 @@ namespace StateMachineNodeEditor
             // MouseUp += mouseUp;
             //MouseMove += mouseMove;
         }
+       
         public Nodess(string text) : this()
         {
             this.Text = text;

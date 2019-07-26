@@ -16,9 +16,10 @@ namespace StateMachineNodeEditor
     public class NodesCanvas : Grid, ManagedElement
     {
         //public ObservableCollection<Nodess> nodes = new ObservableCollection<Nodess>();
-        public ObservableCollection<UserControl> nodes = new ObservableCollection<UserControl>();
-        public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
-
+        public ObservableCollection<UserControl1> nodes = new ObservableCollection<UserControl1>();
+        public ObservableCollection<UserControl3> connects = new ObservableCollection<UserControl3>();
+        // public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
+        public MouseEventHandler Moves;
         static NodesCanvas()
         {
             #region Style for class Text (TextBox)
@@ -146,6 +147,15 @@ namespace StateMachineNodeEditor
             this.ContextMenu = contex;
             Manager = new Managers(this);
             this.ClipToBounds = true;
+            this.MouseMove += Move;
+
+            //UserControl3 userControl3 = new UserControl3();
+            //userControl3.StartPoint = new Point(0, 0);
+            //userControl3.EndPoint = new Point(500, 500);
+            //userControl3.Stroke = Brushes.White;
+            //this.Children.Add(userControl3);
+            
+
             //this.Children.Add(new UserControl1());
         }
         public NodesCanvas(UIElement _parent) : this()
@@ -164,17 +174,20 @@ namespace StateMachineNodeEditor
         //}
         public void NodeOutputClick(object sender, RoutedEventArgs e)
         {
-            Ellipse ellipse = sender as Ellipse;
             //UserControl1 outputNode = sender as UserControl1;
           
             var t = Mouse.GetPosition(this);
             // outputNode.UpdateOutputCenterLocation();
-            Connect connect = AddConnect(t);
+           // Connect connect = AddConnect(t);
            // connect.InputNode = outputNode;
+        }
+        public void Move(object sender, EventArgs e)
+        {
+            //Console.WriteLine("Двигаем мышь");
         }
         public void NodeMove(object sender, EventArgs e)
         {
-            Console.WriteLine("Изменилась Локация");
+            //Console.WriteLine("Изменилась Локация");
         }
         //public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         //{
@@ -228,7 +241,7 @@ namespace StateMachineNodeEditor
             {
                 foreach (var element in e.NewItems)
                 {
-                    if (element is Connect node)
+                    if (element is UserControl3 node)
                         this.Children.Add(node);
                 }
             }
@@ -236,7 +249,7 @@ namespace StateMachineNodeEditor
             {
                 foreach (var element in e.OldItems)
                 {
-                    if (element is Connect node)
+                    if (element is UserControl3 node)
                         this.Children.Remove(node);
                 }
             }
@@ -244,7 +257,7 @@ namespace StateMachineNodeEditor
             {
                 foreach (var element in this.Children)
                 {
-                    if (element is Connect connect)
+                    if (element is UserControl3 connect)
                         this.Children.Remove(connect);
                 }
             }
@@ -256,36 +269,59 @@ namespace StateMachineNodeEditor
         {
             Point position = Mouse.GetPosition(this.parent);
             //AddNode(position);
-            AddNodes(position);
+            UserControl1 node =  AddNodes(position);
+
         }
-        public Nodess AddNode(Point position)
-        {
-            Nodess node = new Nodess("State " + this.nodes.Count.ToString());
-            this.Name = "State" + this.nodes.Count.ToString();
-            node.OutputMouseUpEvent += NodeOutputClick;
-            node.LocationChangeEvent += NodeMove;
-            node.Manager.translate.X = position.X;
-            node.Manager.translate.Y = position.Y;
-           // nodes.Add(node);
-            return node;
-        }
+        //public Nodess AddNode(Point position)
+        //{
+        //   // Nodess node = new Nodess("State " + this.nodes.Count.ToString());
+        //   // this.Name = "State" + this.nodes.Count.ToString();
+        //   // node.OutputMouseUpEvent += NodeOutputClick;
+        //   // node.LocationChangeEvent += NodeMove;
+        //   // node.Manager.translate.X = position.X;
+        //   // node.Manager.translate.Y = position.Y;
+        //   //// nodes.Add(node);
+        //    return null;
+        //}
+        //public Connect AddConnect(Point position)
+        //{
+        //    Connect connect = new Connect(position, "Connect " + this.connects.Count.ToString());
+
+        //    this.Name = "Connect" + this.connects.Count.ToString();
+        //    connects.Add(connect);
+        //    return connect;
+        //}
         public UserControl1 AddNodes(Point position)
         {
-            UserControl1 node = new UserControl1("State " + this.nodes.Count.ToString());
+            UserControl1 node = new UserControl1("State " + this.nodes.Count.ToString(),this);
             this.Name = "State" + this.nodes.Count.ToString();
             node.OutputForm.MouseDown += NodeOutputClick;
+            this.Moves += node.Moves;
             //node.LocationChangeEvent += NodeMove;
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
             nodes.Add(node);
+
             return node;
         }
-        public Connect AddConnect(Point position)
+        public UserControl3 AddConnect(UserControl2 userControl2,Point position)
         {
-            Connect connect = new Connect(position, "Connect " + this.connects.Count.ToString());
-            this.Name = "Connect" + this.connects.Count.ToString();
+            UserControl3 connect = new UserControl3(userControl2);
+
+            connect.StartPoint = position;
+            connect.Stroke = Brushes.White;
+            this.MouseMove += connect.HeaderMouseMove;  
+            
             connects.Add(connect);
             return connect;
         }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+                Moves.Invoke(this, e);
+
+        }
+       
     }
 }

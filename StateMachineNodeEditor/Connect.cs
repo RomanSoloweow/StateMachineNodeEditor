@@ -93,7 +93,6 @@ namespace StateMachineNodeEditor
             position.X -= Manager.translate.X;
             position.Y -= Manager.translate.Y;
             StartPoint = position;
-
         }
         private static void OutputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {

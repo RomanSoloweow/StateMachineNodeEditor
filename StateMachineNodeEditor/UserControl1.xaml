@@ -27,6 +27,7 @@
                     </Button>
                 </Grid>
                 <StackPanel  Name="Transitions" Margin="0,5,0,0" >
+                    <local:UserControl2  x:Name="MainTransitions" />
                 </StackPanel>
             </StackPanel>
         </Border>
