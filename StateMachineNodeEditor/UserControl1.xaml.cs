@@ -113,17 +113,27 @@ namespace StateMachineNodeEditor
             e.Handled = true;
             UserControl2 control = new UserControl2("Transition "+Transitions.Children.Count.ToString(), this);
             UserControl3 connect = nodesCanvas.AddConnect(control, MainTransitions.CenterLocation);
-           // MainTransitions.form.DragDelta += connect.OnThumbDragDelta;
-            DataObject data = new DataObject();
-            Mouse.Capture(nodesCanvas, CaptureMode.SubTree);
+            //MainTransitions.form.DragDelta += connect.OnThumbDragDelta;
+
+
+
+            //Mouse.Capture(nodesCanvas, CaptureMode.SubTree);
+            //this.nodesCanvas.MouseMove += connect.HeaderMouseMove;
+
             //connect.CaptureMouse();
 
-           this.nodesCanvas.MouseMove += connect.HeaderMouseMove;
-            data.SetData("control", control);
-            data.SetData("connect", connect);
-            //DragDrop.DoDragDrop(connect, data, DragDropEffects.Move);
+            DataObject data = new DataObject();
+            //data.SetData("control", control);
+            data.SetData("object", connect);
+            DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
             this.Transitions.Children.Insert(1, control);
 
+        }
+        protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
+        {
+            Console.WriteLine("Node GiveFeedBack");
+            base.OnGiveFeedback(e);
+           
         }
         public void InputsMouseDown(object sender, MouseButtonEventArgs e)
         {

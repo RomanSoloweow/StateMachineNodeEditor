@@ -34,13 +34,24 @@ namespace StateMachineNodeEditor
         {
             InitializeComponent();
             AllowDrop = true;
+            form.AllowDrop = true;
             form.MouseEnter += HeaderMouseEnter;
             this.Drop += OnThumbDrop;
             form.DragStarted += OnThumbDragStarted;
             form.DragDelta += OnThumbDragDelta;
             form.PreviewDrop += OnThumbPreviewDrop;
             this.PreviewDrop += OnThumbPreviewDrop;
-            this.DragEnter += OnThumbEnter;
+
+            //this.PreviewDragEnter += DragEn;
+            //this.DragEnter += DragEn;
+            //this.form.DragOver += DragOvers;
+            this.form.DragEnter += DragOvers;
+            this.form.DragLeave += DragLeaves;
+            this.form.Drop += Drops;
+
+            //this.form.DragEnter += DragEn;
+            //this.PreviewDragOver += DragEn;
+
             form.DragCompleted += OnThumbDragCompleted;
             form.Drop += OnThumbDrop;
             form.QueryContinueDrag += OnThumbQueryContinueDragEventArgs;
@@ -57,9 +68,59 @@ namespace StateMachineNodeEditor
         {
 
         }
+        private void DragOvers(object sender, DragEventArgs args)
+        {
+            this.form.Background = Brushes.Green;
+        }
+        private void DragLeaves(object sender, DragEventArgs args)
+        {
+            this.form.Background = Brushes.White;
+        }
+        private void Drops(object sender, DragEventArgs args)
+        {
+            this.form.Background = Brushes.Pink;
+        }
         private void OnThumbEnter(object sender, DragEventArgs args)
         {
 
+        }
+        protected override void OnPreviewDragEnter(DragEventArgs e)
+        {
+            Console.WriteLine("OnPreviewDragEnter");
+            base.OnPreviewDragEnter(e);
+        }
+        protected override void OnPreviewDragOver(DragEventArgs e)
+        {
+            Console.WriteLine("OnPreviewDragOver");
+           // this.form.Background = Brushes.Blue;
+            //this.form.BorderBrush = Brushes.Blue;
+            base.OnPreviewDragOver(e);
+        }
+        protected override void OnDragEnter(DragEventArgs e)
+        {
+            Console.WriteLine("OnDragEnter");
+            base.OnDragEnter(e);
+        }
+        protected override void OnDragLeave(DragEventArgs e)
+        {
+            base.OnDragLeave(e);
+        }
+        protected override void OnDragOver(DragEventArgs e)
+        {
+           // this.form.Background = Brushes.Blue;
+           Console.WriteLine("OnDragOver");
+            base.OnDragOver(e);
+        }
+        protected override void OnDrop(DragEventArgs e)
+        {
+           Console.WriteLine("OnDrop");
+          //  this.form.Background = Brushes.Green;
+            base.OnDrop(e);
+        }
+        private void DragEn(object sender, DragEventArgs args)
+        {
+            //Console.WriteLine("DragEn");
+            //this.form.Background = Brushes.Green;
         }
         private void OnThumbDrop(object sender, DragEventArgs args)
         {
@@ -100,6 +161,12 @@ namespace StateMachineNodeEditor
             base.OnMouseDown(e);
           
         }
+        protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
+        {
+            Console.WriteLine("Connector GiveFeedBack");
+            base.OnGiveFeedback(e);
+
+        }
         private void LocationChange(object sender, RoutedEventArgs e)
         {
             UpdateCenterLocation();
@@ -109,6 +176,5 @@ namespace StateMachineNodeEditor
             Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
             CenterLocation = node.TranslatePoint(this.TranslatePoint(InputCenter, node), node.nodesCanvas);
         }
-
     }
 }

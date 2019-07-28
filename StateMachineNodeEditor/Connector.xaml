@@ -12,12 +12,10 @@
     <SolidColorBrush x:Key="Thumb.Disabled.Border" Color="Black"/>
     <Style x:Key="Connector" TargetType="{x:Type Thumb}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border  Name="border" CornerRadius="50,50,50,50" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
+                    <Border  Name="border" CornerRadius="50,50,50,50"  Background="{TemplateBinding Background}">
                         <!--Background="{TemplateBinding Background}"-->
                         <!---->
                         <!--<Grid>
@@ -25,7 +23,7 @@
                             <Border BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0,0,1,1" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" Margin="1"/>
                             <Border Background="{TemplateBinding Background}" Margin="2"/>
                         </Grid>-->
-                        <Border.Style>
+                        <!--<Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="White" />
                                 <Style.Triggers>
@@ -34,19 +32,15 @@
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-                        </Border.Style>
+                        </Border.Style>-->
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Thumb.MouseOver.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="Black"/>
                         </Trigger>
-                        <!--<Trigger Property="Border.IsMouseDirectlyOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Thumb.MouseOver.Background}"/>
-                        </Trigger>-->
-                        <!--<Trigger Property="IsMouseEnter" Value="false">
-                            <Setter Property="Fill" TargetName="border" Value="{StaticResource Thumb.Disabled.Background}"/>
-                            <Setter Property="Stroke" TargetName="border" Value="{StaticResource Thumb.Disabled.Border}"/>
-                        </Trigger>-->
+                        <Trigger Property="IsMouseDirectlyOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="Black"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

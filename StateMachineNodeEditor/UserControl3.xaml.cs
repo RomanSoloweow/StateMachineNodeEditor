@@ -14,6 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Windows.Controls.Primitives;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using System.Windows.Media.Effects;
+
 namespace StateMachineNodeEditor
 {
     public  partial class UserControl3 : UserControl
@@ -30,6 +34,7 @@ namespace StateMachineNodeEditor
             get { return (UserControl2)GetValue(OutputNodeProperty); }
             set { SetValue(OutputNodeProperty, value); }
         }
+        public Point position;
         public Point StartPoint
         {
             get { return pathFigure.StartPoint; }
@@ -60,7 +65,6 @@ namespace StateMachineNodeEditor
         {
             
         }
-
         public void OnThumbDragDelta(object sender, DragDeltaEventArgs args)
         {
             update();
@@ -71,14 +75,29 @@ namespace StateMachineNodeEditor
         }
         protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
+            update(position);
             base.OnGiveFeedback(e);
         }
-        public void update()
+        protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e)
         {
-            Point point= Mouse.GetPosition(InputNode.node.nodesCanvas);
-            point.X -= 1;
-            point.Y -= 1;
+            var t1 = Mouse.GetPosition(this);
+            var t2 = Mouse.GetPosition(InputNode);
+            var t3 = Mouse.GetPosition(InputNode.node);
+            var t4 = Mouse.GetPosition(InputNode.node.nodesCanvas);
+            base.OnPreviewQueryContinueDrag(e);
+        }
+        public void update(Point? _point=null)
+        {
+            Point point=new Point(0,0);
+            if (_point == null)
+                point = Mouse.GetPosition(InputNode.node.nodesCanvas);
+            else
+            {
+                point.X = _point.Value.X - 1;
+                point.Y = _point.Value.Y - 1;
+            }
             EndPoint = point;
+            //Console.WriteLine(EndPoint.ToString());
         }
         public void HeaderMouseMove(object sender, MouseEventArgs e)
         {

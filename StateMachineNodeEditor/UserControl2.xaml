@@ -10,6 +10,6 @@
         <TextBox Name="Text"  HorizontalAlignment="Right" TextWrapping="NoWrap" Margin="10,0,10,0" BorderThickness="0,0,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"/>
         <!--<Ellipse Name="Form" Fill="#FFF4F4F5" HorizontalAlignment="Right" Height="12" Stroke="Black" VerticalAlignment="Top" Width="12" Margin="0,2,-7,0" AllowDrop="True"/>-->
 
-        <Thumb x:Name="form" Background="White" Style="{DynamicResource Connector}" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-6,0"/>
+        <Thumb x:Name="form"  Style="{DynamicResource Connector}"  Background="White" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-6,0" />
     </Grid>
 </UserControl>

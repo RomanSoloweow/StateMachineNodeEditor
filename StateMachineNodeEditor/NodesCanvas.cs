@@ -132,6 +132,14 @@ namespace StateMachineNodeEditor
             #endregion Style for class Connect
         }
         public Managers Manager { get; set; }
+        protected override void OnDragOver(DragEventArgs e)
+        {
+           if( e.Data.GetData("object") is UserControl3 obj)
+            {
+                obj.position= e.GetPosition(this);
+            }
+            base.OnDragOver(e);
+        }
         public NodesCanvas()
         {
             AllowDrop = true;
