@@ -15,10 +15,9 @@ namespace StateMachineNodeEditor
 {
     public class NodesCanvas : Grid
     {
-        //public ObservableCollection<Nodess> nodes = new ObservableCollection<Nodess>();
         public ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
-        // public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
+
         public MouseEventHandler Moves;
         static NodesCanvas()
         {
@@ -166,7 +165,6 @@ namespace StateMachineNodeEditor
         }
 
 
-
         public void Add_Click(object sender, RoutedEventArgs e)
         {
             Point position = Mouse.GetPosition(this.parent);
@@ -197,9 +195,8 @@ namespace StateMachineNodeEditor
         {
             Node node = new Node("State " + this.nodes.Count.ToString(),this);
             this.Name = "State" + this.nodes.Count.ToString();
-            node.OutputForm.MouseDown += NodeOutputClick;
-            this.Moves += node.Moves;
-           // this.PreviewMouseMove += NodeMove;
+            node.Output.form.MouseDown += NodeOutputClick;
+            // this.PreviewMouseMove += NodeMove;
             //node.LocationChangeEvent += NodeMove;
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
@@ -207,28 +204,13 @@ namespace StateMachineNodeEditor
 
             return node;
         }
-        public Connect AddConnect(Connector userControl2,Point position)
+        public Connect AddConnect(Connect connect)
         {
-            Connect connect = new Connect(userControl2);
-
-            connect.StartPoint = position;
-            connect.Stroke = Brushes.White;
-
-           // this.PreviewMouseMove += connect.HeaderMouseMove;    
             connects.Add(connect);
             return connect;
         }
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
-                Moves.Invoke(this, e);
 
-        }
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            base.OnMouseUp(e);
-        }
+
 
     }
 }

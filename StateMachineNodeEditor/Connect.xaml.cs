@@ -22,17 +22,18 @@ namespace StateMachineNodeEditor
 {
     public  partial class Connect : UserControl
     {
-        public static readonly DependencyProperty InputNodeProperty;
-        public Connector InputNode
+        public static readonly DependencyProperty InputConnectorProperty;
+        public Connector InputConnector
         {
-            get { return (Connector)GetValue(InputNodeProperty); }
-            set { SetValue(InputNodeProperty, value); }
+            get { return (Connector)GetValue(InputConnectorProperty); }
+            set { SetValue(InputConnectorProperty, value); }
         }
-        public static readonly DependencyProperty OutputNodeProperty;
-        public Connector OutputNode
+        public NodesCanvas nodesCanvas;
+        public static readonly DependencyProperty OutputConnectorProperty;
+        public Connector OutputConnector
         {
-            get { return (Connector)GetValue(OutputNodeProperty); }
-            set { SetValue(OutputNodeProperty, value); }
+            get { return (Connector)GetValue(OutputConnectorProperty); }
+            set { SetValue(OutputConnectorProperty, value); }
         }
         public Point position;
         public Point StartPoint
@@ -52,8 +53,8 @@ namespace StateMachineNodeEditor
         }
         static Connect()
         {
-            InputNodeProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
-            OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
+            InputConnectorProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputChange)));
+            OutputConnectorProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputChange)));
         }
 
         public Connect()
@@ -69,9 +70,9 @@ namespace StateMachineNodeEditor
         {
             update();
         }
-        public Connect(Connector userControl2):this()
+        public Connect(Connector inputConnector):this()
         {
-            InputNode = userControl2;
+            InputConnector = inputConnector;
         }
         protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
@@ -80,17 +81,21 @@ namespace StateMachineNodeEditor
         }
         protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e)
         {
-            var t1 = Mouse.GetPosition(this);
-            var t2 = Mouse.GetPosition(InputNode);
-            var t3 = Mouse.GetPosition(InputNode.node);
-            var t4 = Mouse.GetPosition(InputNode.node.nodesCanvas);
+            if(e.EscapePressed)
+            {
+
+            }
             base.OnPreviewQueryContinueDrag(e);
+        }
+        protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
+        {
+            base.OnQueryContinueDrag(e);
         }
         public void update(Point? _point=null)
         {
             Point point=new Point(0,0);
             if (_point == null)
-                point = Mouse.GetPosition(InputNode.node.nodesCanvas);
+                point = Mouse.GetPosition(nodesCanvas);
             else
             {
                 point.X = _point.Value.X - 1;
@@ -99,61 +104,40 @@ namespace StateMachineNodeEditor
             EndPoint = point;
             //Console.WriteLine(EndPoint.ToString());
         }
-        public void HeaderMouseMove(object sender, MouseEventArgs e)
-        {
-            update();
-        }
         protected void Update()
         {
             Vector different = EndPoint - StartPoint;
             bezierSegment.Point1 = new Point(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
             bezierSegment.Point2 = new Point(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
         }
-        public static void InputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        public static void InputChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            //Connect connect = (obj as Connect);
-            //Nodess oldNode = (e.OldValue as Nodess);
-            //Nodess newNode = (e.NewValue as Nodess);
+            Connect connect = (obj as Connect);
+            Connector oldNode = (e.OldValue as Connector);
+            Connector newNode = (e.NewValue as Connector);
+            if (oldNode != null)
+                newNode.PositionChange -= connect.InputPositionChange;
+            if (newNode != null)
+                newNode.PositionChange += connect.InputPositionChange;
+        }
+        private static void OutputChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            Connect connect = (obj as Connect);
+            Connector oldNode = (e.OldValue as Connector);
+            Connector newNode = (e.NewValue as Connector);
 
-            //if (oldNode != null)
-            //    oldNode.LocationChangeEvent -= connect.InputLocationChange;
-            //if (newNode != null)
-            //    newNode.LocationChangeEvent += connect.InputLocationChange;
+            if (oldNode != null)
+                newNode.PositionChange -= connect.OutputPositionChange;
+            if (newNode != null)
+                newNode.PositionChange += connect.OutputPositionChange;
         }
-        private static void OutputShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private void InputPositionChange(object sender, EventArgs e)
         {
-            //Connect connect = (obj as Connect);
-            //Nodess oldNode = (e.OldValue as Nodess);
-            //Nodess newNode = (e.NewValue as Nodess);
-
-            //if (oldNode != null)
-            //    oldNode.LocationChangeEvent -= connect.InputLocationChange;
-            //if (newNode != null)
-            //    newNode.LocationChangeEvent += connect.InputLocationChange;
+            StartPoint = InputConnector.Position;
         }
-        private void InputLocationChange(object sender, EventArgs e)
+        private void OutputPositionChange(object sender, EventArgs e)
         {
- 
-        }
-        private void OutputLocationChange(object sender, EventArgs e)
-        {
-
-        }
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            var t = Mouse.DirectlyOver;
-            base.OnMouseUp(e);
-        }
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            update();
-            // EndPoint = e.GetPosition(InputNode.node.nodesCanvas);
-            base.OnMouseMove(e);
-
-        }
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseDown(e);
+            EndPoint = OutputConnector.Position;
         }
     }
 }
