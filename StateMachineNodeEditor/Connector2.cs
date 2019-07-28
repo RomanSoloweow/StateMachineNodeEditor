@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+
 namespace StateMachineNodeEditor
 {
-    public interface ManagedElement
+    class Connector2
     {
-        Managers Manager { get; set; }
     }
 }

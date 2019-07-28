@@ -18,7 +18,7 @@ namespace StateMachineNodeEditor
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class Node : UserControl
     {
         public static RoutedEvent LocationChangeEvent;
         public event RoutedEventHandler LocationChange
@@ -26,16 +26,17 @@ namespace StateMachineNodeEditor
             add { base.AddHandler(LocationChangeEvent, value);}
             remove{ base.RemoveHandler(LocationChangeEvent, value);}
         }
+
         public Managers Manager { get; protected set; }
         public NodesCanvas nodesCanvas;
         public Point InputCenterLocation { get; protected set; }
 
         public Point OutputCenterLocation { get; protected set; }
-        static UserControl1()
+        static Node()
         {
-            LocationChangeEvent = EventManager.RegisterRoutedEvent("LocationChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(UserControl1));
+            LocationChangeEvent = EventManager.RegisterRoutedEvent("LocationChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
         }
-        public UserControl1()
+        public Node()
         {
             InitializeComponent();
             Manager = new Managers(this);
@@ -45,16 +46,16 @@ namespace StateMachineNodeEditor
             this.OutputForm.MouseEnter += OutputMouseEnter;
             //this.OutputForm.MouseDown += NewConnect;        
             this.Header.TextChanged+= TextBox_TextChanged;
-            this.MainTransitions.form.DragStarted += NewConnect;
             this.MainTransitions.SetNode(this);
-            this.MainTransitions.Text.IsEnabled = false;
+            this.MainTransitions.text.IsEnabled = false;
+            this.MainTransitions.MouseDown += NewConnect;
             this.InputForm.MouseDown += InputsMouseDown;
         }
         protected override void OnDrop(DragEventArgs e)
         {
             base.OnDrop(e);
         }
-        public UserControl1(string text,NodesCanvas _nodesCanvas) :this()
+        public Node(string text,NodesCanvas _nodesCanvas) :this()
         {
             Header.Text = text;
             nodesCanvas = _nodesCanvas;
@@ -107,12 +108,12 @@ namespace StateMachineNodeEditor
             //Console.WriteLine("Двигаем мышь");
         }
 
-        public void NewConnect(object sender, DragStartedEventArgs e)
+        public void NewConnect(object sender, MouseEventArgs e)
         {
           
             e.Handled = true;
-            UserControl2 control = new UserControl2("Transition "+Transitions.Children.Count.ToString(), this);
-            UserControl3 connect = nodesCanvas.AddConnect(control, MainTransitions.CenterLocation);
+            Connector control = new Connector("Transition "+Transitions.Children.Count.ToString(), this);
+            Connect connect = nodesCanvas.AddConnect(control, MainTransitions.CenterLocation);
             //MainTransitions.form.DragDelta += connect.OnThumbDragDelta;
 
 

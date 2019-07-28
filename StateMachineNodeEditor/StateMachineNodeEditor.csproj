@@ -62,42 +62,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Connect.cs" />
-    <Compile Include="ConnectNode.cs" />
-    <Compile Include="Connector.cs" />
-    <Compile Include="Control.cs" />
-    <Compile Include="Editor.cs" />
-    <Compile Include="Element.cs" />
-    <Compile Include="Events.cs" />
-    <Compile Include="ManagedElement.cs" />
+    <Compile Include="Connector2.cs" />
     <Compile Include="Manager.cs" />
-    <Compile Include="MouseMove.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="NodeIsPanel.cs" />
     <Compile Include="NodesCanvas.cs" />
-    <Compile Include="Resource1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Styles.cs" />
     <Compile Include="test.cs" />
-    <Compile Include="Text.cs" />
-    <Compile Include="ThumbTest.cs" />
-    <Compile Include="Transform.cs" />
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
+    <Compile Include="Node.xaml.cs">
+      <DependentUpon>Node.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControl2.xaml.cs">
-      <DependentUpon>UserControl2.xaml</DependentUpon>
+    <Compile Include="Connector.xaml.cs">
+      <DependentUpon>Connector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControl3.xaml.cs">
-      <DependentUpon>UserControl3.xaml</DependentUpon>
+    <Compile Include="Connect.xaml.cs">
+      <DependentUpon>Connect.xaml</DependentUpon>
     </Compile>
-    <Page Include="Connector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,35 +87,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NodeButtonRollUp.xaml">
+    <Page Include="Styles\NodeButtonRollUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NodeHeader.xaml">
+    <Page Include="Styles\NodeHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StyleMenuItem - Copy.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StyleMenuItem.xaml">
+    <Page Include="Node.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StyleNodePanel.xaml">
+    <Page Include="Connector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControl1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControl2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControl3.xaml">
+    <Page Include="Connect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -162,10 +127,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -175,11 +136,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Styles\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="background.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

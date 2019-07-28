@@ -20,18 +20,18 @@ using System.Windows.Media.Effects;
 
 namespace StateMachineNodeEditor
 {
-    public  partial class UserControl3 : UserControl
+    public  partial class Connect : UserControl
     {
         public static readonly DependencyProperty InputNodeProperty;
-        public UserControl2 InputNode
+        public Connector InputNode
         {
-            get { return (UserControl2)GetValue(InputNodeProperty); }
+            get { return (Connector)GetValue(InputNodeProperty); }
             set { SetValue(InputNodeProperty, value); }
         }
         public static readonly DependencyProperty OutputNodeProperty;
-        public UserControl2 OutputNode
+        public Connector OutputNode
         {
-            get { return (UserControl2)GetValue(OutputNodeProperty); }
+            get { return (Connector)GetValue(OutputNodeProperty); }
             set { SetValue(OutputNodeProperty, value); }
         }
         public Point position;
@@ -50,13 +50,13 @@ namespace StateMachineNodeEditor
             get { return bezierSegment.Point3; }
             set { bezierSegment.Point3 = value; Update(); }
         }
-        static UserControl3()
+        static Connect()
         {
-            InputNodeProperty = DependencyProperty.Register("InputNode", typeof(UserControl2), typeof(UserControl3), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
-            OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(UserControl2), typeof(UserControl3), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
+            InputNodeProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputShange)));
+            OutputNodeProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputShange)));
         }
 
-        public UserControl3()
+        public Connect()
         {
             InitializeComponent();
         
@@ -69,7 +69,7 @@ namespace StateMachineNodeEditor
         {
             update();
         }
-        public UserControl3(UserControl2 userControl2):this()
+        public Connect(Connector userControl2):this()
         {
             InputNode = userControl2;
         }
