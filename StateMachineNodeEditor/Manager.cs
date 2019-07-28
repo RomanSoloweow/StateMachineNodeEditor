@@ -68,14 +68,14 @@ namespace StateMachineNodeEditor
             if (Mouse.Captured == null)
             {
                 Keyboard.ClearFocus();
-              parent.CaptureMouse();
+              //parent.CaptureMouse();
             }
         }
         public void mouseUp(object sender, MouseButtonEventArgs e)
         {
              _movePoint = null;
 
-            parent.ReleaseMouseCapture();
+            //parent.ReleaseMouseCapture();
             // ((FrameworkElement)sender).Cursor = Cursors.Arrow;
         }
 

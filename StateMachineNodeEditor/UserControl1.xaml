@@ -14,6 +14,7 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <Thumb x:Name="form" Background="White" Style="{DynamicResource Connector}" Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-6,0"/>
                     <Ellipse  Name="InputForm" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="#FFF4F4F5" Height="12" Stroke="Black"  Width="12" Margin="-5,0,0,0" AllowDrop="True" />
                     <TextBlock Name="InputText" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="NoWrap" Text="Input"  Foreground="White"  Margin="10,0,0,0" />
                     <Ellipse Name="OutputForm" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Fill="#FFF4F4F5"  Height="12" Stroke="Black"  Width="12"  Grid.Column="2" Margin="0,0,-5,0" Visibility="Hidden" />

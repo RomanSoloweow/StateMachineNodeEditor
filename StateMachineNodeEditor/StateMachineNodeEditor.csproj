@@ -83,6 +83,7 @@
     <Compile Include="Styles.cs" />
     <Compile Include="test.cs" />
     <Compile Include="Text.cs" />
+    <Compile Include="ThumbTest.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
@@ -93,6 +94,10 @@
     <Compile Include="UserControl3.xaml.cs">
       <DependentUpon>UserControl3.xaml</DependentUpon>
     </Compile>
+    <Page Include="Connector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

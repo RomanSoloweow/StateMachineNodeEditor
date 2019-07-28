@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="StyleNodePanel.xaml"/>
                 <ResourceDictionary Source="NodeHeader.xaml"/>
                 <ResourceDictionary Source="NodeButtonRollUp.xaml"/>
+                <ResourceDictionary Source="Connector.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

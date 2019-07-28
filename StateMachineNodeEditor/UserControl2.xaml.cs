@@ -16,7 +16,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using System.Windows.Controls.Primitives;
 namespace StateMachineNodeEditor
 {
     /// <summary>
@@ -33,11 +33,54 @@ namespace StateMachineNodeEditor
         public UserControl2()
         {
             InitializeComponent();
+            AllowDrop = true;
+            form.MouseEnter += HeaderMouseEnter;
+            this.Drop += OnThumbDrop;
+            form.DragStarted += OnThumbDragStarted;
+            form.DragDelta += OnThumbDragDelta;
+            form.PreviewDrop += OnThumbPreviewDrop;
+            this.PreviewDrop += OnThumbPreviewDrop;
+            this.DragEnter += OnThumbEnter;
+            form.DragCompleted += OnThumbDragCompleted;
+            form.Drop += OnThumbDrop;
+            form.QueryContinueDrag += OnThumbQueryContinueDragEventArgs;
         }
         public void SetNode(UserControl1 userControl1)
         {
             node = userControl1;
             node.LocationChange += LocationChange;
+        }
+        private void OnThumbDragStarted(object sender, DragStartedEventArgs args)
+        {
+        }
+        private void OnThumbQueryContinueDragEventArgs(object sender, QueryContinueDragEventArgs args)
+        {
+
+        }
+        private void OnThumbEnter(object sender, DragEventArgs args)
+        {
+
+        }
+        private void OnThumbDrop(object sender, DragEventArgs args)
+        {
+
+        }
+        public void HeaderMouseEnter(object sender, MouseEventArgs e)
+        {
+            var t = Mouse.DirectlyOver;
+        }
+        private void OnThumbPreviewDrop(object sender, DragEventArgs args)
+        {
+
+        }
+        private void OnThumbDragDelta(object sender, DragDeltaEventArgs args)
+        {
+
+        }
+        private void OnThumbDragCompleted(object sender, DragCompletedEventArgs args)
+        {
+            var t = Mouse.DirectlyOver;
+    
         }
         public UserControl2(string text,UserControl1 userControl1):this()
         {
@@ -63,7 +106,7 @@ namespace StateMachineNodeEditor
         }
         public void UpdateCenterLocation()
         {
-            Point InputCenter = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
+            Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
             CenterLocation = node.TranslatePoint(this.TranslatePoint(InputCenter, node), node.nodesCanvas);
         }
 

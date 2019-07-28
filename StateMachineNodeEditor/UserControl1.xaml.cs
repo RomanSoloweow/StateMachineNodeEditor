@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Windows.Controls.Primitives;
 namespace StateMachineNodeEditor
 {
     /// <summary>
@@ -41,14 +41,18 @@ namespace StateMachineNodeEditor
             Manager = new Managers(this);
             Manager.translate.Changed += TransformChange;
             LocationChange += LocationChanges;
-            this.InputForm.Drop += txtTarget_Drop;
 
             this.OutputForm.MouseEnter += OutputMouseEnter;
-            this.OutputForm.MouseDown += NewConnect;        
+            //this.OutputForm.MouseDown += NewConnect;        
             this.Header.TextChanged+= TextBox_TextChanged;
-            this.MainTransitions.Form.MouseDown += NewConnect;
+            this.MainTransitions.form.DragStarted += NewConnect;
             this.MainTransitions.SetNode(this);
             this.MainTransitions.Text.IsEnabled = false;
+            this.InputForm.MouseDown += InputsMouseDown;
+        }
+        protected override void OnDrop(DragEventArgs e)
+        {
+            base.OnDrop(e);
         }
         public UserControl1(string text,NodesCanvas _nodesCanvas) :this()
         {
@@ -103,19 +107,27 @@ namespace StateMachineNodeEditor
             //Console.WriteLine("Двигаем мышь");
         }
 
-        public void NewConnect(object sender, MouseButtonEventArgs e)
+        public void NewConnect(object sender, DragStartedEventArgs e)
         {
           
             e.Handled = true;
             UserControl2 control = new UserControl2("Transition "+Transitions.Children.Count.ToString(), this);
             UserControl3 connect = nodesCanvas.AddConnect(control, MainTransitions.CenterLocation);
-            this.MouseMove += connect.HeaderMouseMove;
-            this.Transitions.Children.Insert(1, control);
+           // MainTransitions.form.DragDelta += connect.OnThumbDragDelta;
             DataObject data = new DataObject();
+            Mouse.Capture(nodesCanvas, CaptureMode.SubTree);
+            //connect.CaptureMouse();
+
+           this.nodesCanvas.MouseMove += connect.HeaderMouseMove;
             data.SetData("control", control);
             data.SetData("connect", connect);
-            DragDrop.DoDragDrop(connect, data,DragDropEffects.Move);
+            //DragDrop.DoDragDrop(connect, data, DragDropEffects.Move);
+            this.Transitions.Children.Insert(1, control);
 
+        }
+        public void InputsMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("go");
         }
         public void OutputMouseEnter(object sender, MouseEventArgs e)
         {

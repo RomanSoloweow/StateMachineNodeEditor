@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Windows.Controls.Primitives;
 namespace StateMachineNodeEditor
 {
     public  partial class UserControl3 : UserControl
@@ -53,6 +54,16 @@ namespace StateMachineNodeEditor
         public UserControl3()
         {
             InitializeComponent();
+        
+        }
+        public void OnThumbDragStarted(object sender, DragStartedEventArgs args)
+        {
+            
+        }
+
+        public void OnThumbDragDelta(object sender, DragDeltaEventArgs args)
+        {
+            update();
         }
         public UserControl3(UserControl2 userControl2):this()
         {
@@ -64,13 +75,14 @@ namespace StateMachineNodeEditor
         }
         public void update()
         {
-            EndPoint = Mouse.GetPosition(InputNode.node.nodesCanvas);
-            Console.WriteLine(EndPoint.ToString());
+            Point point= Mouse.GetPosition(InputNode.node.nodesCanvas);
+            point.X -= 1;
+            point.Y -= 1;
+            EndPoint = point;
         }
         public void HeaderMouseMove(object sender, MouseEventArgs e)
         {
-            EndPoint = e.GetPosition(InputNode.node.nodesCanvas);
-         
+            update();
         }
         protected void Update()
         {
@@ -108,6 +120,21 @@ namespace StateMachineNodeEditor
         {
 
         }
-        
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            var t = Mouse.DirectlyOver;
+            base.OnMouseUp(e);
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            update();
+            // EndPoint = e.GetPosition(InputNode.node.nodesCanvas);
+            base.OnMouseMove(e);
+
+        }
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
     }
 }

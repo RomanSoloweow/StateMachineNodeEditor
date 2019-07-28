@@ -159,14 +159,6 @@ namespace StateMachineNodeEditor
 
             //this.Children.Add(new UserControl1());
         }
-        protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
-        {
-       
-            (e.OriginalSource as UserControl3).update();
-            base.OnGiveFeedback(e);
-            
-           // Console.WriteLine("Canvas feedback");
-        }
         public NodesCanvas(UIElement _parent) : this()
         {
             parent = _parent;
@@ -306,6 +298,7 @@ namespace StateMachineNodeEditor
             this.Name = "State" + this.nodes.Count.ToString();
             node.OutputForm.MouseDown += NodeOutputClick;
             this.Moves += node.Moves;
+           // this.PreviewMouseMove += NodeMove;
             //node.LocationChangeEvent += NodeMove;
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
@@ -319,8 +312,8 @@ namespace StateMachineNodeEditor
 
             connect.StartPoint = position;
             connect.Stroke = Brushes.White;
-            //this.MouseMove += connect.HeaderMouseMove;  
-            ////this.MouseUp+=
+
+           // this.PreviewMouseMove += connect.HeaderMouseMove;    
             connects.Add(connect);
             return connect;
         }
