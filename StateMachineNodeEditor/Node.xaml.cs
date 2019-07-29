@@ -128,17 +128,16 @@ namespace StateMachineNodeEditor
             {
                  currentConnector.text.IsEnabled = true;
                  currentConnector.text.Text = currentConnector.Name;
-                    currentConnector.UpdateCenterLocation();      
+                currentConnector.MouseDown -= NewConnect;  
             }
             currentConnector = new Connector(this);
+
             currentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
-            currentConnector.MouseDown += NewConnect;
-            
+            currentConnector.MouseDown += NewConnect;            
             this.Transitions.Children.Insert(0, currentConnector);
-            if (old != null)
-                old.UpdateCenterLocation();
-            currentConnector.UpdateCenterLocation();
-            return old;
+            //if (old != null)
+              //  old.UpdateCenterLocation();
+                return old;
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)
@@ -151,34 +150,50 @@ namespace StateMachineNodeEditor
         }
         public void NewConnect(object sender, MouseEventArgs e)
         {
-
-            e.Handled = true;
+            kek();
+        }
+        public void kek()
+        {
+            currentConnector.UpdateCenterLocation();
+            Connector old = currentConnector;
             Connect connect = new Connect(currentConnector)
             {
                 StartPoint = currentConnector.Position
-             };
+            };
             nodesCanvas.AddConnect(connect);
 
 
             DataObject data = new DataObject();
+
             data.SetData("control", currentConnector);
             data.SetData("object", connect);
             DragDropEffects result = DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
             if (result == DragDropEffects.Link)
             {
                 Connector connector = AddEmptyConnector();
-                connector.UpdateCenterLocation();
-                connect.StartPoint = connector.Position;
+                //connector.UpdateCenterLocation();
+                // connect.StartPoint = connector.Position;
             }
             else
             {
                 nodesCanvas.connects.Remove(connect);
             }
+            this.InvalidateVisual();
+            // connect.InputConnector.InvalidateVisual();
+            //connect.InputConnector.UpdateCenterLocation();
+            //connect.StartPoint = new Point(0, 0);
+            //foreach (var connec in this.Transitions.Children)
+            //{
+            //    if (connec is Connector con)
+            //    {
+            //        con.UpdateCenterLocation();
+            //    }
+            //}
             //this.Transitions.Children.Insert(1, control);
         }
         protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
-            Console.WriteLine("Node GiveFeedBack");
+           // Console.WriteLine("Node GiveFeedBack");
             base.OnGiveFeedback(e);
            
         }

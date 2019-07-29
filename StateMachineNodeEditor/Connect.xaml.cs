@@ -22,12 +22,14 @@ namespace StateMachineNodeEditor
 {
     public  partial class Connect : UserControl
     {
+
         public static readonly DependencyProperty InputConnectorProperty;
         public Connector InputConnector
         {
             get { return (Connector)GetValue(InputConnectorProperty); }
             set { SetValue(InputConnectorProperty, value); }
         }
+       
         public NodesCanvas nodesCanvas;
         public static readonly DependencyProperty OutputConnectorProperty;
         public Connector OutputConnector
@@ -35,40 +37,38 @@ namespace StateMachineNodeEditor
             get { return (Connector)GetValue(OutputConnectorProperty); }
             set { SetValue(OutputConnectorProperty, value); }
         }
-        public Point position;
+
+        public static readonly DependencyProperty StartPointProperty;
         public Point StartPoint
         {
-            get { return pathFigure.StartPoint; }
-            set { pathFigure.StartPoint = value; Update();}
+            get { return (Point)GetValue(StartPointProperty); }
+            set { SetValue(StartPointProperty, value); }
         }
         public Brush Stroke
         {
             get { return path.Stroke; }
             set { path.Stroke = value; }
         }
+        public static readonly DependencyProperty EndPointProperty;
         public Point EndPoint
         {
-            get { return bezierSegment.Point3; }
-            set { bezierSegment.Point3 = value; Update(); }
+            get { return (Point)GetValue(EndPointProperty); }
+            set { SetValue(EndPointProperty, value); }
         }
         static Connect()
         {
-            InputConnectorProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(InputChange)));
-            OutputConnectorProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OutputChange)));
+            InputConnectorProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(InputChange)));
+            OutputConnectorProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(OutputChange)));
+            StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0,0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(StartPointChange)));
+            EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(EndPointChange)));
         }
 
         public Connect()
         {
             InitializeComponent();
-        
-        }
-        public void OnThumbDragStarted(object sender, DragStartedEventArgs args)
-        {
             
-        }
-        public void OnThumbDragDelta(object sender, DragDeltaEventArgs args)
-        {
-            update();
+
+
         }
         public Connect(Connector inputConnector):this()
         {
@@ -76,7 +76,7 @@ namespace StateMachineNodeEditor
         }
         protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
-            update(position);
+           // update(position);
             base.OnGiveFeedback(e);
         }
         protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e)
@@ -107,6 +107,8 @@ namespace StateMachineNodeEditor
         protected void Update()
         {
             Vector different = EndPoint - StartPoint;
+            //Console.WriteLine(this.Name+"  "+this.InputConnector.Name+ "  " + "StartPoint " + StartPoint.ToString());
+            //Console.WriteLine(this.Name + "  " + this.InputConnector.Name + "  " + "EndPoint " + EndPoint.ToString());
             bezierSegment.Point1 = new Point(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
             bezierSegment.Point2 = new Point(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
         }
@@ -131,13 +133,34 @@ namespace StateMachineNodeEditor
             if (newNode != null)
                 newNode.PositionChange += connect.OutputPositionChange;
         }
-        private void InputPositionChange(object sender, EventArgs e)
+        public static void EndPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            StartPoint = InputConnector.Position;
+            Console.WriteLine("EndPointChange");
+            Connect connect = (obj as Connect);
+            connect.bezierSegment.Point3 = ((Point)e.NewValue);
+            connect.Update();
         }
-        private void OutputPositionChange(object sender, EventArgs e)
+        private static void StartPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            EndPoint = OutputConnector.Position;
+            Console.WriteLine("StartPointChange");
+            Connect connect = (obj as Connect);
+            connect.pathFigure.StartPoint = ((Point)e.NewValue);
+            connect.Update();
+        }
+        public void InputPositionChange(object sender, RoutedEventArgs e)
+        {
+           this.StartPoint = InputConnector.Position;
+           Console.WriteLine("StartPoint " + StartPoint.ToString());
+        }
+        public void OutputPositionChange(object sender, RoutedEventArgs e)
+        {        
+            this.EndPoint = OutputConnector.Position;
+            //Console.WriteLine("EndPoint " + EndPoint.ToString());
+        }
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            Console.WriteLine(this.Name+ " - OnRender");
+            base.OnRender(drawingContext);
         }
     }
 }

@@ -17,8 +17,9 @@ namespace StateMachineNodeEditor
     {
         public ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
-
+        TextBox textBox = new TextBox();
         public MouseEventHandler Moves;
+        Point position_click;
         static NodesCanvas()
         {
 
@@ -28,7 +29,7 @@ namespace StateMachineNodeEditor
         {
            if( e.Data.GetData("object") is Connect obj)
             {
-                obj.position= e.GetPosition(this);
+                obj.EndPoint= e.GetPosition(this);
             }
             base.OnDragOver(e);
         }
@@ -49,13 +50,15 @@ namespace StateMachineNodeEditor
             Manager = new Managers(this);
             this.ClipToBounds = true;
             this.MouseMove += Move;
-
+            textBox.HorizontalAlignment = HorizontalAlignment.Right;
+            textBox.VerticalAlignment = VerticalAlignment.Top;
+            this.Children.Add(textBox);
             //UserControl3 userControl3 = new UserControl3();
             //userControl3.StartPoint = new Point(0, 0);
             //userControl3.EndPoint = new Point(500, 500);
             //userControl3.Stroke = Brushes.White;
             //this.Children.Add(userControl3);
-            
+
 
             //this.Children.Add(new UserControl1());
         }
@@ -64,6 +67,11 @@ namespace StateMachineNodeEditor
             parent = _parent;
             this.Background = Brushes.Red;
             this.AllowDrop = true;
+        }
+        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            position_click = e.GetPosition(this);
+            base.OnMouseRightButtonDown(e);
         }
         public UIElement parent;
         //public void NodeOutputClick(object sender, RoutedEventArgs e)
@@ -136,6 +144,12 @@ namespace StateMachineNodeEditor
                 this.Children.Clear();
             }
         }
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            textBox.Text = e.GetPosition(this).ToString();
+            base.OnMouseDown(e);
+
+        }
         public void ConnectsChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -167,9 +181,7 @@ namespace StateMachineNodeEditor
 
         public void Add_Click(object sender, RoutedEventArgs e)
         {
-            Point position = Mouse.GetPosition(this.parent);
-            //AddNode(position);
-            Node node =  AddNodes(position);
+            Node node = AddNodes(position_click);
 
         }
         //public Nodess AddNode(Point position)
@@ -195,9 +207,6 @@ namespace StateMachineNodeEditor
         {
             Node node = new Node("State " + this.nodes.Count.ToString(),this);
             this.Name = "State" + this.nodes.Count.ToString();
-            node.Output.form.MouseDown += NodeOutputClick;
-            // this.PreviewMouseMove += NodeMove;
-            //node.LocationChangeEvent += NodeMove;
             node.Manager.translate.X = position.X;
             node.Manager.translate.Y = position.Y;
             nodes.Add(node);
@@ -206,6 +215,8 @@ namespace StateMachineNodeEditor
         }
         public Connect AddConnect(Connect connect)
         {
+          
+            connect.Name = "Connect_" + this.connects.Count.ToString();
             connects.Add(connect);
             return connect;
         }

@@ -26,6 +26,11 @@ namespace StateMachineNodeEditor
     {
        
         public static readonly DependencyProperty PositionProperty;
+        public Point Position
+        {
+            get { return (Point)GetValue(PositionProperty); }
+            protected set { SetValue(PositionProperty, value); }
+        }
         public static RoutedEvent PositionChangeEvent;
         public static readonly DependencyProperty NodeProperty;
         public Node Node
@@ -61,24 +66,21 @@ namespace StateMachineNodeEditor
             add { base.AddHandler(PositionChangeEvent, value); }
             remove { base.RemoveHandler(PositionChangeEvent, value); }
         }
-        public Point Position
-        {
-            get { return (Point)GetValue(PositionProperty); }
-            protected set { SetValue(PositionProperty, value); }
-        }
+     
         static Connector()
         {
-            PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(Connector), new FrameworkPropertyMetadata(new Point(0,0),  new PropertyChangedCallback(PositionShange)));
+            PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(Connector), new FrameworkPropertyMetadata(new Point(0,0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(PositionShange)));
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Connector));
             NodeProperty = DependencyProperty.Register("InputNode", typeof(Node), typeof(Connector), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(NodeChange)));
         }
-
+        public Managers managers;
         public Connector()
         {
             InitializeComponent();
             form.DragOver += DragOvers;
             form.DragLeave += DragLeaves;
             form.Drop += Drops;
+            managers = new Managers(this);
         }
         public Connector(string text) : this()
         {
@@ -87,6 +89,10 @@ namespace StateMachineNodeEditor
         public Connector(Node node):this()
         {
             Node = node;
+        }
+        public Connector(string text, Node userControl1) : this(userControl1)
+        {
+            this.text.Text = text;
         }
         private void DragOvers(object sender, DragEventArgs args)
         {
@@ -112,12 +118,7 @@ namespace StateMachineNodeEditor
             if (newNode != null)
             {
                 newNode.PositionChange += connector.LocationChange;
-            }
-        }
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            Console.WriteLine(e.Property.ToString());
-            base.OnPropertyChanged(e);
+            }         
         }
         private static void PositionShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -140,24 +141,16 @@ namespace StateMachineNodeEditor
             {
                 form.Margin = new Thickness(-radius, 0, 0, 0);
             }
-        }
-       
-
-        public Connector(string text,Node userControl1):this(userControl1)
-        {
-            this.text.Text = text;
-        }
+        }         
         private void LocationChange(object sender, RoutedEventArgs e)
         {
-            UpdateCenterLocation();
+           UpdateCenterLocation();
         }
         public void UpdateCenterLocation()
         {
             Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
             Point InpuCenterOnNode = this.TranslatePoint(InputCenter, Node);
             Position = Node.TranslatePoint(InpuCenterOnNode, Node.nodesCanvas);
-            this.RaiseEvent(new RoutedEventArgs(PositionChangeEvent, this));
-
         }
     }
 }
