@@ -27,35 +27,49 @@ namespace StateMachineNodeEditor
             remove { base.RemoveHandler(PositionChangeEvent, value); }
         }
         public Managers Manager { get; protected set; }
-        public Connector Input = new Connector();
-        public Connector Output = new Connector();
+        public Connector Input;
+        public Connector Output;
+        bool rite = false;
         public NodesCanvas nodesCanvas;
         public Point InputCenterLocation { get; protected set; }
-        public Connector currentConnector;
+        public static readonly DependencyProperty currentConnectorProperty;
+        public Connector currentConnector
+        {
+            get { return (Connector)GetValue(currentConnectorProperty); }
+            set { SetValue(currentConnectorProperty, value); }
+        }
         public Point OutputCenterLocation { get; protected set; }
         static Node()
         {
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
+            currentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
         }
         public void AddElements()
         {
+            Input = new Connector(this)
+            {
+                Name = "Input",
+                Text = "Input",
+                TextIsEnable=false
+             };
+
             MainPanel.Children.Add(Input);
             Grid.SetRow(Input, 0);
             Grid.SetColumn(Input, 0);
             Input.Distribute(HorizontalAlignment.Left);
-            Input.Name = "Input";
-            Input.Text = "Input";
-            Input.TextIsEnable = false;
 
+            Output = new Connector(this)
+            {
+                Name = "Output",
+                Text = "Output",
+                TextIsEnable = false,
+                Visibility=Visibility.Hidden
+            };
 
             MainPanel.Children.Add(Output);
             Grid.SetRow(Output, 1);
             Grid.SetColumn(Output, 1);
             Output.Distribute(HorizontalAlignment.Right);
-            Output.Name = "Output";
-            Output.Text = "Output";
-            Output.TextIsEnable = false;
-            Output.Visibility = Visibility.Hidden;
         }
         public Node()
         {
@@ -123,21 +137,22 @@ namespace StateMachineNodeEditor
 
         private Connector AddEmptyConnector()
         {
-            Connector old = currentConnector;
             if (currentConnector != null)
             {
                  currentConnector.text.IsEnabled = true;
                  currentConnector.text.Text = currentConnector.Name;
                 currentConnector.MouseDown -= NewConnect;  
             }
-            currentConnector = new Connector(this);
+            currentConnector = new Connector(this)
+            {
+                Name = "Transition_" + Transitions.Children.Count.ToString()
+            };
 
-            currentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
-            currentConnector.MouseDown += NewConnect;            
+            currentConnector.MouseDown += NewConnect;
+
             this.Transitions.Children.Insert(0, currentConnector);
-            //if (old != null)
-              //  old.UpdateCenterLocation();
-                return old;
+            this.Transitions.UpdateLayout();
+            return null;
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)
@@ -152,11 +167,18 @@ namespace StateMachineNodeEditor
         {
             kek();
         }
+        public void getinfo(UserControl element)
+        {
+            Console.WriteLine("ActualHeight " + element.ActualHeight.ToString());
+            Console.WriteLine("ActualWidth " + element.ActualWidth.ToString());
+            Console.WriteLine("DesiredSize " + element.DesiredSize.ToString());
+            Console.WriteLine("RenderSize " + element.RenderSize.ToString());
+        }
         public void kek()
         {
             currentConnector.UpdateCenterLocation();
             Connector old = currentConnector;
-            Connect connect = new Connect(currentConnector)
+              Connect connect = new Connect(currentConnector)
             {
                 StartPoint = currentConnector.Position
             };
@@ -170,17 +192,17 @@ namespace StateMachineNodeEditor
             DragDropEffects result = DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
             if (result == DragDropEffects.Link)
             {
-                Connector connector = AddEmptyConnector();
-                //connector.UpdateCenterLocation();
-                // connect.StartPoint = connector.Position;
+                AddEmptyConnector();
             }
             else
             {
                 nodesCanvas.connects.Remove(connect);
             }
             this.InvalidateVisual();
+            this.chan
             // connect.InputConnector.InvalidateVisual();
-            //connect.InputConnector.UpdateCenterLocation();
+           // connect.InputConnector.UpdateCenterLocation();
+            
             //connect.StartPoint = new Point(0, 0);
             //foreach (var connec in this.Transitions.Children)
             //{
@@ -212,6 +234,15 @@ namespace StateMachineNodeEditor
             this.Rotate.Angle = visible?180:0;
             this.Output.Visibility = visible? Visibility.Visible:Visibility.Hidden;
             this.Transitions.Visibility= visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            if(rite)
+            {
+                int k = 0;
+            }
+         
+            base.OnRender(drawingContext);
         }
     }
 }

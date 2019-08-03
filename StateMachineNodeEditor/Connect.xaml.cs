@@ -65,10 +65,7 @@ namespace StateMachineNodeEditor
 
         public Connect()
         {
-            InitializeComponent();
-            
-
-
+            InitializeComponent();         
         }
         public Connect(Connector inputConnector):this()
         {
@@ -76,7 +73,6 @@ namespace StateMachineNodeEditor
         }
         protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
-           // update(position);
             base.OnGiveFeedback(e);
         }
         protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e)
@@ -135,14 +131,14 @@ namespace StateMachineNodeEditor
         }
         public static void EndPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            Console.WriteLine("EndPointChange");
+           // Console.WriteLine("EndPointChange");
             Connect connect = (obj as Connect);
             connect.bezierSegment.Point3 = ((Point)e.NewValue);
             connect.Update();
         }
         private static void StartPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            Console.WriteLine("StartPointChange");
+            //Console.WriteLine("StartPointChange");
             Connect connect = (obj as Connect);
             connect.pathFigure.StartPoint = ((Point)e.NewValue);
             connect.Update();
@@ -150,7 +146,7 @@ namespace StateMachineNodeEditor
         public void InputPositionChange(object sender, RoutedEventArgs e)
         {
            this.StartPoint = InputConnector.Position;
-           Console.WriteLine("StartPoint " + StartPoint.ToString());
+           //Console.WriteLine("StartPoint " + StartPoint.ToString());
         }
         public void OutputPositionChange(object sender, RoutedEventArgs e)
         {        
@@ -159,7 +155,7 @@ namespace StateMachineNodeEditor
         }
         protected override void OnRender(DrawingContext drawingContext)
         {
-            Console.WriteLine(this.Name+ " - OnRender");
+            //Console.WriteLine(this.Name+ " - OnRender");
             base.OnRender(drawingContext);
         }
     }

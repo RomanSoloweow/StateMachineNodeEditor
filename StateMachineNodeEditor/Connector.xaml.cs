@@ -124,6 +124,12 @@ namespace StateMachineNodeEditor
         {
             Connector connector = obj as Connector;
             connector.RaiseEvent(new RoutedEventArgs(PositionChangeEvent, connector));
+            
+        }
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            Console.WriteLine(this.Name + "  " + e.Property);
         }
         public void Distribute(HorizontalAlignment horizontalAlignment)
         {
