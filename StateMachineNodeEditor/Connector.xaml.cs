@@ -19,9 +19,6 @@ using System.Windows.Input;
 using System.Windows.Controls.Primitives;
 namespace StateMachineNodeEditor
 {
-    /// <summary>
-    /// Interaction logic for UserControl2.xaml
-    /// </summary>
     public partial class Connector : UserControl
     {
        
@@ -79,6 +76,7 @@ namespace StateMachineNodeEditor
             InitializeComponent();
             form.DragOver += DragOvers;
             form.DragLeave += DragLeaves;
+            this.IsVisibleChanged += IsVisibleShange;
             form.Drop += Drops;
             managers = new Managers(this);
         }
@@ -106,7 +104,7 @@ namespace StateMachineNodeEditor
         {
             this.form.Stroke = Brushes.Pink;
         }
-        public static void NodeChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private static void NodeChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Connector connector = (obj as Connector);
             Node oldNode = (e.OldValue as Node);
@@ -126,10 +124,10 @@ namespace StateMachineNodeEditor
             connector.RaiseEvent(new RoutedEventArgs(PositionChangeEvent, connector));
             
         }
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        private  void IsVisibleShange(object sender, DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(e);
-            Console.WriteLine(this.Name + "  " + e.Property);
+            UpdateCenterLocation();
+
         }
         public void Distribute(HorizontalAlignment horizontalAlignment)
         {
@@ -148,15 +146,25 @@ namespace StateMachineNodeEditor
                 form.Margin = new Thickness(-radius, 0, 0, 0);
             }
         }         
+        
         private void LocationChange(object sender, RoutedEventArgs e)
         {
            UpdateCenterLocation();
         }
         public void UpdateCenterLocation()
         {
-            Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
-            Point InpuCenterOnNode = this.TranslatePoint(InputCenter, Node);
-            Position = Node.TranslatePoint(InpuCenterOnNode, Node.nodesCanvas);
+            if (this.IsVisible)
+            {
+                Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
+                Point InpuCenterOnNode = this.TranslatePoint(InputCenter, Node);
+                Position = Node.TranslatePoint(InpuCenterOnNode, Node.nodesCanvas);
+            }
+            else
+                Position = Node.OutputCenterLocation;
+        }
+        public void NodeUpdateLayout(object sender, RoutedEventArgs e)
+        {
+            UpdateCenterLocation();
         }
     }
 }

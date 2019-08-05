@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" >
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80"   >
-        <Border CornerRadius="5,5,5,5" Background="#FF2D2D2D" HorizontalAlignment="Left"   >
+        <Border x:Name="Border" CornerRadius="5,5,5,5" Background="#FF2D2D2D" HorizontalAlignment="Left"   >
             <StackPanel Margin="0,0,0,5"   >
                 <TextBox Name="Header" Text="TextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}" Background="#FF123D6A" Margin="0" HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
                 <Grid x:Name="MainPanel" Margin="0,5,0,0" MinWidth="80" MinHeight="40">
@@ -22,7 +22,7 @@
                     <TextBlock Name="InputText" Grid.Row="0" HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Input"  Foreground="White"  Margin="10,0,0,0" />
                     <Ellipse Name="OutputForm" Grid.Row="3" HorizontalAlignment="Right" Fill="#FFF4F4F5"  Height="12" Stroke="Black"  Width="12"  Grid.Column="2" Margin="0,0,-5,0" />
                     <TextBlock Name="OutputText" Grid.Row="3" HorizontalAlignment="Right" TextWrapping="NoWrap" Text="Output" Foreground="White" Grid.Column="2" Margin="0,0,10,0" />-->
-                    <Button Name ="RollUp" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom" Background="#000000"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left" Click="Button_Click"   >
+                    <Button Name ="RollUp" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom" Background="#000000"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left" Click="Button_Click" FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
                         <Button.RenderTransform>
                             <TransformGroup>
                                 <RotateTransform x:Name="Rotate" Angle="360" CenterX="9" CenterY="3.2"/>
@@ -32,8 +32,7 @@
           
 
                 </Grid>
-                <StackPanel  Name="Transitions" Margin="0,5,0,0" >
-                </StackPanel>
+                <StackPanel  Name="Transitions" Margin="0,5,0,0" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" />
             </StackPanel>
         </Border>
     </Grid >

@@ -74,22 +74,6 @@ namespace StateMachineNodeEditor
             base.OnMouseRightButtonDown(e);
         }
         public UIElement parent;
-        //public void NodeOutputClick(object sender, RoutedEventArgs e)
-        //{
-        //   Nodess outputNode = sender as Nodess;
-        //   outputNode.UpdateOutputCenterLocation();
-        //   Connect connect= AddConnect(outputNode.OutputCenterLocation);
-        //   connect.InputNode = outputNode;
-        //}
-        public void NodeOutputClick(object sender, RoutedEventArgs e)
-        {
-            //UserControl1 outputNode = sender as UserControl1;
-          
-            var t = Mouse.GetPosition(this);
-            // outputNode.UpdateOutputCenterLocation();
-           // Connect connect = AddConnect(t);
-           // connect.InputNode = outputNode;
-        }
         public void Move(object sender, EventArgs e)
         {
             //Console.WriteLine("Двигаем мышь");
@@ -98,29 +82,6 @@ namespace StateMachineNodeEditor
         {
             //Console.WriteLine("Изменилась Локация");
         }
-        //public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    if(e.Action == NotifyCollectionChangedAction.Add)
-        //    {
-        //        foreach (var element in e.NewItems)
-        //        {
-        //            if(element is Nodess node)
-        //            this.Children.Add(node);
-        //        }
-        //    }
-        //    else if (e.Action == NotifyCollectionChangedAction.Remove)
-        //    {
-        //        foreach (var element in e.OldItems)
-        //        {
-        //            if (element is Nodess node)
-        //                this.Children.Remove(node);
-        //        }
-        //    }
-        //    else if (e.Action == NotifyCollectionChangedAction.Reset)
-        //    {
-        //        this.Children.Clear();
-        //    }
-        //}
         public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -182,27 +143,7 @@ namespace StateMachineNodeEditor
         public void Add_Click(object sender, RoutedEventArgs e)
         {
             Node node = AddNodes(position_click);
-
         }
-        //public Nodess AddNode(Point position)
-        //{
-        //   // Nodess node = new Nodess("State " + this.nodes.Count.ToString());
-        //   // this.Name = "State" + this.nodes.Count.ToString();
-        //   // node.OutputMouseUpEvent += NodeOutputClick;
-        //   // node.LocationChangeEvent += NodeMove;
-        //   // node.Manager.translate.X = position.X;
-        //   // node.Manager.translate.Y = position.Y;
-        //   //// nodes.Add(node);
-        //    return null;
-        //}
-        //public Connect AddConnect(Point position)
-        //{
-        //    Connect connect = new Connect(position, "Connect " + this.connects.Count.ToString());
-
-        //    this.Name = "Connect" + this.connects.Count.ToString();
-        //    connects.Add(connect);
-        //    return connect;
-        //}
         public Node AddNodes(Point position)
         {
             Node node = new Node("State " + this.nodes.Count.ToString(),this);
@@ -214,14 +155,10 @@ namespace StateMachineNodeEditor
             return node;
         }
         public Connect AddConnect(Connect connect)
-        {
-          
+        {          
             connect.Name = "Connect_" + this.connects.Count.ToString();
             connects.Add(connect);
             return connect;
         }
-
-
-
     }
 }

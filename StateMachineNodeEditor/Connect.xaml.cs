@@ -59,8 +59,8 @@ namespace StateMachineNodeEditor
         {
             InputConnectorProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(InputChange)));
             OutputConnectorProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(OutputChange)));
-            StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0,0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(StartPointChange)));
-            EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(EndPointChange)));
+            StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0,0), new PropertyChangedCallback(StartPointChange)));
+            EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0),  new PropertyChangedCallback(EndPointChange)));
         }
 
         public Connect()
@@ -71,22 +71,7 @@ namespace StateMachineNodeEditor
         {
             InputConnector = inputConnector;
         }
-        protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
-        {
-            base.OnGiveFeedback(e);
-        }
-        protected override void OnPreviewQueryContinueDrag(QueryContinueDragEventArgs e)
-        {
-            if(e.EscapePressed)
-            {
 
-            }
-            base.OnPreviewQueryContinueDrag(e);
-        }
-        protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
-        {
-            base.OnQueryContinueDrag(e);
-        }
         public void update(Point? _point=null)
         {
             Point point=new Point(0,0);
@@ -103,8 +88,6 @@ namespace StateMachineNodeEditor
         protected void Update()
         {
             Vector different = EndPoint - StartPoint;
-            //Console.WriteLine(this.Name+"  "+this.InputConnector.Name+ "  " + "StartPoint " + StartPoint.ToString());
-            //Console.WriteLine(this.Name + "  " + this.InputConnector.Name + "  " + "EndPoint " + EndPoint.ToString());
             bezierSegment.Point1 = new Point(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
             bezierSegment.Point2 = new Point(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
         }
@@ -114,9 +97,14 @@ namespace StateMachineNodeEditor
             Connector oldNode = (e.OldValue as Connector);
             Connector newNode = (e.NewValue as Connector);
             if (oldNode != null)
+            {
                 newNode.PositionChange -= connect.InputPositionChange;
+            }
+
             if (newNode != null)
+            {
                 newNode.PositionChange += connect.InputPositionChange;
+            }
         }
         private static void OutputChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -131,14 +119,12 @@ namespace StateMachineNodeEditor
         }
         public static void EndPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-           // Console.WriteLine("EndPointChange");
             Connect connect = (obj as Connect);
             connect.bezierSegment.Point3 = ((Point)e.NewValue);
             connect.Update();
         }
         private static void StartPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            //Console.WriteLine("StartPointChange");
             Connect connect = (obj as Connect);
             connect.pathFigure.StartPoint = ((Point)e.NewValue);
             connect.Update();
@@ -146,17 +132,11 @@ namespace StateMachineNodeEditor
         public void InputPositionChange(object sender, RoutedEventArgs e)
         {
            this.StartPoint = InputConnector.Position;
-           //Console.WriteLine("StartPoint " + StartPoint.ToString());
         }
         public void OutputPositionChange(object sender, RoutedEventArgs e)
         {        
             this.EndPoint = OutputConnector.Position;
-            //Console.WriteLine("EndPoint " + EndPoint.ToString());
         }
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            //Console.WriteLine(this.Name+ " - OnRender");
-            base.OnRender(drawingContext);
-        }
+
     }
 }
