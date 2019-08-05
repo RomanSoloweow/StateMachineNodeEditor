@@ -76,6 +76,7 @@ namespace StateMachineNodeEditor
             
             AddInputOutput();
             Manager = new Managers(this);
+            this.Output.MouseDown += NewConnect;
             PositionChange += PositionChanges;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            

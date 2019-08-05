@@ -158,6 +158,8 @@ namespace StateMachineNodeEditor
         {          
             connect.Name = "Connect_" + this.connects.Count.ToString();
             connects.Add(connect);
+            //int k = Panel.GetZIndex(connect);
+            Panel.SetZIndex(connect, 2);
             return connect;
         }
     }

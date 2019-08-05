@@ -87,6 +87,7 @@ namespace StateMachineNodeEditor
         public Connector(Node node):this()
         {
             Node = node;
+           // int k = Panel.GetZIndex(this.form);
         }
         public Connector(string text, Node userControl1) : this(userControl1)
         {
@@ -127,7 +128,6 @@ namespace StateMachineNodeEditor
         private  void IsVisibleShange(object sender, DependencyPropertyChangedEventArgs e)
         {
             UpdateCenterLocation();
-
         }
         public void Distribute(HorizontalAlignment horizontalAlignment)
         {
@@ -136,15 +136,8 @@ namespace StateMachineNodeEditor
             form.HorizontalAlignment = horizontalAlignment;
             double radius = form.Width / 2;
             text.Margin = new Thickness(radius + 4, 0, radius + 4, 0);
-            if (this.HorizontalAlignment == HorizontalAlignment.Right)
-            {
-                form.Margin = new Thickness(0, 0, -radius, 0);
-               
-            }
-            else
-            {
-                form.Margin = new Thickness(-radius, 0, 0, 0);
-            }
+            bool right = (this.HorizontalAlignment == HorizontalAlignment.Right);
+           form.Margin = right? new Thickness(0, 0, -radius, 0): new Thickness(-radius, 0, 0, 0);             
         }         
         
         private void LocationChange(object sender, RoutedEventArgs e)

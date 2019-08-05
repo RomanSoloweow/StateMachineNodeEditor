@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
           HorizontalAlignment="Right" VerticalAlignment="Top">
-    <Grid >
+    <Grid>
         <TextBox Name="text" HorizontalAlignment="Right" VerticalAlignment="Top" TextWrapping="NoWrap" Margin="10,0,10,0" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource TextBoxInConnector}"/>
-        <Ellipse Name="form" HorizontalAlignment="Right" VerticalAlignment="Center" Fill="#FFF4F4F5"   Height="12" Stroke="Black"  Width="12"  AllowDrop="True" Margin="0,0,-6,0"/>
-
+        <Ellipse Name="form" HorizontalAlignment="Right" VerticalAlignment="Center"    Height="12" Stroke="Black"  Width="12"  AllowDrop="True" Margin="0,0,-6,0" Panel.ZIndex="3" Fill="#FFC50B0B"/>
+        <!--Fill="#FFF4F4F5"-->
     </Grid>
 </UserControl>

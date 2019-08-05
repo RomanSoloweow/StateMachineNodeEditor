@@ -65,7 +65,7 @@ namespace StateMachineNodeEditor
 
         public Connect()
         {
-            InitializeComponent();         
+            InitializeComponent();       
         }
         public Connect(Connector inputConnector):this()
         {
