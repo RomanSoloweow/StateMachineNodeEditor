@@ -20,8 +20,7 @@ using System.Windows.Controls.Primitives;
 namespace StateMachineNodeEditor
 {
     public partial class Connector : UserControl
-    {
-       
+    {     
         public static readonly DependencyProperty PositionProperty;
         public Point Position
         {
@@ -74,6 +73,8 @@ namespace StateMachineNodeEditor
         public Connector()
         {
             InitializeComponent();
+            int t = Panel.GetZIndex(this.form);
+            Panel.SetZIndex(this.form, 10);
             form.DragOver += DragOvers;
             form.DragLeave += DragLeaves;
             this.IsVisibleChanged += IsVisibleShange;
@@ -95,15 +96,15 @@ namespace StateMachineNodeEditor
         }
         private void DragOvers(object sender, DragEventArgs args)
         {
-            this.form.Stroke = Brushes.Pink;
+      
         }
         private void DragLeaves(object sender, DragEventArgs args)
         {
-            this.form.Stroke = Brushes.Black;
+
         }
         private void Drops(object sender, DragEventArgs args)
         {
-            this.form.Stroke = Brushes.Pink;
+  
         }
         private static void NodeChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {

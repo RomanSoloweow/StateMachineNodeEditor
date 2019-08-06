@@ -76,7 +76,7 @@ namespace StateMachineNodeEditor
             
             AddInputOutput();
             Manager = new Managers(this);
-            this.Output.MouseDown += NewConnect;
+            this.Output.form.MouseDown += NewConnect;
             PositionChange += PositionChanges;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
@@ -121,13 +121,13 @@ namespace StateMachineNodeEditor
             {
                  currentConnector.text.IsEnabled = true;
                  currentConnector.text.Text = currentConnector.Name;
-                currentConnector.MouseDown -= NewConnect;  
+                currentConnector.form.MouseDown -= NewConnect;  
             }
             currentConnector = new Connector(this);
             currentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
-            currentConnector.MouseDown += NewConnect;
+            currentConnector.form.MouseDown += NewConnect;
             this.Transitions.Children.Insert(0, currentConnector);
-            this.Transitions.UpdateLayout();           
+            StackPanel.SetZIndex(currentConnector.form, 3);
             return null;
         }
 
@@ -149,7 +149,6 @@ namespace StateMachineNodeEditor
             data.SetData("control", currentConnector);
             data.SetData("object", connect);
             DragDropEffects result = DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
-
             if (result == DragDropEffects.Link)
             {
                 AddEmptyConnector();
@@ -158,6 +157,9 @@ namespace StateMachineNodeEditor
             {
                 nodesCanvas.connects.Remove(connect);
             }
+
+            int t = Grid.GetZIndex(currentConnector.form);
+            int k  = Grid.GetZIndex(connect.path);
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {

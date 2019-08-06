@@ -53,14 +53,6 @@ namespace StateMachineNodeEditor
             textBox.HorizontalAlignment = HorizontalAlignment.Right;
             textBox.VerticalAlignment = VerticalAlignment.Top;
             this.Children.Add(textBox);
-            //UserControl3 userControl3 = new UserControl3();
-            //userControl3.StartPoint = new Point(0, 0);
-            //userControl3.EndPoint = new Point(500, 500);
-            //userControl3.Stroke = Brushes.White;
-            //this.Children.Add(userControl3);
-
-
-            //this.Children.Add(new UserControl1());
         }
         public NodesCanvas(UIElement _parent) : this()
         {
@@ -158,8 +150,7 @@ namespace StateMachineNodeEditor
         {          
             connect.Name = "Connect_" + this.connects.Count.ToString();
             connects.Add(connect);
-            //int k = Panel.GetZIndex(connect);
-            Panel.SetZIndex(connect, 2);
+            Panel.SetZIndex(connect.path, 1);
             return connect;
         }
     }
