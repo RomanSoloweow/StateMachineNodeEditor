@@ -27,9 +27,14 @@ namespace StateMachineNodeEditor
         public Managers Manager { get; set; }
         protected override void OnDragOver(DragEventArgs e)
         {
-           if( e.Data.GetData("object") is Connect obj)
+           if( e.Data.GetData("Connect") is Connect obj)
             {
-                obj.EndPoint= e.GetPosition(this);
+                Point point = e.GetPosition(this);
+                point.X -= 2;
+                point.Y -= 2;
+                obj.EndPoint = point;
+
+              //  e.Effects = DragDropEffects.Move;
             }
             base.OnDragOver(e);
         }

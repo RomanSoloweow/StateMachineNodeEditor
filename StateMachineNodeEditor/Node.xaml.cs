@@ -49,7 +49,8 @@ namespace StateMachineNodeEditor
             {
                 Name = "Input",
                 Text = "Input",
-                TextIsEnable=false
+                TextIsEnable=false,
+                AllowDrop=true
              };
 
             MainPanel.Children.Add(Input);
@@ -70,20 +71,48 @@ namespace StateMachineNodeEditor
             Grid.SetColumn(Output, 1);
             Output.Distribute(HorizontalAlignment.Right);
         }
+        private void DropList_Drop(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Link;
+        }
+        private void DropList_Drop2(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.None;
+        }
         public Node()
         {
             InitializeComponent();
-            
+            this.AllowDrop = true;
             AddInputOutput();
             Manager = new Managers(this);
             this.Output.form.MouseDown += NewConnect;
+          // this.Border.DragEnter+= OVerYes;
+            this.Input.Drop += DropEnter;
+    
+            //this.Input.MouseEnter
+            //this.Input.DragLeave+=
             PositionChange += PositionChanges;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
             this.Header.TextChanged += TextBox_TextChanged;
             AddEmptyConnector();
         }
-
+        public void DropEnter(object sender, DragEventArgs e)
+        {
+            var node = e.Data.GetData("Node");
+            if((node is Node)&&(node!=this))
+            {
+              ((Connect)e.Data.GetData("Connect")).OutputConnector = this.Input;
+            }
+        }
+        public void DropLeave(object sender, DragEventArgs e)
+        {
+ 
+            if ((Node)e.Data.GetData("object") != this)
+            {
+               // ((Connect)e.Data.GetData("object")).InputConnector = this.Input;
+            }
+        }
         public Node(string text, NodesCanvas _nodesCanvas) : this()
         {
             Header.Text = text;
@@ -130,7 +159,7 @@ namespace StateMachineNodeEditor
             StackPanel.SetZIndex(currentConnector.form, 3);
             return null;
         }
-
+       
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
@@ -146,10 +175,12 @@ namespace StateMachineNodeEditor
             connect.StartPoint = currentConnector.Position;
             nodesCanvas.AddConnect(connect);
             DataObject data = new DataObject();
-            data.SetData("control", currentConnector);
-            data.SetData("object", connect);
+            data.SetData("Node", this);
+            data.SetData("Control", currentConnector);
+            data.SetData("Connect", connect);
             DragDropEffects result = DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
-            if (result == DragDropEffects.Link)
+            //if (result == DragDropEffects.Link)
+            if(connect.OutputConnector!=null)
             {
                 AddEmptyConnector();
             }

@@ -104,6 +104,7 @@ namespace StateMachineNodeEditor
             if (newNode != null)
             {
                 newNode.PositionChange += connect.InputPositionChange;
+                connect.StartPoint = newNode.Position;
             }
         }
         private static void OutputChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -115,7 +116,10 @@ namespace StateMachineNodeEditor
             if (oldNode != null)
                 newNode.PositionChange -= connect.OutputPositionChange;
             if (newNode != null)
+            {
                 newNode.PositionChange += connect.OutputPositionChange;
+                connect.EndPoint = newNode.Position;
+            }
         }
         public static void EndPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {

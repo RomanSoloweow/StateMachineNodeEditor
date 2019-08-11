@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
-             mc:Ignorable="d" >
-    <Border x:Name="Border" CornerRadius="5,5,5,5" Background="#FF2D2D2D" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80"  >
+             mc:Ignorable="d"  >
+    <Border x:Name="Border" CornerRadius="5,5,5,5" Background="#FF2D2D2D" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80"   >
             <StackPanel Margin="0,0,0,5"  >
                 <TextBox Name="Header" Text="TextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}" Background="#FF123D6A" HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
                 <Grid x:Name="MainPanel" Margin="0,5,0,0" MinWidth="80" MinHeight="40">

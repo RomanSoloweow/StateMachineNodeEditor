@@ -6,6 +6,51 @@
     <SolidColorBrush x:Key="Static.Border" Color="Black"/>
     <SolidColorBrush x:Key="MouseOver.Background" Color="#FFF4F4F5"/>
     <SolidColorBrush x:Key="MouseOver.Border" Color="#FFF4F4F5"/>
+
+    <SolidColorBrush x:Key="MouseEnter.Background" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="MouseEnter.Border" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="MouseLeave.Background" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="MouseLeave.Border" Color="Black"/>
+    <SolidColorBrush x:Key="DropEnter.Background" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="DropEnter.Border" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="DropLeave.Background" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="DropLeave.Border" Color="Black"/>
+
+    <Storyboard x:Key="MouseEnterStoryboard">
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource MouseEnter.Border}" />
+        </ObjectAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource MouseEnter.Background}" />
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+
+    <Storyboard x:Key="MouseLeaveStoryboard">
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource MouseLeave.Border}" />
+        </ObjectAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource MouseLeave.Background}" />
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+
+    <Storyboard x:Key="DragEnterStoryboard">
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource DropEnter.Border}" />
+        </ObjectAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource DropEnter.Background}" />
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+    <Storyboard x:Key="DragLeaveStoryboard">
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource DropLeave.Border}" />
+        </ObjectAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{StaticResource DropLeave.Background}" />
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+
     <Style x:Key="ConnectorEllipse" TargetType="{x:Type Ellipse}">
         <Style.Setters>
             <Setter Property="Stroke" Value="{StaticResource Static.Border}"/>
@@ -13,10 +58,25 @@
         </Style.Setters>
         
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="true">
+            <!--<Trigger Property="IsMouseOver" Value="true">
                 <Setter Property="Stroke" Value="{StaticResource MouseOver.Border}"/>
-                <Setter Property="Fill"  Value="{StaticResource MouseOver.Background}"/>
-            </Trigger>
+                --><!--<Setter Property="Fill"  Value="{StaticResource MouseOver.Background}"/>--><!--
+            </Trigger>-->
+            <EventTrigger RoutedEvent="Ellipse.MouseEnter">
+                <BeginStoryboard Storyboard="{StaticResource MouseEnterStoryboard}" />
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Ellipse.MouseLeave">
+                <BeginStoryboard Storyboard="{StaticResource MouseLeaveStoryboard}" />
+            </EventTrigger>
+            <!--<EventTrigger RoutedEvent="Ellipse.DragOver">
+                <BeginStoryboard Storyboard="{StaticResource DragEnterStoryboard}" />
+            </EventTrigger>-->
+            <EventTrigger RoutedEvent="Ellipse.DragEnter">
+                <BeginStoryboard Storyboard="{StaticResource DragEnterStoryboard}" />
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Ellipse.DragLeave">
+                <BeginStoryboard Storyboard="{StaticResource DragLeaveStoryboard}" />
+            </EventTrigger>
         </Style.Triggers>
    
     </Style>
