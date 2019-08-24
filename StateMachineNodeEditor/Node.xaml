@@ -24,7 +24,7 @@
                     <Button Name ="RollUp" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom" Background="#000000"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left" Click="Button_Click" FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
                         <Button.RenderTransform>
                             <TransformGroup>
-                                <RotateTransform x:Name="Rotate" Angle="360" CenterX="9" CenterY="3.2"/>
+                                <RotateTransform x:Name="Rotate" Angle="0" CenterX="9" CenterY="3.2"/>
                             </TransformGroup>
                         </Button.RenderTransform>
                     </Button>

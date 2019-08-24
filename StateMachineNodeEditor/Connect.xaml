@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d">
     <Grid>
-        <Path x:Name="path" Stroke="White" >
+        <Path StrokeDashArray="10 3" StrokeDashCap="Round" StrokeLineJoin="Round"  x:Name="path" Stroke="White" >
             <Path.Data>
-                <PathGeometry x:Name="pathGeometry" >
+                <PathGeometry  x:Name="pathGeometry" >
                     <PathFigure x:Name="pathFigure"  IsClosed="False">
-                        <BezierSegment x:Name="bezierSegment" />
+                        <BezierSegment  x:Name="bezierSegment" />
                     </PathFigure>
                 </PathGeometry>
             </Path.Data>

@@ -18,15 +18,22 @@ namespace StateMachineNodeEditor
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class Node : UserControl
+    public partial class Node : UserControl, HaveManager,ICloneable
     {
         public static RoutedEvent PositionChangeEvent;
         public event RoutedEventHandler PositionChange
         {       
-            add { base.AddHandler(PositionChangeEvent, value); Console.WriteLine("PositionChange"); }
+            add { base.AddHandler(PositionChangeEvent, value);}
             remove { base.RemoveHandler(PositionChangeEvent, value); }
         }
-        public Managers Manager { get; protected set; }
+        public static RoutedEvent ZoomChangeEvent;
+        public event RoutedEventHandler ZoomChange
+        {
+            add { base.AddHandler(ZoomChangeEvent, value); }
+            remove { base.RemoveHandler(ZoomChangeEvent, value); }
+        }
+
+        public Managers Manager { get;  set; }
         public Connector Input;
         public Connector Output;
         public NodesCanvas nodesCanvas;
@@ -41,6 +48,7 @@ namespace StateMachineNodeEditor
         static Node()
         {
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
+            ZoomChangeEvent = EventManager.RegisterRoutedEvent("ZoomChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
             currentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
         }
         public void AddInputOutput()
@@ -85,17 +93,25 @@ namespace StateMachineNodeEditor
             this.AllowDrop = true;
             AddInputOutput();
             Manager = new Managers(this);
+            Manager.scale.Changed += Zoom;
             this.Output.form.MouseDown += NewConnect;
-          // this.Border.DragEnter+= OVerYes;
             this.Input.Drop += DropEnter;
-    
-            //this.Input.MouseEnter
-            //this.Input.DragLeave+=
+            //this.MouseMove += mouseMove;
             PositionChange += PositionChanges;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
             this.Header.TextChanged += TextBox_TextChanged;
             AddEmptyConnector();
+        }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+        public void Zoom(object sender, EventArgs e)
+        {
+      
+            RaiseEvent(new RoutedEventArgs(PositionChangeEvent, this));
+            RaiseEvent(new RoutedEventArgs(ZoomChangeEvent, this));
         }
         public void DropEnter(object sender, DragEventArgs e)
         {
@@ -133,7 +149,10 @@ namespace StateMachineNodeEditor
             if (Output.IsVisible)
                 UpdateOutputCenterLocation();
         }
-        
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {            
+            base.OnMouseDown(e);
+        }
         public void UpdateOutputCenterLocation()
         {
            Point OutputCenter = Output.form.TranslatePoint(new Point(Output.form.Width / 2, Output.form.Height / 2), this);
@@ -179,7 +198,6 @@ namespace StateMachineNodeEditor
             data.SetData("Control", currentConnector);
             data.SetData("Connect", connect);
             DragDropEffects result = DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
-            //if (result == DragDropEffects.Link)
             if(connect.OutputConnector!=null)
             {
                 AddEmptyConnector();
@@ -188,14 +206,20 @@ namespace StateMachineNodeEditor
             {
                 nodesCanvas.connects.Remove(connect);
             }
-
+            e.Handled = true;
             int t = Grid.GetZIndex(currentConnector.form);
             int k  = Grid.GetZIndex(connect.path);
         }
+        //public void mouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if ((Mouse.Captured == this)&& (Mouse.LeftButton == MouseButtonState.Pressed))
+        //    {
+        //        Manager.Move();
+        //    }
+        //}
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             bool visible = (this.Rotate.Angle == 0);
-
             this.Rotate.Angle = visible?180:0;
             this.Output.Visibility = visible? Visibility.Visible:Visibility.Hidden;
             this.Transitions.Visibility= visible ? Visibility.Collapsed : Visibility.Visible;

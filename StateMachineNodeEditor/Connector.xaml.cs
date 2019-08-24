@@ -20,7 +20,7 @@ using System.Windows.Controls.Primitives;
 namespace StateMachineNodeEditor
 {
     public partial class Connector : UserControl
-    {     
+    {
         public static readonly DependencyProperty PositionProperty;
         public Point Position
         {
@@ -43,7 +43,7 @@ namespace StateMachineNodeEditor
             }
             set
             {
-                text.Text = value;               
+                text.Text = value;
             }
         }
         public bool TextIsEnable
@@ -62,14 +62,13 @@ namespace StateMachineNodeEditor
             add { base.AddHandler(PositionChangeEvent, value); }
             remove { base.RemoveHandler(PositionChangeEvent, value); }
         }
-     
+
         static Connector()
         {
-            PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(Connector), new FrameworkPropertyMetadata(new Point(0,0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(PositionShange)));
+            PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(Connector), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(PositionShange)));
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Connector));
             NodeProperty = DependencyProperty.Register("InputNode", typeof(Node), typeof(Connector), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(NodeChange)));
         }
-        public Managers managers;
         public Connector()
         {
             InitializeComponent();
@@ -79,16 +78,15 @@ namespace StateMachineNodeEditor
             form.DragLeave += DragLeaves;
             this.IsVisibleChanged += IsVisibleShange;
             form.Drop += Drops;
-            managers = new Managers(this);
         }
         public Connector(string text) : this()
         {
             this.text.Text = text;
         }
-        public Connector(Node node):this()
+        public Connector(Node node) : this()
         {
             Node = node;
-           // int k = Panel.GetZIndex(this.form);
+            // int k = Panel.GetZIndex(this.form);
         }
         public Connector(string text, Node userControl1) : this(userControl1)
         {
@@ -96,7 +94,7 @@ namespace StateMachineNodeEditor
         }
         private void DragOvers(object sender, DragEventArgs args)
         {
-      
+
         }
         private void DragLeaves(object sender, DragEventArgs args)
         {
@@ -104,7 +102,7 @@ namespace StateMachineNodeEditor
         }
         private void Drops(object sender, DragEventArgs args)
         {
-  
+
         }
         private static void NodeChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -113,20 +111,20 @@ namespace StateMachineNodeEditor
             Node newNode = (e.NewValue as Node);
             if (oldNode != null)
             {
-                newNode.PositionChange -= connector.LocationChange;
+                oldNode.PositionChange -= connector.LocationChange;
             }
             if (newNode != null)
             {
                 newNode.PositionChange += connector.LocationChange;
-            }         
+            }
         }
         private static void PositionShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Connector connector = obj as Connector;
             connector.RaiseEvent(new RoutedEventArgs(PositionChangeEvent, connector));
-            
+
         }
-        private  void IsVisibleShange(object sender, DependencyPropertyChangedEventArgs e)
+        private void IsVisibleShange(object sender, DependencyPropertyChangedEventArgs e)
         {
             UpdateCenterLocation();
         }
@@ -138,12 +136,12 @@ namespace StateMachineNodeEditor
             double radius = form.Width / 2;
             text.Margin = new Thickness(radius + 4, 0, radius + 4, 0);
             bool right = (this.HorizontalAlignment == HorizontalAlignment.Right);
-           form.Margin = right? new Thickness(0, 0, -radius, 0): new Thickness(-radius, 0, 0, 0);             
-        }         
-        
+            form.Margin = right ? new Thickness(0, 0, -radius, 0) : new Thickness(-radius, 0, 0, 0);
+        }
+       
         private void LocationChange(object sender, RoutedEventArgs e)
         {
-           UpdateCenterLocation();
+            UpdateCenterLocation();
         }
         public void UpdateCenterLocation()
         {

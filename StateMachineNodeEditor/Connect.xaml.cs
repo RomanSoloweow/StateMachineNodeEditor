@@ -20,7 +20,7 @@ using System.Windows.Media.Effects;
 
 namespace StateMachineNodeEditor
 {
-    public  partial class Connect : UserControl
+    public partial class Connect : UserControl
     {
 
         public static readonly DependencyProperty InputConnectorProperty;
@@ -29,7 +29,7 @@ namespace StateMachineNodeEditor
             get { return (Connector)GetValue(InputConnectorProperty); }
             set { SetValue(InputConnectorProperty, value); }
         }
-       
+
         public NodesCanvas nodesCanvas;
         public static readonly DependencyProperty OutputConnectorProperty;
         public Connector OutputConnector
@@ -59,32 +59,34 @@ namespace StateMachineNodeEditor
         {
             InputConnectorProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(InputChange)));
             OutputConnectorProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(OutputChange)));
-            StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0,0), new PropertyChangedCallback(StartPointChange)));
-            EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0),  new PropertyChangedCallback(EndPointChange)));
+            StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0), new PropertyChangedCallback(StartPointChange)));
+            EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0), new PropertyChangedCallback(EndPointChange)));
         }
-
+        private double StrokeThickness;
         public Connect()
         {
-            InitializeComponent();       
+            InitializeComponent();
+            StrokeThickness = path.StrokeThickness;
         }
-        public Connect(Connector inputConnector):this()
+        public Connect(Connector inputConnector) : this()
         {
             InputConnector = inputConnector;
+            UpdateZoom();
+
         }
 
-        public void update(Point? _point=null)
-        {
-            Point point=new Point(0,0);
-            if (_point == null)
-                point = Mouse.GetPosition(nodesCanvas);
-            else
-            {
-                point.X = _point.Value.X - 1;
-                point.Y = _point.Value.Y - 1;
-            }
-            EndPoint = point;
-            //Console.WriteLine(EndPoint.ToString());
-        }
+        //public void update(Point? _point=null)
+        //{
+        //    Point point=new Point(0,0);
+        //    if (_point == null)
+        //        point = Mouse.GetPosition(nodesCanvas);
+        //    else
+        //    {
+        //        point.X = _point.Value.X - 1;
+        //        point.Y = _point.Value.Y - 1;
+        //    }
+        //    EndPoint = point;
+        //}
         protected void Update()
         {
             Vector different = EndPoint - StartPoint;
@@ -98,12 +100,14 @@ namespace StateMachineNodeEditor
             Connector newNode = (e.NewValue as Connector);
             if (oldNode != null)
             {
-                newNode.PositionChange -= connect.InputPositionChange;
+                oldNode.PositionChange -= connect.InputPositionChange;
+                oldNode.Node.ZoomChange -= connect.ZoomChange;
             }
 
             if (newNode != null)
             {
                 newNode.PositionChange += connect.InputPositionChange;
+                newNode.Node.ZoomChange += connect.ZoomChange;
                 connect.StartPoint = newNode.Position;
             }
         }
@@ -114,12 +118,21 @@ namespace StateMachineNodeEditor
             Connector newNode = (e.NewValue as Connector);
 
             if (oldNode != null)
-                newNode.PositionChange -= connect.OutputPositionChange;
+                oldNode.PositionChange -= connect.OutputPositionChange;
             if (newNode != null)
             {
+                connect.path.StrokeDashArray = null;
                 newNode.PositionChange += connect.OutputPositionChange;
                 connect.EndPoint = newNode.Position;
             }
+        }
+        private void ZoomChange(object sender, RoutedEventArgs e)
+        {
+            UpdateZoom();
+        }
+        public void UpdateZoom()
+        {
+            this.path.StrokeThickness = StrokeThickness * InputConnector.Node.Manager.scale.ScaleX;
         }
         public static void EndPointChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -141,6 +154,5 @@ namespace StateMachineNodeEditor
         {        
             this.EndPoint = OutputConnector.Position;
         }
-
     }
 }
