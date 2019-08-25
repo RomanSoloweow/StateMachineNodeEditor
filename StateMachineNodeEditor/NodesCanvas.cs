@@ -11,13 +11,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+
 namespace StateMachineNodeEditor
 {
-    public class NodesCanvas : Grid,HaveManager
+    public class NodesCanvas : Grid
     {
         public ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
+        public List<Node> selectedNodes = new List<Node>();
         TextBox textBox = new TextBox();
+        public Selector Selector;
         public MouseEventHandler Moves;
         Point position_click;
         static NodesCanvas()
@@ -29,10 +32,10 @@ namespace StateMachineNodeEditor
         {
            if( e.Data.GetData("Connect") is Connect obj)
             {
-                Point point = e.GetPosition(this);
-                point.X -= 2;
-                point.Y -= 2;
-                obj.EndPoint = point;
+                //Point point =;
+                //point.X -= 2;
+                //point.Y -= 2;
+                obj.EndPoint = ForPoint.Subtraction(e.GetPosition(this), 2);
             }
             base.OnDragOver(e);
         }
@@ -51,9 +54,14 @@ namespace StateMachineNodeEditor
             add.Icon = null;
             this.ContextMenu = contex;
             Manager = new Managers(this);
+            Selector = new Selector(this);
+            this.Children.Add(Selector);
+            //this.Children.Add(Selector);
             this.ClipToBounds = true;
             this.MouseMove += mouseMove;
             this.MouseWheel += mouseWheel;
+            this.MouseUp += mouseUp;
+            this.MouseDown += mouseDown;
             textBox.HorizontalAlignment = HorizontalAlignment.Right;
             textBox.VerticalAlignment = VerticalAlignment.Top;
             this.Children.Add(textBox);
@@ -61,7 +69,7 @@ namespace StateMachineNodeEditor
         public NodesCanvas(UIElement _parent) : this()
         {
             parent = _parent;
-            this.Background = Brushes.Red;
+            this.Background = new SolidColorBrush(Color.FromRgb(20, 20, 20));
             this.AllowDrop = true;
         }
         protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
@@ -72,7 +80,7 @@ namespace StateMachineNodeEditor
         public UIElement parent;
         public void NodeMove(object sender, EventArgs e)
         {
-            //Console.WriteLine("Изменилась Локация");
+
         }
         public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -96,12 +104,6 @@ namespace StateMachineNodeEditor
             {
                 this.Children.Clear();
             }
-        }
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            textBox.Text = e.GetPosition(this).ToString();
-            base.OnMouseDown(e);
-
         }
         public void ConnectsChange(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -130,29 +132,49 @@ namespace StateMachineNodeEditor
                 }
             }
         }
-        //public void mouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if(Mouse.Captured==this)
-        //    {
-        //        Point position = e.GetPosition(this);
-        //        foreach(var node in nodes)
-        //        {
-        //            node.Manager.Move(position);
-        //        }
-        //    }
-        //}
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Point position = e.GetPosition(this);
+            textBox.Text = position.ToString();
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                Selector.Position1 = position;
+                Selector.Visibility = Visibility.Visible;
+            }
+        }
+        public void mouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Selector.Visibility = Visibility.Hidden;
+        }
+        public void UpdateSeletedNodes()
+        {
+            //nodes.Select()
+        }
         public void mouseMove(object sender, MouseEventArgs e)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                Delta delta = Manager.GetDeltaMove();
+                Point delta = Manager.GetDeltaMove();
                 if (Mouse.Captured == this)
                 {
-                   
-                    foreach (var node in nodes)
+                    if (!Keyboard.IsKeyDown(Key.LeftCtrl))
                     {
-                        node.Manager.Move(delta);
+                        foreach (var node in nodes)
+                        {
+                            node.Manager.Move(delta);
+                        }
                     }
+                    else
+                    {
+                        if(!Selector.IsVisible)
+                        {
+                            Selector.Visibility = Visibility.Visible;
+                        }
+                        Selector.Change(e.GetPosition(this));
+
+                        //Selector.Position2 = e.GetPosition(this);
+                    }
+
                 }
                 else
                 {
@@ -162,14 +184,12 @@ namespace StateMachineNodeEditor
                         node.Manager.Move(delta);
                     }
                 }
-            }
-            
+            }         
         }
         public void mouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (Mouse.Captured == this) 
+            if (Mouse.Captured == null) 
             {
-                //Manager.Scale(e.Delta);
                 foreach (var node in nodes)
                 {
                     node.Manager.Scale(e.Delta);
@@ -184,8 +204,6 @@ namespace StateMachineNodeEditor
         {
             Node node = new Node("State " + this.nodes.Count.ToString(),this);
             node.Name = "State" + this.nodes.Count.ToString();
-            //node.Manager.translate.X = position.X;
-            //node.Manager.translate.Y = position.Y;
             if (nodes.Count > 0)
             {
                 Node firstNode = nodes.First();
@@ -193,10 +211,9 @@ namespace StateMachineNodeEditor
                 node.Manager.scale.ScaleY = firstNode.Manager.scale.ScaleY;
                 node.Manager.zoom = firstNode.Manager.zoom;
             }
-            node.Manager.translate.X = position.X/node.Manager.zoom;
-            node.Manager.translate.Y = position.Y/node.Manager.zoom;
-            //node.Manager.translate.X /= node.Manager.zoom;
-            //node.Manager.translate.Y /= node.Manager.zoom;
+            ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.zoom));
+            //node.Manager.translate.X = position.X;
+            //node.Manager.translate.Y = position.Y;
             nodes.Add(node);
             return node;
         }

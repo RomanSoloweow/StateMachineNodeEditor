@@ -74,10 +74,7 @@ namespace StateMachineNodeEditor
             InitializeComponent();
             int t = Panel.GetZIndex(this.form);
             Panel.SetZIndex(this.form, 10);
-            form.DragOver += DragOvers;
-            form.DragLeave += DragLeaves;
             this.IsVisibleChanged += IsVisibleShange;
-            form.Drop += Drops;
         }
         public Connector(string text) : this()
         {
@@ -86,23 +83,10 @@ namespace StateMachineNodeEditor
         public Connector(Node node) : this()
         {
             Node = node;
-            // int k = Panel.GetZIndex(this.form);
         }
         public Connector(string text, Node userControl1) : this(userControl1)
         {
             this.text.Text = text;
-        }
-        private void DragOvers(object sender, DragEventArgs args)
-        {
-
-        }
-        private void DragLeaves(object sender, DragEventArgs args)
-        {
-
-        }
-        private void Drops(object sender, DragEventArgs args)
-        {
-
         }
         private static void NodeChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {

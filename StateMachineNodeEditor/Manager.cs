@@ -9,33 +9,15 @@ using System.Windows;
 using System.Windows.Input;
 namespace StateMachineNodeEditor
 {
-  public struct Delta
+  //public struct Delta
+  //  {
+  //      public double deltaX;
+  //      public double deltaY;
+  //  }
+    public class Managers:Transforms
     {
-        public double deltaX;
-        public double deltaY;
-    }
-    public class Managers
-    {
-        public TransformGroup _transformGroup { get; private set; } = new TransformGroup();
-        public TranslateTransform translate { get; private set; } = new TranslateTransform();
-        public RotateTransform rotate { get; private set; } = new RotateTransform();
-        public ScaleTransform scale { get;  set; } = new ScaleTransform();
-        public SkewTransform skew { get; private set; } = new SkewTransform();
-        public MatrixTransform matrix { get; private set; } = new MatrixTransform();
-        public Point Origin
-        {
-            get
-            {
-                return parent.RenderTransformOrigin;
-            }
-
-            set
-            {
-                parent.RenderTransformOrigin = value;
-            }
-        }
         public Point? _movePoint { get; private set; } = null;
-        public UIElement parent;
+ 
         public bool canMovie;
         public bool canScale;
         public double ScaleMax = 5;
@@ -48,15 +30,8 @@ namespace StateMachineNodeEditor
         public double zoom { get; set; } = 1;
         public double scales { get;  set; } = 0.05;
 
-        public Managers(UIElement _parent)
+        public Managers(UIElement _parent):base(_parent)
         {
-            _transformGroup.Children.Add(translate);
-            _transformGroup.Children.Add(rotate);
-            _transformGroup.Children.Add(scale);
-            _transformGroup.Children.Add(skew);
-            _transformGroup.Children.Add(matrix);
-            parent = _parent;
-            parent.RenderTransform = _transformGroup;
             //Origin = new Point(0.5, 0.5);
             parent.MouseDown += mouseDown;
             parent.MouseUp += mouseUp;
@@ -78,17 +53,18 @@ namespace StateMachineNodeEditor
             _movePoint = null;
             parent.ReleaseMouseCapture();
         }
-        public Delta GetDeltaMove(Point? CurrentPosition=null)
+        public Point GetDeltaMove(Point? CurrentPosition=null)
         {
-            Delta result = new Delta();
+            Point result = new Point();
 
             if (CurrentPosition == null)
                 CurrentPosition = Mouse.GetPosition(parent);
         
             if (_movePoint != null)
             {
-                result.deltaX = (CurrentPosition.Value.X - _movePoint.Value.X);
-                result.deltaY = (CurrentPosition.Value.Y - _movePoint.Value.Y);
+                result = ForPoint.Subtraction(CurrentPosition.Value, _movePoint.Value);
+                //result.X = (CurrentPosition.Value.X - _movePoint.Value.X);
+                //result.Y = (CurrentPosition.Value.Y - _movePoint.Value.Y);
             }
             _movePoint = CurrentPosition;
             return result;
@@ -97,23 +73,24 @@ namespace StateMachineNodeEditor
         {
             if (_movePoint != CurrentPosition)
             {
-                Delta delta = GetDeltaMove();
+                Point delta = GetDeltaMove();
                 Move(delta);
             }
         }
-        public void Move(Delta delta)
+        public void Move(Point delta)
         {
-                delta.deltaX /= scale.ScaleX;
-                delta.deltaY /= scale.ScaleY;
-                bool XMax = ((delta.deltaX > 0) && (translate.X > TranslateXMax));
-                bool XMin = ((delta.deltaX < 0) && (translate.X < TranslateXMin));
-                bool YMax = ((delta.deltaY > 0) && (translate.Y > TranslateYMax));
-                bool YMin = ((delta.deltaY < 0) && (translate.Y < TranslateXMin));
+                //delta.X /= scale.ScaleX;
+                //delta.Y /= scale.ScaleY;
+            delta = ForPoint.DivisionOnScale(delta, scale);
+                bool XMax = ((delta.X > 0) && (translate.X > TranslateXMax));
+                bool XMin = ((delta.X < 0) && (translate.X < TranslateXMin));
+                bool YMax = ((delta.Y > 0) && (translate.Y > TranslateYMax));
+                bool YMin = ((delta.Y < 0) && (translate.Y < TranslateXMin));
                 if (XMax || XMin || YMax || YMin)
                     return;
-
-                translate.X += delta.deltaX;
-                translate.Y += delta.deltaY;
+                ForPoint.Addition(translate, delta);
+                //translate.X += delta.X;
+                //translate.Y += delta.Y;
         }
         //public void mouseMove(object sender, MouseEventArgs e)
         //{
@@ -161,8 +138,9 @@ namespace StateMachineNodeEditor
                 return;
 
             zoom += (Delta > 0) ? scales : -scales;
-            scale.ScaleX = zoom;
-            scale.ScaleY = zoom;
+            ForPoint.EqualityScale(scale, zoom);
+            //scale.ScaleX = zoom;
+            //scale.ScaleY = zoom;
         }
         //private void _MouseWheel(object sender, MouseWheelEventArgs e)
         //{

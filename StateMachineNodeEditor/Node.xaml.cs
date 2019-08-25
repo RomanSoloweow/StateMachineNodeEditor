@@ -18,7 +18,7 @@ namespace StateMachineNodeEditor
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class Node : UserControl, HaveManager,ICloneable
+    public partial class Node : UserControl
     {
         public static RoutedEvent PositionChangeEvent;
         public event RoutedEventHandler PositionChange
@@ -32,7 +32,10 @@ namespace StateMachineNodeEditor
             add { base.AddHandler(ZoomChangeEvent, value); }
             remove { base.RemoveHandler(ZoomChangeEvent, value); }
         }
-
+        public Point Point1
+        {
+            get 
+        }
         public Managers Manager { get;  set; }
         public Connector Input;
         public Connector Output;
@@ -47,6 +50,7 @@ namespace StateMachineNodeEditor
         public Point OutputCenterLocation { get; protected set; }
         static Node()
         {
+           
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
             ZoomChangeEvent = EventManager.RegisterRoutedEvent("ZoomChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
             currentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -103,13 +107,9 @@ namespace StateMachineNodeEditor
             this.Header.TextChanged += TextBox_TextChanged;
             AddEmptyConnector();
         }
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
         public void Zoom(object sender, EventArgs e)
         {
-      
+            //nodesCanvas.Children.Add(new Selector());
             RaiseEvent(new RoutedEventArgs(PositionChangeEvent, this));
             RaiseEvent(new RoutedEventArgs(ZoomChangeEvent, this));
         }
@@ -172,6 +172,7 @@ namespace StateMachineNodeEditor
                 currentConnector.form.MouseDown -= NewConnect;  
             }
             currentConnector = new Connector(this);
+            currentConnector.text.IsEnabled = false;
             currentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
             currentConnector.form.MouseDown += NewConnect;
             this.Transitions.Children.Insert(0, currentConnector);
