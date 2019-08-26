@@ -23,8 +23,8 @@ namespace StateMachineNodeEditor
 
             set { parent.RenderTransformOrigin = value; }
         }
-        public UIElement parent;
-        public Transforms(UIElement _parent)
+        public FrameworkElement parent;
+        public Transforms(FrameworkElement _parent)
         {
             _transformGroup.Children.Add(translate);
             _transformGroup.Children.Add(rotate);

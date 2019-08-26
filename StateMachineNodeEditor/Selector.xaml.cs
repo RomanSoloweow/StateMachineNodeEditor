@@ -27,13 +27,6 @@ namespace StateMachineNodeEditor
             this.Visibility = Visibility.Collapsed;
             Panel.SetZIndex(this, 1000);
             this.IsVisibleChanged += VisualChange;
-
-            //this.Visibility = Visibility.Hidden;
-            //translate.X = point.X;
-            //translate.Y = point.Y;
-
-            //MouseMove += mouseMove;
-            //nodesCanvas.MouseMove += mouseMove;
         }
         public void VisualChange(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -42,27 +35,34 @@ namespace StateMachineNodeEditor
         }
         public Point Position1
         {
-            get
-            {
-                return ForPoint.GetValueAsPoint(transforms.translate);
-            }
+            get { return ForPoint.GetPoint1WithAngle(this.form, transforms); }
             set
             {
                 ForPoint.Equality(transforms.translate, value);
-                //transforms.translate.X = value.X;
-                //transforms.translate.Y = value.Y;
                 ForPoint.EqualityCenter(transforms.rotate, value);
-                //transforms.rotate.CenterX = value.X;
-                //transforms.rotate.CenterY = value.Y;
             }
         }
-
-        public void Change(Point point)
+        public Point Position2
         {
-            Point position1 = Position1;
-            Point size = ForPoint.Subtraction(point, Position1);
-            //size.X = point.X - position1.X;
-            //size.Y = point.Y - position1.Y;
+            get
+            {
+                return ForPoint.GetPoint2WithAngle(this.form, transforms);
+            }
+            set
+            {
+                ChangePosition2(value);
+            }
+        }
+        private void ChangePosition2(Point point)
+        {
+           void SwapWidthHeight()
+            {
+                double tmp = form.Width;
+                form.Width = form.Height;
+                form.Height = tmp;
+            }
+            Point position1 = ForPoint.GetValueAsPoint(transforms.translate);
+            Point size = ForPoint.Subtraction(point, position1);
             form.Width = Math.Abs(size.X);
             form.Height = Math.Abs(size.Y);
             if ((size.X > 0) && (size.Y > 0))
@@ -71,17 +71,15 @@ namespace StateMachineNodeEditor
             }
             else if ((size.X < 0) && (size.Y > 0))
             {
-                double tmp = form.Width;
-                form.Width = form.Height;
-                form.Height = tmp;
-                transforms.rotate.Angle = 90;             
+               
+                transforms.rotate.Angle = 90;
+                SwapWidthHeight();
             }
             else if ((size.X > 0) && (size.Y < 0))
             {
+               
                 transforms.rotate.Angle = 270;
-                double tmp = form.Width;
-                form.Width = form.Height;
-                form.Height = tmp;
+                SwapWidthHeight();
             }
             else if ((size.X < 0) && (size.Y < 0))
             {

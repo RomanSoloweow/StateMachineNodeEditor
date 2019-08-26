@@ -9,11 +9,6 @@ using System.Windows;
 using System.Windows.Input;
 namespace StateMachineNodeEditor
 {
-  //public struct Delta
-  //  {
-  //      public double deltaX;
-  //      public double deltaY;
-  //  }
     public class Managers:Transforms
     {
         public Point? _movePoint { get; private set; } = null;
@@ -29,14 +24,18 @@ namespace StateMachineNodeEditor
 
         public double zoom { get; set; } = 1;
         public double scales { get;  set; } = 0.05;
-
-        public Managers(UIElement _parent):base(_parent)
+        //public Point Position1
+        //{
+        //    get { return GetPosition1(translate);}
+        //}
+        //public Point Position2
+        //{
+        //    get { return GetPosition2(parent, translate); }
+        //}       
+        public Managers(FrameworkElement _parent):base(_parent)
         {
-            //Origin = new Point(0.5, 0.5);
             parent.MouseDown += mouseDown;
             parent.MouseUp += mouseUp;
-            //parent.MouseMove += mouseMove;
-            //parent.MouseWheel += _MouseWheel;
         }
         public void mouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -63,8 +62,6 @@ namespace StateMachineNodeEditor
             if (_movePoint != null)
             {
                 result = ForPoint.Subtraction(CurrentPosition.Value, _movePoint.Value);
-                //result.X = (CurrentPosition.Value.X - _movePoint.Value.X);
-                //result.Y = (CurrentPosition.Value.Y - _movePoint.Value.Y);
             }
             _movePoint = CurrentPosition;
             return result;
@@ -79,56 +76,15 @@ namespace StateMachineNodeEditor
         }
         public void Move(Point delta)
         {
-                //delta.X /= scale.ScaleX;
-                //delta.Y /= scale.ScaleY;
             delta = ForPoint.DivisionOnScale(delta, scale);
-                bool XMax = ((delta.X > 0) && (translate.X > TranslateXMax));
-                bool XMin = ((delta.X < 0) && (translate.X < TranslateXMin));
-                bool YMax = ((delta.Y > 0) && (translate.Y > TranslateYMax));
-                bool YMin = ((delta.Y < 0) && (translate.Y < TranslateXMin));
-                if (XMax || XMin || YMax || YMin)
-                    return;
-                ForPoint.Addition(translate, delta);
-                //translate.X += delta.X;
-                //translate.Y += delta.Y;
+            bool XMax = ((delta.X > 0) && (translate.X > TranslateXMax));
+            bool XMin = ((delta.X < 0) && (translate.X < TranslateXMin));
+            bool YMax = ((delta.Y > 0) && (translate.Y > TranslateYMax));
+            bool YMin = ((delta.Y < 0) && (translate.Y < TranslateXMin));
+            if (XMax || XMin || YMax || YMin)
+                return;
+            ForPoint.Addition(translate, delta);
         }
-        //public void mouseMove(object sender, MouseEventArgs e)
-        //{
-        //    bool thisElementSelected = (Mouse.Captured == parent);
-        //    bool leftButtonPressed = (Mouse.LeftButton != MouseButtonState.Pressed);
-        //    bool MoveAllowed = canMove || canMoveChildren;
-
-        //    if ((!thisElementSelected) || (!leftButtonPressed) || (!canMove))
-        //        return;
-
-        //    if (_movePoint != null)
-        //    {
-        //        Point Position = e.GetPosition(parent);
-        //        double deltaX = (e.GetPosition(parent).X - _movePoint.Value.X);
-        //        double deltaY = (e.GetPosition(parent).Y - _movePoint.Value.Y);
-        //        bool XMax = ((deltaX > 0) && (translate.X > TranslateXMax));
-        //        bool XMin = ((deltaX < 0) && (translate.X < TranslateXMin));
-        //        bool YMax = ((deltaY > 0) && (translate.Y > TranslateYMax));
-        //        bool YMin = ((deltaY < 0) && (translate.Y < TranslateXMin));
-        //        if (XMax || XMin || YMax || YMin)
-        //            return;
-
-        //        if (canMoveChildren)
-        //        {
-        //            foreach (var children in childrenForMove)
-        //            {
-        //                children.Manager.translate.X += deltaX / children.Manager.scale.ScaleX;
-        //                children.Manager.translate.Y += deltaY / children.Manager.scale.ScaleY;
-        //            }
-        //        }
-        //        if (canMove)
-        //        {
-        //            translate.X += deltaX;
-        //            translate.Y += deltaY;
-        //        }
-        //    }
-        //    _movePoint = e.GetPosition(parent);
-        //}
         public void Scale(int Delta)
         {
             bool Delta0 = (Delta == 0);
@@ -139,38 +95,6 @@ namespace StateMachineNodeEditor
 
             zoom += (Delta > 0) ? scales : -scales;
             ForPoint.EqualityScale(scale, zoom);
-            //scale.ScaleX = zoom;
-            //scale.ScaleY = zoom;
         }
-        //private void _MouseWheel(object sender, MouseWheelEventArgs e)
-        //{
-        //    bool thisElementSelected = (Mouse.Captured == parent);
-        //    bool ScaleAllowed = canScale || canScaleChildren;
-
-        //    if ((!thisElementSelected) || (!ScaleAllowed))
-        //        return;
-
-        //    bool Delta0 = (e.Delta == 0);
-        //    bool DeltaMax = ((e.Delta > 0) && (zoom > ScaleMax));
-        //    bool DeltaMin = ((e.Delta < 0) && (zoom < ScaleMin));
-        //    if (Delta0 || DeltaMax || DeltaMin)
-        //        return;
-
-        //    zoom += (e.Delta > 0) ? scales : -scales;
-
-        //    if (canScaleChildren)
-        //    {
-        //        foreach (var children in childrenForMove)
-        //        {
-        //            children.Manager.scale.ScaleX = zoom;
-        //            children.Manager.scale.ScaleY = zoom;
-        //        }
-        //    }
-        //    if (canScale)
-        //    {
-        //        scale.ScaleX = zoom;
-        //        scale.ScaleY = zoom;
-        //    }
-        //}
     }
 }

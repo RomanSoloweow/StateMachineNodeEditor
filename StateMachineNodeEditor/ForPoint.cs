@@ -13,7 +13,15 @@ namespace StateMachineNodeEditor
         {
             return new Point(point1.X + point2.X, point1.Y + point2.Y);
         }
-
+        
+        public static Point Multiplication(Point point1, int number)
+        {
+            return new Point(point1.X * number, point1.Y * number);
+        }
+        public static Point Multiplication(Point point1, double number)
+        {
+            return new Point(point1.X * number, point1.Y * number);
+        }
         public static Point Division(Point point1, Point point2)
         {
             return new Point(point1.X / point2.X, point1.Y / point2.Y);
@@ -78,10 +86,62 @@ namespace StateMachineNodeEditor
             rotate.CenterY = point.Y;
         }
 
-
         public static Point DivisionOnScale(Point point1, ScaleTransform scale)
         {
             return new Point(point1.X / scale.ScaleX, point1.Y / scale.ScaleY);
+        }
+
+        public static Point GetPoint1(FrameworkElement element, TranslateTransform translate)
+        {
+            return ForPoint.GetValueAsPoint(translate);
+        }
+        public static Point GetPoint2(FrameworkElement element, TranslateTransform translate)
+        {
+            Point point1 = GetPoint1(element, translate);
+            return new Point(point1.X + element.ActualWidth, point1.Y + element.ActualHeight);
+        }
+        public static Point GetPoint1WithAngle(FrameworkElement element, Transforms transforms)
+        {
+            if ((transforms.rotate.Angle >= 0) && (transforms.rotate.Angle < 90))
+            {
+                return ForPoint.GetPoint1(element, transforms.translate);
+            }
+            else if ((transforms.rotate.Angle >= 90) && (transforms.rotate.Angle < 180))
+            {
+                Point point1 = ForPoint.GetPoint1(element, transforms.translate);
+                return new Point(point1.X - element.ActualHeight, point1.Y );
+            }
+            else if ((transforms.rotate.Angle >= 180) && (transforms.rotate.Angle < 270))
+            {
+                Point point1 = ForPoint.GetPoint1(element, transforms.translate);
+                return new Point(point1.X - element.ActualWidth, point1.Y - element.ActualHeight);
+            }
+            else
+            {
+                Point point1 = ForPoint.GetPoint1(element, transforms.translate);
+                return new Point(point1.X, point1.Y - element.ActualWidth);
+            }
+        }
+        public static Point GetPoint2WithAngle(FrameworkElement element, Transforms transforms)
+        {
+            if ((transforms.rotate.Angle >= 0) && (transforms.rotate.Angle < 90))
+            {
+                return ForPoint.GetPoint2(element, transforms.translate);
+            }
+            else if ((transforms.rotate.Angle >= 90) && (transforms.rotate.Angle < 180))
+            {
+                Point point1 = ForPoint.GetPoint1(element, transforms.translate);
+                return new Point(point1.X, point1.Y + element.ActualWidth);
+            }
+            else if ((transforms.rotate.Angle >= 180) && (transforms.rotate.Angle < 270))
+            {
+                return ForPoint.GetPoint1(element, transforms.translate);
+            }
+            else
+            {
+                Point point2 = ForPoint.GetPoint1(element, transforms.translate);
+                return new Point(point2.X+element.ActualHeight, point2.Y );
+            }
         }
     }
 }

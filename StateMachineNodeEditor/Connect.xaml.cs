@@ -72,21 +72,7 @@ namespace StateMachineNodeEditor
         {
             InputConnector = inputConnector;
             UpdateZoom();
-
         }
-
-        //public void update(Point? _point=null)
-        //{
-        //    Point point=new Point(0,0);
-        //    if (_point == null)
-        //        point = Mouse.GetPosition(nodesCanvas);
-        //    else
-        //    {
-        //        point.X = _point.Value.X - 1;
-        //        point.Y = _point.Value.Y - 1;
-        //    }
-        //    EndPoint = point;
-        //}
         protected void Update()
         {
             Vector different = EndPoint - StartPoint;
@@ -123,7 +109,7 @@ namespace StateMachineNodeEditor
             {
                 connect.path.StrokeDashArray = null;
                 newNode.PositionChange += connect.OutputPositionChange;
-                connect.EndPoint = newNode.Position;
+                connect.EndPoint = newNode.Position;             
             }
         }
         private void ZoomChange(object sender, RoutedEventArgs e)

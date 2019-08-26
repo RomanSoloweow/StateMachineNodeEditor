@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d">
     <Grid>
-        <Path StrokeDashArray="10 3" StrokeDashCap="Round" StrokeLineJoin="Round"  x:Name="path" Stroke="White" >
+        <Path x:Name="path"  StrokeDashArray="10 3" StrokeDashCap="Round" StrokeLineJoin="Round"  Stroke="DarkGray" >
             <Path.Data>
                 <PathGeometry  x:Name="pathGeometry" >
                     <PathFigure x:Name="pathFigure"  IsClosed="False">

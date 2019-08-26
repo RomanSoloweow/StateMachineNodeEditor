@@ -27,10 +27,10 @@ namespace StateMachineNodeEditor
         {
 
         }
-        public Managers Manager { get;  set; }
+        public Managers Manager { get; set; }
         protected override void OnDragOver(DragEventArgs e)
         {
-           if( e.Data.GetData("Connect") is Connect obj)
+            if (e.Data.GetData("Connect") is Connect obj)
             {
                 //Point point =;
                 //point.X -= 2;
@@ -43,7 +43,7 @@ namespace StateMachineNodeEditor
         {
             AllowDrop = true;
             nodes.CollectionChanged += NodesChange;
-            connects.CollectionChanged += ConnectsChange;           
+            connects.CollectionChanged += ConnectsChange;
             ContextMenu contex = new ContextMenu();
             MenuItem add = new MenuItem();
             add.Name = "Add";
@@ -146,11 +146,28 @@ namespace StateMachineNodeEditor
         {
             Selector.Visibility = Visibility.Hidden;
         }
-        public void UpdateSeletedNodes()
+        public int UpdateSeletedNodes()
         {
-            //nodes.Select()
+            Point selectorPoint1 = Selector.Position1;            
+            Point selectorPoint2 = Selector.Position2;
+            if (nodes.Count > 0)
+            {
+                selectorPoint1 = ForPoint.Division(selectorPoint1, nodes.First().Manager.zoom);
+                selectorPoint2 = ForPoint.Division(selectorPoint2, nodes.First().Manager.zoom);
+            }
+            foreach (Node node in nodes)
+            {
+                if (Functions.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2))
+                {
+                    node.Select();
+                }
+                else
+                    node.UnSelect();
+            }
+            return 0;
         }
-        public void mouseMove(object sender, MouseEventArgs e)
+    
+    public void mouseMove(object sender, MouseEventArgs e)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
@@ -170,9 +187,8 @@ namespace StateMachineNodeEditor
                         {
                             Selector.Visibility = Visibility.Visible;
                         }
-                        Selector.Change(e.GetPosition(this));
-
-                        //Selector.Position2 = e.GetPosition(this);
+                        Selector.Position2 = e.GetPosition(this);
+                        UpdateSeletedNodes();
                     }
 
                 }
@@ -212,16 +228,14 @@ namespace StateMachineNodeEditor
                 node.Manager.zoom = firstNode.Manager.zoom;
             }
             ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.zoom));
-            //node.Manager.translate.X = position.X;
-            //node.Manager.translate.Y = position.Y;
             nodes.Add(node);
+            Panel.SetZIndex(node, 1);
             return node;
         }
         public Connect AddConnect(Connect connect)
         {          
             connect.Name = "Connect_" + this.connects.Count.ToString();
             connects.Add(connect);
-            Panel.SetZIndex(connect.path, 1);
             return connect;
         }
 

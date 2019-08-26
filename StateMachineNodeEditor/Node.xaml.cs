@@ -34,7 +34,22 @@ namespace StateMachineNodeEditor
         }
         public Point Point1
         {
-            get 
+            get { return ForPoint.GetValueAsPoint(Manager.translate); }
+        }
+        public Point Point2
+        {
+            get {
+                Point point1 = Point1;
+                return new Point(point1.X + Border.ActualWidth, point1.Y + Border.ActualHeight); 
+               }
+        }
+        public void Select()
+        {
+            Border.BorderBrush = Brushes.Red;
+        }
+        public void UnSelect()
+        {
+            Border.BorderBrush = Brushes.DarkGray;
         }
         public Managers Manager { get;  set; }
         public Connector Input;
@@ -100,7 +115,6 @@ namespace StateMachineNodeEditor
             Manager.scale.Changed += Zoom;
             this.Output.form.MouseDown += NewConnect;
             this.Input.Drop += DropEnter;
-            //this.MouseMove += mouseMove;
             PositionChange += PositionChanges;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
@@ -109,7 +123,6 @@ namespace StateMachineNodeEditor
         }
         public void Zoom(object sender, EventArgs e)
         {
-            //nodesCanvas.Children.Add(new Selector());
             RaiseEvent(new RoutedEventArgs(PositionChangeEvent, this));
             RaiseEvent(new RoutedEventArgs(ZoomChangeEvent, this));
         }
@@ -119,14 +132,6 @@ namespace StateMachineNodeEditor
             if((node is Node)&&(node!=this))
             {
               ((Connect)e.Data.GetData("Connect")).OutputConnector = this.Input;
-            }
-        }
-        public void DropLeave(object sender, DragEventArgs e)
-        {
- 
-            if ((Node)e.Data.GetData("object") != this)
-            {
-               // ((Connect)e.Data.GetData("object")).InputConnector = this.Input;
             }
         }
         public Node(string text, NodesCanvas _nodesCanvas) : this()
@@ -149,10 +154,6 @@ namespace StateMachineNodeEditor
             if (Output.IsVisible)
                 UpdateOutputCenterLocation();
         }
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {            
-            base.OnMouseDown(e);
-        }
         public void UpdateOutputCenterLocation()
         {
            Point OutputCenter = Output.form.TranslatePoint(new Point(Output.form.Width / 2, Output.form.Height / 2), this);
@@ -169,21 +170,15 @@ namespace StateMachineNodeEditor
             {
                  currentConnector.text.IsEnabled = true;
                  currentConnector.text.Text = currentConnector.Name;
-                currentConnector.form.MouseDown -= NewConnect;  
+                currentConnector.form.MouseDown -= NewConnect;
             }
             currentConnector = new Connector(this);
             currentConnector.text.IsEnabled = false;
             currentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
             currentConnector.form.MouseDown += NewConnect;
             this.Transitions.Children.Insert(0, currentConnector);
-            StackPanel.SetZIndex(currentConnector.form, 3);
             return null;
-        }
-       
-        protected override void OnMouseEnter(MouseEventArgs e)
-        {
-            base.OnMouseEnter(e);
-        }
+        }      
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
         
@@ -191,6 +186,7 @@ namespace StateMachineNodeEditor
         public void NewConnect(object sender, MouseEventArgs e)
         {
             currentConnector.UpdateCenterLocation();
+            Connector oldconnector = currentConnector;
             Connect connect = new Connect(currentConnector);
             connect.StartPoint = currentConnector.Position;
             nodesCanvas.AddConnect(connect);
@@ -208,16 +204,7 @@ namespace StateMachineNodeEditor
                 nodesCanvas.connects.Remove(connect);
             }
             e.Handled = true;
-            int t = Grid.GetZIndex(currentConnector.form);
-            int k  = Grid.GetZIndex(connect.path);
         }
-        //public void mouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if ((Mouse.Captured == this)&& (Mouse.LeftButton == MouseButtonState.Pressed))
-        //    {
-        //        Manager.Move();
-        //    }
-        //}
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             bool visible = (this.Rotate.Angle == 0);

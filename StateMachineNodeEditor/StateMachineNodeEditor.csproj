@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ForPoint.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="NodesCanvas.cs" />
     <Compile Include="Selector.xaml.cs">

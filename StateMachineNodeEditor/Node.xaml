@@ -7,32 +7,26 @@
              mc:Ignorable="d"  ><!--BorderBrush="DarkGray" BorderBrush="#0078d7" -->
     <Border x:Name="Border" CornerRadius="5,5,5,5" BorderBrush="DarkGray" BorderThickness="1,1,1,1"   Background="#FF2D2D2D" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80"   >
         <StackPanel Margin="0,0,0,5">
-                <TextBox Name="Header" Text="TextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}"  HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
+            <TextBox Name="Header" Text="TextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}"  HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
             <Grid x:Name="MainPanel" Margin="0,5,0,0" MinWidth="80" MinHeight="40">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <!--<local:Connector Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" />-->
-                    <!--<Ellipse  Name="InputForm" Grid.Row="0" HorizontalAlignment="Left"  Fill="#FFF4F4F5" Height="12" Stroke="Black"  Width="12" Margin="-5,0,0,0" AllowDrop="True" />
-                    <TextBlock Name="InputText" Grid.Row="0" HorizontalAlignment="Left"  TextWrapping="NoWrap" Text="Input"  Foreground="White"  Margin="10,0,0,0" />
-                    <Ellipse Name="OutputForm" Grid.Row="3" HorizontalAlignment="Right" Fill="#FFF4F4F5"  Height="12" Stroke="Black"  Width="12"  Grid.Column="2" Margin="0,0,-5,0" />
-                    <TextBlock Name="OutputText" Grid.Row="3" HorizontalAlignment="Right" TextWrapping="NoWrap" Text="Output" Foreground="White" Grid.Column="2" Margin="0,0,10,0" />-->
-                    <Button Name ="RollUp" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left" Click="Button_Click" FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
-                        <Button.RenderTransform>
-                            <TransformGroup>
-                                <RotateTransform x:Name="Rotate" Angle="0" CenterX="9" CenterY="3.2"/>
-                            </TransformGroup>
-                        </Button.RenderTransform>
-                    </Button>
-          
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Button Name ="RollUp" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left" Click="Button_Click" FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform x:Name="Rotate" Angle="0" CenterX="9" CenterY="3.2"/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
 
-                </Grid>
-                <StackPanel  Name="Transitions" Margin="0,5,0,0" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" />
-            </StackPanel>
-        </Border>
-    <!--</Grid >-->
+
+            </Grid>
+            <StackPanel  Name="Transitions" Margin="0,5,0,0" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" />
+        </StackPanel>
+    </Border>
 </UserControl>

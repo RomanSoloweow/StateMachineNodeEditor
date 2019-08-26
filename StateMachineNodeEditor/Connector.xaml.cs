@@ -72,8 +72,6 @@ namespace StateMachineNodeEditor
         public Connector()
         {
             InitializeComponent();
-            int t = Panel.GetZIndex(this.form);
-            Panel.SetZIndex(this.form, 10);
             this.IsVisibleChanged += IsVisibleShange;
         }
         public Connector(string text) : this()
