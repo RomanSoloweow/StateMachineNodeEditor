@@ -43,32 +43,43 @@ namespace StateMachineNodeEditor
                 return new Point(point1.X + Border.ActualWidth, point1.Y + Border.ActualHeight); 
                }
         }
-        public void Select()
-        {
-            Border.BorderBrush = Brushes.Red;
-        }
-        public void UnSelect()
-        {
-            Border.BorderBrush = Brushes.DarkGray;
-        }
         public Managers Manager { get;  set; }
         public Connector Input;
         public Connector Output;
         public NodesCanvas nodesCanvas;
         public Point InputCenterLocation { get; protected set; }
-        public static readonly DependencyProperty currentConnectorProperty;
-        public Connector currentConnector
+        public static readonly DependencyProperty CurrentConnectorProperty;
+        public Connector CurrentConnector
         {
-            get { return (Connector)GetValue(currentConnectorProperty); }
-            set { SetValue(currentConnectorProperty, value); }
+            get { return (Connector)GetValue(CurrentConnectorProperty); }
+            set { SetValue(CurrentConnectorProperty, value); }
         }
         public Point OutputCenterLocation { get; protected set; }
-        static Node()
+        public static readonly DependencyProperty SelectedProperty;
+        public bool? Selected
         {
-           
+            get { return (bool?)GetValue(SelectedProperty); }
+            set { SetValue(SelectedProperty, value); }
+        }
+        static Node()
+        {           
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
             ZoomChangeEvent = EventManager.RegisterRoutedEvent("ZoomChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
-            currentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+            CurrentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+            SelectedProperty = DependencyProperty.Register("Selected", typeof(bool?), typeof(Node), new FrameworkPropertyMetadata(false, new PropertyChangedCallback(Select)));
+        }
+        private static void Select(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            Node node = (obj as Node);
+            bool? selected = (e.NewValue as bool?);
+            if (selected == true)
+            {
+                node.Border.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                node.Border.BorderBrush = Brushes.DarkGray;
+            }
         }
         public void AddInputOutput()
         {
@@ -116,10 +127,26 @@ namespace StateMachineNodeEditor
             this.Output.form.MouseDown += NewConnect;
             this.Input.Drop += DropEnter;
             PositionChange += PositionChanges;
+            this.MouseDown += mouseDown;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
             this.Header.TextChanged += TextBox_TextChanged;
             AddEmptyConnector();
+        }
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                Selected = !Selected;
+            }
+            else
+            {
+                if (Selected!=true)
+                {
+                    nodesCanvas.UpdateSeletedNodes();
+                    Selected = true;
+                }              
+            }
         }
         public void Zoom(object sender, EventArgs e)
         {
@@ -166,17 +193,17 @@ namespace StateMachineNodeEditor
         }
         private Connector AddEmptyConnector()
         {
-            if (currentConnector != null)
+            if (CurrentConnector != null)
             {
-                 currentConnector.text.IsEnabled = true;
-                 currentConnector.text.Text = currentConnector.Name;
-                currentConnector.form.MouseDown -= NewConnect;
+                CurrentConnector.text.IsEnabled = true;
+                CurrentConnector.text.Text = CurrentConnector.Name;
+                CurrentConnector.form.MouseDown -= NewConnect;
             }
-            currentConnector = new Connector(this);
-            currentConnector.text.IsEnabled = false;
-            currentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
-            currentConnector.form.MouseDown += NewConnect;
-            this.Transitions.Children.Insert(0, currentConnector);
+            CurrentConnector = new Connector(this);
+            CurrentConnector.text.IsEnabled = false;
+            CurrentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
+            CurrentConnector.form.MouseDown += NewConnect;
+            this.Transitions.Children.Insert(0, CurrentConnector);
             return null;
         }      
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -185,16 +212,18 @@ namespace StateMachineNodeEditor
         }
         public void NewConnect(object sender, MouseEventArgs e)
         {
-            currentConnector.UpdateCenterLocation();
-            Connector oldconnector = currentConnector;
-            Connect connect = new Connect(currentConnector);
-            connect.StartPoint = currentConnector.Position;
+            CurrentConnector.UpdateCenterLocation();
+            Connector oldconnector = CurrentConnector;
+            Connect connect = new Connect(CurrentConnector);
+            connect.StartPoint = CurrentConnector.Position;
             nodesCanvas.AddConnect(connect);
+
             DataObject data = new DataObject();
             data.SetData("Node", this);
-            data.SetData("Control", currentConnector);
+            data.SetData("Control", CurrentConnector);
             data.SetData("Connect", connect);
             DragDropEffects result = DragDrop.DoDragDrop(connect, data, DragDropEffects.Link);
+
             if(connect.OutputConnector!=null)
             {
                 AddEmptyConnector();

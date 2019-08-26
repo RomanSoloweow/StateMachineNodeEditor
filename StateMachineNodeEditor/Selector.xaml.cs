@@ -25,7 +25,6 @@ namespace StateMachineNodeEditor
             transforms = new Transforms(this);
             nodesCanvas = _nodesCanvas;
             this.Visibility = Visibility.Collapsed;
-            Panel.SetZIndex(this, 1000);
             this.IsVisibleChanged += VisualChange;
         }
         public void VisualChange(object sender, DependencyPropertyChangedEventArgs e)

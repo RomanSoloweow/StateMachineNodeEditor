@@ -18,10 +18,8 @@ namespace StateMachineNodeEditor
     {
         public ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
-        public List<Node> selectedNodes = new List<Node>();
         TextBox textBox = new TextBox();
         public Selector Selector;
-        public MouseEventHandler Moves;
         Point position_click;
         static NodesCanvas()
         {
@@ -32,9 +30,6 @@ namespace StateMachineNodeEditor
         {
             if (e.Data.GetData("Connect") is Connect obj)
             {
-                //Point point =;
-                //point.X -= 2;
-                //point.Y -= 2;
                 obj.EndPoint = ForPoint.Subtraction(e.GetPosition(this), 2);
             }
             base.OnDragOver(e);
@@ -136,6 +131,10 @@ namespace StateMachineNodeEditor
         {
             Point position = e.GetPosition(this);
             textBox.Text = position.ToString();
+            if (Mouse.Captured == this)
+            {
+                UnSelectedAllNodes();
+            }
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
                 Selector.Position1 = position;
@@ -157,17 +156,18 @@ namespace StateMachineNodeEditor
             }
             foreach (Node node in nodes)
             {
-                if (Functions.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2))
-                {
-                    node.Select();
-                }
-                else
-                    node.UnSelect();
+               node.Selected = Functions.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2);
             }
             return 0;
         }
-    
-    public void mouseMove(object sender, MouseEventArgs e)
+        public void UnSelectedAllNodes()
+        {
+            foreach (Node node in nodes)
+            {
+                node.Selected = false;
+            }
+        }
+        public void mouseMove(object sender, MouseEventArgs e)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
@@ -176,7 +176,7 @@ namespace StateMachineNodeEditor
                 {
                     if (!Keyboard.IsKeyDown(Key.LeftCtrl))
                     {
-                        foreach (var node in nodes)
+                        foreach (Node node in nodes)
                         {
                             node.Manager.Move(delta);
                         }
@@ -194,11 +194,11 @@ namespace StateMachineNodeEditor
                 }
                 else
                 {
-                    Node node = Mouse.Captured as Node;
-                    if (node!=null)
+                    foreach (Node node in nodes.Where(x=>x.Selected==true).ToList())
                     {
                         node.Manager.Move(delta);
                     }
+                    
                 }
             }         
         }
@@ -229,7 +229,7 @@ namespace StateMachineNodeEditor
             }
             ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.zoom));
             nodes.Add(node);
-            Panel.SetZIndex(node, 1);
+            Panel.SetZIndex(node, nodes.Count());
             return node;
         }
         public Connect AddConnect(Connect connect)
