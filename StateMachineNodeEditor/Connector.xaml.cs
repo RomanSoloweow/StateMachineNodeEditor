@@ -129,7 +129,16 @@ namespace StateMachineNodeEditor
         {
             if (this.IsVisible)
             {
-                Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
+                Point InputCenter;
+                //Point InputCenter = form.TranslatePoint(new Point(form.Width / 2, form.Height / 2), this);
+                if (this.HorizontalAlignment == HorizontalAlignment.Right)
+                {
+                    InputCenter = form.TranslatePoint(new Point(form.Width, form.Height / 2), this);
+                }
+                else
+                {
+                   InputCenter = form.TranslatePoint(new Point(form.Width/2, form.Height / 2), this);
+                }
                 Point InpuCenterOnNode = this.TranslatePoint(InputCenter, Node);
                 Position = Node.TranslatePoint(InpuCenterOnNode, Node.nodesCanvas);
             }

@@ -110,7 +110,7 @@ namespace StateMachineNodeEditor
                 connect.path.StrokeDashArray = null;
                 newNode.PositionChange += connect.OutputPositionChange;
                 connect.EndPoint = newNode.Position;
-                Panel.SetZIndex(connect, Panel.GetZIndex(newNode.Node)-1);
+                Panel.SetZIndex(connect, Panel.GetZIndex(newNode.Node) - 1);
             }
         }
         private void ZoomChange(object sender, RoutedEventArgs e)
