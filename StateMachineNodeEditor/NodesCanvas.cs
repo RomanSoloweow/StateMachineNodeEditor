@@ -198,6 +198,7 @@ namespace StateMachineNodeEditor
                     {
                         foreach (Node node in nodes)
                         {
+                            node.Selected = false;
                             node.Manager.Move(delta);
                         }
                     }

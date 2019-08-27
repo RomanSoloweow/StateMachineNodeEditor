@@ -146,7 +146,7 @@ namespace StateMachineNodeEditor
             {
                 if (Selected!=true)
                 {
-                    nodesCanvas.UpdateSeletedNodes();
+                    nodesCanvas.UnSelectedAllNodes();
                     Selected = true;
                 }              
             }

@@ -111,18 +111,18 @@ namespace StateMachineNodeEditor
         public static Point GetPoint1WithScale(FrameworkElement element, Transforms transforms)
         {
             Point point1 = ForPoint.GetPoint1(element, transforms.translate);
-            if (transforms.scale.ScaleX == -1)
+            if (transforms.scale.ScaleX < 0)
                 point1.X -= element.ActualWidth;
-            if (transforms.scale.ScaleY == -1)
+            if (transforms.scale.ScaleY < 0)
                 point1.Y -= element.ActualHeight;
             return point1;
         }
         public static Point GetPoint2WithScale(FrameworkElement element, Transforms transforms)
         {
             Point point1 = ForPoint.GetPoint1(element, transforms.translate);
-            if (transforms.scale.ScaleX == 1)
+            if (transforms.scale.ScaleX > 0)
                 point1.X += element.ActualWidth;
-            if (transforms.scale.ScaleY == 1)
+            if (transforms.scale.ScaleY > 0)
                 point1.Y += element.ActualHeight;
             return point1;
         }
