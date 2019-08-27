@@ -24,8 +24,9 @@ namespace StateMachineNodeEditor
             InitializeComponent();
             transforms = new Transforms(this);
             nodesCanvas = _nodesCanvas;
-            this.Visibility = Visibility.Collapsed;
+            this.Visibility = Visibility.Hidden;
             this.IsVisibleChanged += VisualChange;
+            //transforms.Origin = new Point(0.5, 0.5);
         }
         public void VisualChange(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -34,56 +35,45 @@ namespace StateMachineNodeEditor
         }
         public Point Position1
         {
-            get { return ForPoint.GetPoint1WithAngle(this.form, transforms); }
+            get { return ForPoint.GetPoint1WithScale(this.form, transforms); }
             set
             {
                 ForPoint.Equality(transforms.translate, value);
                 ForPoint.EqualityCenter(transforms.rotate, value);
+                ForPoint.EqualityCenter(transforms.scale, value);
             }
         }
         public Point Position2
         {
             get
             {
-                return ForPoint.GetPoint2WithAngle(this.form, transforms);
+                return ForPoint.GetPoint2WithScale(this.form, transforms);
             }
             set
             {
                 ChangePosition2(value);
+
             }
         }
-        private void ChangePosition2(Point point)
+        public void StartSelect(Point position)
         {
-           void SwapWidthHeight()
-            {
-                double tmp = form.Width;
-                form.Width = form.Height;
-                form.Height = tmp;
-            }
+            Position1 = position;
+            Visibility = Visibility.Visible;
+        }
+        public void EndSelect()
+        {
+            Visibility = Visibility.Hidden;
+        }
+        private void ChangePosition2(Point point)
+        {        
             Point position1 = ForPoint.GetValueAsPoint(transforms.translate);
             Point size = ForPoint.Subtraction(point, position1);
             form.Width = Math.Abs(size.X);
             form.Height = Math.Abs(size.Y);
-            if ((size.X > 0) && (size.Y > 0))
-            {
-                transforms.rotate.Angle = 0;
-            }
-            else if ((size.X < 0) && (size.Y > 0))
-            {
-               
-                transforms.rotate.Angle = 90;
-                SwapWidthHeight();
-            }
-            else if ((size.X > 0) && (size.Y < 0))
-            {
-               
-                transforms.rotate.Angle = 270;
-                SwapWidthHeight();
-            }
-            else if ((size.X < 0) && (size.Y < 0))
-            {
-                transforms.rotate.Angle = 180;
-            }
+            //Если нужно отражаем по X
+            transforms.scale.ScaleX = (size.X>0) ? 1 : -1;
+            //Если нужно отражаем по Y
+            transforms.scale.ScaleY = (size.Y>0) ? 1 : -1;
         }
     }
 }

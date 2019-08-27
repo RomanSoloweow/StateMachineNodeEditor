@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Styles/ConnectorTextBox.xaml"/>
                 <ResourceDictionary Source="Styles/ConnectorEllipse.xaml"/>
                 <ResourceDictionary Source="Styles/SelectorStyle.xaml"/>
+                <ResourceDictionary Source="Styles/NodeBorder.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

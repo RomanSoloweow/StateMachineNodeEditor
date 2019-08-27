@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
-             mc:Ignorable="d"  ><!--BorderBrush="DarkGray" BorderBrush="#0078d7" -->
-    <Border x:Name="Border" CornerRadius="5,5,5,5" BorderBrush="DarkGray" BorderThickness="1,1,1,1"   Background="#FF2D2D2D" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80"   >
+             mc:Ignorable="d"><!--BorderBrush="DarkGray" BorderBrush="#0078d7" -->
+
+
+    <Border x:Name="Border" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1"   HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" Style="{DynamicResource NodeBorder}"   >
         <StackPanel Margin="0,0,0,5">
             <TextBox Name="Header" Text="TextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}"  HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
             <Grid x:Name="MainPanel" Margin="0,5,0,0" MinWidth="80" MinHeight="40">
@@ -23,8 +25,6 @@
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-
-
             </Grid>
             <StackPanel  Name="Transitions" Margin="0,5,0,0" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" />
         </StackPanel>

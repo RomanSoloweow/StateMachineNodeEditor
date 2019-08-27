@@ -20,7 +20,8 @@ namespace StateMachineNodeEditor
         public ObservableCollection<Connect> connects = new ObservableCollection<Connect>();
         TextBox textBox = new TextBox();
         public Selector Selector;
-        Point position_click;
+        Point positionRightClick;
+        //Point positionLeftClick;
         static NodesCanvas()
         {
 
@@ -44,6 +45,7 @@ namespace StateMachineNodeEditor
             add.Name = "Add";
             add.Header = "Add";
             add.Click += Add_Click;
+            this.Focusable = true;
             contex.Items.Add(add);
             contex.Margin = new Thickness(10, 0, 0, 0);
             add.Icon = null;
@@ -57,6 +59,8 @@ namespace StateMachineNodeEditor
             this.MouseWheel += mouseWheel;
             this.MouseUp += mouseUp;
             this.MouseDown += mouseDown;
+            this.KeyUp += keyUp;
+            this.KeyDown += keyDown;
             textBox.HorizontalAlignment = HorizontalAlignment.Right;
             textBox.VerticalAlignment = VerticalAlignment.Top;
             this.Children.Add(textBox);
@@ -69,7 +73,7 @@ namespace StateMachineNodeEditor
         }
         protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
         {
-            position_click = e.GetPosition(this);
+            positionRightClick = e.GetPosition(this);
             base.OnMouseRightButtonDown(e);
         }
         public UIElement parent;
@@ -129,7 +133,7 @@ namespace StateMachineNodeEditor
         }
         public void mouseDown(object sender, MouseButtonEventArgs e)
         {
-            Point position = e.GetPosition(this);
+            Point position = Mouse.GetPosition(this);
             textBox.Text = position.ToString();
             if (Mouse.Captured == this)
             {
@@ -137,13 +141,29 @@ namespace StateMachineNodeEditor
             }
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                Selector.Position1 = position;
-                Selector.Visibility = Visibility.Visible;
+                Selector.StartSelect(position);
             }
         }
         public void mouseUp(object sender, MouseButtonEventArgs e)
         {
-            Selector.Visibility = Visibility.Hidden;
+            Selector.EndSelect();
+        }
+        public void keyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key==Key.LeftCtrl)
+            {
+                Selector.EndSelect();
+            }
+        }
+        public void keyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                if(Mouse.LeftButton==MouseButtonState.Pressed)
+                {
+                    Selector.StartSelect(Mouse.GetPosition(this));
+                }
+            }
         }
         public int UpdateSeletedNodes()
         {
@@ -202,6 +222,10 @@ namespace StateMachineNodeEditor
                 }
             }         
         }
+        public bool Check(Node from, Node to)
+        {
+            return (connects.Where(x => (x.InputConnector?.Node == from) && (x.OutputConnector?.Node == to)).Count() == 0);
+        }
         public void mouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Mouse.Captured == null) 
@@ -214,7 +238,7 @@ namespace StateMachineNodeEditor
         }
         public void Add_Click(object sender, RoutedEventArgs e)
         {
-            Node node = AddNodes(position_click);
+            Node node = AddNodes(positionRightClick);
         }
         public Node AddNodes(Point position)
         {

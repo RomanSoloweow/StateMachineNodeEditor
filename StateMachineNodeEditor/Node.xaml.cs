@@ -68,18 +68,26 @@ namespace StateMachineNodeEditor
             CurrentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
             SelectedProperty = DependencyProperty.Register("Selected", typeof(bool?), typeof(Node), new FrameworkPropertyMetadata(false, new PropertyChangedCallback(Select)));
         }
-        private static void Select(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        public static void Select(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Node node = (obj as Node);
             bool? selected = (e.NewValue as bool?);
             if (selected == true)
             {
-                node.Border.BorderBrush = Brushes.Red;
+                node.SetColorOnSelect();
             }
             else
             {
-                node.Border.BorderBrush = Brushes.DarkGray;
+                node.SetColorOnUnSelect();
             }
+        }
+        private void SetColorOnSelect()
+        {
+            Border.BorderBrush = Brushes.Red;
+        }
+        private void SetColorOnUnSelect()
+        {
+            Border.BorderBrush = Brushes.DarkGray;
         }
         public void AddInputOutput()
         {
@@ -109,14 +117,6 @@ namespace StateMachineNodeEditor
             Grid.SetColumn(Output, 1);
             Output.Distribute(HorizontalAlignment.Right);
         }
-        private void DropList_Drop(object sender, DragEventArgs e)
-        {
-            e.Effects = DragDropEffects.Link;
-        }
-        private void DropList_Drop2(object sender, DragEventArgs e)
-        {
-            e.Effects = DragDropEffects.None;
-        }
         public Node()
         {
             InitializeComponent();
@@ -128,6 +128,9 @@ namespace StateMachineNodeEditor
             this.Input.Drop += DropEnter;
             PositionChange += PositionChanges;
             this.MouseDown += mouseDown;
+            this.MouseEnter += mouseEnter;
+            this.MouseLeave += mouseLeave;
+            this.Transitions.MouseEnter += mouseEnter2;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
             this.Header.TextChanged += TextBox_TextChanged;
@@ -148,6 +151,20 @@ namespace StateMachineNodeEditor
                 }              
             }
         }
+        public void mouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Selected!=true)
+                SetColorOnSelect();
+        }
+        public void mouseEnter2(object sender, MouseEventArgs e)
+        {
+            e.Handled = true;
+        }
+        public void mouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Selected != true)
+                SetColorOnUnSelect();
+        }
         public void Zoom(object sender, EventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(PositionChangeEvent, this));
@@ -155,9 +172,11 @@ namespace StateMachineNodeEditor
         }
         public void DropEnter(object sender, DragEventArgs e)
         {
-            var node = e.Data.GetData("Node");
-            if((node is Node)&&(node!=this))
+            var obj = e.Data.GetData("Node");
+            Node node = obj as Node;
+            if((node!=null)&&(node!=this))
             {
+                if(nodesCanvas.Check(node,this))
               ((Connect)e.Data.GetData("Connect")).OutputConnector = this.Input;
             }
         }

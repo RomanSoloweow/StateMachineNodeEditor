@@ -45,6 +45,7 @@ namespace StateMachineNodeEditor
             {
                 Keyboard.ClearFocus();
                 parent.CaptureMouse();
+                Keyboard.Focus(parent);
             }
         }
         public void mouseUp(object sender, MouseButtonEventArgs e)
