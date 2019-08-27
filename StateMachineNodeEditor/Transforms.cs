@@ -11,12 +11,12 @@ namespace StateMachineNodeEditor
 {
     public class Transforms
     {
-        public TransformGroup _transformGroup { get; private set; } = new TransformGroup();
-        public TranslateTransform translate { get; private set; } = new TranslateTransform();
-        public RotateTransform rotate { get; private set; } = new RotateTransform();
+        public TransformGroup _transformGroup { get;  set; } = new TransformGroup();
+        public TranslateTransform translate { get;  set; } = new TranslateTransform();
+        public RotateTransform rotate { get;  set; } = new RotateTransform();
         public ScaleTransform scale { get; set; } = new ScaleTransform();
-        public SkewTransform skew { get; private set; } = new SkewTransform();
-        public MatrixTransform matrix { get; private set; } = new MatrixTransform();
+        public SkewTransform skew { get;  set; } = new SkewTransform();
+        public MatrixTransform matrix { get;  set; } = new MatrixTransform();
         public Point Origin
         {
             get { return parent.RenderTransformOrigin; }

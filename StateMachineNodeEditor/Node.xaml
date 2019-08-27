@@ -29,4 +29,8 @@
             <StackPanel  Name="Transitions" Margin="0,5,0,0" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True" />
         </StackPanel>
     </Border>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Paste" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="Copy" Executed="CommandBinding_Executed"/>
+    </UserControl.CommandBindings>
 </UserControl>

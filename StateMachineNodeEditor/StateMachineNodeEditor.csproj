@@ -81,7 +81,7 @@
     <Compile Include="Connect.xaml.cs">
       <DependentUpon>Connect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Transform.cs" />
+    <Compile Include="Transforms.cs" />
     <Page Include="Canvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

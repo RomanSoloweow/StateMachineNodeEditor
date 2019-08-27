@@ -18,7 +18,7 @@ namespace StateMachineNodeEditor
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class Node : UserControl
+    public partial class Node : UserControl, ICloneable
     {
         public static RoutedEvent PositionChangeEvent;
         public event RoutedEventHandler PositionChange
@@ -47,6 +47,11 @@ namespace StateMachineNodeEditor
         public Connector Input;
         public Connector Output;
         public NodesCanvas nodesCanvas;
+        public string Text
+        {
+            get { return Header.Text; }
+            set { Header.Text = value; }
+        }
         public Point InputCenterLocation { get; protected set; }
         public static readonly DependencyProperty CurrentConnectorProperty;
         public Connector CurrentConnector
@@ -56,6 +61,14 @@ namespace StateMachineNodeEditor
         }
         public Point OutputCenterLocation { get; protected set; }
         public static readonly DependencyProperty SelectedProperty;
+        public object Clone()
+        {
+            Node node = new Node();
+            node.Manager._transformGroup = (TransformGroup)this.Manager._transformGroup.Clone();
+            node.Name = this.Name + "_";
+            node.Text = this.Text + "_";
+            return node;
+        }
         public bool? Selected
         {
             get { return (bool?)GetValue(SelectedProperty); }
@@ -126,6 +139,7 @@ namespace StateMachineNodeEditor
             Manager.scale.Changed += Zoom;
             this.Output.form.MouseDown += NewConnect;
             this.Input.Drop += DropEnter;
+            this.Focusable = true;
             PositionChange += PositionChanges;
             this.MouseDown += mouseDown;
             this.MouseEnter += mouseEnter;
@@ -135,6 +149,10 @@ namespace StateMachineNodeEditor
             Manager.translate.Changed += TransformChange;            
             this.Header.TextChanged += TextBox_TextChanged;
             AddEmptyConnector();
+        }
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Clipboard operation occured!");
         }
         public void mouseDown(object sender, MouseButtonEventArgs e)
         {
