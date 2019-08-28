@@ -37,16 +37,17 @@ namespace StateMachineNodeEditor
             parent.MouseDown += mouseDown;
             parent.MouseUp += mouseUp;
         }
-        public void mouseDown(object sender, MouseButtonEventArgs e)
+        public void Down()
         {
             _movePoint = null;
-            _movePoint= Mouse.GetPosition(parent);
-            if (Mouse.Captured == null)
-            {
+            _movePoint = Mouse.GetPosition(parent);
                 Keyboard.ClearFocus();
                 parent.CaptureMouse();
                 Keyboard.Focus(parent);
-            }
+        }
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Down();
         }
         public void mouseUp(object sender, MouseButtonEventArgs e)
         {

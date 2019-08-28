@@ -22,14 +22,18 @@ namespace StateMachineNodeEditor
 {
     public partial class Connect : UserControl
     {
-
+        public static RoutedEvent BeforeDeleteEvent;
+        public event RoutedEventHandler BeforeDelete
+        {
+            add { base.AddHandler(BeforeDeleteEvent, value); }
+            remove { base.RemoveHandler(BeforeDeleteEvent, value); }
+        }
         public static readonly DependencyProperty InputConnectorProperty;
         public Connector InputConnector
         {
             get { return (Connector)GetValue(InputConnectorProperty); }
             set { SetValue(InputConnectorProperty, value); }
         }
-
         public NodesCanvas nodesCanvas;
         public static readonly DependencyProperty OutputConnectorProperty;
         public Connector OutputConnector
@@ -57,6 +61,7 @@ namespace StateMachineNodeEditor
         }
         static Connect()
         {
+            BeforeDeleteEvent = EventManager.RegisterRoutedEvent("BeforeDelete", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Connect));
             InputConnectorProperty = DependencyProperty.Register("InputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(InputChange)));
             OutputConnectorProperty = DependencyProperty.Register("OutputNode", typeof(Connector), typeof(Connect), new FrameworkPropertyMetadata(new PropertyChangedCallback(OutputChange)));
             StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Connect), new FrameworkPropertyMetadata(new Point(0, 0), new PropertyChangedCallback(StartPointChange)));
@@ -67,11 +72,22 @@ namespace StateMachineNodeEditor
         {
             InitializeComponent();
             StrokeThickness = path.StrokeThickness;
+            this.MouseEnter += mouseEnter;
+            this.MouseLeave += mouseLeave;
         }
         public Connect(Connector inputConnector) : this()
         {
             InputConnector = inputConnector;
+           
             UpdateZoom();
+        }
+        public void mouseEnter(object sender, MouseEventArgs e)
+        {
+            Stroke = Brushes.Red;
+        }
+        public void mouseLeave(object sender, MouseEventArgs e)
+        {
+            Stroke = Brushes.DarkGray;
         }
         protected void Update()
         {
@@ -82,35 +98,42 @@ namespace StateMachineNodeEditor
         public static void InputChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Connect connect = (obj as Connect);
-            Connector oldNode = (e.OldValue as Connector);
-            Connector newNode = (e.NewValue as Connector);
-            if (oldNode != null)
+            Connector oldConnector = (e.OldValue as Connector);
+            Connector newConnector = (e.NewValue as Connector);
+            if (oldConnector != null)
             {
-                oldNode.PositionChange -= connect.InputPositionChange;
-                oldNode.Node.ZoomChange -= connect.ZoomChange;
+                oldConnector.PositionChange -= connect.InputPositionChange;
+                oldConnector.Node.ZoomChange -= connect.ZoomChange;
+                oldConnector.Node.BeforeDelete -= connect.BeforeDeleteInputConnector;
             }
 
-            if (newNode != null)
+            if (newConnector != null)
             {
-                newNode.PositionChange += connect.InputPositionChange;
-                newNode.Node.ZoomChange += connect.ZoomChange;
-                connect.StartPoint = newNode.Position;
+                newConnector.PositionChange += connect.InputPositionChange;
+                newConnector.Node.ZoomChange += connect.ZoomChange;
+                newConnector.Node.BeforeDelete += connect.BeforeDeleteInputConnector;
+                connect.StartPoint = newConnector.Position;
+                connect.nodesCanvas = newConnector.Node.nodesCanvas;
             }
         }
         private static void OutputChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             Connect connect = (obj as Connect);
-            Connector oldNode = (e.OldValue as Connector);
-            Connector newNode = (e.NewValue as Connector);
+            Connector oldConnector = (e.OldValue as Connector);
+            Connector newConnector = (e.NewValue as Connector);
 
-            if (oldNode != null)
-                oldNode.PositionChange -= connect.OutputPositionChange;
-            if (newNode != null)
+            if (oldConnector != null)
+            {
+                oldConnector.PositionChange -= connect.OutputPositionChange;
+                oldConnector.Node.BeforeDelete -= connect.BeforeDeleteOutputConnector;
+            }
+            if (newConnector != null)
             {
                 connect.path.StrokeDashArray = null;
-                newNode.PositionChange += connect.OutputPositionChange;
-                connect.EndPoint = newNode.Position;
-                Panel.SetZIndex(connect, Panel.GetZIndex(newNode.Node) - 1);
+                newConnector.PositionChange += connect.OutputPositionChange;
+                newConnector.Node.BeforeDelete += connect.BeforeDeleteOutputConnector;
+                connect.EndPoint = newConnector.Position;
+                Panel.SetZIndex(connect, Panel.GetZIndex(newConnector.Node) - 1);
             }
         }
         private void ZoomChange(object sender, RoutedEventArgs e)
@@ -140,6 +163,22 @@ namespace StateMachineNodeEditor
         public void OutputPositionChange(object sender, RoutedEventArgs e)
         {        
             this.EndPoint = OutputConnector.Position;
+        }
+        private void BeforeDeleteInputConnector(object sender, RoutedEventArgs e)
+        {
+            InputConnector = null;
+            Delete();
+        }
+        private void BeforeDeleteOutputConnector(object sender, RoutedEventArgs e)
+        {
+            OutputConnector = null;
+            Delete();
+        }
+        public Connect Delete()
+        {                     
+            RaiseEvent(new RoutedEventArgs(BeforeDeleteEvent, this));
+            nodesCanvas.DeleteConnect(this);
+            return this;
         }
     }
 }

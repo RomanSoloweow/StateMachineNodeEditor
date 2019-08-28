@@ -11,6 +11,7 @@ namespace StateMachineNodeEditor
         public MainWindow()
         {
             InitializeComponent();
+            //this.grid.Children.Add(new NodesCanvas(this));
             this.grid.Children.Add(new NodesCanvas(this));
             //this.grid.Children.Add(new Canvas());
         }       

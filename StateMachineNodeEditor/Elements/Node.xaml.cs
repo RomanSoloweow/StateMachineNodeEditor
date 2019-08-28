@@ -32,6 +32,12 @@ namespace StateMachineNodeEditor
             add { base.AddHandler(ZoomChangeEvent, value); }
             remove { base.RemoveHandler(ZoomChangeEvent, value); }
         }
+        public static RoutedEvent BeforeDeleteEvent;
+        public event RoutedEventHandler BeforeDelete
+        {
+            add { base.AddHandler(BeforeDeleteEvent, value); }
+            remove { base.RemoveHandler(BeforeDeleteEvent, value); }
+        }
         public Point Point1
         {
             get { return ForPoint.GetValueAsPoint(Manager.translate); }
@@ -46,6 +52,7 @@ namespace StateMachineNodeEditor
         public Managers Manager { get;  set; }
         public Connector Input;
         public Connector Output;
+        //public NodesCanvas nodesCanvas;
         public NodesCanvas nodesCanvas;
         public string Text
         {
@@ -78,6 +85,7 @@ namespace StateMachineNodeEditor
         {           
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
             ZoomChangeEvent = EventManager.RegisterRoutedEvent("ZoomChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
+            BeforeDeleteEvent = EventManager.RegisterRoutedEvent("BeforeDelete", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Node));
             CurrentConnectorProperty = DependencyProperty.Register("currentConnector", typeof(Connector), typeof(Node), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
             SelectedProperty = DependencyProperty.Register("Selected", typeof(bool?), typeof(Node), new FrameworkPropertyMetadata(false, new PropertyChangedCallback(Select)));
         }
@@ -108,8 +116,9 @@ namespace StateMachineNodeEditor
             {
                 Name = "Input",
                 Text = "Input",
-                TextIsEnable=false,
-                AllowDrop=true
+                TextIsEnable = false,
+                CanDelete = false
+
              };
 
             MainPanel.Children.Add(Input);
@@ -122,7 +131,8 @@ namespace StateMachineNodeEditor
                 Name = "Output",
                 Text = "Output",
                 TextIsEnable = false,
-                Visibility=Visibility.Hidden
+                CanDelete = false,
+                Visibility =Visibility.Hidden
             };
 
             MainPanel.Children.Add(Output);
@@ -133,41 +143,34 @@ namespace StateMachineNodeEditor
         public Node()
         {
             InitializeComponent();
-            this.AllowDrop = true;
             AddInputOutput();
             Manager = new Managers(this);
             Manager.scale.Changed += Zoom;
             this.Output.form.MouseDown += NewConnect;
             this.Input.Drop += DropEnter;
-            this.Focusable = true;
             PositionChange += PositionChanges;
             this.MouseDown += mouseDown;
             this.MouseEnter += mouseEnter;
             this.MouseLeave += mouseLeave;
-            this.Transitions.MouseEnter += mouseEnter2;
+            //this.Transitions.MouseEnter += mouseEnter2;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
             this.Header.TextChanged += TextBox_TextChanged;
             AddEmptyConnector();
         }
-        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            MessageBox.Show("Clipboard operation occured!");
-        }
+        
         public void mouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            if (Selected!=true)
             {
-                Selected = !Selected;
+                nodesCanvas.UnSelectedAllNodes();
+                Selected = true;
             }
-            else
-            {
-                if (Selected!=true)
-                {
-                    nodesCanvas.UnSelectedAllNodes();
-                    Selected = true;
-                }              
-            }
+            e.Handled = true;
+        }
+        private void Select(object sender, ExecutedRoutedEventArgs e)
+        {
+            Selected = !Selected;
         }
         public void mouseEnter(object sender, MouseEventArgs e)
         {
@@ -198,10 +201,10 @@ namespace StateMachineNodeEditor
               ((Connect)e.Data.GetData("Connect")).OutputConnector = this.Input;
             }
         }
-        public Node(string text, NodesCanvas _nodesCanvas) : this()
+        public Node(string text, NodesCanvas _canvasNode) : this()
         {
             Header.Text = text;
-            nodesCanvas = _nodesCanvas;
+            nodesCanvas = _canvasNode;
         }
         private void SizeChange(object sender, EventArgs e)
         {
@@ -251,9 +254,10 @@ namespace StateMachineNodeEditor
         {
             CurrentConnector.UpdateCenterLocation();
             Connector oldconnector = CurrentConnector;
-            Connect connect = new Connect(CurrentConnector);
-            connect.StartPoint = CurrentConnector.Position;
-            nodesCanvas.AddConnect(connect);
+            Connect connect = nodesCanvas.GetNewConnect(CurrentConnector.Position);
+            connect.InputConnector = CurrentConnector;
+            CurrentConnector.Connect = connect;
+
 
             DataObject data = new DataObject();
             data.SetData("Node", this);
@@ -278,6 +282,18 @@ namespace StateMachineNodeEditor
             this.Output.Visibility = visible? Visibility.Visible:Visibility.Hidden;
             this.Transitions.Visibility= visible ? Visibility.Collapsed : Visibility.Visible;
             UpdateOutputCenterLocation();
+        }
+        public Connector DeleteConnector(Connector connector)
+        {
+            if (connector != null)
+                Transitions.Children.Remove(connector);
+            return connector;
+        }
+        public Node Delete()
+        {
+            RaiseEvent(new RoutedEventArgs(BeforeDeleteEvent, this));
+            nodesCanvas.DeleteNode(this);
+            return this;
         }
     }
 }

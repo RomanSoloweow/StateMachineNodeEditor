@@ -62,27 +62,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Canvas.xaml.cs">
-      <DependentUpon>Canvas.xaml</DependentUpon>
+    <Compile Include="Elements\NodesCanvas.xaml.cs">
+      <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ForPoint.cs" />
-    <Compile Include="Functions.cs" />
-    <Compile Include="Manager.cs" />
-    <Compile Include="NodesCanvas.cs" />
-    <Compile Include="Selector.xaml.cs">
+    <Compile Include="OtherClass\ForPoint.cs" />
+    <Compile Include="OtherClass\Functions.cs" />
+    <Compile Include="OtherClass\Manager.cs" />
+    <Compile Include="Elements\Selector.xaml.cs">
       <DependentUpon>Selector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Node.xaml.cs">
+    <Compile Include="Elements\Node.xaml.cs">
       <DependentUpon>Node.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Connector.xaml.cs">
+    <Compile Include="Elements\Connector.xaml.cs">
       <DependentUpon>Connector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Connect.xaml.cs">
+    <Compile Include="Elements\Connect.xaml.cs">
       <DependentUpon>Connect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Transforms.cs" />
-    <Page Include="Canvas.xaml">
+    <Compile Include="OtherClass\Transforms.cs" />
+    <Page Include="Elements\NodesCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -98,7 +97,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Selector.xaml">
+    <Page Include="Elements\Selector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -118,15 +117,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Node.xaml">
+    <Page Include="Elements\Node.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Connector.xaml">
+    <Page Include="Elements\Connector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Connect.xaml">
+    <Page Include="Elements\Connect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

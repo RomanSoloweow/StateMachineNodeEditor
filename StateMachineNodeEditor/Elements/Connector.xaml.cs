@@ -21,6 +21,12 @@ namespace StateMachineNodeEditor
 {
     public partial class Connector : UserControl
     {
+        public static RoutedEvent BeforeDeleteEvent;
+        public event RoutedEventHandler BeforeDelete
+        {
+            add { base.AddHandler(BeforeDeleteEvent, value); }
+            remove { base.RemoveHandler(BeforeDeleteEvent, value); }
+        }
         public static readonly DependencyProperty PositionProperty;
         public Point Position
         {
@@ -28,7 +34,19 @@ namespace StateMachineNodeEditor
             protected set { SetValue(PositionProperty, value); }
         }
         public static RoutedEvent PositionChangeEvent;
+        public event RoutedEventHandler PositionChange
+        {
+            add { base.AddHandler(PositionChangeEvent, value); }
+            remove { base.RemoveHandler(PositionChangeEvent, value); }
+        }
         public static readonly DependencyProperty NodeProperty;
+        public bool CanDelete { get; set; } = true;
+        public static readonly DependencyProperty ConnectProperty;
+        public Connect Connect
+        {
+            get { return (Connect)GetValue(ConnectProperty); }
+            set { SetValue(ConnectProperty, value); }
+        }
         public Node Node
         {
             get { return (Node)GetValue(NodeProperty); }
@@ -57,14 +75,13 @@ namespace StateMachineNodeEditor
                 text.IsEnabled = value;
             }
         }
-        public event RoutedEventHandler PositionChange
-        {
-            add { base.AddHandler(PositionChangeEvent, value); }
-            remove { base.RemoveHandler(PositionChangeEvent, value); }
-        }
+   
 
         static Connector()
         {
+            BeforeDeleteEvent = EventManager.RegisterRoutedEvent("BeforeDelete", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Connector));
+            ConnectProperty = DependencyProperty.Register("Connect", typeof(Connect), typeof(Connector), new FrameworkPropertyMetadata(new PropertyChangedCallback(ConnectChange)));
+
             PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(Connector), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(PositionShange)));
             PositionChangeEvent = EventManager.RegisterRoutedEvent("PositionChange", RoutingStrategy.Tunnel, typeof(RoutedEventHandler), typeof(Connector));
             NodeProperty = DependencyProperty.Register("InputNode", typeof(Node), typeof(Connector), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(NodeChange)));
@@ -82,6 +99,22 @@ namespace StateMachineNodeEditor
         {
             Node = node;
         }
+        public static void ConnectChange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            Connector connector = (obj as Connector);
+            Connect oldConnect = (e.OldValue as Connect);
+            Connect newConnect = (e.NewValue as Connect);
+            if (oldConnect != null)
+            {
+                oldConnect.BeforeDelete -= connector.BeforeDeleteConnect;
+            }
+
+            if (newConnect != null)
+            {
+                newConnect.BeforeDelete += connector.BeforeDeleteConnect;
+            }
+        }
+        
         public Connector(string text, Node userControl1) : this(userControl1)
         {
             this.text.Text = text;
@@ -94,10 +127,12 @@ namespace StateMachineNodeEditor
             if (oldNode != null)
             {
                 oldNode.PositionChange -= connector.LocationChange;
+                oldNode.BeforeDelete -= connector.BeforeDeleteNode;
             }
             if (newNode != null)
             {
                 newNode.PositionChange += connector.LocationChange;
+                newNode.BeforeDelete += connector.BeforeDeleteNode;
             }
         }
         private static void PositionShange(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -120,7 +155,15 @@ namespace StateMachineNodeEditor
             bool right = (this.HorizontalAlignment == HorizontalAlignment.Right);
             form.Margin = right ? new Thickness(0, 0, -radius, 0) : new Thickness(-radius, 0, 0, 0);
         }
-       
+        private void BeforeDeleteNode(object sender, RoutedEventArgs e)
+        {
+            Delete();
+        }
+        private void BeforeDeleteConnect(object sender, RoutedEventArgs e)
+        {
+            Connect = null;
+            Delete();
+        }
         private void LocationChange(object sender, RoutedEventArgs e)
         {
             UpdateCenterLocation();
@@ -148,6 +191,15 @@ namespace StateMachineNodeEditor
         public void NodeUpdateLayout(object sender, RoutedEventArgs e)
         {
             UpdateCenterLocation();
+        }
+        public Connector Delete()
+        {
+            if (CanDelete)
+            {               
+                RaiseEvent(new RoutedEventArgs(BeforeDeleteEvent, this));
+                Node.DeleteConnector(this);
+            }
+            return this;
         }
     }
 }
