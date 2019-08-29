@@ -29,7 +29,8 @@ namespace StateMachineNodeEditor
             _output = new ModelConnector()
             {
                 Text = "Output",
-                TextIsEnable = false
+                TextIsEnable = false,
+                Visible = false
             };
             _translate = new Translates();
         }   

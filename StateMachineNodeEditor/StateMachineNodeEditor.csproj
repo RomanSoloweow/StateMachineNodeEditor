@@ -70,6 +70,7 @@
     <Compile Include="ModelConnector.cs" />
     <Compile Include="ModelNode.cs" />
     <Compile Include="ModelNodesCanvas.cs" />
+    <Compile Include="ModelSelector.cs" />
     <Compile Include="OtherClass\ForPoint.cs" />
     <Compile Include="OtherClass\Functions.cs" />
     <Compile Include="OtherClass\Manager.cs" />
@@ -95,8 +96,9 @@
       <DependentUpon>ViewLeftConnector.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModelNodesCanvas.cs" />
-    <Compile Include="VIewNodesCanvas.xaml.cs">
-      <DependentUpon>VIewNodesCanvas.xaml</DependentUpon>
+    <Compile Include="ViewModelSelector.cs" />
+    <Compile Include="ViewNodesCanvas.xaml.cs">
+      <DependentUpon>ViewNodesCanvas.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewRightConnector.xaml.cs">
       <DependentUpon>ViewRightConnector.xaml</DependentUpon>
@@ -106,6 +108,9 @@
     <Compile Include="ViewModelNode.cs" />
     <Compile Include="ViewNode.xaml.cs">
       <DependentUpon>ViewNode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSelector.xaml.cs">
+      <DependentUpon>ViewSelector.xaml</DependentUpon>
     </Compile>
     <Page Include="Elements\NodesCanvas.xaml">
       <SubType>Designer</SubType>
@@ -171,7 +176,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIewNodesCanvas.xaml">
+    <Page Include="ViewNodesCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -180,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ViewNode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

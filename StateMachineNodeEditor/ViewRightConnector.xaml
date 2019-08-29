@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
-              HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,-6,0">
+              HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,-6,0" Visibility="{Binding Visible, Converter={StaticResource ResourceKey=BoolToVisibility}, UpdateSourceTrigger=PropertyChanged}">
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
-    </UserControl.Resources>
-    <Grid x:Name="grid">
+    </UserControl.Resources>-->
+    <Grid x:Name="grid" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />

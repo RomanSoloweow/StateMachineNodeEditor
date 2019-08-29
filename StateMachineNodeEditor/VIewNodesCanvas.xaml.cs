@@ -18,9 +18,9 @@ namespace StateMachineNodeEditor
     /// <summary>
     /// Interaction logic for VIewNodesCanvas.xaml
     /// </summary>
-    public partial class VIewNodesCanvas : UserControl
+    public partial class ViewNodesCanvas : UserControl
     {
-        public VIewNodesCanvas()
+        public ViewNodesCanvas()
         {
             InitializeComponent();
             DataContext = new ViewModelNodesCanvas();

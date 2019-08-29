@@ -18,6 +18,12 @@ namespace StateMachineNodeEditor
             node.Translate.X = 100;
             node.Translate.Y = 100;
             _nodes.Add(node);
+
+            ModelNode node2 = new ModelNode();
+            node2.Text = "TestNode2";
+            node2.Translate.X = 10;
+            node2.Translate.Y = 10;
+            _nodes.Add(node2);
         }
         public ObservableCollection<ModelNode> Nodes
         {

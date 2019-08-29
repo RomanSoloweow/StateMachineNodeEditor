@@ -16,14 +16,14 @@ using System.Windows.Shapes;
 namespace StateMachineNodeEditor
 {
     /// <summary>
-    /// Interaction logic for ViewNode.xaml
+    /// Interaction logic for ViewSelector.xaml
     /// </summary>
-    public partial class ViewNode : UserControl
+    public partial class ViewSelector : UserControl
     {
-        public ViewNode()
+        public ViewSelector()
         {
             InitializeComponent();
-            //DataContext = new ViewModelNode();
+            DataContext = new ViewModelSelector();
         }
     }
 }

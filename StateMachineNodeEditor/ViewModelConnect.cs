@@ -57,7 +57,7 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Point2");
             }
         }
-        public ModelConnect InputConnect
+        public ModelConnector InputConnect
         {
             get { return Connect.InputConnect; }
             set
@@ -66,7 +66,7 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("InputConnect");
             }
         }
-        public ModelConnect OutputConnect
+        public ModelConnector OutputConnect
         {
             get { return Connect.OutputConnect; }
             set

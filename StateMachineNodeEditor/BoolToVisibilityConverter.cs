@@ -19,8 +19,8 @@ namespace StateMachineNodeEditor
         {
             // set defaults
             TrueValue = Visibility.Visible;
-            FalseValue = Visibility.Collapsed;
-            NullValue = Visibility.Hidden;
+            FalseValue = Visibility.Hidden;
+            NullValue = Visibility.Collapsed;
         }
 
         public object Convert(object value, Type targetType,
