@@ -55,16 +55,16 @@ namespace StateMachineNodeEditor
             return new Point(point2.X, point2.Y);
         }
 
-        public static Point GetValueAsPoint(TranslateTransform translate)
+        public static Point GetValueAsPoint(System.Windows.Media.TranslateTransform translate)
         {
           return new Point(translate.X, translate.Y);
         }
-        public static void Addition(TranslateTransform translate, Point point)
+        public static void Addition(System.Windows.Media.TranslateTransform translate, Point point)
         {
             translate.X += point.X;
             translate.Y += point.Y;
         }
-        public static void Equality(TranslateTransform translate, Point point)
+        public static void Equality(System.Windows.Media.TranslateTransform translate, Point point)
         {
             translate.X = point.X;
             translate.Y = point.Y;
@@ -99,11 +99,11 @@ namespace StateMachineNodeEditor
             return new Point(point1.X / scale.ScaleX, point1.Y / scale.ScaleY);
         }
 
-        public static Point GetPoint1(FrameworkElement element, TranslateTransform translate)
+        public static Point GetPoint1(FrameworkElement element, System.Windows.Media.TranslateTransform translate)
         {
             return ForPoint.GetValueAsPoint(translate);
         }
-        public static Point GetPoint2(FrameworkElement element, TranslateTransform translate)
+        public static Point GetPoint2(FrameworkElement element, System.Windows.Media.TranslateTransform translate)
         {
             Point point1 = GetPoint1(element, translate);
             return new Point(point1.X + element.ActualWidth, point1.Y + element.ActualHeight);

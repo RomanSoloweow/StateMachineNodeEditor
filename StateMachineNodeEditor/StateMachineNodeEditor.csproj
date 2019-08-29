@@ -62,9 +62,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ModelConnect.cs" />
+    <Compile Include="ModelConnector.cs" />
+    <Compile Include="ModelNode.cs" />
+    <Compile Include="ModelNodesCanvas.cs" />
     <Compile Include="OtherClass\ForPoint.cs" />
     <Compile Include="OtherClass\Functions.cs" />
     <Compile Include="OtherClass\Manager.cs" />
@@ -81,6 +86,27 @@
       <DependentUpon>Connect.xaml</DependentUpon>
     </Compile>
     <Compile Include="OtherClass\Transforms.cs" />
+    <Compile Include="Transf\Scales.cs" />
+    <Compile Include="Transf\Translates.cs" />
+    <Compile Include="ViewConnect.xaml.cs">
+      <DependentUpon>ViewConnect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewLeftConnector.xaml.cs">
+      <DependentUpon>ViewLeftConnector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModelNodesCanvas.cs" />
+    <Compile Include="VIewNodesCanvas.xaml.cs">
+      <DependentUpon>VIewNodesCanvas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewRightConnector.xaml.cs">
+      <DependentUpon>ViewRightConnector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModelConnect.cs" />
+    <Compile Include="ViewModelConnector.cs" />
+    <Compile Include="ViewModelNode.cs" />
+    <Compile Include="ViewNode.xaml.cs">
+      <DependentUpon>ViewNode.xaml</DependentUpon>
+    </Compile>
     <Page Include="Elements\NodesCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -137,6 +163,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ViewConnect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewLeftConnector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VIewNodesCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewRightConnector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewNode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -166,6 +212,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NewStyle\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

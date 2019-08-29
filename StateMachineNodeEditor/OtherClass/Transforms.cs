@@ -12,7 +12,7 @@ namespace StateMachineNodeEditor
     public class Transforms
     {
         public TransformGroup _transformGroup { get;  set; } = new TransformGroup();
-        public TranslateTransform translate { get;  set; } = new TranslateTransform();
+        public TranslateTransform translate { get;  set; } = new System.Windows.Media.TranslateTransform();
         public RotateTransform rotate { get;  set; } = new RotateTransform();
         public ScaleTransform scale { get; set; } = new ScaleTransform();
         public SkewTransform skew { get;  set; } = new SkewTransform();

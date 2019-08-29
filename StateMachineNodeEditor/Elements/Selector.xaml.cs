@@ -90,7 +90,7 @@ namespace StateMachineNodeEditor
             transforms.scale.ScaleX = (size.X>0) ? 1 : -1;
             //Если нужно отражаем по Y
             transforms.scale.ScaleY = (size.Y>0) ? 1 : -1;
-        }
+        }   
         
     }
 }

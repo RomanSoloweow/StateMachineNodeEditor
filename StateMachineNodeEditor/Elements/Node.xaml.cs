@@ -71,9 +71,9 @@ namespace StateMachineNodeEditor
         public object Clone()
         {
             Node node = new Node();
-            node.Manager._transformGroup = (TransformGroup)this.Manager._transformGroup.Clone();
-            node.Name = this.Name + "_";
-            node.Text = this.Text + "_";
+            //node.Manager._transformGroup = (TransformGroup)this.Manager._transformGroup.Clone();
+            //node.Name = this.Name + "_";
+            //node.Text = this.Text + "_";
             return node;
         }
         public bool? Selected
@@ -216,10 +216,10 @@ namespace StateMachineNodeEditor
         }
         private void PositionChanges(object sender, RoutedEventArgs e)
         {
-            if (Input.IsVisible)
-               UpdateInputCenterLocation();
-            if (Output.IsVisible)
-                UpdateOutputCenterLocation();
+            //if (Input.IsVisible)
+            //   UpdateInputCenterLocation();
+            //if (Output.IsVisible)
+            //    UpdateOutputCenterLocation();
         }
         public void UpdateOutputCenterLocation()
         {
