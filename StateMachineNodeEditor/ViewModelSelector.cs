@@ -8,76 +8,72 @@ namespace StateMachineNodeEditor
 {
     public class ViewModelSelector : INotifyPropertyChanged
     {
-        public ModelSelector Selector;
-        public ViewModelSelector()
+        private ModelSelector selector;
+        public ViewModelSelector(ModelSelector modelSelector)
         {
-            Selector = new ModelSelector();
-            Selector.Translate.X = 10;
-            Selector.Translate.Y = 10;
-            Selector.Width = 500;
-            Selector.Height = 500;
+            selector = modelSelector;
         }
         public Point Point1
         {
-            get { return Selector.Point1; }
+            get { return selector.Point1; }
             set
             {
-                Selector.Point1 = value;
+                selector.Point1 = value;
                 OnPropertyChanged("Point1");
             }
         }
         public Point Point2
         {
-            get { return Selector.Point2; }
+            get { return selector.Point2; }
             set
             {
-                Selector.Point2 = value;
+                selector.Point2 = value;
                 OnPropertyChanged("Point2");
             }
         }
         public Translates Translate
         {
-            get { return Selector.Translate; }
+            get { return selector.Translate; }
             set
             {
-                Selector.Translate = value;
+                selector.Translate = value;
                 OnPropertyChanged("Translate");
 
             }
         }
         public Scales Sclale
         {
-            get { return Selector.Sclale; }
+            get { return selector.Sclale; }
             set
             {
-                Selector.Sclale = value;
+                selector.Sclale = value;
                 OnPropertyChanged("Sclale");
             }
         }
         public bool? Visible
         {
-            get { return Selector.Visible; }
+            get { return selector.Visible; }
             set
             {
-                Selector.Visible = value;
+                selector.Visible = value;
                 OnPropertyChanged("Visible");
             }
         }
         public double Width
         {
-            get { return Selector.Width; }
+            get { return selector.Width; }
             set
             {
-                Selector.Width = value;
+                selector.Width = value;
                 OnPropertyChanged("Width");
             }
         }
         public double Height
         {
-            get { return Selector.Height; }
+            get { return selector.Height; }
             set
             {
-                Selector.Height = value;
+                selector.Height = value;
                 OnPropertyChanged("Height");
             }
         }

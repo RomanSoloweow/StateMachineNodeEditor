@@ -23,7 +23,7 @@ namespace StateMachineNodeEditor
         public ViewSelector()
         {
             InitializeComponent();
-            DataContext = new ViewModelSelector();
+            DataContext = new ViewModelSelector(new ModelSelector());
         }
     }
 }

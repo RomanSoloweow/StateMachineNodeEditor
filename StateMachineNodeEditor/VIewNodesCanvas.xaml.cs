@@ -23,7 +23,7 @@ namespace StateMachineNodeEditor
         public ViewNodesCanvas()
         {
             InitializeComponent();
-            DataContext = new ViewModelNodesCanvas();
+            DataContext = new ViewModelNodesCanvas(new ModelNodesCanvas());
         }
     }
 }

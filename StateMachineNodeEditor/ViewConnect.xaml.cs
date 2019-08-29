@@ -23,7 +23,7 @@ namespace StateMachineNodeEditor
         public ViewConnect()
         {
             InitializeComponent();
-            DataContext = new ViewModelConnect();
+            //DataContext = new ViewModelConnect(new ModelConnect());
         }
     }
 }

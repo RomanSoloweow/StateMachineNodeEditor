@@ -7,80 +7,53 @@ namespace StateMachineNodeEditor
 {
     public class ViewModelConnector : INotifyPropertyChanged
     {
-        public ModelConnector Connector { get; set; }
-        public ViewModelConnector()
+        private ModelConnector connector { get; set; }
+        public ViewModelConnector(ModelConnector modelConnector)
         {
-            Connector = new ModelConnector();
-        }
-        public Point Position
-        {
-            get { return Connector.Position; }
-            set
-            {
-                Connector.Position = value;
-                OnPropertyChanged("Position");
-            }
-        }
-        public ModelNode Node
-        {
-            get { return Connector.Node; }
-            set
-            {
-                Connector.Node = value;
-                OnPropertyChanged("Node");
-            }
-        }
-        public ModelConnect Connect
-        {
-            get { return Connector.Connect; }
-            set
-            {
-                Connector.Connect = value;
-                OnPropertyChanged("Connect");
-            }
+            connector = modelConnector;
         }
         public String Text
         {
-            get { return Connector.Text; }
+            get { return connector.Text; }
             set
             {
-                Connector.Text = value;
+                connector.Text = value;
                 OnPropertyChanged("Text");
             }
         }
         public bool TextIsEnable
         {
-            get { return Connector.TextIsEnable; }
+            get { return connector.TextIsEnable; }
             set
             {
-                Connector.TextIsEnable = value;
+                connector.TextIsEnable = value;
                 OnPropertyChanged("TextIsEnable");
             }
         }
         public Brush Fill
         {
-            get { return Connector.Fill; }
+            get { return connector.Fill; }
             set
             {
-                Connector.Fill = value;
+                connector.Fill = value;
                 OnPropertyChanged("Fill");
             }
         }
         public Brush Stroke
         {
-            get { return Connector.Stroke; }
+            get { return connector.Stroke; }
             set
             {
-                Connector.Stroke = value;
+                connector.Stroke = value;
                 OnPropertyChanged("Stroke");
             }
         }
         public bool? Visible
         {
-            get { return Connector.Visible; }
+            get { return connector.Visible; }
             set
             {
-                Connector.Visible = value;
+                connector.Visible = value;
                 OnPropertyChanged("Visible");
             }
         }

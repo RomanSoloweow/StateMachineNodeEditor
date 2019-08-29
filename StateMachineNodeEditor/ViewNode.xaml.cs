@@ -23,7 +23,17 @@ namespace StateMachineNodeEditor
         public ViewNode()
         {
             InitializeComponent();
-            //DataContext = new ViewModelNode();
+            //DataContext = new ViewModelNode(new ModelNode());
+            this.SizeChanged += SizeChange;
+        }
+        private void SizeChange(object sender, EventArgs e)
+        {
+            ModelNode modelNode = DataContext as ModelNode;
+            if (modelNode != null)
+            {
+                modelNode.Height = ActualHeight;
+                modelNode.Width = ActualWidth;
+            }
         }
     }
 }

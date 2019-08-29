@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="StateMachineNodeEditor.ViewNode"
+﻿<UserControl x:Name="ggg" x:Class="StateMachineNodeEditor.ViewNode"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
-             mc:Ignorable="d" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
+             mc:Ignorable="d" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+
     <UserControl.RenderTransform>
         <TransformGroup>
             <ScaleTransform ScaleX="{Binding Scale.ScaleX, UpdateSourceTrigger=PropertyChanged}" ScaleY="{Binding Scale.ScaleY, UpdateSourceTrigger=PropertyChanged}" CenterX="{Binding Scale.CenterX, UpdateSourceTrigger=PropertyChanged}" CenterY="{Binding Scale.CenterY, UpdateSourceTrigger=PropertyChanged}"/>
@@ -13,10 +14,10 @@
             <TranslateTransform X="{Binding Translate.X, UpdateSourceTrigger=PropertyChanged}" Y="{Binding Translate.Y, UpdateSourceTrigger=PropertyChanged}"/>
         </TransformGroup>
     </UserControl.RenderTransform>
-    <Border x:Name="Border" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1"   HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" Style="{DynamicResource NodeBorder}"   >
+    <Border x:Name="Border" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1"   HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" Style="{DynamicResource NodeBorder}" >
         <StackPanel Margin="0,0,0,5">
             <TextBox Name="Header" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}"  HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
-            <Grid x:Name="MainPanel"  MinWidth="80" >
+            <Grid x:Name="MainPanel"  MinWidth="80" MinHeight="40" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
@@ -27,7 +28,7 @@
                 <local:ViewLeftConnector Grid.Row="0" Grid.Column="0" DataContext="{Binding Input, UpdateSourceTrigger=PropertyChanged}" />
                 <local:ViewRightConnector  Grid.Row="1" Grid.Column="1"  DataContext="{Binding Output, UpdateSourceTrigger=PropertyChanged}" />
 
-                <Button Name ="RollUp" Margin="0,10,0,0" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left"  FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
+                <Button Name ="RollUp" Margin="0,20,0,0" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left"  FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
                     <Button.RenderTransform>
                         <TransformGroup>
                             <RotateTransform x:Name="Rotate" Angle="0" CenterX="9" CenterY="3.2"/>

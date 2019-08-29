@@ -13,14 +13,15 @@ namespace StateMachineNodeEditor
         private Point _point2;
         private ModelConnector _input;
         private ModelConnector _output;
-        private ObservableCollection<ModelConnector> _transitions;
-        private Translates _translate;
-        private static Scales _sclale;
+        private ObservableCollection<ModelConnector> _transitions = new ObservableCollection<ModelConnector>();
+        private Translates _translate = new Translates();
+        private static Scales _sclale = new Scales();
         private string _text;
+        private double _width;
+        private double _height;
         //private Brush 
         public  ModelNode()
         {
-            _transitions = new ObservableCollection<ModelConnector>();
             _input = new ModelConnector()
             {
                 Text = "Input",
@@ -32,7 +33,10 @@ namespace StateMachineNodeEditor
                 TextIsEnable = false,
                 Visible = false
             };
-            _translate = new Translates();
+
+            Text = "Test";
+            _translate.X=100;
+            _translate.Y= 100;
         }   
         public Point Point1
         {
@@ -108,7 +112,24 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Text");
             }
         }
-
+        public double Width
+        {
+            get { return _width; }
+            set
+            {
+                _width = value;
+                OnPropertyChanged("Width");
+            }
+        }
+        public double Height
+        {
+            get { return _height; }
+            set
+            {
+                _height = value;
+                OnPropertyChanged("Height");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              Visibility="{Binding Visible, Converter={StaticResource ResourceKey=BoolToVisibility}, UpdateSourceTrigger=PropertyChanged}"
              Width="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
-             Height="{Binding Height, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top">
+             Height="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
+             HorizontalAlignment="Left" VerticalAlignment="Top">
     <UserControl.RenderTransform>
         <TransformGroup>
             <ScaleTransform ScaleX="{Binding Scale.ScaleX, UpdateSourceTrigger=PropertyChanged}" ScaleY="{Binding Scale.ScaleY, UpdateSourceTrigger=PropertyChanged}" CenterX="{Binding Scale.CenterX, UpdateSourceTrigger=PropertyChanged}" CenterY="{Binding Scale.CenterY, UpdateSourceTrigger=PropertyChanged}"/>
