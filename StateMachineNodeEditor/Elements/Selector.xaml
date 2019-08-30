@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" Focusable="True" >
     <UserControl.RenderTransform>
-        <!--<RotateTransform x:Name="rotate" Angle="0"/>-->
         <TransformGroup>
             <ScaleTransform/>
             <SkewTransform/>

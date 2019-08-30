@@ -5,7 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
-              Background="#FF141414">
+              Background="#FF141414" Focusable="True" AllowDrop="True" 
+             local:ViewNodesCanvas.RegisterCommandBindings="{Binding CommandBindings}"
+             local:ViewNodesCanvas.RegisterInputBindings="{Binding InputBindings}"
+             >
+    <UserControl.ContextMenu>
+        <ContextMenu ItemsSource="{Binding Items}">
+            <!--<MenuItem Header="Delete" Name="DeleteItem" Command="Delete"/>-->
+            <!--<local:ViewMenuItems Header="Add" Command="New"/>-->
+        </ContextMenu>
+        
+    </UserControl.ContextMenu>
     <ItemsControl x:Name="grid" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

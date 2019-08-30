@@ -6,9 +6,6 @@
         xmlns:local="clr-namespace:StateMachineNodeEditor"
         mc:Ignorable="d"
         Title="MainWindow"  d:DesignWidth="808.96" Height="738.592" >
-    <!--<Window.Resources>
-        <:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
-    </Window.Resources>-->
     <Grid x:Name="grid" >
         <!--<Rectangle Style="{DynamicResource Selector}" />-->
     </Grid>

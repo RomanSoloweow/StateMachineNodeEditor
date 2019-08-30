@@ -17,8 +17,7 @@
     <UserControl.CommandBindings>
         <!--<CommandBinding Command="Zoom" Executed="Zoom" />-->
         <CommandBinding Command="Select" Executed="Select"/>
-
-        <CommandBinding Command="SelectAll"     Executed="SelectAll"/>              <!--ctrl+a сделано-->
+        <CommandBinding Command="SelectAll"     Executed="SelectAll" />              <!--ctrl+a сделано-->
         <CommandBinding Command="New"           Executed="New"/>                    <!--ctrl+n сделано-->        
         <CommandBinding Command="Redo" Executed="CommandBinding_Executed"/>         <!--ctrl+y-->
         <CommandBinding Command="Undo" Executed="CommandBinding_Executed"/>         <!--ctrl+z-->

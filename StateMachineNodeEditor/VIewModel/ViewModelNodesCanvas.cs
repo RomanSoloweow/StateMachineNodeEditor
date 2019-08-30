@@ -2,11 +2,31 @@
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Windows.Input;
+using Microsoft.VisualStudio.PlatformUI;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+
 namespace StateMachineNodeEditor
 {
+    
     public class ViewModelNodesCanvas: INotifyPropertyChanged
     {
         private ModelNodesCanvas nodesCanvas;
+         public void News(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        public CommandBindingCollection CommandBindings { get; } = new CommandBindingCollection();
+        public InputBindingCollection InputBindings { get; } = new InputBindingCollection();
+        public List<MenuItem> Items { get; } = new List<MenuItem>();
+
+        public void New(object sender)
+        {
+
+        }
+
         public ObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollection<ViewModelNode>();
         public ObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollection<ViewModelConnect>();
         public ViewModelNodesCanvas(ModelNodesCanvas modelNodesCanvas)
@@ -22,6 +42,22 @@ namespace StateMachineNodeEditor
             }
             nodesCanvas.Nodes.CollectionChanged += NodesChange;
             nodesCanvas.Connects.CollectionChanged += ConnectsChange;
+
+            AddCommand();
+        }
+        public void AddCommand()
+        {
+            MenuItem ItemFromCommand(Command command)
+            {
+                MenuItem menuItem = new MenuItem();
+                //menuItem.Header = command.Text;
+                menuItem.Name = command.Text;
+                menuItem.Command = command;
+                return menuItem;
+            }
+            Command newCommnad = new Command(ApplicationCommands.New, New);
+            CommandBindings.Add(newCommnad.GetCommandBinding());
+            Items.Add(ItemFromCommand(newCommnad));
         }
         public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
