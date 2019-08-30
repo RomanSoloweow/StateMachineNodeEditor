@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
+using System.Windows;
 namespace StateMachineNodeEditor
 {
     public class Translates : INotifyPropertyChanged
@@ -15,6 +15,11 @@ namespace StateMachineNodeEditor
                 _x = value;
                 OnPropertyChanged("X");
             }
+        }
+        public Point Value
+        {
+            get { return new Point(X, Y); }
+            set { X = value.X;Y = value.Y; }
         }
         public double Y
         {

@@ -16,6 +16,11 @@ namespace StateMachineNodeEditor
         private ModelConnector _outputConnect;
         private Brush _stroke;
         private DoubleCollection _strokeDashArray;
+        public ModelConnect(Point? point)
+        {
+            if (point != null)
+                StartPoint = point.Value;
+        }
         public Point StartPoint
         {
             get { return _startPoint; }

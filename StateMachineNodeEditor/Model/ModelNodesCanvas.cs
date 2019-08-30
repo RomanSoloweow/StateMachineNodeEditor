@@ -13,17 +13,17 @@ namespace StateMachineNodeEditor
 
         public ModelNodesCanvas()
         {
-            ModelNode node = new ModelNode();
-            node.Text = "TestNode";
-            node.Translate.X = 100;
-            node.Translate.Y = 100;
-            _nodes.Add(node);
+            //ModelNode node = new ModelNode();
+            //node.Text = "TestNode";
+            //node.Translate.X = 100;
+            //node.Translate.Y = 100;
+            //_nodes.Add(node);
 
-            ModelNode node2 = new ModelNode();
-            node2.Text = "TestNode2";
-            node2.Translate.X = 10;
-            node2.Translate.Y = 10;
-            _nodes.Add(node2);
+            //ModelNode node2 = new ModelNode();
+            //node2.Text = "TestNode2";
+            //node2.Translate.X = 10;
+            //node2.Translate.Y = 10;
+            //_nodes.Add(node2);
         }
         public ObservableCollection<ModelNode> Nodes
         {
@@ -47,6 +47,48 @@ namespace StateMachineNodeEditor
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+        public ModelConnect GetNewConnect(Point position)
+        {
+            ModelConnect modelConnect = new ModelConnect(position);
+            _connects.Add(modelConnect);
+            return modelConnect;
+        }
+        public ModelConnect DeleteConnect(ModelConnect modelConnect)
+        {
+            if (modelConnect != null)
+            {
+                _connects.Remove(modelConnect);
+            }
+            return modelConnect;
+        }
+        public ModelNode GetNewNode(Point position)
+        {
+            string text = "State " + this._nodes.Count.ToString();
+            ModelNode modelNode = new ModelNode(text, position);
+            //if (nodes.Count > 0)
+            //{
+            //    Node firstNode = nodes.First();
+            //}
+            //ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.zoom));
+            _nodes.Add(modelNode);
+            //Panel.SetZIndex(node, nodes.Count());
+            return modelNode;
+        }
+        public ModelNode AddNode(ModelNode modelNode)
+        {
+            string text = "State" + this._nodes.Count.ToString();
+            modelNode.Text = text;
+            _nodes.Add(modelNode);
+            return modelNode;
+        }
+        public ModelNode DeleteNode(ModelNode node)
+        {
+            if (node != null)
+            {
+                _nodes.Remove(node);
+            }
+            return node;
         }
     }
 }

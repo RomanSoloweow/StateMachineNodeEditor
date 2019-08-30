@@ -8,6 +8,7 @@
               Background="#FF141414" Focusable="True" AllowDrop="True" 
              local:ViewNodesCanvas.RegisterCommandBindings="{Binding CommandBindings}"
              local:ViewNodesCanvas.RegisterInputBindings="{Binding InputBindings}"
+             local:ViewNodesCanvas.Add="{Binding Kek}"
              >
     <UserControl.ContextMenu>
         <ContextMenu ItemsSource="{Binding Items}">
@@ -28,4 +29,10 @@
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="{Binding Add}" undo/>
+    </UserControl.CommandBindings>
+    <!--<UserControl.InputBindings>
+        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" />
+    </UserControl.InputBindings>-->
 </UserControl>

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
+using System.Windows;
 namespace StateMachineNodeEditor
 {
     public class Scales : INotifyPropertyChanged
@@ -13,6 +13,16 @@ namespace StateMachineNodeEditor
         {
             _scaleX = 1;
             _scaleY = 1;
+        }
+        public Point ValueScale
+        {
+            get { return new Point(ScaleX, ScaleY); }
+            set { ScaleX = value.X; ScaleY = value.Y; }
+        }
+        public Point ValueCenter
+        {
+            get { return new Point(CenterX, CenterY); }
+            set { CenterX = value.X; CenterY = value.Y; }
         }
         public double ScaleX
         {

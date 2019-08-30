@@ -13,24 +13,6 @@ namespace StateMachineNodeEditor
         {
             selector = modelSelector;
         }
-        public Point Point1
-        {
-            get { return selector.Point1; }
-            set
-            {
-                selector.Point1 = value;
-                OnPropertyChanged("Point1");
-            }
-        }
-        public Point Point2
-        {
-            get { return selector.Point2; }
-            set
-            {
-                selector.Point2 = value;
-                OnPropertyChanged("Point2");
-            }
-        }
         public Translates Translate
         {
             get { return selector.Translate; }

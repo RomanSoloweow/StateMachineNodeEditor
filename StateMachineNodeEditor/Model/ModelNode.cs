@@ -9,54 +9,47 @@ namespace StateMachineNodeEditor
 {
     public class ModelNode : INotifyPropertyChanged
     {
-        private Point _point1;
-        private Point _point2;
         private ModelConnector _input;
         private ModelConnector _output;
         private ObservableCollection<ModelConnector> _transitions = new ObservableCollection<ModelConnector>();
+        private ModelConnector _currentConnector;
         private Translates _translate = new Translates();
         private static Scales _sclale = new Scales();
         private string _text;
         private double _width;
         private double _height;
-        //private Brush 
-        public  ModelNode()
+        private ModelConnector AddEmptyConnector()
         {
-            _input = new ModelConnector()
+            if (_currentConnector != null)
+            {
+                _currentConnector.TextIsEnable = true;
+                _currentConnector.Text = "Transition_" + Transitions.Count.ToString();
+            }
+            _currentConnector = new ModelConnector(this);
+            _currentConnector.TextIsEnable  = false;
+            _transitions.Insert(0, _currentConnector);
+            return _currentConnector;
+        }
+        //private Brush 
+        public  ModelNode(string text=null, Point? point=null )
+        {
+            _input = new ModelConnector(this)
             {
                 Text = "Input",
                 TextIsEnable = false
             };
-            _output = new ModelConnector()
+            _output = new ModelConnector(this)
             {
                 Text = "Output",
                 TextIsEnable = false,
                 Visible = false
             };
 
-            Text = "Test";
-            _translate.X=100;
-            _translate.Y= 100;
+            Text = text??"Test";
+            if (point != null)
+                _translate.Value = point.Value;
+            AddEmptyConnector();
         }   
-        public Point Point1
-        {
-            get { return new Point(Translate.X, Translate.Y); }
-            set
-            {
-                Translate.X = value.X;
-                Translate.Y = value.Y;
-                OnPropertyChanged("Translate");
-            }
-        }
-        public Point Point2
-        {
-            get { return _point2; }
-            set
-            {
-                _point2 = value;
-                OnPropertyChanged("Point2");
-            }
-        }
         public ModelConnector Input
         {
             get { return _input; }

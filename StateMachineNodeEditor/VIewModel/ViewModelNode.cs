@@ -45,24 +45,6 @@ namespace StateMachineNodeEditor
             }
             OnPropertyChanged("Transitions");
         }
-        public Point Point1
-        {
-            get { return node.Point1; }
-            set
-            {
-                node.Point1 = value;
-                OnPropertyChanged("Point1");
-            }
-        }
-        public Point Point2
-        {
-            get { return node.Point2; }
-            set
-            {
-                node.Point2 = value;
-                OnPropertyChanged("Point2");
-            }
-        }
         public Translates Translate
         {
             get { return node.Translate; }

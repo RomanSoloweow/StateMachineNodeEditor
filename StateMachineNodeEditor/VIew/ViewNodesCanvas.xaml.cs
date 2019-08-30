@@ -27,6 +27,16 @@ namespace StateMachineNodeEditor
             ViewModelNodesCanvas viewModelNodesCanvas = new ViewModelNodesCanvas(new ModelNodesCanvas());
             DataContext = viewModelNodesCanvas;
         }
+        public static DependencyProperty AddProperty = DependencyProperty.RegisterAttached("Add", typeof(Action<object, ExecutedRoutedEventArgs>), typeof(ViewNodesCanvas), new PropertyMetadata(null));
+        public static void SetAdd(UIElement element, Action<object, ExecutedRoutedEventArgs> value)
+        {
+            element.SetValue(AddProperty, value);
+        }
+        public static Action<object, ExecutedRoutedEventArgs> GetAdd(UIElement element)
+        {
+            return (Action<object, ExecutedRoutedEventArgs>)element.GetValue(AddProperty);
+        }
+
         public static DependencyProperty RegisterCommandBindingsProperty = DependencyProperty.RegisterAttached("RegisterCommandBindings", typeof(CommandBindingCollection), typeof(ViewNodesCanvas), new PropertyMetadata(null, OnRegisterCommandBindingChanged));
         public static void SetRegisterCommandBindings(UIElement element, CommandBindingCollection value)
         {

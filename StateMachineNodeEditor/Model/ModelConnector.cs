@@ -16,9 +16,10 @@ namespace StateMachineNodeEditor
         private Brush _stroke;
         private bool? _visible;
 
-        public ModelConnector()
+        public ModelConnector(ModelNode node)
         {
-            Text = "QWERTY";
+            _node = node;
+            Text = "";
             Fill = Brushes.DarkGray;
             Stroke = Brushes.Black;
             TextIsEnable = true;
