@@ -29,23 +29,42 @@ namespace StateMachineNodeEditor
 
             this.DataContextChanged += DataContextChange;
             this.MouseRightButtonDown += mouseRightDown;
+            this.MouseLeftButtonDown += mouseLeftDown;
         }
+
         public void mouseRightDown(object sender, MouseButtonEventArgs e)
         {
             positionRightClick = e.GetPosition(this);
         }
+        public void mouseLeftDown(object sender, MouseButtonEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
+        }
         private Point positionRightClick;
+        private Point positionMove;
         public ViewModelNodesCanvas ViewModelNodesCanvas { get; set; }
         public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
         {
             ViewModelNodesCanvas = e.NewValue as ViewModelNodesCanvas;
+            
+            
+            //RoutedCommand routedCommand = new RoutedCommand("UnSelectedAllNodes",typeof(this),new Input)
+
+            InputGesture inputGesture = new KeyGesture(Key.R, ModifierKeys.Control, "Ctrl + R");
+            RoutedCommand Requery = new RoutedCommand("Requery",typeof(ViewNodesCanvas));
+     
+            CommandBinding commandBinding = new CommandBinding(Requery, CommandBinding_Executed);
+            this.CommandBindings.Add(commandBinding);
+            this.InputBindings.Add(new InputBinding(Requery, inputGesture));
         }
         
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            MessageBox.Show("Ctrl +r");
         }
         private void Select(object sender, ExecutedRoutedEventArgs e)
         {
+
             ViewModelNodesCanvas.CommandSelect.Execute(e.Parameter);
         }
         private void SelectAll(object sender, ExecutedRoutedEventArgs e)

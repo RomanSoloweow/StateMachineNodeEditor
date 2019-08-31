@@ -16,6 +16,8 @@ namespace StateMachineNodeEditor
             _translate = new Translates();
             _sclale = new Scales();
             _visible = true;
+            _width = 100;
+            _height = 100;
         }
         public Translates Translate
         {

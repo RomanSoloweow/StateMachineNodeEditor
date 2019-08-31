@@ -14,10 +14,6 @@ namespace StateMachineNodeEditor
     public class ViewModelNodesCanvas: INotifyPropertyChanged
     {
         private ModelNodesCanvas nodesCanvas;
-        public CommandBindingCollection CommandBindings { get; } = new CommandBindingCollection();
-        public InputBindingCollection InputBindings { get; } = new InputBindingCollection();
-        public List<MenuItem> Items { get; } = new List<MenuItem>();
-
         public ObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollection<ViewModelNode>();
         public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -34,9 +30,10 @@ namespace StateMachineNodeEditor
             {
                 foreach (var element in e.OldItems)
                 {
+                    bool result = true;
                     ModelNode node = element as ModelNode;
                     if (node != null)
-                        Nodes.Remove(new ViewModelNode(node));
+                        result= Nodes.Remove(new ViewModelNode(node));
                 }
             }
             OnPropertyChanged("Nodes");
@@ -64,10 +61,12 @@ namespace StateMachineNodeEditor
             }
             OnPropertyChanged("Connects");
         }
+        public ViewModelSelector Selector { get; set; }
         public ViewModelNodesCanvas(ModelNodesCanvas modelNodesCanvas)
         {
             nodesCanvas  = modelNodesCanvas;
-            foreach(ModelNode modelNode in nodesCanvas.Nodes)
+           
+            foreach (ModelNode modelNode in nodesCanvas.Nodes)
             {
                 Nodes.Add(new ViewModelNode(modelNode));
             }
@@ -78,11 +77,13 @@ namespace StateMachineNodeEditor
             nodesCanvas.Nodes.CollectionChanged += NodesChange;
             nodesCanvas.Connects.CollectionChanged += ConnectsChange;
             nodesCanvas.PropertyChanged += ModelPropertyChange;
+            Selector = new ViewModelSelector(nodesCanvas.Selector);
             AddCommand();
         }
 
         #region Commands
         public SimpleCommand CommandSelectAll { get; set; }
+        public SimpleCommand CommandUnSelectAll { get; set; }
         public SimpleCommand CommandSelect { get; set; }
         public SimpleCommand CommandNew { get; set; }
         public SimpleCommand CommandRedo { get; set; }
@@ -90,23 +91,26 @@ namespace StateMachineNodeEditor
         public SimpleCommand CommandCopy { get; set; }
         public SimpleCommand CommandPaste { get; set; }
         public SimpleCommand CommandDelete { get; set; }
-        public SimpleCommand CommandCut { get; set; }
+        public SimpleCommand CommandCut { get; set; }    
         public SimpleCommand CommandMoveDown { get; set; }
         public SimpleCommand CommandMoveLeft { get; set; }
         public SimpleCommand CommandMoveRight { get; set; }
         public SimpleCommand CommandMoveUp { get; set; }
 
+        public SimpleCommand CommandMoveAllNode { get; set; }
+        public SimpleCommand CommandMoveAllSelectedNode { get; set; }
         public object Test(object parameters)
         {
             return null;
         }
         public void AddCommand()
         {
-            CommandSelectAll    = new SimpleCommand(this, Test);
+            CommandSelectAll    = new SimpleCommand(this, SelectAll);
+            CommandUnSelectAll  = new SimpleCommand(this, UnSelectAll);
             CommandSelect       = new SimpleCommand(this, Test);
             CommandNew          = new SimpleCommand(this, New, UnNew);
-            CommandRedo         = new SimpleCommand(this, Test);
-            CommandUndo         = new SimpleCommand(this, Test);
+            CommandRedo         = new SimpleCommand(this, Redo);
+            CommandUndo         = new SimpleCommand(this, Undo);
             CommandCopy         = new SimpleCommand(this, Test);
             CommandPaste        = new SimpleCommand(this, Test);
             CommandDelete       = new SimpleCommand(this, Test);
@@ -117,6 +121,9 @@ namespace StateMachineNodeEditor
             CommandMoveRight    = new SimpleCommand(this, Test);
             CommandMoveUp       = new SimpleCommand(this, Test);
 
+
+            CommandMoveAllNode = new SimpleCommand(this, Test);
+            CommandMoveAllSelectedNode = new SimpleCommand(this, Test);
             //MenuItem ItemFromCommand(Command command)
             //{
             //    MenuItem menuItem = new MenuItem();
@@ -146,6 +153,36 @@ namespace StateMachineNodeEditor
         {
             ModelNode modelNode = parameters as ModelNode;
             return nodesCanvas.DeleteNode(modelNode);
+        }
+        public object Redo(object parameters)
+        {
+            if (SimpleCommand.Redo.Count>0)
+            SimpleCommand.Redo.Pop().Execute();
+            return null;
+        }
+        public object Undo(object parameters)
+        {
+            if (SimpleCommand.Undo.Count > 0)
+                SimpleCommand.Undo.Pop().UnExecute();
+            return null;
+        }
+        public object SelectAll(object parameters)
+        {
+            if(parameters==null)
+                nodesCanvas.SelectedAllNodes();
+            else
+                nodesCanvas.UnSelectedAllNodes();
+            return null;
+        }
+        public object UnSelectAll(object parameters)
+        {
+            nodesCanvas.UnSelectedAllNodes();
+            return null;
+        }
+        public object Select(object parameters)
+        {
+            //nodesCanvas.UnSelectedAllNodes();
+            return null;
         }
         #endregion Commands
 

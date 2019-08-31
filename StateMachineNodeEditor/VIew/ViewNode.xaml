@@ -56,6 +56,6 @@
     </UserControl.CommandBindings>
     <UserControl.InputBindings>
         <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" CommandParameter="false"/><!--ctrl+ЛКМ-->
-        <!--<MouseBinding Command="MediaCommands.Select" Gesture="LeftClick" CommandParameter="true"/>-->
+        <MouseBinding Command="MediaCommands.Select" Gesture="LeftClick" CommandParameter="true"/>
     </UserControl.InputBindings>
 </UserControl>

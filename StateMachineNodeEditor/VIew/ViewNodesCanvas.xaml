@@ -5,11 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
-              Background="#FF141414" Focusable="True" AllowDrop="True">
+             Focusable="True" AllowDrop="True">
+    <Grid>
+        <local:ViewSelector  Panel.ZIndex="999" DataContext="{Binding Selector}"></local:ViewSelector>
     <ItemsControl x:Name="grid" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <Grid />
+                <Grid Background="#FF141414">
+                </Grid>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
@@ -18,15 +21,21 @@
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
+    </Grid>
     <UserControl.ContextMenu>
         <ContextMenu Margin="10, 0, 0, 0">
             <MenuItem Header="Add" Name="AddItem" Command="New"/>
-            <MenuItem Header="Delete" Name="DeleteItem" Command="Delete"/>
+            <MenuItem Header="Delete"   Name="DeleteItem"   Command="Delete"/>
+            <MenuItem Header="Undo"     Name="UndoItem"     Command="Undo"/>
+            <MenuItem Header="Redo"     Name="RedoItem"     Command="Redo"/>
+            <MenuItem Header="Copy"     Name="CopyItem"     Command="Copy"/>
+            <MenuItem Header="Paste"    Name="PasteItem"    Command="Paste"/>
+            <MenuItem Header="Cut"      Name="CutItem"      Command="Cut"/>
         </ContextMenu>
     </UserControl.ContextMenu>
     <UserControl.CommandBindings>
         <!--<CommandBinding Command="Zoom" Executed="Zoom" />-->
-        <CommandBinding Command="Select"    Executed="Select"   />
+        <CommandBinding Command="Select"    Executed="Select" />
         <CommandBinding Command="SelectAll" Executed="SelectAll"/> <!--ctrl+a -->
         <CommandBinding Command="New"       Executed="New"      /> <!--ctrl+n-->
         <CommandBinding Command="Redo"      Executed="Redo"     /> <!--ctrl+y-->
@@ -44,5 +53,7 @@
     <UserControl.InputBindings>
         <!--<MouseBinding Command="NavigationCommands.Zoom" Gesture="WheelClick"  CommandParameter="EventArgs"/> --><!--колесо мыши-->
         <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" /> <!--ctrl+ЛКМ сделано-->
+        <!--<MouseBinding Command="SelectAll" Gesture="LeftClick" CommandParameter="false"/>-->
+        <!--ctrl+ЛКМ сделано-->
     </UserControl.InputBindings>
 </UserControl>

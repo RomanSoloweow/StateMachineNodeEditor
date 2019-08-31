@@ -20,7 +20,6 @@ namespace StateMachineNodeEditor
         private double _width;
         private double _height;
         private bool _selected;
-        private Brush _borderBrush = Brushes.DarkGray;
 
         private ModelConnector AddEmptyConnector()
         {
@@ -56,7 +55,7 @@ namespace StateMachineNodeEditor
 
             AddEmptyConnector();
         }
-        public ModelNode Select(bool selectOnlyOne)
+        public bool Select(bool selectOnlyOne)
         {
             //ЛКМ
             if (selectOnlyOne)
@@ -71,7 +70,7 @@ namespace StateMachineNodeEditor
             {
                 Selected = !Selected;
             }
-            return this;
+            return Selected;
         }
 
 
@@ -147,13 +146,7 @@ namespace StateMachineNodeEditor
             set
             {
                 _selected = value;
-
-                if (value)
-                    SetColorOnSelect();
-                else
-                    SetColorOnUnSelect();
-
-                OnPropertyChanged("Select");
+                OnPropertyChanged("Selected");
             }
         }
         public double Height
@@ -165,29 +158,12 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Height");
             }
         }
-        public Brush BorderBrush
-        {
-            get { return _borderBrush; }
-            set
-            {
-                _borderBrush = value;
-                OnPropertyChanged("BorderBrush");
-            }
-        }
+
         #endregion Property
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
-        private void SetColorOnSelect()
-        {
-           this.BorderBrush = Brushes.Red;
-        }
-        private void SetColorOnUnSelect()
-        {
-            this.BorderBrush = Brushes.DarkGray;
         }
     }
 }

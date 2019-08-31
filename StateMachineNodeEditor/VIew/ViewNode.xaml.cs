@@ -33,6 +33,7 @@ namespace StateMachineNodeEditor
         {
             
             ViewModelNode.CommandSelect.Execute(e.Parameter);
+            e.Handled = false;
             //Border.BorderBrush = ViewModelNode.BorderBrush;
         }
         

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace StateMachineNodeEditor
 {
-    public class ViewModelNode : INotifyPropertyChanged
+    public class ViewModelNode : INotifyPropertyChanged, IEquatable<ViewModelNode>
     {
         private ModelNode node { get; set; }
         public ViewModelNode(ModelNode modelNode)
@@ -24,6 +24,20 @@ namespace StateMachineNodeEditor
             node.Transitions.CollectionChanged += TransitionsChange;
             CommandSelect = new SimpleCommand(this, Select);
             node.PropertyChanged += ModelPropertyChange;
+        }
+        public bool Equals(ViewModelNode other)
+        {
+            if (other == null)
+                return false;
+
+            if (object.ReferenceEquals(this.node, other.node))
+                return true;
+
+            if (this.GetType() != other.GetType())
+                return false;
+
+            return Equals(this.Text,other.Text) && Equals(this.Translate, other.Translate) && Equals(this.Transitions,other.Transitions);
+
         }
         #region Property
         public ObservableCollection<ViewModelConnector> Transitions { get; set; } = new ObservableCollection<ViewModelConnector>();
@@ -97,32 +111,59 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Height");
             }
         }
-        public Brush BorderBrush
+        private Brush _borderBrush = Brushes.DarkGray;
+        public Brush BorderBrush 
         {
-            get { return node.BorderBrush; }
+            get { return _borderBrush; }
             set
             {
-                node.BorderBrush = value;
+                _borderBrush = value;
                 OnPropertyChanged("BorderBrush");
+            }
+        }
+        public bool Selected
+        {
+            get { return node.Selected; }
+            set
+            {
+                node.Selected = value;
+                UpdateBorderBrush();
+                OnPropertyChanged("Selected");
             }
         }
         #endregion Property
         public SimpleCommand CommandSelect { get; set; }
-        public ModelNode Select(object parameters)
+        public object Select(object parameters)
         {
             bool selectOnlyOne = false;
             bool.TryParse(parameters.ToString(),out selectOnlyOne);
-           return node.Select(selectOnlyOne);
+            node.Select(selectOnlyOne);
+        
+            return null;
+        }
+        private void UpdateBorderBrush()
+        {
+            if (Selected)
+                BorderBrush = Brushes.Red;
+            else
+                BorderBrush = Brushes.DarkGray;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+            if (PropertyChanged == null)
+                return;
+            
+         
+            PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+            if (e.PropertyName == "Selected")
+                UpdateBorderBrush();
         }       
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
-            if (PropertyChanged != null)
+            if (PropertyChanged == null)
+                return;
+
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 

@@ -10,7 +10,7 @@ namespace StateMachineNodeEditor
     {
         private ObservableCollection<ModelNode> _nodes = new ObservableCollection<ModelNode>();
         private ObservableCollection<ModelConnect> _connects = new ObservableCollection<ModelConnect>();
-
+        private ModelSelector _selector = new ModelSelector();
         public ModelNodesCanvas()
         {
             //ModelNode node = new ModelNode();
@@ -43,11 +43,21 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Connects");
             }
         }
+        public ModelSelector Selector
+        {
+            get { return _selector; }
+            set
+            {
+                _selector = value;
+                OnPropertyChanged("Selector");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
         public ModelConnect GetNewConnect(Point position)
         {
             ModelConnect modelConnect = new ModelConnect(position);
