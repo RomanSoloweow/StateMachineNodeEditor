@@ -12,6 +12,7 @@ namespace StateMachineNodeEditor
         public ViewModelConnect(ModelConnect modelConnect)
         {
             connect = modelConnect;
+            connect.PropertyChanged += ModelPropertyChange;
         }
         public Point StartPoint
         {
@@ -68,6 +69,11 @@ namespace StateMachineNodeEditor
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
+        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+        }
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));

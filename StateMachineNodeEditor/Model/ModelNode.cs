@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Collections.ObjectModel;
-
+using System.Windows.Media;
 
 namespace StateMachineNodeEditor
 {
@@ -13,11 +13,15 @@ namespace StateMachineNodeEditor
         private ModelConnector _output;
         private ObservableCollection<ModelConnector> _transitions = new ObservableCollection<ModelConnector>();
         private ModelConnector _currentConnector;
+        private ModelNodesCanvas _nodesCanvas;
         private Translates _translate = new Translates();
         private static Scales _sclale = new Scales();
         private string _text;
         private double _width;
         private double _height;
+        private bool _selected;
+        private Brush _borderBrush = Brushes.DarkGray;
+
         private ModelConnector AddEmptyConnector()
         {
             if (_currentConnector != null)
@@ -31,8 +35,9 @@ namespace StateMachineNodeEditor
             return _currentConnector;
         }
         //private Brush 
-        public  ModelNode(string text=null, Point? point=null )
+        public  ModelNode(ModelNodesCanvas modelNodesCanvas,string text=null, Point? point=null )
         {
+            _nodesCanvas = modelNodesCanvas;
             _input = new ModelConnector(this)
             {
                 Text = "Input",
@@ -48,8 +53,30 @@ namespace StateMachineNodeEditor
             Text = text??"Test";
             if (point != null)
                 _translate.Value = point.Value;
+
             AddEmptyConnector();
-        }   
+        }
+        public ModelNode Select(bool selectOnlyOne)
+        {
+            //ЛКМ
+            if (selectOnlyOne)
+            {
+                if (!Selected)
+                {
+                    _nodesCanvas.UnSelectedAllNodes();
+                    Selected = true;
+                }
+            }
+            else //ctrl + ЛКМ
+            {
+                Selected = !Selected;
+            }
+            return this;
+        }
+
+
+
+        #region Property
         public ModelConnector Input
         {
             get { return _input; }
@@ -114,6 +141,21 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Width");
             }
         }
+        public bool Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+
+                if (value)
+                    SetColorOnSelect();
+                else
+                    SetColorOnUnSelect();
+
+                OnPropertyChanged("Select");
+            }
+        }
         public double Height
         {
             get { return _height; }
@@ -123,10 +165,29 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Height");
             }
         }
+        public Brush BorderBrush
+        {
+            get { return _borderBrush; }
+            set
+            {
+                _borderBrush = value;
+                OnPropertyChanged("BorderBrush");
+            }
+        }
+        #endregion Property
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void SetColorOnSelect()
+        {
+           this.BorderBrush = Brushes.Red;
+        }
+        private void SetColorOnUnSelect()
+        {
+            this.BorderBrush = Brushes.DarkGray;
         }
     }
 }

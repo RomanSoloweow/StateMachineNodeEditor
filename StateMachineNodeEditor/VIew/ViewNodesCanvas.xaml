@@ -5,18 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
-              Background="#FF141414" Focusable="True" AllowDrop="True" 
-             local:ViewNodesCanvas.RegisterCommandBindings="{Binding CommandBindings}"
-             local:ViewNodesCanvas.RegisterInputBindings="{Binding InputBindings}"
-             local:ViewNodesCanvas.Add="{Binding Kek}"
-             >
-    <UserControl.ContextMenu>
-        <ContextMenu ItemsSource="{Binding Items}">
-            <!--<MenuItem Header="Delete" Name="DeleteItem" Command="Delete"/>-->
-            <!--<local:ViewMenuItems Header="Add" Command="New"/>-->
-        </ContextMenu>
-        
-    </UserControl.ContextMenu>
+              Background="#FF141414" Focusable="True" AllowDrop="True">
     <ItemsControl x:Name="grid" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -29,10 +18,31 @@
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
+    <UserControl.ContextMenu>
+        <ContextMenu Margin="10, 0, 0, 0">
+            <MenuItem Header="Add" Name="AddItem" Command="New"/>
+            <MenuItem Header="Delete" Name="DeleteItem" Command="Delete"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <UserControl.CommandBindings>
-        <CommandBinding Command="New" Executed="{Binding Add}" undo/>
+        <!--<CommandBinding Command="Zoom" Executed="Zoom" />-->
+        <CommandBinding Command="Select"    Executed="Select"   />
+        <CommandBinding Command="SelectAll" Executed="SelectAll"/> <!--ctrl+a -->
+        <CommandBinding Command="New"       Executed="New"      /> <!--ctrl+n-->
+        <CommandBinding Command="Redo"      Executed="Redo"     /> <!--ctrl+y-->
+        <CommandBinding Command="Undo"      Executed="Undo"     /> <!--ctrl+z-->
+        <CommandBinding Command="Copy"      Executed="Copy"     /> 
+        <CommandBinding Command="Paste"     Executed="Paste"    /> <!--ctrl+v-->
+        <CommandBinding Command="Delete"    Executed="Delete"   /> <!--del -->
+        <CommandBinding Command="Cut"       Executed="Cut"      /> <!--ctrl+x-->
+
+        <CommandBinding Command="MoveDown"  Executed="MoveDown" /> <!--стрелка вниз-->
+        <CommandBinding Command="MoveLeft"  Executed="MoveLeft" /> <!--стрелка влево-->
+        <CommandBinding Command="MoveRight" Executed="MoveRight"/> <!--стрелка право-->
+        <CommandBinding Command="MoveUp"    Executed="MoveUp"   />  <!--стрелка вверх-->
     </UserControl.CommandBindings>
-    <!--<UserControl.InputBindings>
-        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" />
-    </UserControl.InputBindings>-->
+    <UserControl.InputBindings>
+        <!--<MouseBinding Command="NavigationCommands.Zoom" Gesture="WheelClick"  CommandParameter="EventArgs"/> --><!--колесо мыши-->
+        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" /> <!--ctrl+ЛКМ сделано-->
+    </UserControl.InputBindings>
 </UserControl>

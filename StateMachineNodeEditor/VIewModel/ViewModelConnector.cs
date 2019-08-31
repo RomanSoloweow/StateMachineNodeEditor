@@ -11,6 +11,7 @@ namespace StateMachineNodeEditor
         public ViewModelConnector(ModelConnector modelConnector)
         {
             connector = modelConnector;
+            connector.PropertyChanged += ModelPropertyChange;
         }
         public String Text
         {
@@ -58,6 +59,11 @@ namespace StateMachineNodeEditor
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
+        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+        }
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)

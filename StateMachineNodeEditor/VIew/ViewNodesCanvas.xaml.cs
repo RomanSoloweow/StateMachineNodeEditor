@@ -24,66 +24,89 @@ namespace StateMachineNodeEditor
         public ViewNodesCanvas()
         {
             InitializeComponent();
-            ViewModelNodesCanvas viewModelNodesCanvas = new ViewModelNodesCanvas(new ModelNodesCanvas());
-            DataContext = viewModelNodesCanvas;
+            ViewModelNodesCanvas = new ViewModelNodesCanvas(new ModelNodesCanvas());
+            DataContext = ViewModelNodesCanvas;
+
+            this.DataContextChanged += DataContextChange;
+            this.MouseRightButtonDown += mouseRightDown;
         }
-        public static DependencyProperty AddProperty = DependencyProperty.RegisterAttached("Add", typeof(Action<object, ExecutedRoutedEventArgs>), typeof(ViewNodesCanvas), new PropertyMetadata(null));
-        public static void SetAdd(UIElement element, Action<object, ExecutedRoutedEventArgs> value)
+        public void mouseRightDown(object sender, MouseButtonEventArgs e)
         {
-            element.SetValue(AddProperty, value);
+            positionRightClick = e.GetPosition(this);
         }
-        public static Action<object, ExecutedRoutedEventArgs> GetAdd(UIElement element)
+        private Point positionRightClick;
+        public ViewModelNodesCanvas ViewModelNodesCanvas { get; set; }
+        public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
         {
-            return (Action<object, ExecutedRoutedEventArgs>)element.GetValue(AddProperty);
+            ViewModelNodesCanvas = e.NewValue as ViewModelNodesCanvas;
+        }
+        
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+        }
+        private void Select(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandSelect.Execute(e.Parameter);
+        }
+        private void SelectAll(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandSelectAll.Execute(e.Parameter);
+        }
+        private void New(object sender, ExecutedRoutedEventArgs e)
+        {
+            Point point = new Point();
+
+            if (positionRightClick != point)
+                point = positionRightClick;
+            else
+                point = Mouse.GetPosition(this);
+
+            positionRightClick = new Point();
+            ViewModelNodesCanvas.CommandNew.Execute(point);
+        }
+        private void Redo(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandRedo.Execute(e.Parameter);
+        }
+        private void Undo(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandUndo.Execute(e.Parameter);
+        }
+        private void Copy(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandCopy.Execute(e.Parameter);
+        }
+        private void Paste(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandPaste.Execute(e.Parameter);
+        }
+        private void Delete(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandDelete.Execute(e.Parameter);
+        }
+        private void Cut(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandCut.Execute(e.Parameter);
         }
 
-        public static DependencyProperty RegisterCommandBindingsProperty = DependencyProperty.RegisterAttached("RegisterCommandBindings", typeof(CommandBindingCollection), typeof(ViewNodesCanvas), new PropertyMetadata(null, OnRegisterCommandBindingChanged));
-        public static void SetRegisterCommandBindings(UIElement element, CommandBindingCollection value)
+        private void MoveDown(object sender, ExecutedRoutedEventArgs e)
         {
-            if (element != null)
-                element.SetValue(RegisterCommandBindingsProperty, value);
+            ViewModelNodesCanvas.CommandMoveDown.Execute(e.Parameter);
         }
-        public static CommandBindingCollection GetRegisterCommandBindings(UIElement element)
+        private void MoveLeft(object sender, ExecutedRoutedEventArgs e)
         {
-            return (element != null ? (CommandBindingCollection)element.GetValue(RegisterCommandBindingsProperty) : null);
+            ViewModelNodesCanvas.CommandMoveLeft.Execute(e.Parameter);
         }
-        private static void OnRegisterCommandBindingChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private void MoveRight(object sender, ExecutedRoutedEventArgs e)
         {
-            UIElement element = sender as UIElement;
-            if (element != null)
-            {
-                CommandBindingCollection bindings = e.NewValue as CommandBindingCollection;
-                if (bindings != null)
-                {
-                    element.CommandBindings.AddRange(bindings);
-                }
-            }
+            ViewModelNodesCanvas.CommandMoveRight.Execute(e.Parameter);
+        }
+        private void MoveUp(object sender, ExecutedRoutedEventArgs e)
+        {
+            ViewModelNodesCanvas.CommandMoveUp.Execute(e.Parameter);
         }
 
 
-        public static DependencyProperty RegisterInputBindingsProperty = DependencyProperty.RegisterAttached("RegisterInputBindings", typeof(InputBindingCollection), typeof(ViewNodesCanvas), new PropertyMetadata(null, OnRegisterInputBindingsChanged));
-        public static void SetRegisterInputBindings(UIElement element, InputBindingCollection value)
-        {
-            if (element != null)
-                element.SetValue(RegisterInputBindingsProperty, value);
-        }
-        public static InputBindingCollection GetRegisterInputBindings(UIElement element)
-        {
-            return (element != null ? (InputBindingCollection)element.GetValue(RegisterInputBindingsProperty) : null);
-        }
-        private static void OnRegisterInputBindingsChanged
-        (DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            UIElement element = sender as UIElement;
-            if (element != null)
-            {
-                InputBindingCollection bindings = e.NewValue as InputBindingCollection;
-                if (bindings != null)
-                {
-                    element.InputBindings.AddRange(bindings);
-                }
-            }
-        }
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);

@@ -77,46 +77,70 @@ namespace StateMachineNodeEditor
             }
             nodesCanvas.Nodes.CollectionChanged += NodesChange;
             nodesCanvas.Connects.CollectionChanged += ConnectsChange;
-
+            nodesCanvas.PropertyChanged += ModelPropertyChange;
             AddCommand();
-        }
-        public void QWER(object sender, ExecutedRoutedEventArgs e)
-        {
-        
-        }
-        public void Kek(object param, ExecutedRoutedEventArgs e)
-        {
-
-        }
-        public void AddCommand()
-        {
-            MenuItem ItemFromCommand(Command command)
-            {
-                MenuItem menuItem = new MenuItem();
-                //menuItem.Header = command.Text;
-                menuItem.Name = command.Text;
-                menuItem.Command = command;
-                return menuItem;
-            }
-            CommandBinding CommandBindingFromCommand(Command command)
-            {
-                return new CommandBinding(command, command.Execute);
-            }
-
-            Command newCommnad = new Command(ApplicationCommands.New, New, UnNew);
-            InputBinding inputBinding = new InputBinding(newCommnad, newCommnad.InputGestures[0]);
-            InputBindings.Add(inputBinding);
-            CommandBindings.Add(CommandBindingFromCommand(newCommnad));
-            Items.Add(ItemFromCommand(newCommnad));
         }
 
         #region Commands
+        public SimpleCommand CommandSelectAll { get; set; }
+        public SimpleCommand CommandSelect { get; set; }
+        public SimpleCommand CommandNew { get; set; }
+        public SimpleCommand CommandRedo { get; set; }
+        public SimpleCommand CommandUndo { get; set; }
+        public SimpleCommand CommandCopy { get; set; }
+        public SimpleCommand CommandPaste { get; set; }
+        public SimpleCommand CommandDelete { get; set; }
+        public SimpleCommand CommandCut { get; set; }
+        public SimpleCommand CommandMoveDown { get; set; }
+        public SimpleCommand CommandMoveLeft { get; set; }
+        public SimpleCommand CommandMoveRight { get; set; }
+        public SimpleCommand CommandMoveUp { get; set; }
+
+        public object Test(object parameters)
+        {
+            return null;
+        }
+        public void AddCommand()
+        {
+            CommandSelectAll    = new SimpleCommand(this, Test);
+            CommandSelect       = new SimpleCommand(this, Test);
+            CommandNew          = new SimpleCommand(this, New, UnNew);
+            CommandRedo         = new SimpleCommand(this, Test);
+            CommandUndo         = new SimpleCommand(this, Test);
+            CommandCopy         = new SimpleCommand(this, Test);
+            CommandPaste        = new SimpleCommand(this, Test);
+            CommandDelete       = new SimpleCommand(this, Test);
+            CommandCut          = new SimpleCommand(this, Test);
+
+            CommandMoveDown     = new SimpleCommand(this, Test);
+            CommandMoveLeft     = new SimpleCommand(this, Test);
+            CommandMoveRight    = new SimpleCommand(this, Test);
+            CommandMoveUp       = new SimpleCommand(this, Test);
+
+            //MenuItem ItemFromCommand(Command command)
+            //{
+            //    MenuItem menuItem = new MenuItem();
+            //    //menuItem.Header = command.Text;
+            //    menuItem.Name = command.Text;
+            //    menuItem.Command = command;
+            //    return menuItem;
+            //}
+            //CommandBinding CommandBindingFromCommand(Command command)
+            //{
+            //    return new CommandBinding(command, command.Execute);
+            //}
+
+            //Command newCommnad = new Command(ApplicationCommands.New, New, UnNew);
+            //InputBinding inputBinding = new InputBinding(newCommnad, newCommnad.InputGestures[0]);
+            //InputBindings.Add(inputBinding);
+            //CommandBindings.Add(CommandBindingFromCommand(newCommnad));
+            //Items.Add(ItemFromCommand(newCommnad));
+        }
+
+
         public ModelNode New(object parameters)
         {
-            Point point = new Point();
-            if(parameters!=null)
-            point = (Point)parameters;
-            return nodesCanvas.GetNewNode(point);
+            return nodesCanvas.GetNewNode((Point)parameters);
         }
         public ModelNode UnNew(object parameters)
         {
@@ -126,6 +150,11 @@ namespace StateMachineNodeEditor
         #endregion Commands
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+        }
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));

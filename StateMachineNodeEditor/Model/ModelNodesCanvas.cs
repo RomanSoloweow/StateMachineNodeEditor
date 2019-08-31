@@ -62,10 +62,24 @@ namespace StateMachineNodeEditor
             }
             return modelConnect;
         }
+        public void UnSelectedAllNodes()
+        {
+            foreach (ModelNode node in _nodes)
+            {
+                node.Selected = false;
+            }
+        }
+        public void SelectedAllNodes()
+        {
+            foreach (ModelNode node in _nodes)
+            {
+                node.Selected = true;
+            }
+        }
         public ModelNode GetNewNode(Point position)
         {
             string text = "State " + this._nodes.Count.ToString();
-            ModelNode modelNode = new ModelNode(text, position);
+            ModelNode modelNode = new ModelNode(this,text, position);
             //if (nodes.Count > 0)
             //{
             //    Node firstNode = nodes.First();

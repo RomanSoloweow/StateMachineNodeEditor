@@ -15,24 +15,32 @@ using System.Windows.Shapes;
 
 namespace StateMachineNodeEditor
 {
-    /// <summary>
-    /// Interaction logic for ViewNode.xaml
-    /// </summary>
     public partial class ViewNode : UserControl
     {
         public ViewNode()
         {
             InitializeComponent();
             this.SizeChanged += SizeChange;
+            this.DataContextChanged += DataContextChange;
         }
+        public ViewModelNode ViewModelNode { get; set; }
+        public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ViewModelNode = e.NewValue as ViewModelNode;
+        }
+
+        private void Select(object sender, ExecutedRoutedEventArgs e)
+        {
+            
+            ViewModelNode.CommandSelect.Execute(e.Parameter);
+            //Border.BorderBrush = ViewModelNode.BorderBrush;
+        }
+        
+     
         private void SizeChange(object sender, EventArgs e)
         {
-            ModelNode modelNode = DataContext as ModelNode;
-            if (modelNode != null)
-            {
-                modelNode.Height = ActualHeight;
-                modelNode.Width = ActualWidth;
-            }
+                ViewModelNode.Height = ActualHeight;
+                ViewModelNode.Width = ActualWidth;
         }
     }
 }

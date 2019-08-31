@@ -4,14 +4,14 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Windows.Media;
+using System.Collections.Generic;
+
 namespace StateMachineNodeEditor
 {
     public class ViewModelNode : INotifyPropertyChanged
     {
         private ModelNode node { get; set; }
-        public ObservableCollection<ViewModelConnector> Transitions { get; set; } = new ObservableCollection<ViewModelConnector>();
-        public ViewModelConnector Input { get; set; }
-        public ViewModelConnector Output { get; set; }
         public ViewModelNode(ModelNode modelNode)
         {
             node = modelNode;
@@ -22,7 +22,14 @@ namespace StateMachineNodeEditor
                 Transitions.Add(new ViewModelConnector(modelConnector));
             }
             node.Transitions.CollectionChanged += TransitionsChange;
+            CommandSelect = new SimpleCommand(this, Select);
+            node.PropertyChanged += ModelPropertyChange;
         }
+        #region Property
+        public ObservableCollection<ViewModelConnector> Transitions { get; set; } = new ObservableCollection<ViewModelConnector>();
+        public ViewModelConnector Input { get; set; }
+        public ViewModelConnector Output { get; set; }
+      
         public void TransitionsChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -90,11 +97,36 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Height");
             }
         }
+        public Brush BorderBrush
+        {
+            get { return node.BorderBrush; }
+            set
+            {
+                node.BorderBrush = value;
+                OnPropertyChanged("BorderBrush");
+            }
+        }
+        #endregion Property
+        public SimpleCommand CommandSelect { get; set; }
+        public ModelNode Select(object parameters)
+        {
+            bool selectOnlyOne = false;
+            bool.TryParse(parameters.ToString(),out selectOnlyOne);
+           return node.Select(selectOnlyOne);
+        }
         public event PropertyChangedEventHandler PropertyChanged;
+        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+        }       
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
+
     }
+
 }

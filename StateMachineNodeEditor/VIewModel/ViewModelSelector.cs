@@ -12,6 +12,7 @@ namespace StateMachineNodeEditor
         public ViewModelSelector(ModelSelector modelSelector)
         {
             selector = modelSelector;
+            selector.PropertyChanged += ModelPropertyChange;
         }
         public Translates Translate
         {
@@ -64,6 +65,11 @@ namespace StateMachineNodeEditor
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
     }
 }

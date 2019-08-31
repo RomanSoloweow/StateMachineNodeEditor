@@ -194,6 +194,7 @@
     <Compile Include="Old Version\OtherClass\Transforms.cs" />
     <Compile Include="Helper\Scales.cs" />
     <Compile Include="Helper\Translates.cs" />
+    <Compile Include="SimpleCommand.cs" />
     <Compile Include="VIew\ViewConnect.xaml.cs">
       <DependentUpon>ViewConnect.xaml</DependentUpon>
     </Compile>

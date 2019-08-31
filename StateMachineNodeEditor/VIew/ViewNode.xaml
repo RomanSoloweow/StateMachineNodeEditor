@@ -14,7 +14,7 @@
             <TranslateTransform X="{Binding Translate.X, UpdateSourceTrigger=PropertyChanged}" Y="{Binding Translate.Y, UpdateSourceTrigger=PropertyChanged}"/>
         </TransformGroup>
     </UserControl.RenderTransform>
-    <Border x:Name="Border" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1"   HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" Style="{DynamicResource NodeBorder}" >
+    <Border x:Name="Border" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1"   HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" Background="#FF2D2D2D" BorderBrush="{Binding BorderBrush, UpdateSourceTrigger=PropertyChanged}">
         <StackPanel Margin="0,0,0,5">
             <TextBox Name="Header" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" VerticalContentAlignment="Center" Style="{DynamicResource NodeHeader}" BorderBrush="{x:Null}"  HorizontalContentAlignment="Center" BorderThickness="0" Padding="10,2" Foreground="White" />
             <Grid x:Name="MainPanel"  MinWidth="80" MinHeight="40" >
@@ -51,13 +51,11 @@
             </ItemsControl>
         </StackPanel>
     </Border>
-    <!--<UserControl.CommandBindings>
-        <CommandBinding Command="New" Executed="{Binding QWER}"/>
-    </UserControl.CommandBindings>-->
-    <!--<UserControl.InputBindings>
-        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" />-->
-        
-    <!--ctrl+ЛКМ-->
-    <!--
-    </UserControl.InputBindings>-->
+       <UserControl.CommandBindings>
+        <CommandBinding Command="Select" Executed="Select"/>
+    </UserControl.CommandBindings>
+    <UserControl.InputBindings>
+        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" CommandParameter="false"/><!--ctrl+ЛКМ-->
+        <!--<MouseBinding Command="MediaCommands.Select" Gesture="LeftClick" CommandParameter="true"/>-->
+    </UserControl.InputBindings>
 </UserControl>
