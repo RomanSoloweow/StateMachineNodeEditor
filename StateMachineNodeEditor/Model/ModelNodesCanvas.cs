@@ -76,7 +76,24 @@ namespace StateMachineNodeEditor
             _connects.Add(modelConnect);
             return modelConnect;
         }
-      
+        public List<ModelNode> AddNodes(List<ModelNode> nodes)
+        {
+            foreach (ModelNode node in nodes)
+            {
+                AddNode(node);
+            }
+            return nodes;
+        }
+        public List<ModelNode> DeleteSelectedNodes(List<ModelNode> selectedNodes = null)
+        {
+            if (selectedNodes == null)
+                selectedNodes = GetSelectedNodes();
+            foreach (ModelNode selectedNode in selectedNodes)
+            {
+                DeleteNode(selectedNode);
+            }
+            return selectedNodes;
+        }
         public ModelConnect DeleteConnect(ModelConnect modelConnect)
         {
             if (modelConnect != null)
@@ -118,8 +135,6 @@ namespace StateMachineNodeEditor
             foreach (ModelNode selectedNode in selectedNodes)
             {
                 selectedNode.Move(delta);
-                if (!_nodes.Contains(selectedNode))
-                    MessageBox.Show("ХЗ");
             }
             return selectedNodes;
         }

@@ -115,7 +115,7 @@ namespace StateMachineNodeEditor
             CommandUndo         = new SimpleCommand(this, Undo);
             CommandCopy         = new SimpleCommand(this, Test);
             CommandPaste        = new SimpleCommand(this, Test);
-            CommandDelete       = new SimpleCommand(this, Test);
+            CommandDelete       = new SimpleCommand(this, Delete, UnDelete);
             CommandCut          = new SimpleCommand(this, Test);
 
             CommandMoveDown     = new SimpleCommand(this, Test);
@@ -147,17 +147,25 @@ namespace StateMachineNodeEditor
         }
 
 
-        public ModelNode New(object parameters, object resultExecute)
+        public object New(object parameters, object resultExecute)
         {
             if(resultExecute==null)
                 return nodesCanvas.AddNewNode((Point)parameters);
             else
                 return nodesCanvas.AddNode(resultExecute as ModelNode);
         }
-        public ModelNode UnNew(object parameters, object resultExecute)
+        public object UnNew(object parameters, object resultExecute)
         {
             ModelNode modelNode = resultExecute as ModelNode;
             return nodesCanvas.DeleteNode(modelNode);
+        }
+        public object Delete(object parameters, object resultExecute)
+        {
+            return nodesCanvas.DeleteSelectedNodes(resultExecute as List<ModelNode>);
+        }
+        public object UnDelete(object parameters, object resultExecute)
+        {
+            return nodesCanvas.AddNodes(resultExecute as List<ModelNode>);
         }
         public object Redo(object parameters, object resultExecute)
         {
