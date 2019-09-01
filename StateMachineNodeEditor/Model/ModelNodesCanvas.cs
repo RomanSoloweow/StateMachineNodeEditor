@@ -76,6 +76,7 @@ namespace StateMachineNodeEditor
             _connects.Add(modelConnect);
             return modelConnect;
         }
+      
         public ModelConnect DeleteConnect(ModelConnect modelConnect)
         {
             if (modelConnect != null)
@@ -117,6 +118,8 @@ namespace StateMachineNodeEditor
             foreach (ModelNode selectedNode in selectedNodes)
             {
                 selectedNode.Move(delta);
+                if (!_nodes.Contains(selectedNode))
+                    MessageBox.Show("ХЗ");
             }
             return selectedNodes;
         }
@@ -124,7 +127,7 @@ namespace StateMachineNodeEditor
         {
             return _nodes.Where(x => x.Selected == true).ToList();
         }
-        public ModelNode GetNewNode(Point position)
+        public ModelNode AddNewNode(Point position)
         {
             string text = "State " + this._nodes.Count.ToString();
             ModelNode modelNode = new ModelNode(this,text, position);

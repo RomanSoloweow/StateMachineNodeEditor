@@ -149,7 +149,10 @@ namespace StateMachineNodeEditor
 
         public ModelNode New(object parameters, object resultExecute)
         {
-            return nodesCanvas.GetNewNode((Point)parameters);
+            if(resultExecute==null)
+                return nodesCanvas.AddNewNode((Point)parameters);
+            else
+                return nodesCanvas.AddNode(resultExecute as ModelNode);
         }
         public ModelNode UnNew(object parameters, object resultExecute)
         {
@@ -206,7 +209,7 @@ namespace StateMachineNodeEditor
         }
         public object Select(object parameters, object resultExecute)
         {
-            nodesCanvas.Selector.StartSelect((Point)parameters);
+            //nodesCanvas.Selector.StartSelect((Point)parameters);
             return null;
         }
         #endregion Commands
