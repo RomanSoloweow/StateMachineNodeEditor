@@ -13,7 +13,10 @@ namespace StateMachineNodeEditor
         {
             return new Point(point1.X + point2.X, point1.Y + point2.Y);
         }
-        
+        public static Point Mirror(Point point)
+        {
+            return new Point(-point.X, -point.Y);
+        }
         public static Point Multiplication(Point point1, int number)
         {
             return new Point(point1.X * number, point1.Y * number);
@@ -54,7 +57,10 @@ namespace StateMachineNodeEditor
         {
             return new Point(point2.X, point2.Y);
         }
-
+        public static bool isEmpty(Point point)
+        {
+            return (point.X == 0) && (point.Y == 0);
+         }
         public static Point GetValueAsPoint(System.Windows.Media.TranslateTransform translate)
         {
           return new Point(translate.X, translate.Y);

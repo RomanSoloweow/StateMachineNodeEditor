@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
-             mc:Ignorable="d" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+             mc:Ignorable="d" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="True" AllowDrop="True">
 
     <UserControl.RenderTransform>
         <TransformGroup>
@@ -55,7 +55,6 @@
         <CommandBinding Command="Select" Executed="Select"/>
     </UserControl.CommandBindings>
     <UserControl.InputBindings>
-        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" CommandParameter="false"/><!--ctrl+ЛКМ-->
-        <MouseBinding Command="MediaCommands.Select" Gesture="LeftClick" CommandParameter="true"/>
+        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" /><!--ctrl+ЛКМ-->
     </UserControl.InputBindings>
 </UserControl>

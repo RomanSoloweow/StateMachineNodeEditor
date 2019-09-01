@@ -4,10 +4,11 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
-
+using System.Collections.Generic;
+using System.Collections;
 namespace StateMachineNodeEditor
 {
-    public class ModelNode : INotifyPropertyChanged
+    public class ModelNode : INotifyPropertyChanged,IEquatable<ModelNode>
     {
         private ModelConnector _input;
         private ModelConnector _output;
@@ -21,6 +22,28 @@ namespace StateMachineNodeEditor
         private double _height;
         private bool _selected;
 
+        public bool Equals(ModelNode other)
+        {
+            if (other == null)
+                return false;
+
+            if (this.GetType() != other.GetType())
+                return false;
+
+            return Equals(this.Text, other.Text) && Equals(this.Translate, other.Translate) && Equals(this.Transitions, other.Transitions);
+
+        }
+        //public override bool Equals(object other)
+        //{
+
+        //    if (other == null)
+        //        return false;
+
+        //    if (this.GetType() != other.GetType())
+        //        return false;
+
+        //    return this.Equals(other as ModelNode);
+        //}
         private ModelConnector AddEmptyConnector()
         {
             if (_currentConnector != null)
@@ -57,6 +80,7 @@ namespace StateMachineNodeEditor
         }
         public bool Select(bool selectOnlyOne)
         {
+            var t = this;
             //ЛКМ
             if (selectOnlyOne)
             {
@@ -113,7 +137,7 @@ namespace StateMachineNodeEditor
      
             }
         }
-        public Scales Sclale
+        public Scales Scale
         {
             get { return _sclale; }
             set
@@ -165,5 +189,12 @@ namespace StateMachineNodeEditor
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
+        public void Move(Point delta)
+        {
+            Translate.Value= ForPoint.Addition(Translate.Value, delta);
+        }
+
+      
     }
 }

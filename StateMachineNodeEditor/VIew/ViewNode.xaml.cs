@@ -22,6 +22,8 @@ namespace StateMachineNodeEditor
             InitializeComponent();
             this.SizeChanged += SizeChange;
             this.DataContextChanged += DataContextChange;
+            this.MouseDown += mouseDown;
+            this.MouseUp += mouseUp;
         }
         public ViewModelNode ViewModelNode { get; set; }
         public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
@@ -32,8 +34,8 @@ namespace StateMachineNodeEditor
         private void Select(object sender, ExecutedRoutedEventArgs e)
         {
             
-            ViewModelNode.CommandSelect.Execute(e.Parameter);
-            e.Handled = false;
+            ViewModelNode.CommandSelect.Execute(false);
+            //e.Handled = false;
             //Border.BorderBrush = ViewModelNode.BorderBrush;
         }
         
@@ -42,6 +44,21 @@ namespace StateMachineNodeEditor
         {
                 ViewModelNode.Height = ActualHeight;
                 ViewModelNode.Width = ActualWidth;
+        }
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Mouse.Captured == null)
+            {
+                Keyboard.ClearFocus();
+                this.CaptureMouse();
+                Keyboard.Focus(this);
+            }
+            ViewModelNode.CommandSelect.Execute(true);
+            //e.Handled = true;
+        }
+        public void mouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.ReleaseMouseCapture();
         }
     }
 }

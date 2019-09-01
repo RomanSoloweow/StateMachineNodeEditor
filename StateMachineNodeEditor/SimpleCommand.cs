@@ -6,82 +6,154 @@ using System.Threading.Tasks;
 
 namespace StateMachineNodeEditor
 {
-    public class SimpleCommand : ICloneable
+    public class SimpleCommand : ICloneable, IEquatable<SimpleCommand>
     {
         public static Stack<SimpleCommand> Redo { get; set; } = new Stack<SimpleCommand>();
         public static Stack<SimpleCommand> Undo { get; set; } = new Stack<SimpleCommand>();
-        private Func<object, object> _execute;
+        public static byte Types { get; set; }
 
-        private Func<object, object> _unExecute;
+        private Func<object, object, object> _execute;
+        private Func<object, object, object> _unExecute;
+        private Func<object, object, object> _combineParametr;
+        private Func<object, object, object> _combineResult;
+        private Func<object, object, bool> _equalsResult;
+      
+        public byte Type { get; protected set; }
         public object Parameters { get; protected set; }
         public object Result { get; protected set; }
         public object Owner { get; protected set; }
+        public bool Combined { get; protected set; }
         public object Clone()
         {
-            SimpleCommand simpleCommand  = new SimpleCommand(Owner, _execute, _unExecute);
+            SimpleCommand simpleCommand  = new SimpleCommand(Owner, _execute, _unExecute, _combineParametr, _equalsResult, _combineResult);
+            --Types;
             simpleCommand.Parameters = this.Parameters;
             simpleCommand.Result = this.Result;
+            simpleCommand.Type = this.Type;
+
             return simpleCommand;
         }
-        
-        private void Init()
+        public bool Equals(SimpleCommand other)
         {
-            _execute = Empty;
-            _unExecute = Empty;
-        }
+            if (other == null)
+                return false;
+            
+            if(this.Type!= other.Type)
+                return false;
+
+            return _equalsResult(this.Result, other.Result);
+
+        }     
         public SimpleCommand(object owner)
         {        
-            Owner = owner;        
+            Owner = owner;
+            Type = (++Types);
         }
-        public SimpleCommand(object owner, Func<object, object> action):this(owner)
+        public SimpleCommand(object owner, Func<object, object, object> action):this(owner)
         {
             SetExecute(action);
         }
-        public SimpleCommand(object owner, Func<object, object> action, Func<object, object> unAction) : this(owner,action)
+        public SimpleCommand(object owner, Func<object, object, object> action, Func<object, object, object> unAction) : this(owner,action)
         {
             SetUnExecute(unAction);
+        }
+        public SimpleCommand(object owner, Func<object, object, object> action, Func<object, object, object> unAction, Func<object, object, object> combineParametr, Func<object, object, bool> equalResult, Func<object, object, object> combineResult=null) : this(owner, action, unAction)
+        {
+            SetCombineParametr(combineParametr);
+            SetCombineResult(combineResult);
+            SetEqulsResult(equalResult);
         }
         public void Execute(object param)
         {
             Parameters = param;
-            Result = this._execute(param);
+            Result = this._execute(param, Result);
             if (_unExecute != null)
             {
-                Undo.Push(this.Clone() as SimpleCommand);
+                if (!Combined)
+                    AddInUndo();
+                else
+                    Combine();              
                 Redo.Clear();
             }
+            Result = null;
+            Parameters = null;
         }
+        private void Combine()
+        {
+            SimpleCommand last = Undo.First();
+            if (!last.Equals(this))
+                AddInUndo();
+            else
+            {
+                if (_combineParametr != null)
+                    last.Parameters = _combineParametr(last.Parameters, this.Parameters);
+                if (_combineResult != null)
+                    last.Result = _combineResult(last.Result, this.Result);
+            }
+        }
+        private void UpdateCombined()
+        {
+            Combined = (_combineParametr != null) || (_combineResult != null);
+        }
+        private void AddInUndo()
+        {
+            Undo.Push(this.Clone() as SimpleCommand);
+        }
+
+
         public void Execute()
         {
-            Result = this._execute(Parameters);
+            Result = this._execute(Parameters,Result);
             Undo.Push(this.Clone() as SimpleCommand);
         }
         public void UnExecute()
         {
-            this._unExecute(Result);
+            this._unExecute(Parameters,Result);
             Redo.Push(this.Clone() as SimpleCommand);
         }
-        public void SetExecute(Func<object, object> action)
+        public void SetExecute(Func<object, object, object> action)
         {
             _execute = action;
         }
-        public void SetUnExecute(Func<object, object> action)
-        {
-            _unExecute = action;
-        }
         public void RemoveExecute()
         {
-            _execute = Empty;
+            _execute = null;
         }
+        public void SetUnExecute(Func<object, object,object> action)
+        {
+            _unExecute = action;
+        }     
         public void RemoveUnExecute()
         {
-            _unExecute = Empty;
+            _unExecute = null;
+        }    
+        public void SetCombineParametr(Func<object, object, object> combineParametr)
+        {
+            _combineParametr = combineParametr;
+            UpdateCombined();
+        }
+        public void RemoveCombineParametr()
+        {
+            _combineParametr = null;
+        }
+        public void SetCombineResult(Func<object, object, object> combineResult)
+        {
+            _combineResult = combineResult;
+            UpdateCombined();
+        }
+        public void RemoveCombineResult()
+        {
+            _combineResult = null;
+        }
+      
+        public void SetEqulsResult(Func<object, object,bool> equal)
+        {
+            _equalsResult = equal; ;
+        }
+        public void RemoveEqulsResult()
+        {
+            _equalsResult = null;
         }
         
-        private object Empty(object parameter)
-        {
-            return null;
-        }
-
     }
 }

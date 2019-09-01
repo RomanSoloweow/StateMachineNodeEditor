@@ -75,12 +75,12 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Translate");
             }
         }
-        public Scales Sclale
+        public Scales Scale
         {
-            get { return node.Sclale; }
+            get { return node.Scale; }
             set
             {
-                node.Sclale = value;
+                node.Scale = value;
                 OnPropertyChanged("Sclale");
             }
         }
@@ -133,7 +133,7 @@ namespace StateMachineNodeEditor
         }
         #endregion Property
         public SimpleCommand CommandSelect { get; set; }
-        public object Select(object parameters)
+        public object Select(object parameters, object resultExecute)
         {
             bool selectOnlyOne = false;
             bool.TryParse(parameters.ToString(),out selectOnlyOne);

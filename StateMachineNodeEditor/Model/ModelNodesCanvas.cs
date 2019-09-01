@@ -2,7 +2,19 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 
+using System.Collections.Specialized;
+using System;
+
+using System.Text;
+using System.Threading.Tasks;
+using System.Media;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace StateMachineNodeEditor
 {
@@ -72,19 +84,45 @@ namespace StateMachineNodeEditor
             }
             return modelConnect;
         }
-        public void UnSelectedAllNodes()
+        public object UnSelectedAllNodes()
         {
             foreach (ModelNode node in _nodes)
             {
                 node.Selected = false;
             }
+            return null;
         }
-        public void SelectedAllNodes()
+        public List<ModelNode> SelectedAllNodes()
         {
             foreach (ModelNode node in _nodes)
             {
                 node.Selected = true;
             }
+            return _nodes.ToList();
+        }
+        public List<ModelNode> MoveAllNode(Point delta, List<ModelNode> nodes = null)
+        {
+            if (nodes == null)
+                nodes = _nodes.ToList();
+            foreach (ModelNode node in nodes)
+            {
+                node.Move(delta);
+            }
+            return nodes;
+        }
+        public List<ModelNode> MoveAllSelectedNode(Point delta,List<ModelNode> selectedNodes=null)
+        {
+            if(selectedNodes==null)
+             selectedNodes = GetSelectedNodes();
+            foreach (ModelNode selectedNode in selectedNodes)
+            {
+                selectedNode.Move(delta);
+            }
+            return selectedNodes;
+        }
+        private List<ModelNode> GetSelectedNodes()
+        {
+            return _nodes.Where(x => x.Selected == true).ToList();
         }
         public ModelNode GetNewNode(Point position)
         {

@@ -21,6 +21,10 @@ namespace StateMachineNodeEditor
     /// </summary>
     public partial class ViewNodesCanvas : UserControl
     {
+        public ViewModelNodesCanvas ViewModelNodesCanvas { get; set; }
+        private Point? positionRightClick;
+        private Point positionLeftClick;
+        private Point? positionMove;
         public ViewNodesCanvas()
         {
             InitializeComponent();
@@ -28,34 +32,81 @@ namespace StateMachineNodeEditor
             DataContext = ViewModelNodesCanvas;
 
             this.DataContextChanged += DataContextChange;
+  
+            this.MouseMove += mouseMove;
+            this.MouseDown += mouseDown;
+            this.MouseUp += mouseUp;
             this.MouseRightButtonDown += mouseRightDown;
             this.MouseLeftButtonDown += mouseLeftDown;
         }
+        public void mouseDown(object sender, MouseButtonEventArgs e)
+        {
+        }
+        private Point GetDeltaMove()
+        {
+            Point CurrentPosition = Mouse.GetPosition(this);
+            Point result = new Point();
 
+            if (positionMove !=null)
+            {
+                result = ForPoint.Subtraction(CurrentPosition, positionMove.Value);
+            }
+            positionMove = CurrentPosition;
+            return result;
+        }
+        public void mouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.ReleaseMouseCapture();
+            positionMove = null;
+        }
         public void mouseRightDown(object sender, MouseButtonEventArgs e)
         {
+            Keyboard.Focus(this);
             positionRightClick = e.GetPosition(this);
         }
         public void mouseLeftDown(object sender, MouseButtonEventArgs e)
         {
-            ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
+            if (Mouse.Captured == null)
+            {
+                Keyboard.ClearFocus();
+                this.CaptureMouse();
+                Keyboard.Focus(this);
+            }
+            positionLeftClick = e.GetPosition(this);
+            if (this.IsMouseCaptured)
+                ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
         }
-        private Point positionRightClick;
-        private Point positionMove;
-        public ViewModelNodesCanvas ViewModelNodesCanvas { get; set; }
+        public void mouseMove(object sender, MouseEventArgs e)
+        {
+            if (Mouse.Captured == null)
+                return;
+            Point delta = GetDeltaMove();
+            if (ForPoint.isEmpty(delta))
+                return;
+            if (this.IsMouseCaptured)
+            {
+                ViewModelNodesCanvas.CommandMoveAllNode.Execute(delta);
+
+                //foreach (Node node in nodes)
+                //{
+                //    node.Selected = false;
+                //    node.Manager.Move(delta);
+                //}
+            }
+            else
+            {
+                ViewModelNodesCanvas.CommandMoveAllSelectedNode.Execute(delta);
+                //foreach (Node node in nodes.Where(x => x.Selected == true).ToList())
+                //{
+                //    node.Manager.Move(delta);
+                //}
+            }
+        }
+       
+       
         public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
         {
             ViewModelNodesCanvas = e.NewValue as ViewModelNodesCanvas;
-            
-            
-            //RoutedCommand routedCommand = new RoutedCommand("UnSelectedAllNodes",typeof(this),new Input)
-
-            InputGesture inputGesture = new KeyGesture(Key.R, ModifierKeys.Control, "Ctrl + R");
-            RoutedCommand Requery = new RoutedCommand("Requery",typeof(ViewNodesCanvas));
-     
-            CommandBinding commandBinding = new CommandBinding(Requery, CommandBinding_Executed);
-            this.CommandBindings.Add(commandBinding);
-            this.InputBindings.Add(new InputBinding(Requery, inputGesture));
         }
         
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -64,24 +115,16 @@ namespace StateMachineNodeEditor
         }
         private void Select(object sender, ExecutedRoutedEventArgs e)
         {
-
-            ViewModelNodesCanvas.CommandSelect.Execute(e.Parameter);
+            ViewModelNodesCanvas.CommandSelect.Execute(Mouse.GetPosition(this));
         }
         private void SelectAll(object sender, ExecutedRoutedEventArgs e)
         {
             ViewModelNodesCanvas.CommandSelectAll.Execute(e.Parameter);
         }
         private void New(object sender, ExecutedRoutedEventArgs e)
-        {
-            Point point = new Point();
-
-            if (positionRightClick != point)
-                point = positionRightClick;
-            else
-                point = Mouse.GetPosition(this);
-
-            positionRightClick = new Point();
-            ViewModelNodesCanvas.CommandNew.Execute(point);
+        {         
+            ViewModelNodesCanvas.CommandNew.Execute(positionRightClick?? Mouse.GetPosition(this));
+            positionRightClick = null;
         }
         private void Redo(object sender, ExecutedRoutedEventArgs e)
         {
@@ -107,7 +150,6 @@ namespace StateMachineNodeEditor
         {
             ViewModelNodesCanvas.CommandCut.Execute(e.Parameter);
         }
-
         private void MoveDown(object sender, ExecutedRoutedEventArgs e)
         {
             ViewModelNodesCanvas.CommandMoveDown.Execute(e.Parameter);
@@ -123,13 +165,6 @@ namespace StateMachineNodeEditor
         private void MoveUp(object sender, ExecutedRoutedEventArgs e)
         {
             ViewModelNodesCanvas.CommandMoveUp.Execute(e.Parameter);
-        }
-
-
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseDown(e);
-            Keyboard.Focus(this);
-        }
+        }     
     }
 }

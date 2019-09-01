@@ -15,7 +15,7 @@ namespace StateMachineNodeEditor
         {
             _translate = new Translates();
             _sclale = new Scales();
-            _visible = true;
+            _visible = false;
             _width = 100;
             _height = 100;
         }
@@ -70,6 +70,11 @@ namespace StateMachineNodeEditor
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+        public void StartSelect(Point position)
+        {
+            Translate.Value = position;
+            Visible = true;
         }
     }
 }
