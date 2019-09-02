@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections;
 namespace StateMachineNodeEditor
 {
-    public class ModelNode : INotifyPropertyChanged,IEquatable<ModelNode>
+    public class ModelNode : INotifyPropertyChanged, IEquatable<ModelNode>
     {
         private ModelConnector _input;
         private ModelConnector _output;
@@ -31,33 +31,29 @@ namespace StateMachineNodeEditor
                 return false;
 
             return Equals(this.Text, other.Text) && Equals(this.Translate, other.Translate) && Equals(this.Transitions, other.Transitions);
-
         }
-        //public override bool Equals(object other)
-        //{
-
-        //    if (other == null)
-        //        return false;
-
-        //    if (this.GetType() != other.GetType())
-        //        return false;
-
-        //    return this.Equals(other as ModelNode);
-        //}
         private ModelConnector AddEmptyConnector()
         {
             if (_currentConnector != null)
             {
                 _currentConnector.TextIsEnable = true;
+                _currentConnector.FormIsEnable = false;
                 _currentConnector.Text = "Transition_" + Transitions.Count.ToString();
             }
             _currentConnector = new ModelConnector(this);
-            _currentConnector.TextIsEnable  = false;
+            _currentConnector.TextIsEnable = false;
             _transitions.Insert(0, _currentConnector);
             return _currentConnector;
         }
-        //private Brush 
-        public  ModelNode(ModelNodesCanvas modelNodesCanvas,string text=null, Point? point=null )
+       public void DropSuccessfull()
+        {
+            AddEmptyConnector();
+        }
+        public void DropUnSuccessfull()
+        {
+            NodesCanvas.DeleteConnect(CurrentConnector.Connect);
+        }
+        public ModelNode(ModelNodesCanvas modelNodesCanvas, string text = null, Point? point = null)
         {
             _nodesCanvas = modelNodesCanvas;
             _input = new ModelConnector(this)
@@ -72,7 +68,7 @@ namespace StateMachineNodeEditor
                 Visible = false
             };
 
-            Text = text??"Test";
+            Text = text ?? "Test";
             if (point != null)
                 _translate.Value = point.Value;
 
@@ -80,7 +76,6 @@ namespace StateMachineNodeEditor
         }
         public bool Select(bool selectOnlyOne)
         {
-            var t = this;
             //ЛКМ
             if (selectOnlyOne)
             {
@@ -96,10 +91,34 @@ namespace StateMachineNodeEditor
             }
             return Selected;
         }
-
+        public ModelConnect GetNewConnect()
+        {
+            ModelConnect modelConnect = NodesCanvas.GetNewConnect(CurrentConnector.Position);
+            modelConnect.FromConnector = CurrentConnector;
+            return modelConnect;
+        }
 
 
         #region Property
+        public ModelNodesCanvas NodesCanvas
+        {
+             get { return _nodesCanvas; }
+             set
+             {
+                _nodesCanvas = value;
+                OnPropertyChanged("NodesCanvas");
+             }
+        }
+        public ModelConnector CurrentConnector
+        {
+            get { return _currentConnector; }
+            set
+            {
+                _currentConnector = value;
+                OnPropertyChanged("CurrentConnector");
+            }
+        }
+
         public ModelConnector Input
         {
             get { return _input; }

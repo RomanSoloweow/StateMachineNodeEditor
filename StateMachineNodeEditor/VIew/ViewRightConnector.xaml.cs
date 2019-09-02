@@ -23,7 +23,23 @@ namespace StateMachineNodeEditor
         public ViewRightConnector()
         {
             InitializeComponent();
-            //DataContext = new ViewModelConnector();
+            this.DataContextChanged += DataContextChange;
+            this.form.MouseLeftButtonDown += OnMouseLeftButtonDown;
+        }
+        public ViewModelConnector ViewModelConnector { get; set; }
+        public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            object data = ViewModelConnector.CommandGetDataForDrop.Execute(null);
+            DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+           object connect = ViewModelConnector.CommandGetResultDrop.Execute(null);
+            if (connect != null)
+                ViewModelConnector.CommandAddConnect.Execute(connect);
+            //e.Handled = true;
+        }
+       
+        public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ViewModelConnector = e.NewValue as ViewModelConnector;
         }
     }
 }

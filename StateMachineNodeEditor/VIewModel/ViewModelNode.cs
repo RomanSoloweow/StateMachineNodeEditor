@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Windows.Media;
-using System.Collections.Generic;
 
 namespace StateMachineNodeEditor
 {
-    public class ViewModelNode : INotifyPropertyChanged, IEquatable<ViewModelNode>
+    public partial class ViewModelNode : INotifyPropertyChanged, IEquatable<ViewModelNode>
     {
         private ModelNode node { get; set; }
         public ViewModelNode(ModelNode modelNode)
@@ -21,9 +18,9 @@ namespace StateMachineNodeEditor
             {
                 Transitions.Add(new ViewModelConnector(modelConnector));
             }
-            node.Transitions.CollectionChanged += TransitionsChange;
-            CommandSelect = new SimpleCommand(this, Select);
+            node.Transitions.CollectionChanged += TransitionsChange;    
             node.PropertyChanged += ModelPropertyChange;
+            AddCommands();
         }
         public bool Equals(ViewModelNode other)
         {
@@ -42,8 +39,7 @@ namespace StateMachineNodeEditor
         #region Property
         public ObservableCollection<ViewModelConnector> Transitions { get; set; } = new ObservableCollection<ViewModelConnector>();
         public ViewModelConnector Input { get; set; }
-        public ViewModelConnector Output { get; set; }
-      
+        public ViewModelConnector Output { get; set; }    
         public void TransitionsChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -110,17 +106,7 @@ namespace StateMachineNodeEditor
                 node.Height = value;
                 OnPropertyChanged("Height");
             }
-        }
-        private Brush _borderBrush = Brushes.DarkGray;
-        public Brush BorderBrush 
-        {
-            get { return _borderBrush; }
-            set
-            {
-                _borderBrush = value;
-                OnPropertyChanged("BorderBrush");
-            }
-        }
+        }  
         public bool Selected
         {
             get { return node.Selected; }
@@ -132,22 +118,7 @@ namespace StateMachineNodeEditor
             }
         }
         #endregion Property
-        public SimpleCommand CommandSelect { get; set; }
-        public object Select(object parameters, object resultExecute)
-        {
-            bool selectOnlyOne = false;
-            bool.TryParse(parameters.ToString(),out selectOnlyOne);
-            node.Select(selectOnlyOne);
-        
-            return null;
-        }
-        private void UpdateBorderBrush()
-        {
-            if (Selected)
-                BorderBrush = Brushes.Red;
-            else
-                BorderBrush = Brushes.DarkGray;
-        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {

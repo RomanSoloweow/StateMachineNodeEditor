@@ -19,6 +19,6 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBox Grid.Row="0" Grid.Column="0" Margin="0,0,5,3" Name="text" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TextIsEnable, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource ConnectorTextBox}"/>
-        <Ellipse Grid.Row="0" Grid.Column="1"  Name="form" Height="12" Width="12"  AllowDrop="True" Fill="{Binding Fill, UpdateSourceTrigger=PropertyChanged}" Stroke="{Binding Stroke, UpdateSourceTrigger=PropertyChanged}" StrokeThickness="1" Style="{DynamicResource ConnectorEllipse}"/>
+        <Ellipse Grid.Row="0" Grid.Column="1"  Name="form" Height="12" Width="12"  AllowDrop="True" IsEnabled="{Binding FormIsEnable}"  Fill="{Binding Fill, UpdateSourceTrigger=PropertyChanged}" Stroke="{Binding Stroke, UpdateSourceTrigger=PropertyChanged}" StrokeThickness="1" Style="{DynamicResource ConnectorEllipse}"/>
     </Grid>
 </UserControl>

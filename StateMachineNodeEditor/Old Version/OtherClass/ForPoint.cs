@@ -53,9 +53,9 @@ namespace StateMachineNodeEditor
         {
             return new Point(point1.X -number, point1.Y -number);
         }
-        public static Point Equality(Point point1, Point point2)
+        public static Point Equality(Point point)
         {
-            return new Point(point2.X, point2.Y);
+            return new Point(point.X, point.Y);
         }
         public static bool isEmpty(Point point)
         {

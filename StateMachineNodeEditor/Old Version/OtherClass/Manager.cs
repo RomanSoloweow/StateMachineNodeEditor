@@ -11,7 +11,7 @@ namespace StateMachineNodeEditor
 {
     public class Managers:Transforms
     {
-        public Point? _movePoint { get; private set; } = null;
+        public Point? MovePoint { get; private set; } = null;
  
         public bool canMovie;
         public bool canScale;
@@ -22,8 +22,8 @@ namespace StateMachineNodeEditor
         public double TranslateYMax = 10000;
         public double TranslateYMin = -10000;
 
-        public double zoom { get; set; } = 1;
-        public double scales { get;  set; } = 0.05;
+        public double Zoom { get; set; } = 1;
+        public double Scales { get;  set; } = 0.05;
         //public Point Position1
         //{
         //    get { return GetPosition1(translate);}
@@ -34,24 +34,24 @@ namespace StateMachineNodeEditor
         //}       
         public Managers(FrameworkElement _parent):base(_parent)
         {
-            parent.MouseDown += mouseDown;
-            parent.MouseUp += mouseUp;
+            parent.MouseDown += OnMouseDown;
+            parent.MouseUp += OnMouseUp;
         }
         public void Down()
         {
-            _movePoint = null;
-            _movePoint = Mouse.GetPosition(parent);
+            MovePoint = null;
+            MovePoint = Mouse.GetPosition(parent);
                 Keyboard.ClearFocus();
                 parent.CaptureMouse();
                 Keyboard.Focus(parent);
         }
-        public void mouseDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             Down();
         }
-        public void mouseUp(object sender, MouseButtonEventArgs e)
+        public void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            _movePoint = null;
+            MovePoint = null;
             parent.ReleaseMouseCapture();
         }
         public Point GetDeltaMove(Point? CurrentPosition=null)
@@ -61,16 +61,16 @@ namespace StateMachineNodeEditor
             if (CurrentPosition == null)
                 CurrentPosition = Mouse.GetPosition(parent);
         
-            if (_movePoint != null)
+            if (MovePoint != null)
             {
-                result = ForPoint.Subtraction(CurrentPosition.Value, _movePoint.Value);
+                result = ForPoint.Subtraction(CurrentPosition.Value, MovePoint.Value);
             }
-            _movePoint = CurrentPosition;
+            MovePoint = CurrentPosition;
             return result;
         }
         public void Move(Point? CurrentPosition = null)
         {
-            if (_movePoint != CurrentPosition)
+            if (MovePoint != CurrentPosition)
             {
                 Point delta = GetDeltaMove();
                 Move(delta);
@@ -90,13 +90,13 @@ namespace StateMachineNodeEditor
         public void Scale(int Delta)
         {
             bool Delta0 = (Delta == 0);
-            bool DeltaMax = ((Delta > 0) && (zoom > ScaleMax));
-            bool DeltaMin = ((Delta < 0) && (zoom < ScaleMin));
+            bool DeltaMax = ((Delta > 0) && (Zoom > ScaleMax));
+            bool DeltaMin = ((Delta < 0) && (Zoom < ScaleMin));
             if (Delta0 || DeltaMax || DeltaMin)
                 return;
 
-            zoom += (Delta > 0) ? scales : -scales;
-            ForPoint.EqualityScale(scale, zoom);
+            Zoom += (Delta > 0) ? Scales : -Scales;
+            ForPoint.EqualityScale(scale, Zoom);
         }
     }
 }

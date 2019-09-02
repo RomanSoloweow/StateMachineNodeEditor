@@ -23,7 +23,7 @@ namespace StateMachineNodeEditor
             //this.grid.Children.Add(new ViewSelector());
             //this.grid.Children.Add(new ViewConnect());
             //this.grid.Children.Add(new Canvas());
-        }       
+        }
 
     }
 

@@ -149,9 +149,9 @@ namespace StateMachineNodeEditor
             this.Output.form.MouseDown += NewConnect;
             this.Input.Drop += DropEnter;
             PositionChange += PositionChanges;
-            this.MouseDown += mouseDown;
-            this.MouseEnter += mouseEnter;
-            this.MouseLeave += mouseLeave;
+            this.MouseDown += OnMouseDown;
+            this.MouseEnter += OnMouseEnter;
+            this.MouseLeave += OnMouseLeave;
             //this.Transitions.MouseEnter += mouseEnter2;
             this.Border.SizeChanged += SizeChange;
             Manager.translate.Changed += TransformChange;            
@@ -159,7 +159,7 @@ namespace StateMachineNodeEditor
             AddEmptyConnector();
         }
         
-        public void mouseDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (Selected!=true)
             {
@@ -172,16 +172,12 @@ namespace StateMachineNodeEditor
         {
             Selected = !Selected;
         }
-        public void mouseEnter(object sender, MouseEventArgs e)
+        public void OnMouseEnter(object sender, MouseEventArgs e)
         {
             if (Selected!=true)
                 SetColorOnSelect();
         }
-        public void mouseEnter2(object sender, MouseEventArgs e)
-        {
-            e.Handled = true;
-        }
-        public void mouseLeave(object sender, MouseEventArgs e)
+        public void OnMouseLeave(object sender, MouseEventArgs e)
         {
             if (Selected != true)
                 SetColorOnUnSelect();

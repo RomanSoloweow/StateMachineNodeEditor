@@ -39,10 +39,10 @@ namespace StateMachineNodeEditor
             grid.Children.Add(Selector);
             nodes.CollectionChanged += NodesChange;
             connects.CollectionChanged += ConnectsChange;
-            this.MouseMove += mouseMove;
-            this.MouseWheel += mouseWheel;
-            this.MouseLeftButtonDown += mouseLeftDown;
-            this.MouseRightButtonDown += mouseRightDown;
+            this.MouseMove += OnMouseMove;
+            this.MouseWheel += OnMouseWheel;
+            this.MouseLeftButtonDown += OnMouseLeftDown;
+            this.MouseRightButtonDown += OnMouseRightDown;
         }
         public NodesCanvas(UIElement _parent) : this()
         {
@@ -102,11 +102,11 @@ namespace StateMachineNodeEditor
         }
         #region Events for mouse
        
-        public void mouseRightDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseRightDown(object sender, MouseButtonEventArgs e)
         {
             positionRightClick = e.GetPosition(this);
         }
-        public void mouseLeftDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseLeftDown(object sender, MouseButtonEventArgs e)
         {
             Point position = Mouse.GetPosition(this);
             TextBoxPosition.Text = position.ToString();
@@ -115,7 +115,7 @@ namespace StateMachineNodeEditor
                 UnSelectedAllNodes();
             }
         }
-        public void mouseMove(object sender, MouseEventArgs e)
+        public void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
@@ -137,7 +137,7 @@ namespace StateMachineNodeEditor
                 }
             }
         }
-        public void mouseWheel(object sender, MouseWheelEventArgs e)
+        public void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             foreach (var node in nodes)
             {
@@ -196,8 +196,8 @@ namespace StateMachineNodeEditor
             Point selectorPoint2 = Selector.Position2;
             if (nodes.Count > 0)
             {
-                selectorPoint1 = ForPoint.Division(selectorPoint1, nodes.First().Manager.zoom);
-                selectorPoint2 = ForPoint.Division(selectorPoint2, nodes.First().Manager.zoom);
+                selectorPoint1 = ForPoint.Division(selectorPoint1, nodes.First().Manager.Zoom);
+                selectorPoint2 = ForPoint.Division(selectorPoint2, nodes.First().Manager.Zoom);
             }
             foreach (Node node in nodes)
             {
@@ -259,7 +259,7 @@ namespace StateMachineNodeEditor
             {
                 Node firstNode = nodes.First();
             }
-            ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.zoom));
+            ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.Zoom));
             nodes.Add(node);
             Panel.SetZIndex(node, nodes.Count());
             return node;

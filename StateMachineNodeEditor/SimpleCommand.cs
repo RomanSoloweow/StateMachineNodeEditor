@@ -53,6 +53,10 @@ namespace StateMachineNodeEditor
         {
             SetExecute(action);
         }
+        public static object Test(object parameters, object resultExecute)
+        {
+            return null;
+        }
         public SimpleCommand(object owner, Func<object, object, object> action, Func<object, object, object> unAction) : this(owner,action)
         {
             SetUnExecute(unAction);
@@ -63,10 +67,10 @@ namespace StateMachineNodeEditor
             SetCombineResult(combineResult);
             SetEqulsResult(equalResult);
         }
-        public void Execute(object param)
+        public object Execute(object param)
         {
             Parameters = param;
-            Result = this._execute(param, Result);
+            Result = this._execute(Parameters, Result);
             if (_unExecute != null)
             {
                 if (!Combined)
@@ -75,8 +79,10 @@ namespace StateMachineNodeEditor
                     Combine();              
                 Redo.Clear();
             }
+            object resultCopy = Result;
             Result = null;
             Parameters = null;
+            return resultCopy;
         }
         private void Combine()
         {
@@ -101,10 +107,11 @@ namespace StateMachineNodeEditor
         }
 
 
-        public void Execute()
+        public object Execute()
         {
             Result = this._execute(Parameters,Result);
             Undo.Push(this.Clone() as SimpleCommand);
+            return Result;
         }
         public void UnExecute()
         {

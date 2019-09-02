@@ -1,17 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Media;
 namespace StateMachineNodeEditor
 {
-    public class ViewModelConnector : INotifyPropertyChanged
+    public partial class ViewModelConnector
     {
         private ModelConnector connector { get; set; }
         public ViewModelConnector(ModelConnector modelConnector)
         {
             connector = modelConnector;
             connector.PropertyChanged += ModelPropertyChange;
+            AddCommands();
         }
         public String Text
         {
@@ -31,24 +31,6 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("TextIsEnable");
             }
         }
-        public Brush Fill
-        {
-            get { return connector.Fill; }
-            set
-            {
-                connector.Fill = value;
-                OnPropertyChanged("Fill");
-            }
-        }
-        public Brush Stroke
-        {
-            get { return connector.Stroke; }
-            set
-            {
-                connector.Stroke = value;
-                OnPropertyChanged("Stroke");
-            }
-        }
         public bool? Visible
         {
             get { return connector.Visible; }
@@ -58,13 +40,23 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Visible");
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        public bool FormIsEnable
+        {
+            get { return connector.FormIsEnable; }
+            set
+            {
+                connector.FormIsEnable = value;
+                OnPropertyChanged("FormIsEnable");
+            }
+        }
+
+        private event PropertyChangedEventHandler PropertyChanged;
+        private void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        private void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));

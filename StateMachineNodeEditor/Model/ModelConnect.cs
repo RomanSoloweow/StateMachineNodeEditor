@@ -12,8 +12,8 @@ namespace StateMachineNodeEditor
         private Point _endPoint;
         private Point _point1;
         private Point _point2;
-        private ModelConnector _inputConnect;
-        private ModelConnector _outputConnect;
+        private ModelConnector _fromConnector;
+        private ModelConnector _toConnector;
         private Brush _stroke;
         private DoubleCollection _strokeDashArray;
         public ModelConnect(Point? point)
@@ -59,21 +59,21 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Point2");
             }
         }
-        public ModelConnector InputConnect
+        public ModelConnector FromConnector
         {
-            get { return _inputConnect; }
+            get { return _fromConnector; }
             set
             {
-                _inputConnect = value;
+                _fromConnector = value;
                 OnPropertyChanged("InputConnect");
             }
         }
-        public ModelConnector OutputConnect
+        public ModelConnector ToConnector
         {
-            get { return _outputConnect; }
+            get { return _toConnector; }
             set
             {
-                _outputConnect = value;
+                _toConnector = value;
                 OnPropertyChanged("OutputConnect");
             }
         }

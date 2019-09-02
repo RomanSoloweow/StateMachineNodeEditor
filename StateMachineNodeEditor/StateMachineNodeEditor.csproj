@@ -195,27 +195,33 @@
     <Compile Include="Helper\Scales.cs" />
     <Compile Include="Helper\Translates.cs" />
     <Compile Include="SimpleCommand.cs" />
-    <Compile Include="VIew\ViewConnect.xaml.cs">
+    <Compile Include="ViewModel\Additional\ViewModelConnectorAdditional.cs" />
+    <Compile Include="ViewModel\Additional\ViewModelConnectorInterface.cs" />
+    <Compile Include="ViewModel\Additional\ViewModelLeftConnector.cs" />
+    <Compile Include="ViewModel\Additional\ViewModelNodeAdditional.cs" />
+    <Compile Include="ViewModel\Additional\ViewModelNodesCanvasAdditional.cs" />
+    <Compile Include="ViewModel\Additional\ViewModelRightConnector.cs" />
+    <Compile Include="View\ViewConnect.xaml.cs">
       <DependentUpon>ViewConnect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VIew\ViewLeftConnector.xaml.cs">
+    <Compile Include="View\ViewLeftConnector.xaml.cs">
       <DependentUpon>ViewLeftConnector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VIewModel\ViewModelNodesCanvas.cs" />
-    <Compile Include="VIewModel\ViewModelSelector.cs" />
-    <Compile Include="VIew\ViewNodesCanvas.xaml.cs">
+    <Compile Include="ViewModel\ViewModelNodesCanvas.cs" />
+    <Compile Include="ViewModel\ViewModelSelector.cs" />
+    <Compile Include="View\ViewNodesCanvas.xaml.cs">
       <DependentUpon>ViewNodesCanvas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VIew\ViewRightConnector.xaml.cs">
+    <Compile Include="View\ViewRightConnector.xaml.cs">
       <DependentUpon>ViewRightConnector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VIewModel\ViewModelConnect.cs" />
-    <Compile Include="VIewModel\ViewModelConnector.cs" />
-    <Compile Include="VIewModel\ViewModelNode.cs" />
-    <Compile Include="VIew\ViewNode.xaml.cs">
+    <Compile Include="ViewModel\ViewModelConnect.cs" />
+    <Compile Include="ViewModel\ViewModelConnector.cs" />
+    <Compile Include="ViewModel\ViewModelNode.cs" />
+    <Compile Include="View\ViewNode.xaml.cs">
       <DependentUpon>ViewNode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VIew\ViewSelector.xaml.cs">
+    <Compile Include="View\ViewSelector.xaml.cs">
       <DependentUpon>ViewSelector.xaml</DependentUpon>
     </Compile>
     <Page Include="Old Version\Elements\NodesCanvas.xaml">
@@ -274,27 +280,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIew\ViewConnect.xaml">
+    <Page Include="View\ViewConnect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIew\ViewLeftConnector.xaml">
+    <Page Include="View\ViewLeftConnector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIew\ViewNodesCanvas.xaml">
+    <Page Include="View\ViewNodesCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIew\ViewRightConnector.xaml">
+    <Page Include="View\ViewRightConnector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIew\ViewNode.xaml">
+    <Page Include="View\ViewNode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="VIew\ViewSelector.xaml">
+    <Page Include="View\ViewSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

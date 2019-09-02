@@ -12,19 +12,41 @@ namespace StateMachineNodeEditor
         private ModelConnect _connect;
         private String _text;
         private bool _textIsEnable;
-        private Brush _fill;
-        private Brush _stroke;
         private bool? _visible;
+        private bool _formIsEnable;
 
         public ModelConnector(ModelNode node)
         {
             _node = node;
             Text = "";
-            Fill = Brushes.DarkGray;
-            Stroke = Brushes.Black;
             TextIsEnable = true;
             Visible = true;
+            FormIsEnable = true;
         }
+
+
+        public object GetDataForDrop()
+        {
+            Connect = this.Node.GetNewConnect();
+            DataObject data = new DataObject();
+            data.SetData("Node", this.Node);
+            data.SetData("Connector", this);
+            data.SetData("Connect", Connect);
+            return data;
+        }
+        public object CheckResultDrop()
+        {
+            if (Connect.ToConnector!=null)
+            {
+                Node.DropSuccessfull();            
+            }
+            else
+            {
+                Node.DropUnSuccessfull();
+            }
+            return Connect;
+        }
+
         public Point Position
         {
             get { return _position; }
@@ -70,24 +92,6 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("TextIsEnable");
             }
         }
-        public Brush Fill
-        {
-            get { return _fill; }
-            set
-            {
-                _fill = value;
-                OnPropertyChanged("Fill");
-            }
-        }
-        public Brush Stroke
-        {
-            get { return _stroke; }
-            set
-            {
-                _stroke = value;
-                OnPropertyChanged("Stroke");
-            }
-        }
         public bool? Visible
         {
             get { return _visible; }
@@ -97,6 +101,16 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Visible");
             }
         }
+        public bool FormIsEnable
+        {
+            get { return _formIsEnable; }
+            set
+            {
+                _formIsEnable = value;
+                OnPropertyChanged("FormIsEnable");
+            }
+        }
+   
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

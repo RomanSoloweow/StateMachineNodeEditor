@@ -23,6 +23,12 @@ namespace StateMachineNodeEditor
         public ViewLeftConnector()
         {
             InitializeComponent();
+            this.DataContextChanged += DataContextChange;
+        }
+        public ViewModelConnector ViewModelConnector { get; set; }
+        public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ViewModelConnector = e.NewValue as ViewModelConnector;
         }
     }
 }

@@ -33,14 +33,22 @@ namespace StateMachineNodeEditor
 
             this.DataContextChanged += DataContextChange;
   
-            this.MouseMove += mouseMove;
-            this.MouseDown += mouseDown;
-            this.MouseUp += mouseUp;
-            this.MouseRightButtonDown += mouseRightDown;
-            this.MouseLeftButtonDown += mouseLeftDown;
+            this.MouseMove += OnMouseMove;
+            this.MouseDown += OnMouseDown;
+            this.MouseUp += OnMouseUp;
+            this.MouseRightButtonDown += OnMouseRightDown;
+            this.MouseLeftButtonDown += OnMouseLeftDown;
         }
-        public void mouseDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
+        }
+        protected override void OnDragOver(DragEventArgs e)
+        {
+            if (e.Data.GetData("Connect") is Connect obj)
+            {
+                obj.EndPoint = ForPoint.Subtraction(e.GetPosition(this), 2);
+            }
+            base.OnDragOver(e);
         }
         private Point GetDeltaMove()
         {
@@ -54,17 +62,18 @@ namespace StateMachineNodeEditor
             positionMove = CurrentPosition;
             return result;
         }
-        public void mouseUp(object sender, MouseButtonEventArgs e)
+        public void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
             positionMove = null;
+            Keyboard.Focus(this);
         }
-        public void mouseRightDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseRightDown(object sender, MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
             positionRightClick = e.GetPosition(this);
         }
-        public void mouseLeftDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseLeftDown(object sender, MouseButtonEventArgs e)
         {
             if (Mouse.Captured == null)
             {
@@ -76,7 +85,7 @@ namespace StateMachineNodeEditor
             if (this.IsMouseCaptured)
                 ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
         }
-        public void mouseMove(object sender, MouseEventArgs e)
+        public void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (Mouse.Captured == null)
                 return;
