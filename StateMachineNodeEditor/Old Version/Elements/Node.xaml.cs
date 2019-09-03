@@ -147,7 +147,7 @@ namespace StateMachineNodeEditor
             Manager = new Managers(this);
             Manager.scale.Changed += Zoom;
             this.Output.form.MouseDown += NewConnect;
-            this.Input.Drop += DropEnter;
+            this.Input.Drop += OnDrop;
             PositionChange += PositionChanges;
             this.MouseDown += OnMouseDown;
             this.MouseEnter += OnMouseEnter;
@@ -187,7 +187,7 @@ namespace StateMachineNodeEditor
             RaiseEvent(new RoutedEventArgs(PositionChangeEvent, this));
             RaiseEvent(new RoutedEventArgs(ZoomChangeEvent, this));
         }
-        public void DropEnter(object sender, DragEventArgs e)
+        public void OnDrop(object sender, DragEventArgs e)
         {
             var obj = e.Data.GetData("Node");
             Node node = obj as Node;
@@ -197,6 +197,7 @@ namespace StateMachineNodeEditor
               ((Connect)e.Data.GetData("Connect")).OutputConnector = this.Input;
             }
         }
+
         public Node(string text, NodesCanvas _canvasNode) : this()
         {
             Header.Text = text;

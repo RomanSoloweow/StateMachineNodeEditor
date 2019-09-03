@@ -24,11 +24,19 @@ namespace StateMachineNodeEditor
         {
             InitializeComponent();
             this.DataContextChanged += DataContextChange;
+            this.form.Drop += OnDrop;
+
         }
         public ViewModelConnector ViewModelConnector { get; set; }
         public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
         {
             ViewModelConnector = e.NewValue as ViewModelConnector;
         }
+        public void OnDrop(object sender, DragEventArgs e)
+        {
+            ViewModelConnector.CommandOnDrop.Execute(e.Data);
+        }
+       
+        
     }
 }

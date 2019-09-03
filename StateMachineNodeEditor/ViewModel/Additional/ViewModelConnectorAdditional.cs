@@ -28,26 +28,31 @@ namespace StateMachineNodeEditor
                 OnPropertyChanged("Stroke");
             }
         }
-        public SimpleCommand CommandGetDataForDrop;
-        public SimpleCommand CommandGetResultDrop;
-        public SimpleCommand CommandAddConnect;
+        public SimpleCommand CommandGetDataForDrag;
+        public SimpleCommand CommandAddConnectIfDrop;
+        public SimpleCommand CommandOnDrop;
         public void AddCommands()
         {
-            CommandGetDataForDrop = new SimpleCommand(this, GetDataForDrop);
-            CommandGetResultDrop = new SimpleCommand(this, GetResultDrop);
-            CommandAddConnect = new SimpleCommand(this, AddConnect);
+            CommandGetDataForDrag = new SimpleCommand(this, GetDataForDrop);
+            CommandAddConnectIfDrop = new SimpleCommand(this, AddConnectIfDrop, DeleteConnect);
+            CommandOnDrop = new SimpleCommand(this, OnDrop);
         }
         private object GetDataForDrop(object parameters, object resultExecute)
         {           
-            return connector.GetDataForDrop();
+            return connector.GetDataForDrag();
         }
-        private object GetResultDrop(object parameters, object resultExecute)
+        private object AddConnectIfDrop(object parameters, object resultExecute)
         {
-            return connector.CheckResultDrop();
+            return connector.AddConnectIfDrop(resultExecute as ModelConnect);
         }
-        private object AddConnect(object parameters, object resultExecute)
+        private object DeleteConnect(object parameters, object resultExecute)
         {
-            return null;
+            return connector.DeleteConnect(resultExecute as ModelConnect);
+        }
+
+        private object OnDrop(object parameters, object resultExecute)
+        {
+            return connector.OnDrop(parameters as DataObject);
         }
 
     }

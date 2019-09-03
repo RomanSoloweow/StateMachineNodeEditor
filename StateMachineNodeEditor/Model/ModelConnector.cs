@@ -25,7 +25,7 @@ namespace StateMachineNodeEditor
         }
 
 
-        public object GetDataForDrop()
+        public object GetDataForDrag()
         {
             Connect = this.Node.GetNewConnect();
             DataObject data = new DataObject();
@@ -34,19 +34,31 @@ namespace StateMachineNodeEditor
             data.SetData("Connect", Connect);
             return data;
         }
-        public object CheckResultDrop()
+        public ModelConnect AddConnectIfDrop(ModelConnect modelConnect)
         {
-            if (Connect.ToConnector!=null)
-            {
-                Node.DropSuccessfull();            
-            }
-            else
-            {
-                Node.DropUnSuccessfull();
-            }
-            return Connect;
+            return Node.AddConnectIfDrop(modelConnect);
         }
+        public ModelConnect DropConnect(ModelConnect modelConnect)
+        {
+            return Node.AddConnectIfDrop(modelConnect);
+        }
+        public ModelConnect DeleteConnect(ModelConnect modelConnect)
+        {
+            return Node.DelereConnect(modelConnect);
+        }
+        public object OnDrop(DataObject data)
+        {
+            if (data == null)
+                return false;
 
+            ModelNode node = data.GetData("Node") as ModelNode;
+                if (Node.CheckConnect(node))
+                {
+                    ((ModelConnect)data.GetData("Connect")).ToConnector = this;
+                    return true;
+                }
+            return false;
+        }
         public Point Position
         {
             get { return _position; }
@@ -114,7 +126,9 @@ namespace StateMachineNodeEditor
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

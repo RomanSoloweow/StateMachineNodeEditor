@@ -53,13 +53,22 @@ namespace StateMachineNodeEditor
         private event PropertyChangedEventHandler PropertyChanged;
         private void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+            if (PropertyChanged == null)
+                return;
+
+
+            PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
         private void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+
+
+            //if (PropertyChanged == null)
+            //    return;
+
+            //PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

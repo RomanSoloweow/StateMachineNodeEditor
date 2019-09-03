@@ -155,12 +155,24 @@ namespace StateMachineNodeEditor
             //Panel.SetZIndex(node, nodes.Count());
             return modelNode;
         }
+        public bool CheckConnect(ModelNode nodeFrom, ModelNode nodeTo)
+        {
+            if ((nodeFrom == nodeTo) || (nodeFrom == null) || (nodeTo == null))
+                return false;
+
+            return (_connects.Where(x => (x.FromConnector?.Node == nodeFrom) && (x.ToConnector?.Node == nodeTo)).Count() == 0);
+        }
         public ModelNode AddNode(ModelNode modelNode)
         {
             string text = "State" + this._nodes.Count.ToString();
             modelNode.Text = text;
             _nodes.Add(modelNode);
             return modelNode;
+        }
+        public ModelConnect AddConnect(ModelConnect modelConnect)
+        {
+            _connects.Add(modelConnect);
+            return modelConnect;
         }
         public ModelNode DeleteNode(ModelNode node)
         {

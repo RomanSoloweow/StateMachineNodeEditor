@@ -36,9 +36,9 @@ namespace StateMachineNodeEditor
         {
             if (_currentConnector != null)
             {
-                _currentConnector.TextIsEnable = true;
-                _currentConnector.FormIsEnable = false;
-                _currentConnector.Text = "Transition_" + Transitions.Count.ToString();
+                CurrentConnector.TextIsEnable = true;
+                CurrentConnector.FormIsEnable = false;
+                CurrentConnector.Text = "Transition_" + Transitions.Count.ToString();
             }
             _currentConnector = new ModelConnector(this);
             _currentConnector.TextIsEnable = false;
@@ -52,6 +52,11 @@ namespace StateMachineNodeEditor
         public void DropUnSuccessfull()
         {
             NodesCanvas.DeleteConnect(CurrentConnector.Connect);
+        }
+        public bool CheckConnect(ModelNode nodeFrom)
+        {
+
+            return NodesCanvas.CheckConnect(nodeFrom, this);
         }
         public ModelNode(ModelNodesCanvas modelNodesCanvas, string text = null, Point? point = null)
         {
@@ -97,8 +102,24 @@ namespace StateMachineNodeEditor
             modelConnect.FromConnector = CurrentConnector;
             return modelConnect;
         }
-
-
+        public ModelConnect AddConnectIfDrop(ModelConnect modelConnect)
+        {
+            if (modelConnect != null)
+            {
+                NodesCanvas.AddConnect(modelConnect);
+                CurrentConnector.Connect = modelConnect;
+                DropSuccessfull();
+            }
+            if (CurrentConnector.Connect.ToConnector != null)
+                DropSuccessfull();
+            else
+                DropUnSuccessfull();
+            return CurrentConnector.Connect;
+        }
+        public ModelConnect DelereConnect(ModelConnect modelConnect)
+        {
+            return NodesCanvas.DeleteConnect(modelConnect);
+        }
         #region Property
         public ModelNodesCanvas NodesCanvas
         {
