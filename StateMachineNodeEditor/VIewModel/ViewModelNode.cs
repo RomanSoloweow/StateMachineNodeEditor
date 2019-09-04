@@ -33,7 +33,7 @@ namespace StateMachineNodeEditor
             if (this.GetType() != other.GetType())
                 return false;
 
-            return Equals(this.Text,other.Text) && Equals(this.Translate, other.Translate) && Equals(this.Transitions,other.Transitions);
+            return Equals(this.node,other.node);
 
         }
         #region Property
@@ -48,7 +48,10 @@ namespace StateMachineNodeEditor
                 {
                     ModelConnector connector = element as ModelConnector;
                     if (connector != null)
-                        Transitions.Add(new ViewModelConnector(connector));
+                        if(e.NewStartingIndex== (Transitions.Count))
+                            Transitions.Add(new ViewModelConnector(connector));
+                        else
+                            Transitions.Insert(e.NewStartingIndex, new ViewModelConnector(connector));
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)

@@ -42,6 +42,7 @@ namespace StateMachineNodeEditor
             }
             _currentConnector = new ModelConnector(this);
             _currentConnector.TextIsEnable = false;
+            //_transitions.Add(_currentConnector);
             _transitions.Insert(0, _currentConnector);
             return _currentConnector;
         }
@@ -73,7 +74,7 @@ namespace StateMachineNodeEditor
                 Visible = false
             };
 
-            Text = text ?? "Test";
+            Text = text ;
             if (point != null)
                 _translate.Value = point.Value;
 

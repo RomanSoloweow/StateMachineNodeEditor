@@ -38,21 +38,19 @@ namespace StateMachineNodeEditor
             this.MouseUp += OnMouseUp;
             this.MouseRightButtonDown += OnMouseRightDown;
             this.MouseLeftButtonDown += OnMouseLeftDown;
+            this.DragOver += OnDragOver;
         }
         public void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
         }
-        protected override void OnDragOver(DragEventArgs e)
+        protected  void OnDragOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetData("Connect") is Connect obj)
-            {
-                obj.EndPoint = ForPoint.Subtraction(e.GetPosition(this), 2);
-            }
-            base.OnDragOver(e);
+            e.Data.SetData("Position", e.GetPosition(this.grid));
+            ViewModelNodesCanvas.CommandDropOver.Execute(e.Data);
         }
         private Point GetDeltaMove()
         {
-            Point CurrentPosition = Mouse.GetPosition(this);
+            Point CurrentPosition = Mouse.GetPosition(this.grid);
             Point result = new Point();
 
             if (positionMove !=null)
@@ -71,17 +69,20 @@ namespace StateMachineNodeEditor
         public void OnMouseRightDown(object sender, MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
-            positionRightClick = e.GetPosition(this);
+            positionRightClick = e.GetPosition(this.grid);
         }
         public void OnMouseLeftDown(object sender, MouseButtonEventArgs e)
         {
+            Point t = this.PointToScreen(Mouse.GetPosition(this.grid));
+            //Console.WriteLine(" PointToScreen "+t.ToString());
+            //Console.WriteLine(" PointFromScreen " + this.PointFromScreen(t).ToString());
             if (Mouse.Captured == null)
             {
                 Keyboard.ClearFocus();
                 this.CaptureMouse();
                 Keyboard.Focus(this);
             }
-            positionLeftClick = e.GetPosition(this);
+            positionLeftClick = e.GetPosition(this.grid);
             if (this.IsMouseCaptured)
                 ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
         }
@@ -124,7 +125,7 @@ namespace StateMachineNodeEditor
         }
         private void Select(object sender, ExecutedRoutedEventArgs e)
         {
-            ViewModelNodesCanvas.CommandSelect.Execute(Mouse.GetPosition(this));
+            ViewModelNodesCanvas.CommandSelect.Execute(Mouse.GetPosition(this.grid));
         }
         private void SelectAll(object sender, ExecutedRoutedEventArgs e)
         {
@@ -132,7 +133,7 @@ namespace StateMachineNodeEditor
         }
         private void New(object sender, ExecutedRoutedEventArgs e)
         {         
-            ViewModelNodesCanvas.CommandNew.Execute(positionRightClick?? Mouse.GetPosition(this));
+            ViewModelNodesCanvas.CommandNew.Execute(positionRightClick?? Mouse.GetPosition(this.grid));
             positionRightClick = null;
         }
         private void Redo(object sender, ExecutedRoutedEventArgs e)

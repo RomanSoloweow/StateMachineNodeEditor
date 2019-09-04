@@ -73,6 +73,7 @@ namespace StateMachineNodeEditor
         public ModelConnect GetNewConnect(Point position)
         {
             ModelConnect modelConnect = new ModelConnect(position);
+            modelConnect.StartPoint = position;
             _connects.Add(modelConnect);
             return modelConnect;
         }
@@ -117,6 +118,17 @@ namespace StateMachineNodeEditor
                 node.Selected = true;
             }
             return _nodes.ToList();
+        }
+        public object DropOver(DataObject data)
+        {
+            if (data == null)
+                return null;
+            if (data.GetData("Connect") is ModelConnect connect)
+            {
+                if(data.GetData("Position") is Point position)
+                    connect.EndPoint = ForPoint.Subtraction(position, 2);
+            }
+            return null;
         }
         public List<ModelNode> MoveAllNode(Point delta, List<ModelNode> nodes = null)
         {

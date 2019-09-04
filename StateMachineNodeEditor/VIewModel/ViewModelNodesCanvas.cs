@@ -9,7 +9,7 @@ namespace StateMachineNodeEditor
     {
         private ModelNodesCanvas nodesCanvas;
         public ObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollection<ViewModelNode>();
-        public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
+        private void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -33,7 +33,7 @@ namespace StateMachineNodeEditor
             OnPropertyChanged("Nodes");
         }
         public ObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollection<ViewModelConnect>();
-        public void ConnectsChange(object sender, NotifyCollectionChangedEventArgs e)
+        private void ConnectsChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -76,12 +76,12 @@ namespace StateMachineNodeEditor
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
+        private void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        private void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }

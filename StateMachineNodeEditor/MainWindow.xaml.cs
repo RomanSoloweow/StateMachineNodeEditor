@@ -21,7 +21,10 @@ namespace StateMachineNodeEditor
             //viewNodesCanvas.DataContext = new ViewModelNodesCanvas(new ModelNodesCanvas());
 
             //this.grid.Children.Add(new ViewSelector());
-            //this.grid.Children.Add(new ViewConnect());
+
+            //ViewConnect viewConnect = new ViewConnect();
+            //this.grid.Children.Add(viewNodesCanvas);
+            //this.grid.Children.Add(viewConnect);
             //this.grid.Children.Add(new Canvas());
         }
 

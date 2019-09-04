@@ -25,6 +25,7 @@ namespace StateMachineNodeEditor
 
         public SimpleCommand CommandMoveAllNode { get; set; }
         public SimpleCommand CommandMoveAllSelectedNode { get; set; }
+        public SimpleCommand CommandDropOver { get; set; }
 
         public void AddCommands()
         {
@@ -47,6 +48,7 @@ namespace StateMachineNodeEditor
 
             CommandMoveAllNode = new SimpleCommand(this, MoveAllNode, UnMoveAllNode, CombinePoint, EqualsList);
             CommandMoveAllSelectedNode = new SimpleCommand(this, MoveAllSelectedNode, UnMoveAllSelectedNode, CombinePoint, EqualsList);
+            CommandDropOver = new SimpleCommand(this, DropOver);
             //MenuItem ItemFromCommand(Command command)
             //{
             //    MenuItem menuItem = new MenuItem();
@@ -140,6 +142,10 @@ namespace StateMachineNodeEditor
             //nodesCanvas.Selector.StartSelect((Point)parameters);
             return null;
         }
-#endregion Commands
+        public object DropOver(object parameters, object resultExecute)
+        {
+            return nodesCanvas.DropOver(parameters as DataObject);
+        }
+        #endregion Commands
     }
 }

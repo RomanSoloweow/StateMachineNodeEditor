@@ -25,5 +25,10 @@ namespace StateMachineNodeEditor
             InitializeComponent();
             //DataContext = new ViewModelConnect(new ModelConnect());
         }
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            Console.WriteLine(e.NewValue.ToString());
+            base.OnPropertyChanged(e);
+        }
     }
 }

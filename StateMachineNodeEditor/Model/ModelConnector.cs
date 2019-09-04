@@ -28,6 +28,7 @@ namespace StateMachineNodeEditor
         public object GetDataForDrag()
         {
             Connect = this.Node.GetNewConnect();
+
             DataObject data = new DataObject();
             data.SetData("Node", this.Node);
             data.SetData("Connector", this);

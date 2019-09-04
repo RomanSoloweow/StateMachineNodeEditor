@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace StateMachineNodeEditor
 {
-    public class ModelConnect: INotifyPropertyChanged
+    public class ModelConnect: INotifyPropertyChanged, IEquatable<ModelConnect>
     {
         private Point _startPoint;
         private Point _endPoint;
@@ -14,8 +14,16 @@ namespace StateMachineNodeEditor
         private Point _point2;
         private ModelConnector _fromConnector;
         private ModelConnector _toConnector;
-        private Brush _stroke;
-        private DoubleCollection _strokeDashArray;
+        public bool Equals(ModelConnect other)
+        {
+            if (other == null)
+                return false;
+
+            if (this.GetType() != other.GetType())
+                return false;
+            
+            return Equals(this.ToConnector, other.ToConnector) && Equals(this.FromConnector, other.FromConnector);
+        }
         public ModelConnect(Point? point)
         {
             if (point != null)
@@ -27,8 +35,9 @@ namespace StateMachineNodeEditor
             set
             {
                 _startPoint = value;
-                OnPropertyChanged("StartPoint");
                 Update();
+                OnPropertyChanged("StartPoint");
+               
             }
         }
         public Point EndPoint
@@ -37,8 +46,9 @@ namespace StateMachineNodeEditor
             set
             {
                 _endPoint = value;
-                OnPropertyChanged("EndPoint");
                 Update();
+                OnPropertyChanged("EndPoint");
+              
             }
         }
         public Point Point1
@@ -65,7 +75,7 @@ namespace StateMachineNodeEditor
             set
             {
                 _fromConnector = value;
-                OnPropertyChanged("InputConnect");
+                OnPropertyChanged("FromConnector");
             }
         }
         public ModelConnector ToConnector
@@ -74,31 +84,15 @@ namespace StateMachineNodeEditor
             set
             {
                 _toConnector = value;
-                OnPropertyChanged("OutputConnect");
-            }
-        }
-        public Brush Stroke
-        {
-            get { return _stroke; }
-            set
-            {
-                _stroke = value;
-                OnPropertyChanged("Stroke");
-            }
-        }
-        public DoubleCollection StrokeDashArray
-        {
-            get { return _strokeDashArray; }
-            set
-            {
-                _strokeDashArray = value;
-                OnPropertyChanged("StrokeDashArray");
+                OnPropertyChanged("ToConnector");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
         private void Update()
         {

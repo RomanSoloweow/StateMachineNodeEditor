@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media;
 namespace StateMachineNodeEditor
 {
-    public partial class ViewModelConnector
+    public partial class ViewModelConnector: INotifyPropertyChanged
     {
         private ModelConnector connector { get; set; }
         public ViewModelConnector(ModelConnector modelConnector)
@@ -50,12 +50,11 @@ namespace StateMachineNodeEditor
             }
         }
 
-        private event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
         private void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {
             if (PropertyChanged == null)
                 return;
-
 
             PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }

@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
              Focusable="True" AllowDrop="True">
-    <Grid>
+    <Grid x:Name="grid" Background="#FF141414">
         <local:ViewSelector  Panel.ZIndex="999" DataContext="{Binding Selector}"></local:ViewSelector>
-    <ItemsControl x:Name="grid" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
+    <ItemsControl x:Name="nodes" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <Grid Background="#FF141414">
+                    <Grid Background="{x:Null}">
                 </Grid>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
@@ -21,6 +21,20 @@
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
+
+        <ItemsControl x:Name="connects" ItemsSource="{Binding Connects, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid Background="{x:Null}">
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:ViewConnect />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
     <UserControl.ContextMenu>
         <ContextMenu Margin="10, 0, 0, 0">

@@ -6,9 +6,25 @@ using System.Windows.Media;
 
 namespace StateMachineNodeEditor
 {
-    public class ViewModelConnect: INotifyPropertyChanged
+    public class ViewModelConnect: INotifyPropertyChanged,IEquatable<ViewModelConnect>
     {
         private ModelConnect connect { get; set; }
+        private Brush _stroke = Brushes.White;
+        private DoubleCollection _strokeDashArray = null;
+        public bool Equals(ViewModelConnect other)
+        {
+            if (other == null)
+                return false;
+
+            if (object.ReferenceEquals(this.connect, other.connect))
+                return true;
+
+            if (this.GetType() != other.GetType())
+                return false;
+
+            return Equals(this.connect, other.connect) ;
+
+        }
         public ViewModelConnect(ModelConnect modelConnect)
         {
             connect = modelConnect;
@@ -52,31 +68,34 @@ namespace StateMachineNodeEditor
         }
         public Brush Stroke
         {
-            get { return connect.Stroke; }
+            get { return _stroke; }
             set
             {
-                connect.Stroke = value;
+                _stroke = value;
                 OnPropertyChanged("Stroke");
             }
         }
         public DoubleCollection StrokeDashArray
         {
-            get { return connect.StrokeDashArray; }
+            get { return _strokeDashArray; }
             set
             {
-                connect.StrokeDashArray = value;
+                _strokeDashArray = value;
                 OnPropertyChanged("StrokeDashArray");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+            if (PropertyChanged == null)
+                return;
+
+            PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
         }
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
