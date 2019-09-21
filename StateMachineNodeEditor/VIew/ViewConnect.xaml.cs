@@ -27,7 +27,7 @@ namespace StateMachineNodeEditor
         }
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            Console.WriteLine(e.NewValue.ToString());
+            //Console.WriteLine(e.NewValue.ToString());
             base.OnPropertyChanged(e);
         }
     }

@@ -65,6 +65,10 @@ namespace StateMachineNodeEditor
         {
           return new Point(translate.X, translate.Y);
         }
+        public static Point GetEmpty()
+        {
+            return new Point();
+        }
         public static void Addition(System.Windows.Media.TranslateTransform translate, Point point)
         {
             translate.X += point.X;

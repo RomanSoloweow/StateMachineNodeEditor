@@ -2,12 +2,23 @@
 using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Windows.Input;
 namespace StateMachineNodeEditor
 {
     public partial class ViewModelNodesCanvas
     {
         #region Commands
+       //public ICommand Kek
+       // {
+       //     get { return null; }
+       //     set { }
+       // }
+        //public Command Kekus {
+        //    get;
+        //        set; }
+        public CommandI Keks {
+            get;
+            set; }
         public SimpleCommand CommandSelectAll { get; set; }
         public SimpleCommand CommandUnSelectAll { get; set; }
         public SimpleCommand CommandSelect { get; set; }
@@ -23,6 +34,8 @@ namespace StateMachineNodeEditor
         public SimpleCommand CommandMoveRight { get; set; }
         public SimpleCommand CommandMoveUp { get; set; }
 
+        public SimpleCommand CommandSimpleMoveAllNode { get; set; }
+        public SimpleCommand CommandSimpleMoveAllSelectedNode { get; set; }
         public SimpleCommand CommandMoveAllNode { get; set; }
         public SimpleCommand CommandMoveAllSelectedNode { get; set; }
         public SimpleCommand CommandDropOver { get; set; }
@@ -45,10 +58,12 @@ namespace StateMachineNodeEditor
             CommandMoveRight = new SimpleCommand(this, SimpleCommand.Test);
             CommandMoveUp = new SimpleCommand(this, SimpleCommand.Test);
 
-
-            CommandMoveAllNode = new SimpleCommand(this, MoveAllNode, UnMoveAllNode, CombinePoint, EqualsList);
-            CommandMoveAllSelectedNode = new SimpleCommand(this, MoveAllSelectedNode, UnMoveAllSelectedNode, CombinePoint, EqualsList);
+            CommandSimpleMoveAllNode = new SimpleCommand(this, SimpleMoveAllNode);
+            CommandMoveAllNode = new SimpleCommand(this, MoveAllNode, UnMoveAllNode);
+            CommandSimpleMoveAllSelectedNode= new SimpleCommand(this, SimpleMoveAllSelectedNode);
+            CommandMoveAllSelectedNode = new SimpleCommand(this, MoveAllSelectedNode, UnMoveAllSelectedNode);
             CommandDropOver = new SimpleCommand(this, DropOver);
+            Keks = new CommandI(Ures);
             //MenuItem ItemFromCommand(Command command)
             //{
             //    MenuItem menuItem = new MenuItem();
@@ -69,7 +84,10 @@ namespace StateMachineNodeEditor
             //Items.Add(ItemFromCommand(newCommnad));
         }
 
-
+        public void Ures(object t)
+        {
+            MessageBox.Show("Ur");
+        }
         public object New(object parameters, object resultExecute)
         {
             if (resultExecute == null)
@@ -110,28 +128,31 @@ namespace StateMachineNodeEditor
         {
             return nodesCanvas.UnSelectedAllNodes();
         }
-        public object MoveAllNode(object parameters, object resultExecute)
+        public object SimpleMoveAllNode(object parameters, object resultExecute)
         {
             return nodesCanvas.MoveAllNode((Point)parameters, resultExecute as List<ModelNode>);
         }
-        public object CombinePoint(object parameters1, object parameters2)
+        public object MoveAllNode(object parameters, object resultExecute)
         {
-            Point point1 = (Point)parameters1;
-            Point point2 = (Point)parameters2;
-
-            return ForPoint.Addition(point1, point2);
+            if (resultExecute == null)
+                return nodesCanvas.MoveAllNode(ForPoint.GetEmpty(), resultExecute as List<ModelNode>);
+            else
+                return nodesCanvas.MoveAllNode((Point)parameters, resultExecute as List<ModelNode>);
         }
         public object UnMoveAllNode(object parameters, object resultExecute)
         {
             return nodesCanvas.MoveAllNode(ForPoint.Mirror((Point)parameters), resultExecute as List<ModelNode>);
         }
-        public object MoveAllSelectedNode(object parameters, object resultExecute)
+        public object SimpleMoveAllSelectedNode(object parameters, object resultExecute)
         {
             return nodesCanvas.MoveAllSelectedNode((Point)parameters, resultExecute as List<ModelNode>);
         }
-        public bool EqualsList(object list1, object list2)
+        public object MoveAllSelectedNode(object parameters, object resultExecute)
         {
-            return (list1 as List<ModelNode>).SequenceEqual(list2 as List<ModelNode>);
+            if (resultExecute == null)
+                return nodesCanvas.MoveAllSelectedNode(ForPoint.GetEmpty(), resultExecute as List<ModelNode>);
+            else
+                return nodesCanvas.MoveAllSelectedNode((Point)parameters, resultExecute as List<ModelNode>);
         }
         public object UnMoveAllSelectedNode(object parameters, object resultExecute)
         {

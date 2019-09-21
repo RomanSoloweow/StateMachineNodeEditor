@@ -29,12 +29,18 @@ namespace StateMachineNodeEditor
         public ViewModelConnector ViewModelConnector { get; set; }
         public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            Point t = new Point();
+            Console.WriteLine(" ViewRightConnector PointToScreen " + this.PointToScreen(t).ToString());
             object data = ViewModelConnector.CommandGetDataForDrag.Execute(null);
             DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
             ViewModelConnector.CommandAddConnectIfDrop.Execute(null);
             e.Handled = true;
         }
-       
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+        }
+
         public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
         {
             ViewModelConnector = e.NewValue as ViewModelConnector;

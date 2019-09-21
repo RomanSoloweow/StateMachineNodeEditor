@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor"
              mc:Ignorable="d" 
-             Focusable="True" AllowDrop="True">
+             Focusable="True" AllowDrop="True"
+             
+             Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}">
     <Grid x:Name="grid" Background="#FF141414">
         <local:ViewSelector  Panel.ZIndex="999" DataContext="{Binding Selector}"></local:ViewSelector>
     <ItemsControl x:Name="nodes" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
@@ -36,13 +38,16 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </Grid>
-    <UserControl.ContextMenu>
-        <ContextMenu Margin="10, 0, 0, 0">
+    <UserControl.ContextMenu >
+        <ContextMenu Margin="10, 0, 0, 0" DataContext="">
             <MenuItem Header="Add" Name="AddItem" Command="New"/>
             <MenuItem Header="Delete"   Name="DeleteItem"   Command="Delete"/>
             <MenuItem Header="Copy"     Name="CopyItem"     Command="Copy"/>
             <MenuItem Header="Paste"    Name="PasteItem"    Command="Paste"/>
             <MenuItem Header="Cut"      Name="CutItem"      Command="Cut"/>
+            <!--<MenuItem Header="Remove"  Command="{Binding Path=PlacementTarget.Tag.Kekus, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>-->
+            <MenuItem  Command="{Binding Parent.PlacementTarget.Tag.Keks, 
+                                            RelativeSource={RelativeSource Self}}" Header="Remove"  CommandParameter="kek"/>
         </ContextMenu>
     </UserControl.ContextMenu>
     <UserControl.CommandBindings>

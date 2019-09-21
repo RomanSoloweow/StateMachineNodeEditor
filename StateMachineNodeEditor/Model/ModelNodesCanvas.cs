@@ -23,6 +23,7 @@ namespace StateMachineNodeEditor
         private ObservableCollection<ModelNode> _nodes = new ObservableCollection<ModelNode>();
         private ObservableCollection<ModelConnect> _connects = new ObservableCollection<ModelConnect>();
         private ModelSelector _selector = new ModelSelector();
+        private Point _positionOnScreen;
         public ModelNodesCanvas()
         {
             //ModelNode node = new ModelNode();

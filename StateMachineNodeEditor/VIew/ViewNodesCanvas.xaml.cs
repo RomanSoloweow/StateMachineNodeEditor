@@ -21,10 +21,19 @@ namespace StateMachineNodeEditor
     /// </summary>
     public partial class ViewNodesCanvas : UserControl
     {
+        enum MoveNodes
+        {
+            No = 0,
+            MoveAll,
+            MoveSelected
+        }
+
         public ViewModelNodesCanvas ViewModelNodesCanvas { get; set; }
         private Point? positionRightClick;
         private Point positionLeftClick;
         private Point? positionMove;
+        private Point sumMove;
+        private MoveNodes move = MoveNodes.No;
         public ViewNodesCanvas()
         {
             InitializeComponent();
@@ -36,6 +45,7 @@ namespace StateMachineNodeEditor
             this.MouseMove += OnMouseMove;
             this.MouseDown += OnMouseDown;
             this.MouseUp += OnMouseUp;
+            this.MouseLeftButtonUp += OnMouseLeftButtonUp;
             this.MouseRightButtonDown += OnMouseRightDown;
             this.MouseLeftButtonDown += OnMouseLeftDown;
             this.DragOver += OnDragOver;
@@ -60,6 +70,18 @@ namespace StateMachineNodeEditor
             positionMove = CurrentPosition;
             return result;
         }
+        public void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (move != MoveNodes.No)
+            {
+                if (move == MoveNodes.MoveAll)
+                    ViewModelNodesCanvas.CommandMoveAllNode.Execute(sumMove);
+                else
+                    ViewModelNodesCanvas.CommandMoveAllSelectedNode.Execute(sumMove);
+                move = MoveNodes.No;
+                sumMove = ForPoint.GetEmpty();
+            }
+        }
         public void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
@@ -73,9 +95,8 @@ namespace StateMachineNodeEditor
         }
         public void OnMouseLeftDown(object sender, MouseButtonEventArgs e)
         {
-            Point t = this.PointToScreen(Mouse.GetPosition(this.grid));
-            //Console.WriteLine(" PointToScreen "+t.ToString());
-            //Console.WriteLine(" PointFromScreen " + this.PointFromScreen(t).ToString());
+            Point t = new Point();
+            Console.WriteLine(" PointToScreen " + this.PointToScreen(t).ToString());
             if (Mouse.Captured == null)
             {
                 Keyboard.ClearFocus();
@@ -91,11 +112,14 @@ namespace StateMachineNodeEditor
             if (Mouse.Captured == null)
                 return;
             Point delta = GetDeltaMove();
+            sumMove = ForPoint.Addition(delta, sumMove);
             if (ForPoint.isEmpty(delta))
                 return;
             if (this.IsMouseCaptured)
             {
-                ViewModelNodesCanvas.CommandMoveAllNode.Execute(delta);
+                ViewModelNodesCanvas.CommandSimpleMoveAllNode.Execute(delta);
+                move = MoveNodes.MoveAll;
+                //ViewModelNodesCanvas.CommandMoveAllNode.Execute(delta);
 
                 //foreach (Node node in nodes)
                 //{
@@ -105,7 +129,9 @@ namespace StateMachineNodeEditor
             }
             else
             {
-                ViewModelNodesCanvas.CommandMoveAllSelectedNode.Execute(delta);
+                ViewModelNodesCanvas.CommandSimpleMoveAllSelectedNode.Execute(delta);
+                move = MoveNodes.MoveSelected;
+                //ViewModelNodesCanvas.CommandMoveAllSelectedNode.Execute(delta);
                 //foreach (Node node in nodes.Where(x => x.Selected == true).ToList())
                 //{
                 //    node.Manager.Move(delta);

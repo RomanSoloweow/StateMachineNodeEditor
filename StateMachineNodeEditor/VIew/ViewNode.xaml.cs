@@ -39,6 +39,7 @@ namespace StateMachineNodeEditor
      
         private void SizeChange(object sender, EventArgs e)
         {
+            Console.WriteLine("ViewNode SizeChange");
             ViewModelNode.Height = ActualHeight;
             ViewModelNode.Width = ActualWidth;
         }

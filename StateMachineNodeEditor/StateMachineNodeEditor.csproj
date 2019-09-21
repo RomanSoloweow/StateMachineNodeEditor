@@ -168,6 +168,7 @@
     </ApplicationDefinition>
     <Compile Include="Helper\BoolToVisibilityConverter.cs" />
     <Compile Include="Helper\Command.cs" />
+    <Compile Include="Helper\CommandI.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>
