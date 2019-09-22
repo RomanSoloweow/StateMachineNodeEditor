@@ -12,50 +12,57 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ReactiveUI.Fody.Helpers;
+using StateMachineNodeEditor.Helpers;
+using ReactiveUI;
+using ReactiveUI.Wpf;
+using DynamicData;
+using StateMachineNodeEditor.ViewModel;
 
-namespace StateMachineNodeEditor
+namespace StateMachineNodeEditor.View
 {
-    public partial class ViewNode : UserControl
+    /// <summary>
+    /// Interaction logic for ViewNode.xaml
+    /// </summary>
+    public partial class ViewNode : UserControl, IViewFor<ViewModelNode>
     {
+        #region ViewModel
+        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(ViewModelNode), typeof(ViewNode), new PropertyMetadata(null));
+
+        public ViewModelNode ViewModel
+        {
+            get { return (ViewModelNode)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        object IViewFor.ViewModel
+        {
+            get { return ViewModel; }
+            set { ViewModel = (ViewModelNode)value; }
+        }
+        #endregion ViewModel
         public ViewNode()
         {
             InitializeComponent();
-            this.SizeChanged += SizeChange;
-            this.DataContextChanged += DataContextChange;
-            this.MouseDown += OnMouseDown;
-            this.MouseUp += OnMouseUp;
-        }
-        public ViewModelNode ViewModelNode { get; set; }
-        public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            ViewModelNode = e.NewValue as ViewModelNode;
-        }
-
-        private void Select(object sender, ExecutedRoutedEventArgs e)
-        {
-            ViewModelNode.CommandSelect.Execute(false);
-        }
-        
-     
-        private void SizeChange(object sender, EventArgs e)
-        {
-            Console.WriteLine("ViewNode SizeChange");
-            ViewModelNode.Height = ActualHeight;
-            ViewModelNode.Width = ActualWidth;
-        }
-        public void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Mouse.Captured == null)
+            this.WhenActivated(disposable =>
             {
-                Keyboard.ClearFocus();
-                this.CaptureMouse();
-                Keyboard.Focus(this);
-                ViewModelNode.CommandSelect.Execute(true);
-            }    
-        }
-        public void OnMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            this.ReleaseMouseCapture();
+                //BorderBrush (Рамка вокруг узла)
+                this.Bind(this.ViewModel, x => x.BorderBrush, x => x.Border.BorderBrush);
+                //Name (заголовок узла)
+                this.Bind(this.ViewModel, x => x.Name, x => x.Header.Text);
+                // Позиция X от левого верхнего угла
+                this.Bind(this.ViewModel, x => x.Translate.X, x => x.Translate.X);
+                // Позиция Y от левого верхнего угла
+                this.Bind(this.ViewModel, x => x.Translate.Y, x => x.Translate.Y);
+                // Масштаб по оси X
+                this.Bind(this.ViewModel, x => x.Scale.ScaleX, x => x.Scale.ScaleX);
+                // Масштаб по оси Y
+                this.Bind(this.ViewModel, x => x.Scale.ScaleY, x => x.Scale.ScaleY);
+                // Точка масштабирования, координата X
+                this.Bind(this.ViewModel, x => x.Scale.CenterX, x => x.Scale.CenterX);
+                // Точка масштабирования, координата Y
+                this.Bind(this.ViewModel, x => x.Scale.CenterY, x => x.Scale.CenterY);
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\ReactiveUI.Fody.10.3.1\build\ReactiveUI.Fody.props" Condition="Exists('..\packages\ReactiveUI.Fody.10.3.1\build\ReactiveUI.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,6 +15,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -44,6 +47,9 @@
     <Reference Include="Cyriller.Rule, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Miyconst.Cyriller.0.1.0\lib\net45\Cyriller.Rule.dll</HintPath>
     </Reference>
+    <Reference Include="DynamicData, Version=6.13.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicData.6.13.5\lib\net461\DynamicData.dll</HintPath>
+    </Reference>
     <Reference Include="HelixToolkit.Wpf, Version=2.9.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
       <HintPath>..\packages\HelixToolkit.Wpf.2.9.0\lib\net45\HelixToolkit.Wpf.dll</HintPath>
     </Reference>
@@ -54,7 +60,7 @@
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Threading, Version=16.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.VisualStudio.Threading.16.3.13\lib\net472\Microsoft.VisualStudio.Threading.dll</HintPath>
+      <HintPath>..\packages\Microsoft.VisualStudio.Threading.16.3.52\lib\net472\Microsoft.VisualStudio.Threading.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Utilities, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Utilities.16.2.29122.156\lib\net46\Microsoft.VisualStudio.Utilities.dll</HintPath>
@@ -66,13 +72,31 @@
       <HintPath>..\packages\Microsoft.Win32.Registry.4.5.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
     <Reference Include="Nerdbank.Streams, Version=2.3.0.0, Culture=neutral, PublicKeyToken=cac503e1823ce71c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nerdbank.Streams.2.3.26\lib\netstandard2.0\Nerdbank.Streams.dll</HintPath>
+      <HintPath>..\packages\Nerdbank.Streams.2.3.32\lib\netstandard2.0\Nerdbank.Streams.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="ReactiveUI, Version=10.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveUI.10.3.1\lib\net461\ReactiveUI.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveUI.Fody.Helpers, Version=10.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveUI.Fody.10.3.1\lib\net461\ReactiveUI.Fody.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveUI.Validation, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveUI.Validation.1.4.1\lib\net461\ReactiveUI.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveUI.WPF, Version=10.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveUI.WPF.10.3.1\lib\net461\ReactiveUI.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Splat, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.9.0.5\lib\net461\Splat.dll</HintPath>
+    </Reference>
+    <Reference Include="Splat.Drawing, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.Drawing.9.0.5\lib\net461\Splat.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="StreamJsonRpc, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\StreamJsonRpc.2.1.55\lib\netstandard2.0\StreamJsonRpc.dll</HintPath>
+      <HintPath>..\packages\StreamJsonRpc.2.1.74\lib\netstandard2.0\StreamJsonRpc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -81,6 +105,11 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Primitives.4.3.0\lib\net45\System.Drawing.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
       <Private>True</Private>
@@ -105,6 +134,12 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.4.1.6\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.4.1.6\lib\net46\System.Reactive.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
@@ -146,6 +181,8 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -166,17 +203,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helper\BoolToVisibilityConverter.cs" />
-    <Compile Include="Helper\Command.cs" />
-    <Compile Include="Helper\CommandI.cs" />
+    <Compile Include="Helpers\ConverterBoolToVisibility.cs" />
+    <Compile Include="Helpers\Scale.cs" />
+    <Compile Include="Helpers\Translate.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\ModelConnect.cs" />
-    <Compile Include="Model\ModelConnector.cs" />
-    <Compile Include="Model\ModelNode.cs" />
-    <Compile Include="Model\ModelNodesCanvas.cs" />
-    <Compile Include="Model\ModelSelector.cs" />
     <Compile Include="Old Version\OtherClass\ForPoint.cs" />
     <Compile Include="Old Version\OtherClass\Functions.cs" />
     <Compile Include="Old Version\OtherClass\Manager.cs" />
@@ -193,37 +225,25 @@
       <DependentUpon>Connect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Old Version\OtherClass\Transforms.cs" />
-    <Compile Include="Helper\Scales.cs" />
-    <Compile Include="Helper\Translates.cs" />
     <Compile Include="SimpleCommand.cs" />
-    <Compile Include="ViewModel\Additional\ViewModelConnectorAdditional.cs" />
-    <Compile Include="ViewModel\Additional\ViewModelConnectorInterface.cs" />
-    <Compile Include="ViewModel\Additional\ViewModelLeftConnector.cs" />
-    <Compile Include="ViewModel\Additional\ViewModelNodeAdditional.cs" />
-    <Compile Include="ViewModel\Additional\ViewModelNodesCanvasAdditional.cs" />
-    <Compile Include="ViewModel\Additional\ViewModelRightConnector.cs" />
+    <Compile Include="ViewModel\ViewModelConnect.cs" />
+    <Compile Include="ViewModel\ViewModelConnector.cs" />
+    <Compile Include="ViewModel\ViewModelNode.cs" />
+    <Compile Include="ViewModel\ViewModelNodesCanvas.cs" />
     <Compile Include="View\ViewConnect.xaml.cs">
       <DependentUpon>ViewConnect.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewLeftConnector.xaml.cs">
       <DependentUpon>ViewLeftConnector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ViewModelNodesCanvas.cs" />
-    <Compile Include="ViewModel\ViewModelSelector.cs" />
-    <Compile Include="View\ViewNodesCanvas.xaml.cs">
-      <DependentUpon>ViewNodesCanvas.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ViewRightConnector.xaml.cs">
       <DependentUpon>ViewRightConnector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ViewModelConnect.cs" />
-    <Compile Include="ViewModel\ViewModelConnector.cs" />
-    <Compile Include="ViewModel\ViewModelNode.cs" />
     <Compile Include="View\ViewNode.xaml.cs">
       <DependentUpon>ViewNode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ViewSelector.xaml.cs">
-      <DependentUpon>ViewSelector.xaml</DependentUpon>
+    <Compile Include="View\ViewNodesCanvas.xaml.cs">
+      <DependentUpon>ViewNodesCanvas.xaml</DependentUpon>
     </Compile>
     <Page Include="Old Version\Elements\NodesCanvas.xaml">
       <SubType>Designer</SubType>
@@ -289,10 +309,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ViewNodesCanvas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\ViewRightConnector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -301,7 +317,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ViewSelector.xaml">
+    <Page Include="View\ViewNodesCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -336,4 +352,12 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.6.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.0\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.6.0.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.0\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\ReactiveUI.Fody.10.3.1\build\ReactiveUI.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ReactiveUI.Fody.10.3.1\build\ReactiveUI.Fody.props'))" />
+  </Target>
 </Project>

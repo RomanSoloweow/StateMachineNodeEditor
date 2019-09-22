@@ -1,73 +1,69 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using ReactiveUI.Fody.Helpers;
+using StateMachineNodeEditor.Helpers;
+using ReactiveUI;
+using ReactiveUI.Wpf;
+using DynamicData;
 using System.Windows.Media;
-namespace StateMachineNodeEditor
+using System.Windows;
+using ReactiveUI.Validation.Abstractions;
+using ReactiveUI.Validation.Contexts;
+using ReactiveUI.Validation.Extensions;
+
+namespace StateMachineNodeEditor.ViewModel
 {
-    public partial class ViewModelConnector: INotifyPropertyChanged
+    public class ViewModelConnector: ReactiveObject
     {
-        private ModelConnector connector { get; set; }
-        public ViewModelConnector(ModelConnector modelConnector)
-        {
-            connector = modelConnector;
-            connector.PropertyChanged += ModelPropertyChange;
-            AddCommands();
-        }
-        public String Text
-        {
-            get { return connector.Text; }
-            set
-            {
-                connector.Text = value;
-                OnPropertyChanged("Text");
-            }
-        }
-        public bool TextIsEnable
-        {
-            get { return connector.TextIsEnable; }
-            set
-            {
-                connector.TextIsEnable = value;
-                OnPropertyChanged("TextIsEnable");
-            }
-        }
-        public bool? Visible
-        {
-            get { return connector.Visible; }
-            set
-            {
-                connector.Visible = value;
-                OnPropertyChanged("Visible");
-            }
-        }
-        public bool FormIsEnable
-        {
-            get { return connector.FormIsEnable; }
-            set
-            {
-                connector.FormIsEnable = value;
-                OnPropertyChanged("FormIsEnable");
-            }
-        }
+        /// <summary>
+        /// Координата перехода ( нужна для создания соединения )
+        /// </summary>
+        [Reactive] public Point Position { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
-        {
-            if (PropertyChanged == null)
-                return;
+        /// <summary>
+        /// Имя перехода ( вводится в узле)
+        /// </summary>
+        [Reactive] public string Name { get; set; } = "TestConnector";
 
-            PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
-        }
-        private void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        /// <summary>
+        /// Доступно ли имя перехода для редактирования
+        /// </summary>
+        [Reactive] public bool TextEnable { get; set; } = false;
 
+        /// <summary>
+        /// Отображается ли переход
+        /// </summary>
+        [Reactive] public bool Visible { get; set; } = true;
 
-            //if (PropertyChanged == null)
-            //    return;
+        /// <summary>
+        /// Доступен ли переход для создания соединия
+        /// </summary>
+        [Reactive] public bool FormEnable { get; set; } = true;
 
-            //PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
+        /// <summary>
+        /// Цвет рамки, вокруг перехода
+        /// </summary>
+        [Reactive] public Brush FormStroke { get; set; } = Brushes.Black;
+
+        /// <summary>
+        /// Цвет перехода
+        /// </summary>
+        [Reactive] public Brush FormFill { get; set; } = Brushes.DarkGray;
+
+        /// <summary>
+        /// Узел, которому принадлежит переход
+        /// </summary>
+        public ViewModelNode Node { get; set; }
+
+        /// <summary>
+        /// Соединение, которое связанно с этим переходом
+        /// </summary>
+        public ViewModelConnect Connect { get; set; }
+
+       
     }
 }

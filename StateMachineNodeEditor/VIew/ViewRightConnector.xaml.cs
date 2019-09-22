@@ -12,38 +12,59 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ReactiveUI.Fody.Helpers;
+using StateMachineNodeEditor.Helpers;
+using ReactiveUI;
+using ReactiveUI.Wpf;
+using DynamicData;
+using StateMachineNodeEditor.ViewModel;
 
-namespace StateMachineNodeEditor
+namespace StateMachineNodeEditor.View
 {
     /// <summary>
     /// Interaction logic for ViewConnector.xaml
     /// </summary>
-    public partial class ViewRightConnector : UserControl
+    public partial class ViewRightConnector : UserControl, IViewFor<ViewModelConnector>
     {
+        #region ViewModel
+        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(ViewModelConnector), typeof(ViewRightConnector), new PropertyMetadata(null));
+
+        public ViewModelConnector ViewModel
+        {
+            get { return (ViewModelConnector)GetValue(ViewModelProperty); }
+            set { SetValue(ViewModelProperty, value); }
+        }
+
+        object IViewFor.ViewModel
+        {
+            get { return ViewModel; }
+            set { ViewModel = (ViewModelConnector)value; }
+        }
+        #endregion ViewModel
+
         public ViewRightConnector()
         {
             InitializeComponent();
-            this.DataContextChanged += DataContextChange;
-            this.form.MouseLeftButtonDown += OnMouseLeftButtonDown;
-        }
-        public ViewModelConnector ViewModelConnector { get; set; }
-        public void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Point t = new Point();
-            Console.WriteLine(" ViewRightConnector PointToScreen " + this.PointToScreen(t).ToString());
-            object data = ViewModelConnector.CommandGetDataForDrag.Execute(null);
-            DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
-            ViewModelConnector.CommandAddConnectIfDrop.Execute(null);
-            e.Handled = true;
-        }
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-        }
+            this.WhenActivated(disposable =>
+            {
+                // Имя перехода ( вводится в узле)
+                this.Bind(this.ViewModel, x => x.Name, x => x.Text.Text);
 
-        public void DataContextChange(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            ViewModelConnector = e.NewValue as ViewModelConnector;
+                // Доступно ли имя перехода для редактирования
+                this.Bind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
+
+                // Доступен ли переход для создания соединия
+                this.Bind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
+
+                // Цвет рамки, вокруг перехода
+                this.Bind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
+
+                // Цвет перехода
+                this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
+
+                // Отображается ли переход
+                this.Bind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
+            });
         }
     }
 }

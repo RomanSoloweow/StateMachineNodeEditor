@@ -1,101 +1,54 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using ReactiveUI.Fody.Helpers;
+using StateMachineNodeEditor.Helpers;
+using ReactiveUI;
+using ReactiveUI.Wpf;
+using DynamicData;
 using System.Windows;
 using System.Windows.Media;
 
-namespace StateMachineNodeEditor
+namespace StateMachineNodeEditor.ViewModel
 {
-    public class ViewModelConnect: INotifyPropertyChanged,IEquatable<ViewModelConnect>
+    public class ViewModelConnect:ReactiveObject
     {
-        private ModelConnect connect { get; set; }
-        private Brush _stroke = Brushes.White;
-        private DoubleCollection _strokeDashArray = null;
-        public bool Equals(ViewModelConnect other)
-        {
-            if (other == null)
-                return false;
+        /// <summary>
+        /// Точка, из которой выходит линия ( совпадает с центром элемента, из которого выходит линия)
+        /// </summary>
+        [Reactive] public Point StartPoint { get; set; }
 
-            if (object.ReferenceEquals(this.connect, other.connect))
-                return true;
+        /// <summary>
+        /// Точка, в которую приходит линия ( совпадает с центром элемента, в который приходит линия)
+        /// </summary>
+        [Reactive] public Point EndPoint { get; set; }
 
-            if (this.GetType() != other.GetType())
-                return false;
+        /// <summary>
+        /// Первая промежуточная точка линии (считается автоматически)
+        /// </summary>
+        [Reactive] public Point Point1 { get; set; }
 
-            return Equals(this.connect, other.connect) ;
+        /// <summary>
+        /// Вторая промежуточная точка линии (считается автоматически)
+        /// </summary>
+        [Reactive] public Point Point2 { get; set; }
 
-        }
-        public ViewModelConnect(ModelConnect modelConnect)
-        {
-            connect = modelConnect;
-            connect.PropertyChanged += ModelPropertyChange;
-        }
-        public Point StartPoint
-        {
-            get { return connect.StartPoint; }
-            set
-            {
-                connect.StartPoint = value;
-                OnPropertyChanged("StartPoint");
-            }
-        }
-        public Point EndPoint
-        {
-            get { return connect.EndPoint; }
-            set
-            {
-                connect.EndPoint = value;
-                OnPropertyChanged("EndPoint");
-            }
-        }
-        public Point Point1
-        {
-            get { return connect.Point1; }
-            set
-            {
-                connect.Point1 = value;
-                OnPropertyChanged("Point1");
-            }
-        }
-        public Point Point2
-        {
-            get { return connect.Point2; }
-            set
-            {
-                connect.Point2 = value;
-                OnPropertyChanged("Point2");
-            }
-        }
-        public Brush Stroke
-        {
-            get { return _stroke; }
-            set
-            {
-                _stroke = value;
-                OnPropertyChanged("Stroke");
-            }
-        }
-        public DoubleCollection StrokeDashArray
-        {
-            get { return _strokeDashArray; }
-            set
-            {
-                _strokeDashArray = value;
-                OnPropertyChanged("StrokeDashArray");
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void ModelPropertyChange(object sender, PropertyChangedEventArgs e)
-        {
-            if (PropertyChanged == null)
-                return;
+        /// <summary>
+        /// Цвет линии
+        /// </summary>
+        [Reactive] public Brush Stroke { get; set; }
 
-            PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
-        }
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
+        /// <summary>
+        /// Элемент, из которого выходит линия
+        /// </summary>
+        public ViewModelConnector FromConnector;
+
+        /// <summary>
+        /// Элемент, в который приходит линия
+        /// </summary>
+        public ViewModelConnector ToConnector;
     }
 }

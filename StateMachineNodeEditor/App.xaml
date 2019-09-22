@@ -5,7 +5,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <local:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+            <!--<local:BoolToVisibilityConverter x:Key="BoolToVisibility"/>-->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/NodeHeader.xaml"/>
                 <ResourceDictionary Source="Styles/NodeButtonRollUp.xaml"/>

@@ -31,6 +31,17 @@ namespace StateMachineNodeEditor
         public SimpleCommand CommandGetDataForDrag;
         public SimpleCommand CommandAddConnectIfDrop;
         public SimpleCommand CommandOnDrop;
+        public Point Position
+        {
+            get
+            {
+                return connector.Position;
+            }
+            set
+            {
+                connector.Position = value;
+            }
+        }
         public void AddCommands()
         {
             CommandGetDataForDrag = new SimpleCommand(this, GetDataForDrop);

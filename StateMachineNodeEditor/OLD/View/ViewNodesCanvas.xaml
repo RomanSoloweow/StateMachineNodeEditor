@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="StateMachineNodeEditor.ViewNodesCanvas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StateMachineNodeEditor"
+             mc:Ignorable="d" 
+             Focusable="True" AllowDrop="True"
+             
+             Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=Self}}">
+    <Grid x:Name="grid" Background="#FF141414">
+        <local:ViewSelector  Panel.ZIndex="999" DataContext="{Binding Selector}"></local:ViewSelector>
+    <ItemsControl x:Name="nodes" ItemsSource="{Binding Nodes, UpdateSourceTrigger=PropertyChanged}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                    <Grid Background="{x:Null}">
+                </Grid>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <local:ViewNode />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+        <ItemsControl x:Name="connects" ItemsSource="{Binding Connects, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid Background="{x:Null}">
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:ViewConnect />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+    <UserControl.ContextMenu >
+        <ContextMenu Margin="10, 0, 0, 0" DataContext="">
+            <MenuItem Header="Add" Name="AddItem" Command="New"/>
+            <MenuItem Header="Delete"   Name="DeleteItem"   Command="Delete"/>
+            <MenuItem Header="Copy"     Name="CopyItem"     Command="Copy"/>
+            <MenuItem Header="Paste"    Name="PasteItem"    Command="Paste"/>
+            <MenuItem Header="Cut"      Name="CutItem"      Command="Cut"/>
+            <!--<MenuItem Header="Remove"  Command="{Binding Path=PlacementTarget.Tag.Kekus, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"/>-->
+            <MenuItem  Command="{Binding Parent.PlacementTarget.Tag.Keks, 
+                                            RelativeSource={RelativeSource Self}}" Header="Remove"  CommandParameter="kek"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <UserControl.CommandBindings>
+        <!--<CommandBinding Command="Zoom" Executed="Zoom" />-->
+        <CommandBinding Command="Select"    Executed="Select"   />
+        <CommandBinding Command="SelectAll" Executed="SelectAll"/> <!--ctrl+a -->
+        <CommandBinding Command="New"       Executed="New"      /> <!--ctrl+n-->
+        <CommandBinding Command="Redo"      Executed="Redo"     /> <!--ctrl+y-->
+        <CommandBinding Command="Undo"      Executed="Undo"     /> <!--ctrl+z-->
+        <CommandBinding Command="Copy"      Executed="Copy"     /> 
+        <CommandBinding Command="Paste"     Executed="Paste"    /> <!--ctrl+v-->
+        <CommandBinding Command="Delete"    Executed="Delete"   /> <!--del -->
+        <CommandBinding Command="Cut"       Executed="Cut"      /> <!--ctrl+x-->
+
+        <CommandBinding Command="MoveDown"  Executed="MoveDown" /> <!--стрелка вниз-->
+        <CommandBinding Command="MoveLeft"  Executed="MoveLeft" /> <!--стрелка влево-->
+        <CommandBinding Command="MoveRight" Executed="MoveRight"/> <!--стрелка право-->
+        <CommandBinding Command="MoveUp"    Executed="MoveUp"   />  <!--стрелка вверх-->
+    </UserControl.CommandBindings>
+    <UserControl.InputBindings>
+        <!--<MouseBinding Command="NavigationCommands.Zoom" Gesture="WheelClick"  CommandParameter="EventArgs"/> --><!--колесо мыши-->
+        <MouseBinding Command="MediaCommands.Select" Gesture="Ctrl+LeftClick" /> <!--ctrl+ЛКМ -->
+    </UserControl.InputBindings>
+</UserControl>
