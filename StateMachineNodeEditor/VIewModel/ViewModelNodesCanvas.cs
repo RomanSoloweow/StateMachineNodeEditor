@@ -9,14 +9,20 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using ReactiveUI.Wpf;
 using DynamicData;
+using DynamicData.Binding;
+
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelNodesCanvas : ReactiveObject
     {       
-        public SourceList<ViewModelNode> Nodes { get; set; } = new SourceList<ViewModelNode>();
+        public IObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollectionExtended<ViewModelNode>();
 
-        public SourceList<ViewModelConnect> Connects { get; set; } = new SourceList<ViewModelConnect>();
+        public IObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollectionExtended<ViewModelConnect>();
         public ViewModelNodesCanvas()
+        {
+            Nodes.Add(new ViewModelNode());
+        }
+        public void Add()
         {
             Nodes.Add(new ViewModelNode());
         }

@@ -22,6 +22,7 @@ namespace StateMachineNodeEditor.ViewModel
     /// </summary>
     public class ViewModelNode:ReactiveObject, IValidatableViewModel
     {
+
         public ValidationContext ValidationContext { get; } = new ValidationContext();
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Название узла (Указано в шапке)
         /// </summary>
-        [Reactive] public string Name { get; set; } = "Test";
+        [Reactive] public string Name { get; set; } = "TestNode";
 
         /// <summary>
         /// Флаг того, что узел выбран

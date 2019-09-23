@@ -41,6 +41,12 @@ namespace StateMachineNodeEditor.View
             set { ViewModel = (ViewModelNode)value; }
         }
         #endregion ViewModel
+
+        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseRightButtonDown(e);
+            ViewModel.Translate.X += 10;
+        }
         public ViewNode()
         {
             InitializeComponent();

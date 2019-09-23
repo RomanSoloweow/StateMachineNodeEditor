@@ -18,6 +18,10 @@ using ReactiveUI;
 using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using DynamicData.Binding;
+
 namespace StateMachineNodeEditor.View
 {
     /// <summary>
@@ -43,13 +47,25 @@ namespace StateMachineNodeEditor.View
         #endregion ViewModel
 
 
+        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseRightButtonDown(e);
+            ViewModel.Add();
+            ViewModel.Nodes.Last().Translate.X += ViewModel.Nodes.Count * 200;
+        }
+        private readonly IObservableCollection<ViewModelNode> list = new ObservableCollectionExtended<ViewModelNode>();
         public ViewNodesCanvas()
         {
             InitializeComponent();
-            //this.WhenActivated(disposable =>
-            //{
-            //    this.List(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
-            //});
+            
+
+            this.WhenActivated(disposable =>
+            {
+                //this.Bindlist
+                //BindingListCollectionView
+                //this.ViewModel.Nodes.Connect().ObserveOnDispatcher().Bind(list).Subscribe();
+                this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
+            });
         }
     }
 }

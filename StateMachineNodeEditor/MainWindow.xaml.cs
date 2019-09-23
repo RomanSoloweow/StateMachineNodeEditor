@@ -13,16 +13,20 @@ namespace StateMachineNodeEditor
 
             InitializeComponent();
 
-            //ViewNode viewNode = new ViewNode();
-            //this.grid.Children.Add(viewNode);
-            //viewNode.ViewModel = new ViewModel.ViewModelNode();
+            ViewNode viewNode = new ViewNode();
+       
+            viewNode.ViewModel = new ViewModel.ViewModelNode();
+            this.grid.Children.Add(viewNode);
 
             //ViewRightConnector.ViewModel = new ViewModel.ViewModelConnector();
             //this.Node.ViewModel = new ViewModel.ViewModelNode();
 
 
             //Node.ViewModel = new ViewModel.ViewModelNode();
-            //ViewNodeCanvas viewNodesCanvas = new ViewNodeCanvas();
+
+
+            //ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas();
+            //viewNodesCanvas.ViewModel = new ViewModel.ViewModelNodesCanvas();
             //this.grid.Children.Add(viewNodesCanvas);
 
             //this.grid.Children.Add(new NodesCanvas(this));
