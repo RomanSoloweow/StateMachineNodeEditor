@@ -14,13 +14,23 @@ using DynamicData.Binding;
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelNodesCanvas : ReactiveObject
-    {       
+    {
+        //public IObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollectionExtended<ViewModelNode>();
         public IObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollectionExtended<ViewModelNode>();
-
         public IObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollectionExtended<ViewModelConnect>();
+        //public Commandi commandi { get; set; }
+        public void Func(object t)
+        {
+           
+        }
+        public void Add()
+        {
+            Nodes.Add(new ViewModelNode());
+        }
         public ViewModelNodesCanvas()
         {
             Nodes.Add(new ViewModelNode());
+            //commandi = new Commandi(Func);
         }
     }
 }

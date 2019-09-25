@@ -48,6 +48,7 @@ namespace StateMachineNodeEditor.View
             var t = this;
             ViewModel.Translate.X += 10;
         }
+
         public ViewNode()
         {
             InitializeComponent();
@@ -87,5 +88,8 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Transitions, x => x.Transitions.ItemsSource);
             });
         }
+        #region  Commands
+        //ReactiveCommand
+        #endregion Commands
     }
 }

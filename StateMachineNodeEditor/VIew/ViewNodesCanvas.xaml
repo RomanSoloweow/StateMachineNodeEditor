@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d" 
-                Focusable="True" AllowDrop="True">
+             Focusable="True" AllowDrop="True">
     <Grid x:Name="grid" Background="#FF141414">
         <!--<local:ViewSelector  Panel.ZIndex="999" DataContext="{Binding Selector}"></local:ViewSelector>-->
         <ItemsControl x:Name="Nodes" >
@@ -36,4 +36,15 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>-->
     </Grid>
+    <UserControl.ContextMenu >
+        <ContextMenu Margin="10, 0, 0, 0" DataContext="">
+            <MenuItem Header="Add" InputGestureText="Ctrl + N" x:Name="MenuItemAdd"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <!--<UserControl.CommandBindings>
+        <CommandBinding Command="New" x:Name="CommandNew" />
+    </UserControl.CommandBindings>-->
+    <UserControl.InputBindings>
+        <KeyBinding x:Name="deleteBinding" Key="S"/>
+    </UserControl.InputBindings>
 </UserControl>

@@ -45,9 +45,11 @@ namespace StateMachineNodeEditor.View
             set { ViewModel = (ViewModelNodesCanvas)value; }
         }
         #endregion ViewModel
-
-
-        private readonly IObservableCollection<ViewModelNode> list = new ObservableCollectionExtended<ViewModelNode>();
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            Keyboard.Focus(this);
+        }
         public ViewNodesCanvas()
         {
             InitializeComponent();
@@ -55,10 +57,10 @@ namespace StateMachineNodeEditor.View
 
             this.WhenActivated(disposable =>
             {
-                //this.Bindlist
-                //BindingListCollectionView
-                //this.ViewModel.Nodes.Connect().ObserveOnDispatcher().Bind(list).Subscribe();
+                
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
+                this.OneWayBind(this.ViewModel, x => x.commandi, x => x.deleteBinding.Command);
+                this.OneWayBind(this.ViewModel, x => x.commandi, x => x.MenuItemAdd.Command);
             });
         }
     }
