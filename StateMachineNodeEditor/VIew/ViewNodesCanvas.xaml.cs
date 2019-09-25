@@ -54,13 +54,12 @@ namespace StateMachineNodeEditor.View
         {
             InitializeComponent();
             
-
             this.WhenActivated(disposable =>
             {
-                
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
-                this.OneWayBind(this.ViewModel, x => x.commandi, x => x.deleteBinding.Command);
-                this.OneWayBind(this.ViewModel, x => x.commandi, x => x.MenuItemAdd.Command);
+                this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+                this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
+                //this.OneWayBind(this.ViewModel, x => x.commandi, x => x.MenuItemAdd.Command);
             });
         }
     }

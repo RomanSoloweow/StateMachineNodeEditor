@@ -24,8 +24,10 @@ namespace StateMachineNodeEditor
             //Node.ViewModel = new ViewModel.ViewModelNode();
 
 
-            ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas();
-            viewNodesCanvas.ViewModel = new ViewModel.ViewModelNodesCanvas();
+            ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
+            {
+               ViewModel = new ViewModel.ViewModelNodesCanvas()
+            };
             this.grid.Children.Add(viewNodesCanvas);
 
             //this.grid.Children.Add(new NodesCanvas(this));

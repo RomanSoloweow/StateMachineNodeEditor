@@ -1,5 +1,4 @@
-﻿using Splat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -12,6 +11,7 @@ using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
 using Splat;
+using StateMachineNodeEditor.Helpers;
 namespace StateMachineNodeEditor
 {
     /// <summary>
@@ -22,6 +22,7 @@ namespace StateMachineNodeEditor
         public App()
         {
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
+            Locator.CurrentMutable.RegisterConstant(new ConverterBoolToVisibility(),typeof(IBindingTypeConverter));
         }
     }
 }

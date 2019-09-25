@@ -8,43 +8,83 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows;
 
+using ReactiveUI.Fody.Helpers;
+using StateMachineNodeEditor.Helpers;
+using ReactiveUI;
+using ReactiveUI.Wpf;
+using DynamicData;
+using DynamicData.Binding;
+
 namespace StateMachineNodeEditor.Helpers
 {
-    [ValueConversion(typeof(bool?), typeof(Visibility))]
-    public class ConverterBoolToVisibility: IValueConverter
+    public class ConverterBoolToVisibility:  IBindingTypeConverter
     {
-        public Visibility TrueValue { get; set; }
-        public Visibility FalseValue { get; set; }
-        public Visibility NullValue { get; set; }
-        public ConverterBoolToVisibility()
+        //public Visibility TrueValue { get; set; }
+        //public Visibility FalseValue { get; set; }
+        //public Visibility NullValue { get; set; }
+        //public ConverterBoolToVisibility()
+        //{
+        //    // set defaults
+        //    TrueValue = Visibility.Visible;
+        //    FalseValue = Visibility.Hidden;
+        //    NullValue = Visibility.Collapsed;
+        //}
+
+        //public object Convert(object value, Type targetType,
+        //    object parameter, CultureInfo culture)
+        //{
+
+        //    if (value == null)
+        //        return NullValue;
+
+        //    if (!(value is bool?))
+        //        return null;
+
+        //    return (bool)value ? TrueValue : FalseValue;
+        //}
+
+        //public object ConvertBack(object value, Type targetType,
+        //    object parameter, CultureInfo culture)
+        //{
+        //    if (Equals(value, TrueValue))
+        //        return true;
+        //    if (Equals(value, FalseValue))
+        //        return false;
+        //    return null;
+        //}
+
+        public int GetAffinityForObjects(Type fromType, Type toType)
         {
-            // set defaults
-            TrueValue = Visibility.Visible;
-            FalseValue = Visibility.Hidden;
-            NullValue = Visibility.Collapsed;
+            bool fromTypeIsNullBool = (fromType == typeof(bool?));
+            bool fromTypeIsBool = (fromType == typeof(bool));
+            bool toTypeIsVisibility = (toType == typeof(Visibility));
+            if(!(fromTypeIsNullBool || fromTypeIsBool) ||!toTypeIsVisibility)
+                return 0;
+
+            return 100;            
         }
 
-        public object Convert(object value, Type targetType,
-            object parameter, CultureInfo culture)
+        public bool TryConvert(object from, Type toType, object conversionHint, out object result)
         {
-
-            if (value == null)
-                return NullValue;
-
-            if (!(value is bool?))
-                return null;
-
-            return (bool)value ? TrueValue : FalseValue;
-        }
-
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            if (Equals(value, TrueValue))
-                return true;
-            if (Equals(value, FalseValue))
+            result = null;
+            if (toType != typeof(Visibility))
                 return false;
-            return null;
+
+            if(from==null)
+            {
+                result = Visibility.Collapsed;
+                return true;
+            }
+
+            bool value = false;
+            bool valueIsCorrect = false;
+            valueIsCorrect =  bool.TryParse(from.ToString(),out value);
+            if(valueIsCorrect)
+            {
+                result = value ? Visibility.Visible : Visibility.Hidden;
+            }       
+            return valueIsCorrect;
+
         }
     }
 }

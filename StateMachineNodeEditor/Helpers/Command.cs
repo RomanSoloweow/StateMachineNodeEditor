@@ -9,12 +9,12 @@ namespace StateMachineNodeEditor.Helpers
         /// <summary>
         /// Стек отмененных команд, которые можно выполнить повторно
         /// </summary>
-        public static Stack<Command> Redo { get; set; } = new Stack<Command>();
+        public static Stack<Command> StackRedo { get; set; } = new Stack<Command>();
 
         /// <summary>
         /// Стек выполненных команд, которые можно отменить 
         /// </summary>
-        public static Stack<Command> Undo { get; set; } = new Stack<Command>();
+        public static Stack<Command> StackUndo { get; set; } = new Stack<Command>();
 
         /// <summary>
         /// Функция, которая будет вызвана при выполнении команды
@@ -31,7 +31,7 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         private void AddInRedo()
         {
-            Redo.Push(this.Clone() as Command);
+            StackRedo.Push(this.Clone() as Command);
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         private void AddInUndo()
         {
-            Undo.Push(this.Clone() as Command);
+            StackUndo.Push(this.Clone() as Command);
         }
-     
+
         /// <summary>
         /// Параметр, который был передан в команду при выполнении
         /// </summary>
@@ -64,19 +64,20 @@ namespace StateMachineNodeEditor.Helpers
         private bool CanUnExecute
         {
             get { return _unExecute != null; }
-        }    
-        
+        }
+
         /// <summary>
         /// Клонирование текущей команды, для записи в стек выполненных или отмененных команд
         /// </summary>
         /// <returns></returns>
         public object Clone()
         {
-            Command command = new Command(Owner, _execute, _unExecute);
-            command.Parameters = this.Parameters;
-            command.Result = this.Result;
+            return new Command(Owner, _execute, _unExecute)
+            {
+                Parameters = this.Parameters,
+                Result = this.Result
+            };
 
-            return command;
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace StateMachineNodeEditor.Helpers
                 AddInUndo();
 
                 //Очищаем список отмененнных команд ( началась новая ветка изменений)
-                Redo.Clear();
+                StackRedo.Clear();
             }
 
             //Очищаем результат ( чтобы не передавать его при повторном выполнении)
@@ -139,11 +140,31 @@ namespace StateMachineNodeEditor.Helpers
             AddInRedo();
         }
 
-        /// <summary>
-        /// Установить функцию, которая будет вызвана при выполнении команды
-        /// </summary>
-        /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        public void SetExecute(Func<object, object, object> action)
+        public static object Redo(object obj1 = null, object obj2 = null)
+        {
+            if (Command.StackRedo.Count > 0)
+            {
+                Command last = Command.StackRedo.Pop();
+                last.Execute(last.Parameters);
+            }
+            return null;
+        }
+
+        public static object Undo(object obj1 = null, object obj2 = null)
+        {
+            if (Command.StackUndo.Count > 0)
+            {
+                Command last = Command.StackUndo.Pop();
+                last.UnExecute();
+            }
+            return null;
+        }
+
+    /// <summary>
+    /// Установить функцию, которая будет вызвана при выполнении команды
+    /// </summary>
+    /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
+    public void SetExecute(Func<object, object, object> action)
         {
             _execute = action;
         }

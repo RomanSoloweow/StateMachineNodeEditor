@@ -27,17 +27,17 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Имя перехода ( вводится в узле)
         /// </summary>
-        [Reactive] public string Name { get; set; } = "TestConnector";
+        [Reactive] public string Name { get; set; }
 
         /// <summary>
         /// Доступно ли имя перехода для редактирования
         /// </summary>
-        [Reactive] public bool TextEnable { get; set; } = true;
+        [Reactive] public bool TextEnable { get; set; } = false;
 
         /// <summary>
         /// Отображается ли переход
         /// </summary>
-        [Reactive] public bool Visible { get; set; } = true;
+        [Reactive] public bool? Visible { get; set; } = true;
 
         /// <summary>
         /// Доступен ли переход для создания соединия
@@ -64,6 +64,9 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         public ViewModelConnect Connect { get; set; }
 
-       
+        public ViewModelConnector(ViewModelNode viewModelNode)
+        {
+            Node = viewModelNode;
+        }
     }
 }

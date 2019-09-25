@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              Focusable="True" AllowDrop="True">
     <Grid x:Name="grid" Background="#FF141414">
-        <!--<local:ViewSelector  Panel.ZIndex="999" DataContext="{Binding Selector}"></local:ViewSelector>-->
+        <local:ViewSelector x:Name="Selector"  Panel.ZIndex="999"/>
         <ItemsControl x:Name="Nodes" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -22,7 +22,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!--<ItemsControl x:Name="connects" ItemsSource="{Binding Connects, UpdateSourceTrigger=PropertyChanged}">
+        <ItemsControl x:Name="Connects" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid Background="{x:Null}">
@@ -31,20 +31,17 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <local:ViewConnect />
+                    <local:ViewConnect ViewModel="{Binding}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
+        </ItemsControl>
     </Grid>
-    <UserControl.ContextMenu >
-        <ContextMenu Margin="10, 0, 0, 0" DataContext="">
-            <MenuItem Header="Add" InputGestureText="Ctrl + N" x:Name="MenuItemAdd"/>
+    <!--<UserControl.ContextMenu >
+        <ContextMenu>
+            <MenuItem Header="Add" x:Name="ItemAdd" InputGestureText="Ctrl + N" />
         </ContextMenu>
-    </UserControl.ContextMenu>
-    <!--<UserControl.CommandBindings>
-        <CommandBinding Command="New" x:Name="CommandNew" />
-    </UserControl.CommandBindings>-->
+    </UserControl.ContextMenu>-->
     <UserControl.InputBindings>
-        <KeyBinding x:Name="deleteBinding" Key="S"/>
+        <KeyBinding x:Name="BindingRedo" Key="Y" Modifiers="Control" />
     </UserControl.InputBindings>
 </UserControl>

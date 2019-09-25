@@ -39,7 +39,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Название узла (Указано в шапке)
         /// </summary>
-        [Reactive] public string Name { get; set; } = "TestNode";
+        [Reactive] public string Name { get; set; }
 
         /// <summary>
         /// Флаг того, что узел выбран
@@ -54,12 +54,12 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Вход для соединения с этим узлом
         /// </summary>
-        public ViewModelConnector Input = new ViewModelConnector();
+        public ViewModelConnector Input;
 
         /// <summary>
         /// Выход ( используется, когда список переходов свернут )
         /// </summary>
-        public ViewModelConnector Output = new ViewModelConnector();
+        public ViewModelConnector Output;
 
         /// <summary>
         /// Список переходов
@@ -76,6 +76,34 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         public ViewModelNodesCanvas NodesCanvas;
 
+        public ViewModelNode()
+        {
+            SetupConnectors();
+        }
+        private void SetupConnectors()
+        {
+            Input = new ViewModelConnector(this);
+            Output = new ViewModelConnector(this)
+            {
+                Visible = null
+            };
+            AddEmptyConnector();
+        }
+        private ViewModelConnector AddEmptyConnector()
+        {
+            if (CurrentConnector != null)
+            {
+                CurrentConnector.TextEnable = true;
+                CurrentConnector.FormEnable = false;
+                CurrentConnector.Name = "Transition_" + Transitions.Count.ToString();
+            }
+            CurrentConnector = new ViewModelConnector(this)
+            {
+                TextEnable = false
+            };
+            Transitions.Insert(0, CurrentConnector);
+            return CurrentConnector;
+        }
 
     }
 }

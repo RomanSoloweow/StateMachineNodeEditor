@@ -62,7 +62,7 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
 
                 // Отображается ли переход
-                this.Bind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
             });
         }
     }

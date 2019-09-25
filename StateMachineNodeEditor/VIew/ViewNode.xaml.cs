@@ -42,13 +42,6 @@ namespace StateMachineNodeEditor.View
         }
         #endregion ViewModel
 
-        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseRightButtonDown(e);
-            var t = this;
-            ViewModel.Translate.X += 10;
-        }
-
         public ViewNode()
         {
             InitializeComponent();
