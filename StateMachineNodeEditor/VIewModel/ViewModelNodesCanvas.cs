@@ -10,14 +10,26 @@ using ReactiveUI;
 using ReactiveUI.Wpf;
 using DynamicData;
 using DynamicData.Binding;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using System.Windows;
 
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelNodesCanvas : ReactiveObject
     {
-        public IObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollectionExtended<ViewModelNode>();
-        public IObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollectionExtended<ViewModelConnect>();
+        //public IObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollectionExtended<ViewModelNode>();
+        //public IObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollectionExtended<ViewModelConnect>();
 
+        private SourceList<ViewModelConnect> ListConnects { get; set; } = new SourceList<ViewModelConnect>();
+        public IObservableCollection<ViewModelConnect> Connects = new ObservableCollectionExtended<ViewModelConnect>();
+
+
+        private SourceList<ViewModelNode> ListNodes = new SourceList<ViewModelNode>();
+
+        public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
+        public IObservableList<ViewModelNode> NodesSelected { get; }
+        public Point deltda = new Point();
         public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         public ViewModelConnect CurrentConnect { get; set; }
         private ViewModelConnect AddEmptyConnect()
@@ -28,10 +40,15 @@ namespace StateMachineNodeEditor.ViewModel
         }
         public ViewModelNodesCanvas()
         {
-            Nodes.Add(new ViewModelNode());
+            ListNodes.Connect().ObserveOnDispatcher().Bind(Nodes).Subscribe();
+            NodesSelected = ListNodes.Connect().AutoRefresh(node => node.Selected).Filter(node => node.Selected).AsObservableList();
+
+            ListConnects.Connect().ObserveOnDispatcher().Bind(Connects).Subscribe();
+
+            ListNodes.Add(new ViewModelNode(this));
             AddEmptyConnect();
             SetupCommands();
-            //commandi = new Commandi(Func);
+         
         }
         
         #region Commands
@@ -58,9 +75,18 @@ namespace StateMachineNodeEditor.ViewModel
         public void SetupCommands()
         {
             CommandRedo = new Command(this, Command.Redo);
+            CommandUndo = new Command(this, Command.Undo);
         }
 
         #endregion Commands
+
+        public List<ViewModelNode> MoveAllNode(Point delta, List<ViewModelNode> nodes = null)
+        {
+            if (nodes == null)
+                nodes = Nodes.ToList();
+            nodes.ForEach(node => node.Move(delta));
+            return nodes;
+        }
 
     }
 }

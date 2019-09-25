@@ -77,7 +77,6 @@ namespace StateMachineNodeEditor.Helpers
                 Parameters = this.Parameters,
                 Result = this.Result
             };
-
         }
 
         /// <summary>
@@ -140,6 +139,12 @@ namespace StateMachineNodeEditor.Helpers
             AddInRedo();
         }
 
+        /// <summary>
+        /// Функция для команды повторного выполнения
+        /// </summary>
+        /// <param name="obj1">Не используются</param>
+        /// <param name="obj2">Не используются<</param>
+        /// <returns>Не используются<</returns>
         public static object Redo(object obj1 = null, object obj2 = null)
         {
             if (Command.StackRedo.Count > 0)
@@ -150,6 +155,12 @@ namespace StateMachineNodeEditor.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Функция для команды отмены 
+        /// </summary>
+        /// <param name="obj1">Не используются<</param>
+        /// <param name="obj2">Не используются<</param>
+        /// <returns>Не используются<</returns>
         public static object Undo(object obj1 = null, object obj2 = null)
         {
             if (Command.StackUndo.Count > 0)
@@ -160,14 +171,14 @@ namespace StateMachineNodeEditor.Helpers
             return null;
         }
 
-    /// <summary>
-    /// Установить функцию, которая будет вызвана при выполнении команды
-    /// </summary>
-    /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-    public void SetExecute(Func<object, object, object> action)
-        {
-            _execute = action;
-        }
+        /// <summary>
+        /// Установить функцию, которая будет вызвана при выполнении команды
+        /// </summary>
+        /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
+        public void SetExecute(Func<object, object, object> action)
+            {
+                _execute = action;
+            }
 
         /// <summary>
         /// Установить функцию, которая будет вызвана при отмене команды

@@ -49,6 +49,14 @@ namespace StateMachineNodeEditor.View
         {
             base.OnMouseLeftButtonDown(e);
             Keyboard.Focus(this);
+
+            this.ViewModel.deltda.X += 20;
+            //ViewModel.Nodes.Add(new ViewModelNode(this.ViewModel)
+            //{
+            //    Name = ViewModel.Nodes.Count.ToString(),
+            //    Selected = true
+            //}
+            //);
         }
         public ViewNodesCanvas()
         {
@@ -57,9 +65,27 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
+                this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
                 this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+            });
+            SetupCommands();
+            SetupEvents();
+        }
+        public void SetupCommands()
+        {
+            this.WhenActivated(disposable =>
+            {
                 this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
-                //this.OneWayBind(this.ViewModel, x => x.commandi, x => x.MenuItemAdd.Command);
+                this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+            });
+        }
+        public void SetupEvents()
+        {
+            this.WhenActivated(disposable =>
+            {
+                //this.Events().MouseMove
+                //     .Select(e => e.GetPosition(this))
+                //     .BindTo(this, v => v.ViewModel.deltda);
             });
         }
     }

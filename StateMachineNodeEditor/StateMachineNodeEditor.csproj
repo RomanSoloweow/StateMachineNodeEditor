@@ -77,8 +77,15 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Pharmacist.Common, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pharmacist.Common.1.2.2\lib\netstandard2.0\Pharmacist.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="ReactiveUI, Version=10.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ReactiveUI.10.3.1\lib\net461\ReactiveUI.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveUI.Events.WPF, Version=10.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReactiveUI.Events.WPF.10.3.1\lib\net461\ReactiveUI.Events.WPF.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI.Fody.Helpers, Version=10.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ReactiveUI.Fody.10.3.1\lib\net461\ReactiveUI.Fody.Helpers.dll</HintPath>
@@ -207,6 +214,7 @@
     <Compile Include="Helpers\ConverterBoolToVisibility.cs" />
     <Compile Include="Helpers\Scale.cs" />
     <Compile Include="Helpers\Translate.cs" />
+    <Compile Include="Helpers\WithPoints.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>

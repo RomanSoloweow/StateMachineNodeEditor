@@ -1,19 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Globalization;
-using System.Windows.Data;
 using System.Windows;
-
-using ReactiveUI.Fody.Helpers;
-using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
-using DynamicData;
-using DynamicData.Binding;
 
 namespace StateMachineNodeEditor.Helpers
 {
@@ -76,9 +63,8 @@ namespace StateMachineNodeEditor.Helpers
                 return true;
             }
 
-            bool value = false;
-            bool valueIsCorrect = false;
-            valueIsCorrect =  bool.TryParse(from.ToString(),out value);
+            bool valueIsCorrect;
+            valueIsCorrect =  bool.TryParse(from.ToString(),out bool value);
             if(valueIsCorrect)
             {
                 result = value ? Visibility.Visible : Visibility.Hidden;

@@ -76,8 +76,9 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         public ViewModelNodesCanvas NodesCanvas;
 
-        public ViewModelNode()
+        public ViewModelNode(ViewModelNodesCanvas nodesCanvas)
         {
+            NodesCanvas = nodesCanvas;
             SetupConnectors();
         }
         private void SetupConnectors()
@@ -103,6 +104,10 @@ namespace StateMachineNodeEditor.ViewModel
             };
             Transitions.Insert(0, CurrentConnector);
             return CurrentConnector;
+        }
+        public void Move(Point delta)
+        {
+            Translate.Add(delta);
         }
 
     }

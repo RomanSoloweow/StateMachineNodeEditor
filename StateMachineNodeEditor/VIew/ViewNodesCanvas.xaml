@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d" 
              Focusable="True" AllowDrop="True">
-    <Grid x:Name="grid" Background="#FF141414">
+    <Grid x:Name="Grid" Background="#FF141414">
         <local:ViewSelector x:Name="Selector"  Panel.ZIndex="999"/>
         <ItemsControl x:Name="Nodes" >
             <ItemsControl.ItemsPanel>
@@ -42,6 +42,7 @@
         </ContextMenu>
     </UserControl.ContextMenu>-->
     <UserControl.InputBindings>
+        <KeyBinding x:Name="BindingUndo" Key="Z" Modifiers="Control" />
         <KeyBinding x:Name="BindingRedo" Key="Y" Modifiers="Control" />
     </UserControl.InputBindings>
 </UserControl>
