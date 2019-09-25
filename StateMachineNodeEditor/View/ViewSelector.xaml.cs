@@ -18,46 +18,46 @@ using ReactiveUI;
 using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using DynamicData.Binding;
 
 namespace StateMachineNodeEditor.View
 {
     /// <summary>
-    /// Interaction logic for ViewNode.xaml
+    /// Interaction logic for ViewSelector.xaml
     /// </summary>
-    public partial class ViewNode : UserControl, IViewFor<ViewModelNode>
+    public partial class ViewSelector : UserControl, IViewFor<ViewModelSelector>
     {
         #region ViewModel
-        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(ViewModelNode), typeof(ViewNode), new PropertyMetadata(null));
+        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel),
+            typeof(ViewModelSelector), typeof(ViewSelector), new PropertyMetadata(null));
 
-        public ViewModelNode ViewModel
+        public ViewModelSelector ViewModel
         {
-            get { return (ViewModelNode)GetValue(ViewModelProperty); }
+            get { return (ViewModelSelector)GetValue(ViewModelProperty); }
             set { SetValue(ViewModelProperty, value); }
         }
 
         object IViewFor.ViewModel
         {
             get { return ViewModel; }
-            set { ViewModel = (ViewModelNode)value; }
+            set { ViewModel = (ViewModelSelector)value; }
         }
         #endregion ViewModel
-
-        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseRightButtonDown(e);
-            var t = this;
-            ViewModel.Translate.X += 10;
-        }
-        public ViewNode()
+        public ViewSelector()
         {
             InitializeComponent();
             this.WhenActivated(disposable =>
             {
-                //BorderBrush (Рамка вокруг узла)
-                this.Bind(this.ViewModel, x => x.BorderBrush, x => x.Border.BorderBrush);
+                // Отображается ли выделение
+                this.Bind(this.ViewModel, x => x.Visible, x => x.Visibility);
 
-                //Name (заголовок узла)
-                this.Bind(this.ViewModel, x => x.Name, x => x.Header.Text);
+                //Ширина
+                this.Bind(this.ViewModel, x => x.Width, x => x.Width);
+
+                //Высота
+                this.Bind(this.ViewModel, x => x.Height, x => x.Height);
 
                 //Позиция X от левого верхнего угла
                 this.Bind(this.ViewModel, x => x.Translate.X, x => x.Translate.X);
@@ -77,14 +77,6 @@ namespace StateMachineNodeEditor.View
                 //Точка масштабирования, координата Y
                 this.Bind(this.ViewModel, x => x.Scale.CenterY, x => x.Scale.CenterY);
 
-                //Вход для соединения с этим узлом
-                this.Bind(this.ViewModel, x => x.Input, x => x.Input.ViewModel);
-
-                //Выход ( используется, когда список переходов свернут )
-                this.Bind(this.ViewModel, x => x.Output, x => x.Output.ViewModel);
-
-                //Переходы
-                this.OneWayBind(this.ViewModel, x => x.Transitions, x => x.Transitions.ItemsSource);
             });
         }
     }

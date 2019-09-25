@@ -22,9 +22,5 @@ namespace StateMachineNodeEditor.ViewModel
         {
             Nodes.Add(new ViewModelNode());
         }
-        public void Add()
-        {
-            Nodes.Add(new ViewModelNode());
-        }
     }
 }

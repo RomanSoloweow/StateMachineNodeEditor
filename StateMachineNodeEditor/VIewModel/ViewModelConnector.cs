@@ -32,7 +32,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Доступно ли имя перехода для редактирования
         /// </summary>
-        [Reactive] public bool TextEnable { get; set; } = false;
+        [Reactive] public bool TextEnable { get; set; } = true;
 
         /// <summary>
         /// Отображается ли переход

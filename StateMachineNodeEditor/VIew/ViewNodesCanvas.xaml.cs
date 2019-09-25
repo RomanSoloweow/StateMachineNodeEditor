@@ -47,12 +47,6 @@ namespace StateMachineNodeEditor.View
         #endregion ViewModel
 
 
-        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseRightButtonDown(e);
-            ViewModel.Add();
-            ViewModel.Nodes.Last().Translate.X += ViewModel.Nodes.Count * 200;
-        }
         private readonly IObservableCollection<ViewModelNode> list = new ObservableCollectionExtended<ViewModelNode>();
         public ViewNodesCanvas()
         {

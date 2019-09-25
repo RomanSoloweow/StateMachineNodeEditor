@@ -230,6 +230,7 @@
     <Compile Include="ViewModel\ViewModelConnector.cs" />
     <Compile Include="ViewModel\ViewModelNode.cs" />
     <Compile Include="ViewModel\ViewModelNodesCanvas.cs" />
+    <Compile Include="ViewModel\ViewModelSelector.cs" />
     <Compile Include="View\ViewConnect.xaml.cs">
       <DependentUpon>ViewConnect.xaml</DependentUpon>
     </Compile>
@@ -244,6 +245,9 @@
     </Compile>
     <Compile Include="View\ViewNodesCanvas.xaml.cs">
       <DependentUpon>ViewNodesCanvas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewSelector.xaml.cs">
+      <DependentUpon>ViewSelector.xaml</DependentUpon>
     </Compile>
     <Page Include="Old Version\Elements\NodesCanvas.xaml">
       <SubType>Designer</SubType>
@@ -318,6 +322,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ViewNodesCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ViewSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

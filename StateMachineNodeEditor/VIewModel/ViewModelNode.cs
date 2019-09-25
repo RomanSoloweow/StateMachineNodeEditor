@@ -14,6 +14,7 @@ using System.Windows;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
+using DynamicData.Binding;
 
 namespace StateMachineNodeEditor.ViewModel
 {
@@ -48,22 +49,22 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Цвет рамки вокруг узла
         /// </summary>
-        [Reactive] public Brush BorderBrush { get; set; } = Brushes.Red;
+        [Reactive] public Brush BorderBrush { get; set; } = null;
 
         /// <summary>
         /// Вход для соединения с этим узлом
         /// </summary>
-        public ViewModelConnector Input;
+        public ViewModelConnector Input = new ViewModelConnector();
 
         /// <summary>
         /// Выход ( используется, когда список переходов свернут )
         /// </summary>
-        public ViewModelConnector Output;
+        public ViewModelConnector Output = new ViewModelConnector();
 
         /// <summary>
         /// Список переходов
         /// </summary>
-        public SourceList<ViewModelConnector> _transitions = new SourceList<ViewModelConnector>();
+        public IObservableCollection<ViewModelConnector> Transitions = new ObservableCollectionExtended<ViewModelConnector>();
 
         /// <summary>
         /// Текущий переход, из которого можно создать соединение
