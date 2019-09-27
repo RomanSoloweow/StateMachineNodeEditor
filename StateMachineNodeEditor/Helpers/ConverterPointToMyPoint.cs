@@ -20,14 +20,13 @@ namespace StateMachineNodeEditor.Helpers
 
         public bool TryConvert(object from, Type toType, object conversionHint, out object result)
         {
-
             if(toType == typeof(Point))
             {
-                result = MyPoint.ToPoint((MyPoint)from);
+                result = MyPoint.MyPointToPoint((MyPoint)from);
             }
             else if (toType == typeof(MyPoint))
             {
-                result = MyPoint.FromPoint((Point)from);
+                result = MyPoint.MyPointFromPoint((Point)from);
             }
             else
             {
