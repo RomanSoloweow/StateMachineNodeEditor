@@ -68,7 +68,7 @@ namespace StateMachineNodeEditor.ViewModel
         //public Command CommandSimpleMoveAllNode { get; set; }
         //public Command CommandSimpleMoveAllSelectedNode { get; set; }
         public Command<MyPoint, List<ViewModelNode>> CommandMoveAllNode { get; set; }
-        //public Command CommandMoveAllSelectedNode { get; set; }
+        public Command<MyPoint, List<ViewModelNode>> CommandMoveAllSelectedNode { get; set; }
         //public Command CommandDropOver { get; set; }
 
         public void SetupCommands()
@@ -76,7 +76,7 @@ namespace StateMachineNodeEditor.ViewModel
             CommandRedo = new Command<object, object>(this, Command<object, object>.Redo);
             CommandUndo = new Command<object, object>(this, Command<object, object>.Undo);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllNode);
-            //Commands = new Command2<Point, List<ViewModelNode>>(this, MoveAllNode);
+            CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllSelectedNode);
         }
 
         #endregion Commands

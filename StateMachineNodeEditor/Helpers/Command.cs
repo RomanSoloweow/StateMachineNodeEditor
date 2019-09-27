@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace StateMachineNodeEditor.Helpers
 {
+    /// <summary>
+    /// Команда с Undo/Redo
+    /// </summary>
+    /// <typeparam name="TypeParameter">Тип параметра, передаваемого для выполнения</typeparam>
+    /// <typeparam name="TypeResult">Тип результата выполнения</typeparam>
     public class Command<TypeParameter, TypeResult> : BaseCommand, ICloneable where TypeParameter: class where  TypeResult : class
     {
         /// <summary>
@@ -138,6 +143,10 @@ namespace StateMachineNodeEditor.Helpers
             //Добавляем копию команды в стек команд, которые можно выполнить повторно
             AddInRedo();
         }
+
+        /// <summary>
+        /// Повторное выполнения команды
+        /// </summary>
         public void Execute()
         {
             //Выполянем команду
@@ -184,9 +193,9 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
         public void SetExecute(Func<TypeParameter, TypeResult, TypeResult> action)
-            {
-                _execute = action;
-            }
+        {
+            _execute = action;
+        }
 
         /// <summary>
         /// Установить функцию, которая будет вызвана при отмене команды
@@ -211,11 +220,6 @@ namespace StateMachineNodeEditor.Helpers
         public void RemoveUnExecute()
         {
             _unExecute = null;
-        }
-
-        public void Execude(TypeParameter parameters)
-        {
-            this.Execude(this.Parameters);
         }
 
         /// <summary>

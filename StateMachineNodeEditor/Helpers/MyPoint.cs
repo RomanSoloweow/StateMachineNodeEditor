@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System.Windows;
 
 namespace StateMachineNodeEditor.Helpers
 {
@@ -19,6 +20,14 @@ namespace StateMachineNodeEditor.Helpers
             Y += point.Y;
 
             return this;
+        }
+        public static Point ToPoint(MyPoint point)
+        {            
+            return (point != null)?new Point(point.X, point.Y): new Point();
+        }
+        public static MyPoint FromPoint(Point point)
+        {
+            return (point != null) ? new MyPoint(point.X, point.Y) : new MyPoint();
         }
     }
 }
