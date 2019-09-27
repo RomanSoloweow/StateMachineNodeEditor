@@ -9,7 +9,7 @@ namespace StateMachineNodeEditor.Helpers
     /// </summary>
     /// <typeparam name="TypeParameter">Тип параметра, передаваемого для выполнения</typeparam>
     /// <typeparam name="TypeResult">Тип результата выполнения</typeparam>
-    public class Command<TypeParameter, TypeResult> : BaseCommand, ICloneable where TypeParameter: class where  TypeResult : class
+    public class Command<TypeParameter, TypeResult> : BaseCommand,ICommand, ICloneable where TypeParameter: class where  TypeResult : class
     {
         /// <summary>
         /// Стек отмененных команд, которые можно выполнить повторно
@@ -159,67 +159,27 @@ namespace StateMachineNodeEditor.Helpers
         /// <summary>
         /// Функция для команды повторного выполнения
         /// </summary>
-        /// <param name="obj1">Не используются</param>
-        /// <param name="obj2">Не используются<</param>
-        /// <returns>Не используются<</returns>
-        public static object Redo(object obj1 = null, object obj2 = null)
+        /// <param name="obj">Не используются</param>
+        public static void Redo(object obj = null)
         {
             if (Command<TypeParameter, TypeResult>.StackRedo.Count > 0)
             {
                 BaseCommand last = Command<TypeParameter, TypeResult>.StackRedo.Pop();
                 last.Execute();
             }
-            return null;
         }
 
         /// <summary>
         /// Функция для команды отмены 
         /// </summary>
-        /// <param name="obj1">Не используются<</param>
-        /// <param name="obj2">Не используются<</param>
-        /// <returns>Не используются<</returns>
-        public static object Undo(object obj1 = null, object obj2 = null)
+        /// <param name="obj">Не используются<</param>
+        public static void Undo(object obj = null)
         {
             if (Command<TypeParameter, TypeResult>.StackUndo.Count > 0)
             {
                 BaseCommand last = Command<TypeParameter, TypeResult>.StackUndo.Pop();
                 last.UnExecute();
             }
-            return null;
-        }
-
-        /// <summary>
-        /// Установить функцию, которая будет вызвана при выполнении команды
-        /// </summary>
-        /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        public void SetExecute(Func<TypeParameter, TypeResult, TypeResult> action)
-        {
-            _execute = action;
-        }
-
-        /// <summary>
-        /// Установить функцию, которая будет вызвана при отмене команды
-        /// </summary>
-        /// <param name="action">Функция, которая будет вызвана при отмене команды</param>
-        public void SetUnExecute(Func<TypeParameter, TypeResult, TypeResult> action)
-        {
-            _unExecute = action;
-        }
-
-        /// <summary>
-        /// Очистить функцию, которая будет вызвана при выполнении команды
-        /// </summary>
-        public void RemoveExecute()
-        {
-            _execute = null;
-        }
-
-        /// <summary>
-        /// Очистить функцию, которая будет вызвана при отмене команды
-        /// </summary>
-        public void RemoveUnExecute()
-        {
-            _unExecute = null;
         }
 
         /// <summary>
@@ -227,21 +187,21 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> action)
+        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> execute)
         {
             Owner = owner;
-            SetExecute(action);
+            _execute = execute;
         }
 
         /// <summary>
         /// Создать отменяемую команду
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
-        /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        /// <param name="unAction">Функция, которая будет вызвана при отмене команды</param>
-        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> action, Func<TypeParameter, TypeResult, TypeResult> unAction) : this(owner, action)
+        /// <param name="execute">Функция, которая будет вызвана при выполнении команды</param>
+        /// <param name="unExecute">Функция, которая будет вызвана при отмене команды</param>
+        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> execute, Func<TypeParameter, TypeResult, TypeResult> unExecute) : this(owner, execute)
         {
-            SetUnExecute(unAction);
+            _unExecute = unExecute;
         }
     }
 }

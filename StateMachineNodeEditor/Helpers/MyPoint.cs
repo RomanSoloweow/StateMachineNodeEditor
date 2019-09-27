@@ -25,18 +25,6 @@ namespace StateMachineNodeEditor.Helpers
             Y = y;
         }
 
-        /// <summary>
-        /// Сложение координат двух точек
-        /// </summary>
-        /// <param name="point">Точка два</param>
-        /// <returns>Текущая точка, с результатом сложения</returns>
-        public MyPoint Add(MyPoint point)
-        {
-            X += point.X;
-            Y += point.Y;
-
-            return this;
-        }
 
         /// <summary>
         /// Конвертировать из MyPoint в Point
@@ -102,6 +90,8 @@ namespace StateMachineNodeEditor.Helpers
         {
             return new MyPoint(point1.X - point2.X, point2.X - point2.Y);
         }
+
+
 
         #endregion Static Methods
 

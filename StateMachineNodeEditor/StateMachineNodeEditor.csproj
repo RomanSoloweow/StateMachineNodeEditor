@@ -216,6 +216,7 @@
     <Compile Include="Helpers\ConverterPointToMyPoint.cs" />
     <Compile Include="Helpers\MyPoint.cs" />
     <Compile Include="Helpers\Scale.cs" />
+    <Compile Include="Helpers\SimpleCommand.cs" />
     <Compile Include="Helpers\Translate.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>

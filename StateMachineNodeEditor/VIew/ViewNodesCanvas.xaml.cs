@@ -73,8 +73,8 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                //this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
-                //this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+                this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
+                this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
             });
         }
         private void SetupEvents()

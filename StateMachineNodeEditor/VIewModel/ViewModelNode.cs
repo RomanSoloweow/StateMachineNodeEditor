@@ -112,25 +112,24 @@ namespace StateMachineNodeEditor.ViewModel
         #endregion Connectors
 
         #region Commands
-        //public Command CommandSelect { get; set; }
-       
+        public SimpleCommand<bool> CommandSelect { get; set; }
+        public SimpleCommand<MyPoint> CommandMove{ get; set; }
 
         public void SetupCommands()
         {
-            //CommandSelect = new Command(this, Select);
+            CommandSelect = new SimpleCommand<bool>(this, Select);
+            CommandMove  = new SimpleCommand<MyPoint>(this, Move);
         }
-        public object Select(object parameters, object resultExecute)
+        public void Select(bool selectOne)
         {
             //bool selectOnlyOne = false;
             //bool.TryParse(parameters.ToString(), out selectOnlyOne);
-       
-            return null;
         }
         #endregion Commands
 
         public void Move(MyPoint delta)
         {
-            Translate.Value.Add(delta);
+            Translate.Value += delta;
         }
     }
 }
