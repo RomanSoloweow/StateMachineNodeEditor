@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using System.Collections.Generic;
 
 namespace StateMachineNodeEditor.Helpers
 {
@@ -9,17 +8,8 @@ namespace StateMachineNodeEditor.Helpers
     /// </summary>
     /// <typeparam name="TypeParameter">Тип параметра, передаваемого для выполнения</typeparam>
     /// <typeparam name="TypeResult">Тип результата выполнения</typeparam>
-    public class Command<TypeParameter, TypeResult> : BaseCommand,ICommand, ICloneable where TypeParameter: class where  TypeResult : class
+    public class Command<TypeParameter, TypeResult> : CommandUndoRedo,ICommand, ICloneable where TypeParameter: class where  TypeResult : class
     {
-        /// <summary>
-        /// Стек отмененных команд, которые можно выполнить повторно
-        /// </summary>
-        public static Stack<BaseCommand> StackRedo { get; set; } = new Stack<BaseCommand>();
-
-        /// <summary>
-        /// Стек выполненных команд, которые можно отменить 
-        /// </summary>
-        public static Stack<BaseCommand> StackUndo { get; set; } = new Stack<BaseCommand>();
 
         /// <summary>
         /// Функция, которая будет вызвана при выполнении команды
@@ -30,22 +20,6 @@ namespace StateMachineNodeEditor.Helpers
         /// Функция отмены команды
         /// </summary>
         private readonly Func<TypeParameter, TypeResult, TypeResult> _unExecute;
-
-        /// <summary>
-        /// Добавить копию команды в стек команд, которые можно выполнить повторно
-        /// </summary>
-        private void AddInRedo()
-        {
-            StackRedo.Push(this.Clone() as Command<TypeParameter, TypeResult>);
-        }
-
-        /// <summary>
-        /// Добавить копию команды в стек команд, которые можно отменить
-        /// </summary>
-        private void AddInUndo()
-        {
-           StackUndo.Push(this.Clone() as Command<TypeParameter, TypeResult>);
-        }
 
         /// <summary>
         /// Параметр, который был передан в команду при выполнении
@@ -107,7 +81,7 @@ namespace StateMachineNodeEditor.Helpers
         /// Выполнение команды
         /// </summary>
         /// <param name="parameter"> Параметр команды </param>
-        public void Execute(object parameter)
+        public  void Execute(object parameter)
         {
             //Запоминаем параметр ( чтобы можно было егоже передать в отмену)
             Parameters = parameter as TypeParameter;
@@ -119,7 +93,7 @@ namespace StateMachineNodeEditor.Helpers
             if (CanUnExecute)
             {
                 //Добавляем копию команды в стек команд, которые можно отменить
-                AddInUndo();
+                AddInUndo(this.Clone() as CommandUndoRedo);
 
                 //Очищаем список отмененнных команд ( началась новая ветка изменений)
                 StackRedo.Clear();
@@ -135,51 +109,25 @@ namespace StateMachineNodeEditor.Helpers
         /// <summary>
         /// Отмена команды
         /// </summary>
-        public void UnExecute()
+        public override void UnExecute()
         {
             //Выполняем отмену команду
             this._unExecute(Parameters, Result);
 
             //Добавляем копию команды в стек команд, которые можно выполнить повторно
-            AddInRedo();
+            AddInRedo(this.Clone() as CommandUndoRedo);
         }
 
         /// <summary>
         /// Повторное выполнения команды
         /// </summary>
-        public void Execute()
+        public override void Execute()
         {
             //Выполянем команду
             this.Result = this._execute(this.Parameters, this.Result);
 
             //Добавляем копию команды в стек команд, которые можно отменить
-            AddInUndo();
-        }
-
-        /// <summary>
-        /// Функция для команды повторного выполнения
-        /// </summary>
-        /// <param name="obj">Не используются</param>
-        public static void Redo(object obj = null)
-        {
-            if (Command<TypeParameter, TypeResult>.StackRedo.Count > 0)
-            {
-                BaseCommand last = Command<TypeParameter, TypeResult>.StackRedo.Pop();
-                last.Execute();
-            }
-        }
-
-        /// <summary>
-        /// Функция для команды отмены 
-        /// </summary>
-        /// <param name="obj">Не используются<</param>
-        public static void Undo(object obj = null)
-        {
-            if (Command<TypeParameter, TypeResult>.StackUndo.Count > 0)
-            {
-                BaseCommand last = Command<TypeParameter, TypeResult>.StackUndo.Pop();
-                last.UnExecute();
-            }
+            AddInUndo(this.Clone() as CommandUndoRedo);
         }
 
         /// <summary>

@@ -24,7 +24,22 @@ namespace StateMachineNodeEditor.Helpers
             X = x;
             Y = y;
         }
-
+        public bool IsClear
+        {
+            get
+            {
+                return (X==0)&&(Y == 0);
+            }
+        }
+        public void Clear()
+        {
+            X=0;
+            Y=0;
+        }
+        public MyPoint(Point point)
+        {
+            FromPoint(point);
+        }
 
         /// <summary>
         /// Конвертировать из MyPoint в Point

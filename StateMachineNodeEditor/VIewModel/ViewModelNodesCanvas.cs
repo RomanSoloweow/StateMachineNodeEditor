@@ -51,10 +51,10 @@ namespace StateMachineNodeEditor.ViewModel
          
         }      
         #region Commands
-        public SimpleCommand<object> CommandRedo { get; set; }
-        public SimpleCommand<object> CommandUndo { get; set; }
-        //public Command CommandSelectAll { get; set; }
-        //public Command CommandUnSelectAll { get; set; }
+        public SimpleCommand CommandRedo { get; set; }
+        public SimpleCommand CommandUndo { get; set; }
+        public SimpleCommand CommandSelectAll { get; set; }
+        public SimpleCommand CommandUnSelectAll { get; set; }
         //public Command CommandSelect { get; set; }
         //public Command CommandNew { get; set; }
         //public Command CommandDelete { get; set; }
@@ -73,8 +73,8 @@ namespace StateMachineNodeEditor.ViewModel
 
         public void SetupCommands()
         {
-            CommandRedo = new SimpleCommand<object>(this, Command<object, object>.Redo);
-            CommandUndo = new SimpleCommand<object>(this, Command<object, object>.Undo);
+            CommandRedo = new SimpleCommand(this, CommandUndoRedo.Redo);
+            CommandUndo = new SimpleCommand(this, CommandUndoRedo.Undo);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllNode);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllSelectedNode);
         }
@@ -95,6 +95,5 @@ namespace StateMachineNodeEditor.ViewModel
             nodes.ForEach(node => node.Move(delta));
             return nodes;
         }
-
     }
 }

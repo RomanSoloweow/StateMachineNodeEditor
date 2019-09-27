@@ -51,11 +51,6 @@ namespace StateMachineNodeEditor.View
             SetupProperties();
             SetupEvents();
         }
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            this.ViewModel.Translate.Value.X += 20;
-        }
         private void SetupProperties()
         {
             this.WhenActivated(disposable =>
@@ -94,15 +89,50 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Transitions, x => x.Transitions.ItemsSource);
             });
         }
-
+        #region Events
         private void SetupEvents()
         {
             this.WhenActivated(disposable =>
             {
-                //this.BindCommand(ViewModel, )
-                this.Events().MouseLeftButtonDown.Subscribe(e=>ViewModel.CommandSelect.Execute(true));
+                this.Events().MouseLeftButtonDown.Subscribe(e => OnMouseLeftDown(e));
+                this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftUp(e));
+                this.Events().MouseRightButtonDown.Subscribe(e => OnMouseRightDown(e));
+                this.Events().MouseRightButtonUp.Subscribe(e => OnMouseRightUp(e));
+                this.Events().MouseDown.Subscribe(e => OnMouseDown(e));
+                this.Events().MouseUp.Subscribe(e => OnMouseUp(e));
+                this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
             });
         }
-
+        private void OnMouseLeftDown(MouseButtonEventArgs e)
+        {
+            Keyboard.Focus(this);
+        }
+        private void OnMouseLeftUp(MouseButtonEventArgs e)
+        {
+        }
+        private void OnMouseRightDown(MouseButtonEventArgs e)
+        {
+        }
+        private void OnMouseRightUp(MouseButtonEventArgs e)
+        {
+        }
+        private void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (Mouse.Captured == null)
+            {
+                Keyboard.ClearFocus();
+                this.CaptureMouse();
+                Keyboard.Focus(this);
+                //ViewModelNode.CommandSelect.Execute(true);
+            }
+        }
+        private void OnMouseUp(MouseButtonEventArgs e)
+        {
+            this.ReleaseMouseCapture();
+        }
+        private void OnMouseMove(MouseButtonEventArgs e)
+        {
+        }
+        #endregion Events
     }
 }

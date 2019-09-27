@@ -29,6 +29,13 @@ namespace StateMachineNodeEditor.View
     /// </summary>
     public partial class ViewNodesCanvas : UserControl,IViewFor<ViewModelNodesCanvas>
     {
+        enum MoveNodes
+        {
+            No = 0,
+            MoveAll,
+            MoveSelected
+        }
+
         #region ViewModel
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel),
             typeof(ViewModelNodesCanvas), typeof(ViewNodesCanvas), new PropertyMetadata(null));
@@ -45,6 +52,13 @@ namespace StateMachineNodeEditor.View
             set { ViewModel = (ViewModelNodesCanvas)value; }
         }
         #endregion ViewModel
+
+        private MyPoint positionRightClick = new MyPoint();
+        private MyPoint positionLeftClick = new MyPoint();
+        private MyPoint positionMove = new MyPoint();
+        private MyPoint sumMove = new MyPoint();
+
+        private MoveNodes move = MoveNodes.No;
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
@@ -55,7 +69,6 @@ namespace StateMachineNodeEditor.View
         public ViewNodesCanvas()
         {
             InitializeComponent();
-
             SetupProperties();
             SetupCommands();
             SetupEvents();
@@ -77,14 +90,96 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
             });
         }
+        #region Events
         private void SetupEvents()
         {
             this.WhenActivated(disposable =>
             {
-                //this.Events().MouseMove
-                //     .Select(e => e.GetPosition(this))
-                //     .BindTo(this, v => v.ViewModel.deltda);
+                this.Events().MouseLeftButtonDown.Subscribe(e => OnMouseLeftDown(e));
+                this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftUp(e));
+                this.Events().MouseRightButtonDown.Subscribe(e => OnMouseRightDown(e));
+                this.Events().MouseRightButtonUp.Subscribe(e => OnMouseRightUp(e));
+                this.Events().MouseDown.Subscribe(e => OnMouseDown(e));
+                this.Events().MouseUp.Subscribe(e => OnMouseUp(e));
+                this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
             });
         }
+        private void OnMouseLeftDown(MouseButtonEventArgs e)
+        {
+            if (Mouse.Captured == null)
+            {
+                Keyboard.ClearFocus();
+                this.CaptureMouse();
+                Keyboard.Focus(this);
+            }
+            positionLeftClick.FromPoint(e.GetPosition(this.Grid));
+            //if (this.IsMouseCaptured)
+            //    ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
+        }
+        private void OnMouseLeftUp(MouseButtonEventArgs e)
+        {
+            if (move == MoveNodes.No)
+                return;
+
+            //if (move == MoveNodes.MoveAll)
+                //ViewModelNodesCanvas.CommandMoveAllNode.Execute(sumMove);
+            //else
+                //ViewModelNodesCanvas.CommandMoveAllSelectedNode.Execute(sumMove);
+            move = MoveNodes.No;
+            sumMove.Clear();
+        }
+        private void OnMouseRightDown(MouseButtonEventArgs e)
+        {
+            Keyboard.Focus(this);
+            positionRightClick.FromPoint(e.GetPosition(this.Grid));
+        }
+        private void OnMouseRightUp(MouseButtonEventArgs e)
+        {
+        }
+        private void OnMouseDown(MouseButtonEventArgs e)
+        {
+        }           
+        private void OnMouseUp(MouseButtonEventArgs e)
+        {
+            this.ReleaseMouseCapture();
+            positionMove = null;
+            Keyboard.Focus(this);
+        }
+        private void OnMouseMove(MouseButtonEventArgs e)
+        {
+            if (Mouse.Captured == null)
+                return;
+            MyPoint delta = GetDeltaMove();
+
+            if (delta.IsClear)
+                return;
+
+            sumMove += delta;    
+            
+            if (this.IsMouseCaptured)
+            {
+                //ViewModelNodesCanvas.CommandSimpleMoveAllNode.Execute(delta);
+                move = MoveNodes.MoveAll;
+            }
+            else
+            {
+                //ViewModelNodesCanvas.CommandSimpleMoveAllSelectedNode.Execute(delta);
+                move = MoveNodes.MoveSelected;
+            }
+        }
+
+        private MyPoint GetDeltaMove()
+        {
+            MyPoint CurrentPosition = MyPoint.MyPointFromPoint(Mouse.GetPosition(this.Grid));
+            MyPoint result = new MyPoint();
+
+            if (positionMove.IsClear)
+            {
+                result = CurrentPosition - positionMove;
+            }
+            positionMove = CurrentPosition;
+            return result;
+        }
+        #endregion Events
     }
 }

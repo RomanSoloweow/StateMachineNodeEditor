@@ -3,12 +3,16 @@ using System.Windows.Input;
 
 namespace StateMachineNodeEditor.Helpers
 {
-    public class SimpleCommand : ICommand
+    /// <summary>
+    /// Команда без Undo/Redo
+    /// </summary>
+    /// <typeparam name="TypeParameter"></typeparam>
+    public class SimpleCommandWithParameter<TypeParameter>:ICommand where TypeParameter:class
     {
         /// <summary>
         /// Функция с параметром, которая будет вызвана при выполнении команды
         /// </summary>
-        private Action _execute;
+        private Action<TypeParameter> _execute;
 
         /// <summary>
         /// Объкт, которому принадлежит команда
@@ -20,8 +24,8 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+           add { CommandManager.RequerySuggested += value; }
+           remove { CommandManager.RequerySuggested -= value; }
         }
 
         /// <summary>
@@ -38,9 +42,9 @@ namespace StateMachineNodeEditor.Helpers
         /// Выполнение команды
         /// </summary>
         /// <param name="parameter"> Параметр команды </param>
-        public void Execute(object parameter=null)
+        public void Execute(object parameter)
         {
-            this._execute();
+            this._execute(parameter as TypeParameter);
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="execute">Функция, которая будет вызвана при выполнении команды</param>
-        public SimpleCommand(object owner, Action execute)
+        public SimpleCommandWithParameter(object owner, Action<TypeParameter> execute)
         {
             Owner = owner;
             _execute = execute;
