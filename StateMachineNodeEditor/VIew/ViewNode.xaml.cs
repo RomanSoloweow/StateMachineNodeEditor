@@ -18,6 +18,9 @@ using ReactiveUI;
 using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using DynamicData.Binding;
 
 namespace StateMachineNodeEditor.View
 {
@@ -46,6 +49,7 @@ namespace StateMachineNodeEditor.View
         {
             InitializeComponent();
             SetupProperties();
+            SetupEvents();
         }
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
@@ -88,6 +92,15 @@ namespace StateMachineNodeEditor.View
 
                 //Переходы
                 this.OneWayBind(this.ViewModel, x => x.Transitions, x => x.Transitions.ItemsSource);
+            });
+        }
+
+        private void SetupEvents()
+        {
+            this.WhenActivated(disposable =>
+            {
+                //this.BindCommand(ViewModel, )
+                this.Events().MouseLeftButtonDown.Subscribe(e=>ViewModel.CommandSelect.Execute(true));
             });
         }
 

@@ -24,12 +24,12 @@ namespace StateMachineNodeEditor.Helpers
         /// <summary>
         /// Функция, которая будет вызвана при выполнении команды
         /// </summary>
-        private Func<TypeParameter, TypeResult, TypeResult> _execute;
+        private readonly Func<TypeParameter, TypeResult, TypeResult> _execute;
 
         /// <summary>
         /// Функция отмены команды
         /// </summary>
-        private Func<TypeParameter, TypeResult, TypeResult> _unExecute;
+        private readonly Func<TypeParameter, TypeResult, TypeResult> _unExecute;
 
         /// <summary>
         /// Добавить копию команды в стек команд, которые можно выполнить повторно

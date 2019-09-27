@@ -25,7 +25,7 @@ namespace StateMachineNodeEditor.ViewModel
         public IObservableCollection<ViewModelConnect> Connects = new ObservableCollectionExtended<ViewModelConnect>();
 
 
-        private SourceList<ViewModelNode> ListNodes = new SourceList<ViewModelNode>();
+        private readonly SourceList<ViewModelNode> ListNodes = new SourceList<ViewModelNode>();
 
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
         public IObservableList<ViewModelNode> NodesSelected { get; }

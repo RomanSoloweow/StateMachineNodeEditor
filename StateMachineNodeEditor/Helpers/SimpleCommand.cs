@@ -7,7 +7,7 @@ namespace StateMachineNodeEditor.Helpers
     /// Команда без Undo/Redo
     /// </summary>
     /// <typeparam name="TypeParameter"></typeparam>
-    public class SimpleCommand<TypeParameter>:ICommand
+    public class SimpleCommand<TypeParameter>:ICommand where TypeParameter:class
     {
         /// <summary>
         /// Функция, которая будет вызвана при выполнении команды
@@ -22,7 +22,11 @@ namespace StateMachineNodeEditor.Helpers
         /// <summary>
         /// Требуется  интерфейсом ICloneable, не используется
         /// </summary>
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+           add { CommandManager.RequerySuggested += value; }
+           remove { CommandManager.RequerySuggested -= value; }
+        }
 
         /// <summary>
         /// Требуется  интерфейсом ICloneable, не используется
@@ -40,7 +44,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <param name="parameter"> Параметр команды </param>
         public void Execute(object parameter)
         {
-            this._execute((TypeParameter)parameter);
+            this._execute(parameter as TypeParameter);
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="execute">Функция, которая будет вызвана при выполнении команды</param>
-        public SimpleCommand(object owner, Action<TypeParameter> execute=null)
+        public SimpleCommand(object owner, Action<TypeParameter> execute)
         {
             Owner = owner;
             _execute = execute;
