@@ -19,22 +19,22 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Точка, из которой выходит линия ( совпадает с центром элемента, из которого выходит линия)
         /// </summary>
-        [Reactive] public Point StartPoint { get; set; }
+        [Reactive] public MyPoint StartPoint { get; set; }
 
         /// <summary>
         /// Точка, в которую приходит линия ( совпадает с центром элемента, в который приходит линия)
         /// </summary>
-        [Reactive] public Point EndPoint { get; set; }
+        [Reactive] public MyPoint EndPoint { get; set; }
 
         /// <summary>
         /// Первая промежуточная точка линии (считается автоматически)
         /// </summary>
-        [Reactive] public Point Point1 { get; set; }
+        [Reactive] public MyPoint Point1 { get; set; }
 
         /// <summary>
         /// Вторая промежуточная точка линии (считается автоматически)
         /// </summary>
-        [Reactive] public Point Point2 { get; set; }
+        [Reactive] public MyPoint Point2 { get; set; }
 
         /// <summary>
         /// Цвет линии

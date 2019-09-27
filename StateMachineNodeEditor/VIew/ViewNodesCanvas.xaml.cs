@@ -51,35 +51,33 @@ namespace StateMachineNodeEditor.View
             Keyboard.Focus(this);
 
             this.ViewModel.deltda.X += 20;
-            //ViewModel.Nodes.Add(new ViewModelNode(this.ViewModel)
-            //{
-            //    Name = ViewModel.Nodes.Count.ToString(),
-            //    Selected = true
-            //}
-            //);
         }
         public ViewNodesCanvas()
         {
             InitializeComponent();
-            
+
+            SetupProperties();
+            SetupCommands();
+            SetupEvents();
+        }
+        private void SetupProperties()
+        {
             this.WhenActivated(disposable =>
             {
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
                 this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
                 this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
             });
-            SetupCommands();
-            SetupEvents();
         }
-        public void SetupCommands()
+        private void SetupCommands()
         {
             this.WhenActivated(disposable =>
             {
-                this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
-                this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+                //this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
+                //this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
             });
         }
-        public void SetupEvents()
+        private void SetupEvents()
         {
             this.WhenActivated(disposable =>
             {

@@ -60,22 +60,22 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Height, x => x.Height);
 
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.X, x => x.Translate.X);
+                this.Bind(this.ViewModel, x => x.Translate.Value.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Y, x => x.Translate.Y);
+                this.Bind(this.ViewModel, x => x.Translate.Value.Y, x => x.Translate.Y);
 
                 //Масштаб по оси X
-                this.Bind(this.ViewModel, x => x.Scale.ScaleX, x => x.Scale.ScaleX);
+                this.Bind(this.ViewModel, x => x.Scale.Scales.X, x => x.Scale.ScaleX);
 
                 //Масштаб по оси Y
-                this.Bind(this.ViewModel, x => x.Scale.ScaleY, x => x.Scale.ScaleY);
+                this.Bind(this.ViewModel, x => x.Scale.Scales.Y, x => x.Scale.ScaleY);
 
                 //Точка масштабирования, координата X
-                this.Bind(this.ViewModel, x => x.Scale.CenterX, x => x.Scale.CenterX);
+                this.Bind(this.ViewModel, x => x.Scale.Center.X, x => x.Scale.CenterX);
 
                 //Точка масштабирования, координата Y
-                this.Bind(this.ViewModel, x => x.Scale.CenterY, x => x.Scale.CenterY);
+                this.Bind(this.ViewModel, x => x.Scale.Center.Y, x => x.Scale.CenterY);
 
             });
         }

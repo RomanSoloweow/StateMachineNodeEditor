@@ -42,48 +42,56 @@ namespace StateMachineNodeEditor.ViewModel
         {
             ListNodes.Connect().ObserveOnDispatcher().Bind(Nodes).Subscribe();
             NodesSelected = ListNodes.Connect().AutoRefresh(node => node.Selected).Filter(node => node.Selected).AsObservableList();
-
             ListConnects.Connect().ObserveOnDispatcher().Bind(Connects).Subscribe();
 
             ListNodes.Add(new ViewModelNode(this));
+
             AddEmptyConnect();
             SetupCommands();
          
-        }
-        
+        }      
         #region Commands
-        public Command CommandRedo { get; set; }
-        public Command CommandUndo { get; set; }
-        public Command CommandSelectAll { get; set; }
-        public Command CommandUnSelectAll { get; set; }
-        public Command CommandSelect { get; set; }
-        public Command CommandNew { get; set; }
-        public Command CommandDelete { get; set; }
-        public Command CommandCopy { get; set; }
-        public Command CommandPaste { get; set; }
-        public Command CommandCut { get; set; }
-        public Command CommandMoveDown { get; set; }
-        public Command CommandMoveLeft { get; set; }
-        public Command CommandMoveRight { get; set; }
-        public Command CommandMoveUp { get; set; }
-        public Command CommandSimpleMoveAllNode { get; set; }
-        public Command CommandSimpleMoveAllSelectedNode { get; set; }
-        public Command CommandMoveAllNode { get; set; }
-        public Command CommandMoveAllSelectedNode { get; set; }
+        public Command<object, object> CommandRedo { get; set; }
+        public Command<object, object> CommandUndo { get; set; }
+        //public Command CommandSelectAll { get; set; }
+        //public Command CommandUnSelectAll { get; set; }
+        //public Command CommandSelect { get; set; }
+        //public Command CommandNew { get; set; }
+        //public Command CommandDelete { get; set; }
+        //public Command CommandCopy { get; set; }
+        //public Command CommandPaste { get; set; }
+        //public Command CommandCut { get; set; }
+        //public Command CommandMoveDown { get; set; }
+        //public Command CommandMoveLeft { get; set; }
+        //public Command CommandMoveRight { get; set; }
+        //public Command CommandMoveUp { get; set; }
+        //public Command CommandSimpleMoveAllNode { get; set; }
+        //public Command CommandSimpleMoveAllSelectedNode { get; set; }
+        public Command<MyPoint, List<ViewModelNode>> CommandMoveAllNode { get; set; }
+        //public Command CommandMoveAllSelectedNode { get; set; }
         //public Command CommandDropOver { get; set; }
 
         public void SetupCommands()
         {
-            CommandRedo = new Command(this, Command.Redo);
-            CommandUndo = new Command(this, Command.Undo);
+            CommandRedo = new Command<object, object>(this, Command<object, object>.Redo);
+            CommandUndo = new Command<object, object>(this, Command<object, object>.Undo);
+            CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllNode);
+            //Commands = new Command2<Point, List<ViewModelNode>>(this, MoveAllNode);
         }
 
         #endregion Commands
 
-        public List<ViewModelNode> MoveAllNode(Point delta, List<ViewModelNode> nodes = null)
+        public List<ViewModelNode> MoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {
             if (nodes == null)
                 nodes = Nodes.ToList();
+            nodes.ForEach(node => node.Move(delta));
+            return nodes;
+        }
+        public List<ViewModelNode> MoveAllSelectedNode(MyPoint delta, List<ViewModelNode> nodes = null)
+        {
+            if (nodes == null)
+                nodes = NodesSelected.Items.ToList();
             nodes.ForEach(node => node.Move(delta));
             return nodes;
         }

@@ -4,34 +4,34 @@ using System.Collections.Generic;
 
 namespace StateMachineNodeEditor.Helpers
 {
-    public class Command : ICommand, ICloneable
+    public class Command<TypeParameter, TypeResult> : BaseCommand, ICloneable where TypeParameter: class where  TypeResult : class
     {
         /// <summary>
         /// Стек отмененных команд, которые можно выполнить повторно
         /// </summary>
-        public static Stack<Command> StackRedo { get; set; } = new Stack<Command>();
+        public static Stack<BaseCommand> StackRedo { get; set; } = new Stack<BaseCommand>();
 
         /// <summary>
         /// Стек выполненных команд, которые можно отменить 
         /// </summary>
-        public static Stack<Command> StackUndo { get; set; } = new Stack<Command>();
+        public static Stack<BaseCommand> StackUndo { get; set; } = new Stack<BaseCommand>();
 
         /// <summary>
         /// Функция, которая будет вызвана при выполнении команды
         /// </summary>
-        private Func<object, object, object> _execute;
+        private Func<TypeParameter, TypeResult, TypeResult> _execute;
 
         /// <summary>
         /// Функция отмены команды
         /// </summary>
-        private Func<object, object, object> _unExecute;
+        private Func<TypeParameter, TypeResult, TypeResult> _unExecute;
 
         /// <summary>
         /// Добавить копию команды в стек команд, которые можно выполнить повторно
         /// </summary>
         private void AddInRedo()
         {
-            StackRedo.Push(this.Clone() as Command);
+            StackRedo.Push(this.Clone() as Command<TypeParameter, TypeResult>);
         }
 
         /// <summary>
@@ -39,19 +39,19 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         private void AddInUndo()
         {
-            StackUndo.Push(this.Clone() as Command);
+           StackUndo.Push(this.Clone() as Command<TypeParameter, TypeResult>);
         }
 
         /// <summary>
         /// Параметр, который был передан в команду при выполнении
         /// </summary>
-        public object Parameters { get; protected set; }
+        public  TypeParameter Parameters { get;  set; }
 
         /// <summary>
         /// Результат выполнения команды
         /// </summary>
         /// Например здесь может храниться список объектов, которые были изменены
-        public object Result { get; protected set; }
+        public TypeResult Result { get;  set; }
 
         /// <summary>
         /// Объкт, которому принадлежит команда
@@ -72,7 +72,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <returns></returns>
         public object Clone()
         {
-            return new Command(Owner, _execute, _unExecute)
+            return new Command<TypeParameter, TypeResult>(Owner, _execute, _unExecute) 
             {
                 Parameters = this.Parameters,
                 Result = this.Result
@@ -105,10 +105,10 @@ namespace StateMachineNodeEditor.Helpers
         public void Execute(object parameter)
         {
             //Запоминаем параметр ( чтобы можно было егоже передать в отмену)
-            Parameters = parameter;
+            Parameters = parameter as TypeParameter;
 
             //Выполняем команду и запоминаем результат ( чтобы можно было выполнить отмену именно для этого результата)
-            Result = this._execute(Parameters, Result);
+            Result = this._execute(Parameters, Result) as TypeResult;
 
             //Если команду можно отменить
             if (CanUnExecute)
@@ -132,11 +132,19 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         public void UnExecute()
         {
-            //Отменяем команду
+            //Выполняем отмену команду
             this._unExecute(Parameters, Result);
 
             //Добавляем копию команды в стек команд, которые можно выполнить повторно
             AddInRedo();
+        }
+        public void Execute()
+        {
+            //Выполянем команду
+            this.Result = this._execute(this.Parameters, this.Result);
+
+            //Добавляем копию команды в стек команд, которые можно отменить
+            AddInUndo();
         }
 
         /// <summary>
@@ -147,10 +155,10 @@ namespace StateMachineNodeEditor.Helpers
         /// <returns>Не используются<</returns>
         public static object Redo(object obj1 = null, object obj2 = null)
         {
-            if (Command.StackRedo.Count > 0)
+            if (Command<TypeParameter, TypeResult>.StackRedo.Count > 0)
             {
-                Command last = Command.StackRedo.Pop();
-                last.Execute(last.Parameters);
+                BaseCommand last = Command<TypeParameter, TypeResult>.StackRedo.Pop();
+                last.Execute();
             }
             return null;
         }
@@ -163,9 +171,9 @@ namespace StateMachineNodeEditor.Helpers
         /// <returns>Не используются<</returns>
         public static object Undo(object obj1 = null, object obj2 = null)
         {
-            if (Command.StackUndo.Count > 0)
+            if (Command<TypeParameter, TypeResult>.StackUndo.Count > 0)
             {
-                Command last = Command.StackUndo.Pop();
+                BaseCommand last = Command<TypeParameter, TypeResult>.StackUndo.Pop();
                 last.UnExecute();
             }
             return null;
@@ -175,7 +183,7 @@ namespace StateMachineNodeEditor.Helpers
         /// Установить функцию, которая будет вызвана при выполнении команды
         /// </summary>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        public void SetExecute(Func<object, object, object> action)
+        public void SetExecute(Func<TypeParameter, TypeResult, TypeResult> action)
             {
                 _execute = action;
             }
@@ -184,7 +192,7 @@ namespace StateMachineNodeEditor.Helpers
         /// Установить функцию, которая будет вызвана при отмене команды
         /// </summary>
         /// <param name="action">Функция, которая будет вызвана при отмене команды</param>
-        public void SetUnExecute(Func<object, object, object> action)
+        public void SetUnExecute(Func<TypeParameter, TypeResult, TypeResult> action)
         {
             _unExecute = action;
         }
@@ -205,12 +213,17 @@ namespace StateMachineNodeEditor.Helpers
             _unExecute = null;
         }
 
+        public void Execude(TypeParameter parameters)
+        {
+            this.Execude(this.Parameters);
+        }
+
         /// <summary>
         /// Создать неотменяемую команду ( Для создания отменяемой команды, добавьте функцию, которая будет вызвана при отмене)
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        public Command(object owner, Func<object, object, object> action)
+        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> action)
         {
             Owner = owner;
             SetExecute(action);
@@ -222,7 +235,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
         /// <param name="unAction">Функция, которая будет вызвана при отмене команды</param>
-        public Command(object owner, Func<object, object, object> action, Func<object, object, object> unAction) : this(owner, action)
+        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> action, Func<TypeParameter, TypeResult, TypeResult> unAction) : this(owner, action)
         {
             SetUnExecute(unAction);
         }

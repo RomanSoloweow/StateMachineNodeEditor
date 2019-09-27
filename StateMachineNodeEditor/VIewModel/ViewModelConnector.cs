@@ -22,7 +22,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Координата перехода ( нужна для создания соединения )
         /// </summary>
-        [Reactive] public Point Position { get; set; }
+        [Reactive] public MyPoint Position { get; set; }
 
         /// <summary>
         /// Имя перехода ( вводится в узле)

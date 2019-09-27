@@ -80,7 +80,11 @@ namespace StateMachineNodeEditor.ViewModel
         {
             NodesCanvas = nodesCanvas;
             SetupConnectors();
+            SetupCommands();
         }
+
+
+        #region Connectors
         private void SetupConnectors()
         {
             Input = new ViewModelConnector(this);
@@ -105,10 +109,28 @@ namespace StateMachineNodeEditor.ViewModel
             Transitions.Insert(0, CurrentConnector);
             return CurrentConnector;
         }
-        public void Move(Point delta)
-        {
-            Translate.Add(delta);
-        }
+        #endregion Connectors
 
+        #region Commands
+        //public Command CommandSelect { get; set; }
+       
+
+        public void SetupCommands()
+        {
+            //CommandSelect = new Command(this, Select);
+        }
+        public object Select(object parameters, object resultExecute)
+        {
+            //bool selectOnlyOne = false;
+            //bool.TryParse(parameters.ToString(), out selectOnlyOne);
+       
+            return null;
+        }
+        #endregion Commands
+
+        public void Move(MyPoint delta)
+        {
+            Translate.Value.Add(delta);
+        }
     }
 }
