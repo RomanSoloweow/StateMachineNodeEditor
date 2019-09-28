@@ -9,7 +9,9 @@ namespace StateMachineNodeEditor.Helpers
     /// </summary>
     public class MyPoint: ReactiveObject
     {
-
+        /// <summary>
+        /// Точка с координатами X и Y
+        /// </summary>
         [Reactive] public Point Value { get; set; }
 
         /// <summary>

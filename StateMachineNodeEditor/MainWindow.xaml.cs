@@ -11,7 +11,6 @@ namespace StateMachineNodeEditor
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            var t = this;
         }
         public MainWindow()
         {
@@ -29,16 +28,16 @@ namespace StateMachineNodeEditor
             //Node.ViewModel = new ViewModel.ViewModelNode();
 
 
-            //ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
-            //{
-            //   ViewModel = new ViewModel.ViewModelNodesCanvas()
-            //};
-            //this.grid.Children.Add(viewNodesCanvas);
-            ViewConnect viewConnect = new ViewConnect()
+            ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
             {
-                ViewModel = new ViewModel.ViewModelConnect()
+                ViewModel = new ViewModel.ViewModelNodesCanvas()
             };
-            this.grid.Children.Add(viewConnect);
+            this.grid.Children.Add(viewNodesCanvas);
+            //ViewConnect viewConnect = new ViewConnect()
+            //{
+            //    ViewModel = new ViewModel.ViewModelConnect()
+            //};
+            //this.grid.Children.Add(viewConnect);
 
 
 

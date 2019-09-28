@@ -27,12 +27,12 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public MyPoint EndPoint { get; set; } = new MyPoint();
 
         /// <summary>
-        /// Первая промежуточная точка линии (считается автоматически)
+        /// Первая промежуточная точка линии 
         /// </summary>
         [Reactive] public MyPoint Point1 { get; set; } = new MyPoint();
 
         /// <summary>
-        /// Вторая промежуточная точка линии (считается автоматически)
+        /// Вторая промежуточная точка линии
         /// </summary>
         [Reactive] public MyPoint Point2 { get; set; } = new MyPoint();
 
@@ -51,16 +51,16 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         public ViewModelConnector ToConnector;
 
-        public ViewModelConnect()
+        public ViewModelConnect(ViewModelConnector fromConnector)
         {
+            FromConnector = fromConnector;
             this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => Update());
-            EndPoint.Set(100, 100);
         }
         private void Update()
         {
             MyPoint different = EndPoint - StartPoint;
-            Point1 = new MyPoint(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
-            Point2 = new MyPoint(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
+            Point1.Set(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
+            Point2.Set(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
         }
     }
 }

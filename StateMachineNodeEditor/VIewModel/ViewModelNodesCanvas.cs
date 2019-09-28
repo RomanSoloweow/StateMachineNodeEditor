@@ -26,15 +26,17 @@ namespace StateMachineNodeEditor.ViewModel
 
 
         private readonly SourceList<ViewModelNode> ListNodes = new SourceList<ViewModelNode>();
-
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
+        
+
         public IObservableList<ViewModelNode> NodesSelected { get; }
         public Point deltda = new Point();
         public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         public ViewModelConnect CurrentConnect { get; set; }
+        public ViewModelNode CurrentNode { get; set; }
         private ViewModelConnect AddEmptyConnect()
         {
-            CurrentConnect = new ViewModelConnect();
+            CurrentConnect = new ViewModelConnect(CurrentNode.CurrentConnector);
             Connects.Add(CurrentConnect);
             return CurrentConnect;
         }
