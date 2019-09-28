@@ -213,7 +213,6 @@
     <Compile Include="Helpers\Command.cs" />
     <Compile Include="Helpers\ConverterBoolToVisibility.cs" />
     <Compile Include="Helpers\UndoRedoForCommand.cs" />
-    <Compile Include="Helpers\ConverterPointToMyPoint.cs" />
     <Compile Include="Helpers\MyPoint.cs" />
     <Compile Include="Helpers\Scale.cs" />
     <Compile Include="Helpers\SimpleCommand.cs" />

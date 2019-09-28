@@ -8,6 +8,11 @@ namespace StateMachineNodeEditor
 {
     public partial class MainWindow : Window
     {
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            var t = this;
+        }
         public MainWindow()
         {
 
@@ -24,11 +29,18 @@ namespace StateMachineNodeEditor
             //Node.ViewModel = new ViewModel.ViewModelNode();
 
 
-            ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
+            //ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
+            //{
+            //   ViewModel = new ViewModel.ViewModelNodesCanvas()
+            //};
+            //this.grid.Children.Add(viewNodesCanvas);
+            ViewConnect viewConnect = new ViewConnect()
             {
-               ViewModel = new ViewModel.ViewModelNodesCanvas()
+                ViewModel = new ViewModel.ViewModelConnect()
             };
-            this.grid.Children.Add(viewNodesCanvas);
+            this.grid.Children.Add(viewConnect);
+
+
 
             //this.grid.Children.Add(new NodesCanvas(this));
             //this.grid.Children.Add(new ViewConnector());

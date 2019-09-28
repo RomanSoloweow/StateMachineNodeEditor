@@ -41,6 +41,16 @@ namespace StateMachineNodeEditor.View
             set { ViewModel = (ViewModelConnect)value; }
         }
         #endregion ViewModel
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+          
+        }
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            base.OnMouseEnter(e);
+            this.ViewModel.EndPoint += 20;
+        }
         public ViewConnect()
         {
             InitializeComponent();
@@ -50,16 +60,16 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Stroke, x => x.Path.Stroke);
 
                 // Точка, из которой выходит линия
-                this.Bind(this.ViewModel, x => x.StartPoint, x => x.PathFigure.StartPoint);
+                this.Bind(this.ViewModel, x => x.StartPoint.Value, x => x.PathFigure.StartPoint);
 
                 // Первая промежуточная точка линии 
-                this.Bind(this.ViewModel, x => x.Point1, x => x.BezierSegment.Point1);
+                this.Bind(this.ViewModel, x => x.Point1.Value, x => x.BezierSegment.Point1);
 
                 // Вторая промежуточная точка линии
-                this.Bind(this.ViewModel, x => x.Point2, x => x.BezierSegment.Point2);
+                this.Bind(this.ViewModel, x => x.Point2.Value, x => x.BezierSegment.Point2);
 
                 // Точка, в которую приходит линия
-                this.Bind(this.ViewModel, x => x.EndPoint, x => x.BezierSegment.Point3);
+                this.Bind(this.ViewModel, x => x.EndPoint.Value, x => x.BezierSegment.Point3);
             });
         }
     }

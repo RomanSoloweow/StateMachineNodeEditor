@@ -19,27 +19,27 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Точка, из которой выходит линия ( совпадает с центром элемента, из которого выходит линия)
         /// </summary>
-        [Reactive] public MyPoint StartPoint { get; set; }
+        [Reactive] public MyPoint StartPoint { get; set; } = new MyPoint();
 
         /// <summary>
         /// Точка, в которую приходит линия ( совпадает с центром элемента, в который приходит линия)
         /// </summary>
-        [Reactive] public MyPoint EndPoint { get; set; }
+        [Reactive] public MyPoint EndPoint { get; set; } = new MyPoint();
 
         /// <summary>
         /// Первая промежуточная точка линии (считается автоматически)
         /// </summary>
-        [Reactive] public MyPoint Point1 { get; set; }
+        [Reactive] public MyPoint Point1 { get; set; } = new MyPoint();
 
         /// <summary>
         /// Вторая промежуточная точка линии (считается автоматически)
         /// </summary>
-        [Reactive] public MyPoint Point2 { get; set; }
+        [Reactive] public MyPoint Point2 { get; set; } = new MyPoint();
 
         /// <summary>
         /// Цвет линии
         /// </summary>
-        [Reactive] public Brush Stroke { get; set; }
+        [Reactive] public Brush Stroke { get; set; } = Brushes.White;
 
         /// <summary>
         /// Элемент, из которого выходит линия
@@ -50,5 +50,17 @@ namespace StateMachineNodeEditor.ViewModel
         /// Элемент, в который приходит линия
         /// </summary>
         public ViewModelConnector ToConnector;
+
+        public ViewModelConnect()
+        {
+            this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => Update());
+            EndPoint.Set(100, 100);
+        }
+        private void Update()
+        {
+            MyPoint different = EndPoint - StartPoint;
+            Point1 = new MyPoint(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
+            Point2 = new MyPoint(StartPoint.X + 5 * different.X / 8, StartPoint.Y + 7 * different.Y / 8);
+        }
     }
 }
