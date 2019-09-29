@@ -63,22 +63,23 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Name, x => x.Header.Text);
 
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.X, x => x.Translate.X);
+                this.Bind(this.ViewModel, x => x.Point1.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.Y, x => x.Translate.Y);
+                this.Bind(this.ViewModel, x => x.Point1.Y, x => x.Translate.Y);
 
                 //Масштаб по оси X
-                this.Bind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
+                this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Scales.Value.X, x => x.Scale.ScaleX);
 
                 //Масштаб по оси Y
-                this.Bind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
+                this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
                 //Точка масштабирования, координата X
-                this.Bind(this.ViewModel, x => x.Scale.Center.Value.X, x => x.Scale.CenterX);
+                this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Center.Value.X, x => x.Scale.CenterX);
 
                 //Точка масштабирования, координата Y
-                this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
+                this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Center.Value.Y, x => x.Scale.CenterY);
+
 
                 //Отображаются ли переходы
                 this.Bind(this.ViewModel, x => x.TransitionsVisible, x => x.Transitions.Visibility);
@@ -110,9 +111,6 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseUp.Subscribe(e => OnMouseUp(e));
                 this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
                 this.ButtonCollapse.Events().Click.Subscribe(_ => OnCollapse());
-                //Collapse.Events().Click.
-                //this.Collapse.Events().
-                //this.Collapse.Events().MouseLeftButtonDown.Subscribe(_=> OnCollapse());
 
             });
         }

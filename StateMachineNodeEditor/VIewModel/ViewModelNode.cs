@@ -23,18 +23,18 @@ namespace StateMachineNodeEditor.ViewModel
     /// </summary>
     public class ViewModelNode:ReactiveObject, IValidatableViewModel
     {
-
         public ValidationContext ValidationContext { get; } = new ValidationContext();
 
-        /// <summary>
-        /// Масштаб (Общий для всех узлов)
-        /// </summary>
-        [Reactive] public Scale Scale { get; set; } = new Scale();
 
         /// <summary>
-        /// Перенос (Координата от левого верхнего угла)
+        /// Точка левого верхнего угла
         /// </summary>
-        [Reactive] public Translate Translate { get; set; } = new Translate();
+        [Reactive] public MyPoint Point1 { get; set; } = new MyPoint();
+
+        /// <summary>
+        /// Точка нижнего правого угла
+        /// </summary>
+        [Reactive] public MyPoint Point2 { get; set; } = new MyPoint();
 
         /// <summary>
         /// Размер узла
@@ -92,6 +92,8 @@ namespace StateMachineNodeEditor.ViewModel
             NodesCanvas = nodesCanvas;
             SetupConnectors();
             SetupCommands();
+
+            this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
         }
 
 
@@ -158,7 +160,13 @@ namespace StateMachineNodeEditor.ViewModel
         }
         public void Move(MyPoint delta)
         {
-            Translate.Translates += delta;
+            Point1 += delta;
         }
+
+        public void UpdatePoint2()
+        {
+            Point2.Set(Point1.X + Size.Width, Point1.Y + Size.Height);
+        }
+
     }
 }

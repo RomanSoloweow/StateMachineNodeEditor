@@ -68,5 +68,9 @@ namespace StateMachineNodeEditor.ViewModel
         {
             Node = viewModelNode;
         }
+        #region Commands
+
+        //public 
+        #endregion Commands
     }
 }

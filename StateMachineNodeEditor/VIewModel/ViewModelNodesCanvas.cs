@@ -20,20 +20,23 @@ namespace StateMachineNodeEditor.ViewModel
     {
         //public IObservableCollection<ViewModelNode> Nodes { get; set; } = new ObservableCollectionExtended<ViewModelNode>();
         //public IObservableCollection<ViewModelConnect> Connects { get; set; } = new ObservableCollectionExtended<ViewModelConnect>();
-
         private SourceList<ViewModelConnect> ListConnects { get; set; } = new SourceList<ViewModelConnect>();
         public IObservableCollection<ViewModelConnect> Connects = new ObservableCollectionExtended<ViewModelConnect>();
-
 
         private readonly SourceList<ViewModelNode> ListNodes = new SourceList<ViewModelNode>();
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
         
-
         public IObservableList<ViewModelNode> NodesSelected { get; }
         public Point deltda = new Point();
         public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         public ViewModelConnect CurrentConnect { get; set; }
         public ViewModelNode CurrentNode { get; set; }
+
+        /// <summary>
+        /// Масштаб (Общий для всех узлов)
+        /// </summary>
+        [Reactive] public Scale Scale { get; set; } = new Scale();
+
         private ViewModelConnect AddEmptyConnect()
         {
             CurrentConnect = new ViewModelConnect(CurrentNode.CurrentConnector);
@@ -46,7 +49,10 @@ namespace StateMachineNodeEditor.ViewModel
             NodesSelected = ListNodes.Connect().AutoRefresh(node => node.Selected).Filter(node => node.Selected).AsObservableList();
             ListConnects.Connect().ObserveOnDispatcher().Bind(Connects).Subscribe();
 
-            ListNodes.Add(new ViewModelNode(this));
+            ListNodes.Add(new ViewModelNode(this)
+            {
+                Name= "State 1"
+            });
 
             //AddEmptyConnect();
             SetupCommands();
@@ -57,7 +63,7 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandUndo { get; set; }
         public SimpleCommand CommandSelectAll { get; set; }
         public SimpleCommand CommandUnSelectAll { get; set; }
-        //public Command CommandSelect { get; set; }
+        public SimpleCommandWithParameter<MyPoint> CommandSelect { get; set; }
         //public Command CommandNew { get; set; }
         //public Command CommandDelete { get; set; }
         //public Command CommandCopy { get; set; }
@@ -69,6 +75,8 @@ namespace StateMachineNodeEditor.ViewModel
         //public Command CommandMoveUp { get; set; }
         //public Command CommandSimpleMoveAllNode { get; set; }
         //public Command CommandSimpleMoveAllSelectedNode { get; set; }
+
+        public SimpleCommand CommandSelectorIntersect { get; set; }
         public Command<MyPoint, List<ViewModelNode>> CommandMoveAllNode { get; set; }
         public Command<MyPoint, List<ViewModelNode>> CommandMoveAllSelectedNode { get; set; }
         //public Command CommandDropOver { get; set; }
@@ -79,10 +87,15 @@ namespace StateMachineNodeEditor.ViewModel
             CommandUndo = new SimpleCommand(this, CommandUndoRedo.Undo);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllNode);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllSelectedNode);
+            CommandSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
+            CommandSelectorIntersect = new SimpleCommand(this, SelectorIntersect);
         }
 
         #endregion Commands
-
+        public void StartSelect(MyPoint position)
+        {
+            Selector.Point1.Set(position);
+        }
         public List<ViewModelNode> MoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {
             if (nodes == null)
@@ -96,6 +109,17 @@ namespace StateMachineNodeEditor.ViewModel
                 nodes = NodesSelected.Items.ToList();
             nodes.ForEach(node => node.Move(delta));
             return nodes;
+        }
+
+        private void SelectorIntersect()
+        {
+            MyPoint selectorPoint1 = Selector.Point1 / Scale.Value;
+            MyPoint selectorPoint2 = Selector.Point2 / Scale.Value;
+
+            foreach (ViewModelNode node in Nodes)
+            {
+                node.Selected = Utils.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2);
+            }
         }
     }
 }

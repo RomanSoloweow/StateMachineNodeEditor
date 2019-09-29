@@ -44,5 +44,6 @@
     <UserControl.InputBindings>
         <KeyBinding x:Name="BindingUndo" Key="Z" Modifiers="Control" />
         <KeyBinding x:Name="BindingRedo" Key="Y" Modifiers="Control" />
+        <MouseBinding x:Name="BindingSelect" Gesture="Ctrl+LeftClick" />
     </UserControl.InputBindings>
 </UserControl>

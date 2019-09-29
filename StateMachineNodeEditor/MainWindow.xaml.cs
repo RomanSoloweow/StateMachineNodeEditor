@@ -32,8 +32,9 @@ namespace StateMachineNodeEditor
             //this.grid.Children.Add(viewConnect);
 
 
-
+            ////old version
             //this.grid.Children.Add(new NodesCanvas(this));
+
             //this.grid.Children.Add(new ViewConnector());
             //this.grid.Children.Add(new ViewNode());
 

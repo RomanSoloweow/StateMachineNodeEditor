@@ -65,8 +65,8 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
 
                 // При изменении размера, позиции или zoom узла
-                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Translate.Translates.Value, x=>x.ViewModel.Node.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
-               
+                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x=>x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
+
             });
         }
         void UpdatePosition()
@@ -75,7 +75,7 @@ namespace StateMachineNodeEditor.View
             Point InputCenter = Form.TranslatePoint(new Point(Form.Width, Form.Height / 2), this);
 
             //Ищем Canvas
-            ViewNodesCanvas NodesCanvas = Visuals.FindParent<ViewNodesCanvas>(this);
+            ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
 
             //Получаем позицию центру на канвасе
             Point Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);

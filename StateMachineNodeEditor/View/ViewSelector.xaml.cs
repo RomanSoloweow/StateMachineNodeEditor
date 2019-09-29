@@ -48,22 +48,28 @@ namespace StateMachineNodeEditor.View
         public ViewSelector()
         {
             InitializeComponent();
+            SetupBinding();
+            SetupEvents();
+        }
+        #region Setup Binding 
+        private void SetupBinding()
+        {
             this.WhenActivated(disposable =>
             {
                 // Отображается ли выделение
                 this.Bind(this.ViewModel, x => x.Visible, x => x.Visibility);
 
                 //Ширина
-                this.Bind(this.ViewModel, x => x.Width, x => x.Width);
+                this.Bind(this.ViewModel, x => x.Size.Width, x => x.Width);
 
                 //Высота
-                this.Bind(this.ViewModel, x => x.Height, x => x.Height);
+                this.Bind(this.ViewModel, x => x.Size.Height, x => x.Height);
 
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.X, x => x.Translate.X);
+                this.Bind(this.ViewModel, x => x.Point1.Value.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.Y, x => x.Translate.Y);
+                this.Bind(this.ViewModel, x => x.Point1.Value.Y, x => x.Translate.Y);
 
                 //Масштаб по оси X
                 this.Bind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
@@ -76,8 +82,27 @@ namespace StateMachineNodeEditor.View
 
                 //Точка масштабирования, координата Y
                 this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
-
             });
+        }
+
+        #endregion Setup Binding 
+
+        #region Setup Events
+        private void SetupEvents()
+        {
+            this.WhenActivated(disposable =>
+            {
+                this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
+            });
+        }
+        #endregion Setup Events
+        private void OnMouseMove(MouseButtonEventArgs e)
+        {
+            //Ищем Canvas
+            ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
+
+            ViewModel.Point2.Set(e.GetPosition(NodesCanvas));
+
         }
     }
 }

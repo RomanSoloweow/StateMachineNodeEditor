@@ -69,11 +69,13 @@ namespace StateMachineNodeEditor.View
         public ViewNodesCanvas()
         {
             InitializeComponent();
-            SetupProperties();
+            SetupBinding();
             SetupCommands();
             SetupEvents();
         }
-        private void SetupProperties()
+
+        #region Setup Binding
+        private void SetupBinding()
         {
             this.WhenActivated(disposable =>
             {
@@ -82,15 +84,22 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
             });
         }
+        #endregion Setup Binding
+
+        #region Setup Commands
         private void SetupCommands()
         {
             this.WhenActivated(disposable =>
             {
                 this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
                 this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+                this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
+
             });
         }
-        #region Events
+        #endregion Setup Commands
+
+        #region Setup Events
         private void SetupEvents()
         {
             this.WhenActivated(disposable =>
@@ -180,6 +189,7 @@ namespace StateMachineNodeEditor.View
             positionMove = CurrentPosition;
             return result;
         }
-        #endregion Events
+        #endregion Setup Events
+
     }
 }

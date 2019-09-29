@@ -94,6 +94,17 @@ namespace StateMachineNodeEditor.Helpers
         }
 
         /// <summary>
+        /// Установить координаты текущей точки
+        /// </summary>
+        /// <param name="point">Точка MyPoint</param>
+        /// <returns>MyPoint с новыми координатами</returns>
+        public MyPoint Set(MyPoint point)
+        {
+            this.Set(point.X, point.Y);
+            return this;
+        }
+
+        /// <summary>
         /// Конвертировать из MyPoint в Point
         /// </summary>
         /// <returns>Точка Point</returns>
@@ -157,6 +168,8 @@ namespace StateMachineNodeEditor.Helpers
             return new MyPoint(point1.X - point2.X, point1.Y - point2.Y);
         }
 
+
+
         /// <summary>
         /// Прибавить число к обеим координатам точки
         /// </summary>
@@ -178,6 +191,73 @@ namespace StateMachineNodeEditor.Helpers
         {
             return new MyPoint(point1.X - number, point1.Y - number);
         }
+
+        /// <summary>
+        /// Разделить координаты точки на число
+        /// </summary>
+        /// <param name="point1">Точка, координаты которой делим</param>
+        /// <param name="number">Число, на которое делим</param>
+        /// <returns>Новая точка</returns>
+        public static MyPoint operator /(MyPoint point1, int number)
+        {
+            return new MyPoint(point1.X/number, point1.Y/number);
+        }
+
+        /// <summary>
+        /// Умножить координаты точки на число
+        /// </summary>
+        /// <param name="point1">Точка, координаты которой умножаем</param>
+        /// <param name="number">Число, на которое умножаем</param>
+        /// <returns>Новая точка</returns>
+        public static MyPoint operator *(MyPoint point1, int number)
+        {
+            return new MyPoint(point1.X * number, point1.Y * number);
+        }
+
+        /// <summary>
+        /// Прибавить число к обеим координатам точки
+        /// </summary>
+        /// <param name="point1">Точка, к которой прибавляем</param>
+        /// <param name="number">Число, которое прибавляем</param>
+        /// <returns>Новая точка</returns>
+        public static MyPoint operator +(MyPoint point1, double number)
+        {
+            return new MyPoint(point1.X + number, point1.Y + number);
+        }
+
+        /// <summary>
+        /// Отнять число от обеих координат точки
+        /// </summary>
+        /// <param name="point1">Точка, из которой вычитаем</param>
+        /// <param name="number">Число, которое вычитаем</param>
+        /// <returns>Новая точка</returns>
+        public static MyPoint operator -(MyPoint point1, double number)
+        {
+            return new MyPoint(point1.X - number, point1.Y - number);
+        }
+
+        /// <summary>
+        /// Разделить координаты точки на число
+        /// </summary>
+        /// <param name="point1">Точка, координаты которой делим</param>
+        /// <param name="number">Число, на которое делим</param>
+        /// <returns>Новая точка</returns>
+        public static MyPoint operator /(MyPoint point1, double number)
+        {
+            return new MyPoint(point1.X / number, point1.Y / number);
+        }
+
+        /// <summary>
+        /// Умножить координаты точки на число
+        /// </summary>
+        /// <param name="point1">Точка, координаты которой умножаем</param>
+        /// <param name="number">Число, на которое умножаем</param>
+        /// <returns>Новая точка</returns>
+        public static MyPoint operator *(MyPoint point1, double number)
+        {
+            return new MyPoint(point1.X * number, point1.Y * number);
+        }
+
 
         #endregion Static Methods
 

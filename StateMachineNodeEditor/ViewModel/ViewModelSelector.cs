@@ -19,28 +19,48 @@ namespace StateMachineNodeEditor.ViewModel
     public class ViewModelSelector: ReactiveObject
     {
         /// <summary>
-        /// Ширина
+        /// Размер Селектора
         /// </summary>
-        [Reactive] public double Width { get; set; }
-
-        /// <summary>
-        /// Высота
-        /// </summary>
-        [Reactive] public double Height { get; set; }
+        [Reactive] public Size Size { get; set; }
 
         /// <summary>
         /// Отображается ли выделение
         /// </summary>
-        [Reactive] public bool Visible { get; set; } = true;
+        [Reactive] public bool? Visible { get; set; } = true;
 
         /// <summary>
-        /// Перенос (Координата от левого верхнего угла)
+        /// Точка левого верхнего угла
         /// </summary>
-        [Reactive] public Translate Translate { get; set; } = new Translate();
+        [Reactive] public MyPoint Point1 { get; set; } = new MyPoint();
+
+        /// <summary>
+        /// Точка нижнего правого угла
+        /// </summary>
+        [Reactive] public MyPoint Point2 { get; set; } = new MyPoint();
 
         /// <summary>
         /// Масштаб
         /// </summary>
         [Reactive] public Scale Scale { get; set; } = new Scale();
+
+        public ViewModelSelector()
+        {
+            this.WhenAnyValue(x => x.Point1.Value, x => x.Point2.Value).Subscribe(_ => UpdateSize());
+            this.WhenAnyValue(x => x.Point1.Value).Subscribe(vm => Scale.Center.Set(vm));
+
+        }
+
+        private void UpdateSize()
+        {
+            MyPoint different = Point1 - Point2;
+
+            Size = new Size(Math.Abs(different.X), Math.Abs(different.Y));
+
+            //Если нужно отражаем по X и/или Y 
+            Scale.Scales.Set((different.X > 0) ? 1 : -1, (different.Y > 0) ? 1 : -1);
+        }
+
+        #region Setup Commands
+        #endregion Setup Commands
     }
 }
