@@ -27,7 +27,6 @@ namespace StateMachineNodeEditor.ViewModel
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
         
         public IObservableList<ViewModelNode> NodesSelected { get; }
-        public Point deltda = new Point();
         public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         public ViewModelConnect CurrentConnect { get; set; }
         public ViewModelNode CurrentNode { get; set; }
@@ -94,7 +93,7 @@ namespace StateMachineNodeEditor.ViewModel
         #endregion Commands
         public void StartSelect(MyPoint position)
         {
-            Selector.Point1.Set(position);
+            Selector.CommandStartSelect.Execute(position);
         }
         public List<ViewModelNode> MoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {

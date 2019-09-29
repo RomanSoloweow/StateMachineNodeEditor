@@ -50,6 +50,7 @@ namespace StateMachineNodeEditor.View
             InitializeComponent();
             SetupBinding();
             SetupEvents();
+            SetupCommands();
         }
         #region Setup Binding 
         private void SetupBinding()
@@ -93,9 +94,10 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
+
             });
         }
-        #endregion Setup Events
+
         private void OnMouseMove(MouseButtonEventArgs e)
         {
             //Ищем Canvas
@@ -104,5 +106,18 @@ namespace StateMachineNodeEditor.View
             ViewModel.Point2.Set(e.GetPosition(NodesCanvas));
 
         }
+        #endregion Setup Events
+
+        #region Setup Commands
+        private void SetupCommands()
+        {
+            this.WhenActivated(disposable =>
+            {
+   
+
+            });
+        }
+        #endregion Setup Commands
+
     }
 }

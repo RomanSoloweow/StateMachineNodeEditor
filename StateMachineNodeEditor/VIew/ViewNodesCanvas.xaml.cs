@@ -63,8 +63,6 @@ namespace StateMachineNodeEditor.View
         {
             base.OnMouseLeftButtonDown(e);
             Keyboard.Focus(this);
-
-            this.ViewModel.deltda.X += 20;
         }
         public ViewNodesCanvas()
         {

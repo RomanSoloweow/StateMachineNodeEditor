@@ -47,7 +47,7 @@ namespace StateMachineNodeEditor.ViewModel
         {
             this.WhenAnyValue(x => x.Point1.Value, x => x.Point2.Value).Subscribe(_ => UpdateSize());
             this.WhenAnyValue(x => x.Point1.Value).Subscribe(vm => Scale.Center.Set(vm));
-
+            SetupCommands();
         }
 
         private void UpdateSize()
@@ -61,6 +61,23 @@ namespace StateMachineNodeEditor.ViewModel
         }
 
         #region Setup Commands
+        public SimpleCommandWithParameter<MyPoint> CommandStartSelect { get; set; }
+        public SimpleCommand CommandEndSelect { get; set; }
+
+        private void SetupCommands()
+        {
+            CommandStartSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
+            CommandEndSelect = new SimpleCommand(this, EndSelect);
+        }
+
+        private void StartSelect(MyPoint point)
+        {
+
+        }
+        private void EndSelect()
+        {
+
+        }
         #endregion Setup Commands
     }
 }
