@@ -22,8 +22,7 @@ namespace StateMachineNodeEditor
         public App()
         {
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
-            Locator.CurrentMutable.RegisterConstant(new ConverterBoolToVisibility(),typeof(IBindingTypeConverter));
-
+            Locator.CurrentMutable.RegisterConstant(new ConverterBoolAndVisibility(), typeof(IBindingTypeConverter));
         }
     }
 }

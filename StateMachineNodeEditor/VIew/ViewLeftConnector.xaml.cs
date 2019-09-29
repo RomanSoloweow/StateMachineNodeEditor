@@ -62,10 +62,11 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
 
                 // Отображается ли переход
-                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
+                this.Bind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
 
-                // При изменении рамера или позиции узла
-                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Translate.Value.Value).Subscribe(_ => UpdatePosition());
+                // При изменении размера, позиции или zoom узла
+                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Translate.Translates.Value, x=>x.ViewModel.Node.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
+               
             });
         }
         void UpdatePosition()

@@ -21,6 +21,7 @@ using StateMachineNodeEditor.ViewModel;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using DynamicData.Binding;
+using System.Windows.Controls.Primitives;
 
 namespace StateMachineNodeEditor.View
 {
@@ -62,10 +63,10 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Name, x => x.Header.Text);
 
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Value.Value.X, x => x.Translate.X);
+                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Value.Value.Y, x => x.Translate.Y);
+                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.Y, x => x.Translate.Y);
 
                 //Масштаб по оси X
                 this.Bind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
@@ -78,6 +79,9 @@ namespace StateMachineNodeEditor.View
 
                 //Точка масштабирования, координата Y
                 this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
+
+                //Отображаются ли переходы
+                this.Bind(this.ViewModel, x => x.TransitionsVisible, x => x.Transitions.Visibility);
 
                 //Размеры
                 this.WhenAnyValue(v => v.Border.ActualWidth, v => v.Border.ActualHeight, (width, height) => new Size(width, height))
@@ -105,6 +109,11 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseDown.Subscribe(e => OnMouseDown(e));
                 this.Events().MouseUp.Subscribe(e => OnMouseUp(e));
                 this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
+                this.ButtonCollapse.Events().Click.Subscribe(_ => OnCollapse());
+                //Collapse.Events().Click.
+                //this.Collapse.Events().
+                //this.Collapse.Events().MouseLeftButtonDown.Subscribe(_=> OnCollapse());
+
             });
         }
         private void OnMouseLeftDown(MouseButtonEventArgs e)
@@ -137,6 +146,14 @@ namespace StateMachineNodeEditor.View
         }
         private void OnMouseMove(MouseButtonEventArgs e)
         {
+        }
+
+        private void OnCollapse()
+        {
+            bool visible = (this.Rotate.Angle != 0);
+            this.Rotate.Angle = visible ? 0:180;
+            ViewModel.CommandCollapse.Execute(visible);
+
         }
         #endregion Events
     }

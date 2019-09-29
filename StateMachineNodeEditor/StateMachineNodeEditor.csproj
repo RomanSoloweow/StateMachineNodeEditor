@@ -48,7 +48,7 @@
       <HintPath>..\packages\Miyconst.Cyriller.0.1.0\lib\net45\Cyriller.Rule.dll</HintPath>
     </Reference>
     <Reference Include="DynamicData, Version=6.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DynamicData.6.13.8\lib\net461\DynamicData.dll</HintPath>
+      <HintPath>..\packages\DynamicData.6.13.9\lib\net461\DynamicData.dll</HintPath>
     </Reference>
     <Reference Include="HelixToolkit.Wpf, Version=2.9.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
       <HintPath>..\packages\HelixToolkit.Wpf.2.9.0\lib\net45\HelixToolkit.Wpf.dll</HintPath>
@@ -211,7 +211,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\Command.cs" />
-    <Compile Include="Helpers\ConverterBoolToVisibility.cs" />
+    <Compile Include="Helpers\ConverterBoolAndVisibility.cs" />
     <Compile Include="Helpers\UndoRedoForCommand.cs" />
     <Compile Include="Helpers\MyPoint.cs" />
     <Compile Include="Helpers\Scale.cs" />

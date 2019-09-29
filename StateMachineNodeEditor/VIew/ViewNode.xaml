@@ -28,8 +28,8 @@
                     </Grid.RowDefinitions>
                     <local:ViewLeftConnector x:Name="Input" Grid.Row="0" Grid.Column="0" />
                     <local:ViewRightConnector x:Name="Output" Grid.Row="1" Grid.Column="1"/>
-
-                    <Button Name ="RollUp" Margin="0,20,0,0" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left"  FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
+                    
+                    <Button Name ="ButtonCollapse" Margin="0,20,0,0" Grid.Row="2" Grid.Column="0" Content="Button" VerticalAlignment="Bottom"  Padding="0" Style="{DynamicResource NodeButtonRollUp}" HorizontalAlignment="Left"  FlowDirection="RightToLeft" VerticalContentAlignment="Center"   >
                         <Button.RenderTransform>
                             <TransformGroup>
                                 <RotateTransform x:Name="Rotate" Angle="0" CenterX="9" CenterY="3.2"/>
@@ -38,7 +38,7 @@
                     </Button>
 
                 </Grid>
-                <ItemsControl x:Name="Transitions" >
+                <ItemsControl x:Name="Transitions">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Name="Transitions" Margin="0,5,0,0" UseLayoutRounding="False" ScrollViewer.CanContentScroll="True"/>

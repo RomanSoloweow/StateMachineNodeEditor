@@ -58,6 +58,11 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public Brush BorderBrush { get; set; } = null;
 
         /// <summary>
+        /// Отображаются ли переходы
+        /// </summary>
+        [Reactive] public bool? TransitionsVisible { get; set; } = true;
+
+        /// <summary>
         /// Вход для соединения с этим узлом
         /// </summary>
         public ViewModelConnector Input;
@@ -93,9 +98,13 @@ namespace StateMachineNodeEditor.ViewModel
         #region Connectors
         private void SetupConnectors()
         {
-            Input = new ViewModelConnector(this);
+            Input = new ViewModelConnector(this)
+            {
+                Name = "Input"
+            };
             Output = new ViewModelConnector(this)
             {
+                Name = "Output",
                 Visible = null
             };
             AddEmptyConnector();
@@ -118,13 +127,27 @@ namespace StateMachineNodeEditor.ViewModel
         #endregion Connectors
 
         #region Commands
-        public SimpleCommandWithParameter<object> CommandSelect { get; set; }
-        public SimpleCommandWithParameter<MyPoint> CommandMove{ get; set; }
+        public SimpleCommandWithParameter <object> CommandSelect { get; set; }
+        public SimpleCommandWithParameter <MyPoint> CommandMove{ get; set; }
+        public SimpleCommandWithParameter <object> CommandCollapse { get; set; }
 
         public void SetupCommands()
         {
             CommandSelect = new SimpleCommandWithParameter<object>(this, Select);
             CommandMove  = new SimpleCommandWithParameter<MyPoint>(this, Move);
+            CommandCollapse = new SimpleCommandWithParameter<object>(this, Collapse);
+        }
+
+        #endregion Commands
+        public void Collapse(object obj)
+        {
+            bool value = (bool)obj;
+            Output.Visible = !value;
+            if (value)
+                TransitionsVisible = value;
+            else
+                TransitionsVisible = null ;
+
         }
         public void Select(object selectOne)
         {
@@ -133,11 +156,9 @@ namespace StateMachineNodeEditor.ViewModel
             //bool selectOnlyOne = false;
             //bool.TryParse(parameters.ToString(), out selectOnlyOne);
         }
-        #endregion Commands
-
         public void Move(MyPoint delta)
         {
-            Translate.Value += delta;
+            Translate.Translates += delta;
         }
     }
 }

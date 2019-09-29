@@ -5,6 +5,6 @@ namespace StateMachineNodeEditor.Helpers
 {
     public class Translate:ReactiveObject
     {
-        [Reactive] public MyPoint Value { get; set; } = new MyPoint(1,1);
+        [Reactive] public MyPoint Translates { get; set; } = new MyPoint(1,1);
     }
 }

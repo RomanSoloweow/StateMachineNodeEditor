@@ -60,10 +60,10 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Height, x => x.Height);
 
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Value.Value.X, x => x.Translate.X);
+                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Translate.Value.Value.Y, x => x.Translate.Y);
+                this.Bind(this.ViewModel, x => x.Translate.Translates.Value.Y, x => x.Translate.Y);
 
                 //Масштаб по оси X
                 this.Bind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
