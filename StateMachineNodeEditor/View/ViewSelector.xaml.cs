@@ -66,10 +66,10 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Visible, x => x.Visibility);
 
                 //Ширина
-                this.Bind(this.ViewModel, x => x.Size.Width, x => x.Width);
+                this.Bind(this.ViewModel, x => x.Size.Width, x => x.Form.Width);
 
                 //Высота
-                this.Bind(this.ViewModel, x => x.Size.Height, x => x.Height);
+                this.Bind(this.ViewModel, x => x.Size.Height, x => x.Form.Height);
 
                 //Позиция X от левого верхнего угла
                 this.Bind(this.ViewModel, x => x.Point1.Value.X, x => x.Translate.X);
@@ -110,12 +110,12 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
+                this.Events().MouseMove.Subscribe(e => OnMouseMoves(e));
 
             });
         }
 
-        private void OnMouseMove(MouseButtonEventArgs e)
+        private void OnMouseMoves(MouseEventArgs e)
         {
             //Ищем Canvas
             ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);

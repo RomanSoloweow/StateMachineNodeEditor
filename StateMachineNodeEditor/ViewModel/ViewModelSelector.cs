@@ -46,19 +46,26 @@ namespace StateMachineNodeEditor.ViewModel
         public ViewModelSelector()
         {
             this.WhenAnyValue(x => x.Point1.Value, x => x.Point2.Value).Subscribe(_ => UpdateSize());
-            this.WhenAnyValue(x => x.Point1.Value).Subscribe(vm => Scale.Center.Set(vm));
+            this.WhenAnyValue(x => x.Point1.Value).Subscribe(_=>UpdateCenter());
             SetupCommands();
         }
-
+        public void UpdateCenter()
+        {
+            Scale.Center.Set(Point1);
+            Console.WriteLine("Center___" );
+        }
         private void UpdateSize()
         {
-            MyPoint different = Point1 - Point2;
+     
+            MyPoint different = Point2 - Point1;
 
             Size = new Size(Math.Abs(different.X), Math.Abs(different.Y));
-            Console.WriteLine(Size);
 
             //Если нужно отражаем по X и/или Y 
-            Scale.Scales.Set((different.X > 0) ? 1 : -1, (different.Y > 0) ? 1 : -1);
+            Point point = new Point(((different.X > 0) ? 1 : -1), ((different.Y > 0) ? 1 : -1));
+            Scale.Scales.Set(point);
+            Console.WriteLine(point);
+            //Console.WriteLine(Scale.Scales.X.ToString() + "====" + Scale.Scales.Y.ToString());
         }
 
         #region Setup Commands
