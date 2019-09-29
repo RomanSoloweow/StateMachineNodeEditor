@@ -34,12 +34,18 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Перенос (Координата от левого верхнего угла)
         /// </summary>
-        [Reactive] public Translate Translate { get; set; } = new Translate(); 
+        [Reactive] public Translate Translate { get; set; } = new Translate();
+
+        /// <summary>
+        /// Размер узла
+        /// </summary>
+        [Reactive]  public Size Size { get; set; }
 
         /// <summary>
         /// Название узла (Указано в шапке)
         /// </summary>
         [Reactive] public string Name { get; set; }
+
 
         /// <summary>
         /// Флаг того, что узел выбран

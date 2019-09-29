@@ -218,6 +218,7 @@
     <Compile Include="Helpers\SimpleCommand.cs" />
     <Compile Include="Helpers\SimpleCommandWithParameter.cs" />
     <Compile Include="Helpers\Translate.cs" />
+    <Compile Include="Helpers\Visuals.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>

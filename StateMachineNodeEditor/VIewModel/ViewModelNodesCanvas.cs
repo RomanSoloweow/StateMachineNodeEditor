@@ -48,7 +48,7 @@ namespace StateMachineNodeEditor.ViewModel
 
             ListNodes.Add(new ViewModelNode(this));
 
-            AddEmptyConnect();
+            //AddEmptyConnect();
             SetupCommands();
          
         }      

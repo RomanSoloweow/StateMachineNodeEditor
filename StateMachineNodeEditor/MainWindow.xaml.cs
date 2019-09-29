@@ -17,15 +17,6 @@ namespace StateMachineNodeEditor
 
             InitializeComponent();
 
-            //ViewNode viewNode = new ViewNode();     
-            //viewNode.ViewModel = new ViewModel.ViewModelNode();
-            //this.grid.Children.Add(viewNode);
-
-            //ViewRightConnector.ViewModel = new ViewModel.ViewModelConnector();
-            //this.Node.ViewModel = new ViewModel.ViewModelNode();
-
-
-            //Node.ViewModel = new ViewModel.ViewModelNode();
 
 
             ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
@@ -33,6 +24,7 @@ namespace StateMachineNodeEditor
                 ViewModel = new ViewModel.ViewModelNodesCanvas()
             };
             this.grid.Children.Add(viewNodesCanvas);
+
             //ViewConnect viewConnect = new ViewConnect()
             //{
             //    ViewModel = new ViewModel.ViewModelConnect()

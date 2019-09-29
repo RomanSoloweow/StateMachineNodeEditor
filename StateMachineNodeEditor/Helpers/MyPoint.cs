@@ -83,6 +83,17 @@ namespace StateMachineNodeEditor.Helpers
         }
 
         /// <summary>
+        /// Установить координаты текущей точки
+        /// </summary>
+        /// <param name="point">Точка Point</param>
+        /// <returns>MyPoint с новыми координатами</returns>
+        public MyPoint Set(Point point)
+        {
+            this.Set(point.X, point.Y);
+            return this;
+        }
+
+        /// <summary>
         /// Конвертировать из MyPoint в Point
         /// </summary>
         /// <returns>Точка Point</returns>
@@ -98,7 +109,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <returns>Текущая точка содежащая координаты Point</returns>
         public MyPoint FromPoint(Point point)
         {
-            Value = new Point(point.X, point.Y);
+            Set(point);
             return this;
         }
 

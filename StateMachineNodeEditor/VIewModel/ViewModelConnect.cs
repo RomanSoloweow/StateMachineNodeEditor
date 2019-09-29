@@ -55,6 +55,8 @@ namespace StateMachineNodeEditor.ViewModel
         {
             FromConnector = fromConnector;
             this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => Update());
+            this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(value => StartPoint.Set(value));
+            this.WhenAnyValue(x => x.ToConnector.Position.Value).Subscribe(value => EndPoint.Set(value));
         }
         private void Update()
         {

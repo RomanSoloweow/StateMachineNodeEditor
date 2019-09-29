@@ -64,7 +64,34 @@ namespace StateMachineNodeEditor.View
 
                 // Отображается ли переход
                 this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
+
+                // При изменении рамера или позиции узла
+                this.WhenAnyValue(x => x.ViewModel.Node.Size,x=>x.ViewModel.Node.Translate.Value.Value).Subscribe(_=> UpdatePosition());
             });
+        }
+        void UpdatePosition()
+        {
+            Point Position;
+
+            //Если узел не свернут
+            if (this.ViewModel.Visible == true)
+            {
+                // Координата центра
+                Point InputCenter = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
+
+                //Ищем Canvas
+                ViewNodesCanvas NodesCanvas = Visuals.FindParent<ViewNodesCanvas>(this);
+
+                //Получаем позицию центру на канвасе
+                Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
+            }
+            else
+            {
+                //Позиция выхода
+                Position = this.ViewModel.Node.Output.Position.Value;
+            }
+
+            this.ViewModel.Position.Set(Position);
         }
     }
 }

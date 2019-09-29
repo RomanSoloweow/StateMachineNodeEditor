@@ -79,6 +79,10 @@ namespace StateMachineNodeEditor.View
                 //Точка масштабирования, координата Y
                 this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
 
+                //Размеры
+                this.WhenAnyValue(v => v.Border.ActualWidth, v => v.Border.ActualHeight, (width, height) => new Size(width, height))
+                     .BindTo(this, v => v.ViewModel.Size);
+
                 //Вход для соединения с этим узлом
                 this.Bind(this.ViewModel, x => x.Input, x => x.Input.ViewModel);
 
@@ -112,6 +116,7 @@ namespace StateMachineNodeEditor.View
         }
         private void OnMouseRightDown(MouseButtonEventArgs e)
         {
+
         }
         private void OnMouseRightUp(MouseButtonEventArgs e)
         {
