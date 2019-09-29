@@ -26,7 +26,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Отображается ли выделение
         /// </summary>
-        [Reactive] public bool? Visible { get; set; } = true;
+        [Reactive] public bool? Visible { get; set; } = false;
 
         /// <summary>
         /// Точка левого верхнего угла
@@ -55,24 +55,25 @@ namespace StateMachineNodeEditor.ViewModel
             MyPoint different = Point1 - Point2;
 
             Size = new Size(Math.Abs(different.X), Math.Abs(different.Y));
+            Console.WriteLine(Size);
 
             //Если нужно отражаем по X и/или Y 
             Scale.Scales.Set((different.X > 0) ? 1 : -1, (different.Y > 0) ? 1 : -1);
         }
 
         #region Setup Commands
-        public SimpleCommandWithParameter<MyPoint> CommandStartSelect { get; set; }
+        public SimpleCommand CommandStartSelect { get; set; }
         public SimpleCommand CommandEndSelect { get; set; }
 
         private void SetupCommands()
         {
-            CommandStartSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
+            CommandStartSelect = new SimpleCommand(this, StartSelect);
             CommandEndSelect = new SimpleCommand(this, EndSelect);
         }
 
-        private void StartSelect(MyPoint point)
+        private void StartSelect()
         {
-
+            Visible = true;
         }
         private void EndSelect()
         {

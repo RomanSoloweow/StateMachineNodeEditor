@@ -32,7 +32,7 @@ namespace StateMachineNodeEditor.ViewModel
         public ViewModelNode CurrentNode { get; set; }
 
         /// <summary>
-        /// Масштаб (Общий для всех узлов)
+        /// Масштаб 
         /// </summary>
         [Reactive] public Scale Scale { get; set; } = new Scale();
 
@@ -62,7 +62,7 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandUndo { get; set; }
         public SimpleCommand CommandSelectAll { get; set; }
         public SimpleCommand CommandUnSelectAll { get; set; }
-        public SimpleCommandWithParameter<MyPoint> CommandSelect { get; set; }
+        public SimpleCommand CommandSelect { get; set; }
         //public Command CommandNew { get; set; }
         //public Command CommandDelete { get; set; }
         //public Command CommandCopy { get; set; }
@@ -86,14 +86,14 @@ namespace StateMachineNodeEditor.ViewModel
             CommandUndo = new SimpleCommand(this, CommandUndoRedo.Undo);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllNode);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllSelectedNode);
-            CommandSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
+            CommandSelect = new SimpleCommand(this, StartSelect);
             CommandSelectorIntersect = new SimpleCommand(this, SelectorIntersect);
         }
 
         #endregion Commands
-        public void StartSelect(MyPoint position)
+        public void StartSelect()
         {
-            Selector.CommandStartSelect.Execute(position);
+            Selector.CommandStartSelect.Execute();
         }
         public List<ViewModelNode> MoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {

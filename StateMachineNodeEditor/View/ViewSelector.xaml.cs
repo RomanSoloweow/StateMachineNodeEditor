@@ -52,6 +52,11 @@ namespace StateMachineNodeEditor.View
             SetupEvents();
             SetupCommands();
         }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+        }
         #region Setup Binding 
         private void SetupBinding()
         {
@@ -83,12 +88,24 @@ namespace StateMachineNodeEditor.View
 
                 //Точка масштабирования, координата Y
                 this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
+
+
+                this.WhenAnyValue(x => x.Visibility).Subscribe(_ => Update());
             });
         }
 
         #endregion Setup Binding 
 
         #region Setup Events
+
+        private void Update()
+        {
+            if(this.IsVisible)
+            {
+                Mouse.Capture(this);
+                Keyboard.Focus(this);
+            }
+        }
         private void SetupEvents()
         {
             this.WhenActivated(disposable =>

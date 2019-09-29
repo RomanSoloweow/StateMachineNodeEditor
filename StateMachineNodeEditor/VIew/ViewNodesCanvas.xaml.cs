@@ -53,7 +53,7 @@ namespace StateMachineNodeEditor.View
         }
         #endregion ViewModel
 
-        private MyPoint positionRightClick = new MyPoint();
+        public MyPoint positionRightClick { get; set; } = new MyPoint();
         private MyPoint positionLeftClick = new MyPoint();
         private MyPoint positionMove = new MyPoint();
         private MyPoint sumMove = new MyPoint();
@@ -91,7 +91,12 @@ namespace StateMachineNodeEditor.View
             {
                 this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
                 this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+                this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+                this.OneWayBind(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect.Command);
+
+
                 this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
+                this.WhenAnyValue(x => x.ViewModel.Selector.Visible).Subscribe(_ => ViewModel.Selector.Point1.Set(Mouse.GetPosition(this)));
 
             });
         }

@@ -41,7 +41,11 @@
             <MenuItem Header="Add" x:Name="ItemAdd" InputGestureText="Ctrl + N" />
         </ContextMenu>
     </UserControl.ContextMenu>-->
-    <UserControl.InputBindings>
+    <UserControl.CommandBindings>
+        <!--<CommandBinding Command="Zoom" Executed="Zoom" />-->
+        <CommandBinding Command="Redo" x:Name="RedoCommand"/>
+    </UserControl.CommandBindings>
+            <UserControl.InputBindings>
         <KeyBinding x:Name="BindingUndo" Key="Z" Modifiers="Control" />
         <KeyBinding x:Name="BindingRedo" Key="Y" Modifiers="Control" />
         <MouseBinding x:Name="BindingSelect" Gesture="Ctrl+LeftClick" />
