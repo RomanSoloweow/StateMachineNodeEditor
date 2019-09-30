@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
-             mc:Ignorable="d" Focusable="True">
+             mc:Ignorable="d" Focusable="True" HorizontalAlignment="Left" VerticalAlignment="Top">
     <UserControl.RenderTransform>
         <TransformGroup>
             <ScaleTransform x:Name="Scale" ScaleX="1"  ScaleY="1"/>
@@ -14,5 +14,5 @@
         </TransformGroup>
     </UserControl.RenderTransform>
 
-    <Rectangle x:Name="Form" Style="{DynamicResource SelectorStyle}" />
+    <Rectangle x:Name="Form" Style="{DynamicResource SelectorStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 </UserControl>

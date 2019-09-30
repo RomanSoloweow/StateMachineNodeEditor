@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d" 
              Focusable="True" AllowDrop="True">
+    
     <Grid x:Name="Grid" Background="#FF141414">
         <local:ViewSelector x:Name="Selector"  Panel.ZIndex="999"/>
         <ItemsControl x:Name="Nodes" >

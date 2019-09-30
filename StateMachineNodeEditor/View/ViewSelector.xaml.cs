@@ -83,11 +83,11 @@ namespace StateMachineNodeEditor.View
                 //Масштаб по оси Y
                 this.Bind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
-                //Точка масштабирования, координата X
-                this.Bind(this.ViewModel, x => x.Scale.Center.Value.X, x => x.Scale.CenterX);
+                ////Точка масштабирования, координата X
+                //this.Bind(this.ViewModel, x => x.Scale.Center.Value.X, x => x.Scale.CenterX);
 
-                //Точка масштабирования, координата Y
-                this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
+                ////Точка масштабирования, координата Y
+                //this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
 
 
                 this.WhenAnyValue(x => x.Visibility).Subscribe(_ => Update());
@@ -111,6 +111,7 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.Events().MouseMove.Subscribe(e => OnMouseMoves(e));
+                this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftButtonUp(e));
 
             });
         }
@@ -121,6 +122,11 @@ namespace StateMachineNodeEditor.View
             ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
 
             ViewModel.Point2.Set(e.GetPosition(NodesCanvas));
+
+        }
+        private void OnMouseLeftButtonUp(MouseEventArgs e)
+        {
+            this.ViewModel.Visible = null;
 
         }
         #endregion Setup Events

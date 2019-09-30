@@ -55,17 +55,10 @@ namespace StateMachineNodeEditor.ViewModel
             Console.WriteLine("Center___" );
         }
         private void UpdateSize()
-        {
-     
-            MyPoint different = Point2 - Point1;
-
+        {          
+            MyPoint different = Point2 - Point1;         
             Size = new Size(Math.Abs(different.X), Math.Abs(different.Y));
-
-            //Если нужно отражаем по X и/или Y 
-            Point point = new Point(((different.X > 0) ? 1 : -1), ((different.Y > 0) ? 1 : -1));
-            Scale.Scales.Set(point);
-            Console.WriteLine(point);
-            //Console.WriteLine(Scale.Scales.X.ToString() + "====" + Scale.Scales.Y.ToString());
+            Scale.Scales.Set(((different.X > 0) ? 1 : -1), ((different.Y > 0) ? 1 : -1));
         }
 
         #region Setup Commands
