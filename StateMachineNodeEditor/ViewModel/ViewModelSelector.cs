@@ -46,13 +46,7 @@ namespace StateMachineNodeEditor.ViewModel
         public ViewModelSelector()
         {
             this.WhenAnyValue(x => x.Point1.Value, x => x.Point2.Value).Subscribe(_ => UpdateSize());
-            this.WhenAnyValue(x => x.Point1.Value).Subscribe(_=>UpdateCenter());
             SetupCommands();
-        }
-        public void UpdateCenter()
-        {
-            Scale.Center.Set(Point1);
-            Console.WriteLine("Center___" );
         }
         private void UpdateSize()
         {          
