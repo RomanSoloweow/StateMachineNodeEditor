@@ -56,18 +56,19 @@ namespace StateMachineNodeEditor.ViewModel
         }
 
         #region Setup Commands
-        public SimpleCommand CommandStartSelect { get; set; }
+        public SimpleCommandWithParameter<MyPoint> CommandStartSelect { get; set; }
         public SimpleCommand CommandEndSelect { get; set; }
 
         private void SetupCommands()
         {
-            CommandStartSelect = new SimpleCommand(this, StartSelect);
+            CommandStartSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
             CommandEndSelect = new SimpleCommand(this, EndSelect);
         }
 
-        private void StartSelect()
+        private void StartSelect(MyPoint point)
         {
             Visible = true;
+            Point1.Set(point);
         }
         private void EndSelect()
         {

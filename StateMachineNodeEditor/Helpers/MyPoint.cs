@@ -30,6 +30,10 @@ namespace StateMachineNodeEditor.Helpers
             get { return Value.Y; }
         }
 
+        public MyPoint():this(0,0)
+        {
+
+        }
         public MyPoint(double x = 0,  double y = 0)
         {
             Set(x, y);

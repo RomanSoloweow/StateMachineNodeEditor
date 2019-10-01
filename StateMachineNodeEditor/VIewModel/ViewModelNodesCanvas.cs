@@ -31,6 +31,8 @@ namespace StateMachineNodeEditor.ViewModel
         public ViewModelConnect CurrentConnect { get; set; }
         public ViewModelNode CurrentNode { get; set; }
 
+        public MyPoint testPoint { get; set; } = new MyPoint(100, 100);
+
         /// <summary>
         /// Масштаб 
         /// </summary>
@@ -50,7 +52,7 @@ namespace StateMachineNodeEditor.ViewModel
 
             ListNodes.Add(new ViewModelNode(this)
             {
-                Name= "State 1"
+                Name= "State 0"
             });
 
             //AddEmptyConnect();
@@ -62,16 +64,18 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandUndo { get; set; }
         public SimpleCommand CommandSelectAll { get; set; }
         public SimpleCommand CommandUnSelectAll { get; set; }
-        public SimpleCommand CommandSelect { get; set; }
-        //public Command CommandNew { get; set; }
-        //public Command CommandDelete { get; set; }
+        public SimpleCommandWithParameter<MyPoint> CommandSelect { get; set; }
+        public Command<MyPoint, ViewModelNode> CommandAddNode { get; set; }
+        public Command<MyPoint, ViewModelNode> CommandDeleteNode { get; set; }
         //public Command CommandCopy { get; set; }
         //public Command CommandPaste { get; set; }
         //public Command CommandCut { get; set; }
+
         //public Command CommandMoveDown { get; set; }
         //public Command CommandMoveLeft { get; set; }
         //public Command CommandMoveRight { get; set; }
         //public Command CommandMoveUp { get; set; }
+
         //public Command CommandSimpleMoveAllNode { get; set; }
         //public Command CommandSimpleMoveAllSelectedNode { get; set; }
 
@@ -86,14 +90,16 @@ namespace StateMachineNodeEditor.ViewModel
             CommandUndo = new SimpleCommand(this, CommandUndoRedo.Undo);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllNode);
             CommandMoveAllNode = new Command<MyPoint, List<ViewModelNode>>(this, MoveAllSelectedNode);
-            CommandSelect = new SimpleCommand(this, StartSelect);
+            CommandAddNode = new Command<MyPoint, ViewModelNode>(this, AddNode);
+            CommandDeleteNode = new Command<MyPoint, ViewModelNode>(this, DeleteNode);
+            CommandSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
             CommandSelectorIntersect = new SimpleCommand(this, SelectorIntersect);
         }
 
         #endregion Commands
-        public void StartSelect()
+        public void StartSelect(MyPoint point)
         {
-            Selector.CommandStartSelect.Execute();
+            Selector.CommandStartSelect.Execute(point);
         }
         public List<ViewModelNode> MoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {
@@ -109,7 +115,21 @@ namespace StateMachineNodeEditor.ViewModel
             nodes.ForEach(node => node.Move(delta));
             return nodes;
         }
+        public ViewModelNode AddNode(MyPoint paramentr, ViewModelNode result)
+        {
+            ViewModelNode newNode = new ViewModelNode(this)
+            {
+                Name = "State "+Nodes.Count.ToString(),
+                Point1 = paramentr
+            };
 
+            ListNodes.Add(newNode);
+            return newNode;
+        }
+        public ViewModelNode DeleteNode(MyPoint paramentr, ViewModelNode result)
+        {
+            return null;
+        }
         private void SelectorIntersect()
         {
             MyPoint selectorPoint1 = Selector.Point1 / Scale.Value;
