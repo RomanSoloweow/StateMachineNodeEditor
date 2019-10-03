@@ -53,40 +53,30 @@ namespace StateMachineNodeEditor.View
         }
         #endregion ViewModel
 
-       public MyPoint positionRightClick { get; set ; } = new MyPoint();
+        private MyPoint positionRightClick { get; set ; } = new MyPoint();
+        private MyPoint positionLeftClick { get; set; } = new MyPoint();
+        private MyPoint positionMove { get; set; } = new MyPoint();
+        private MyPoint sumMove { get; set; } = new MyPoint();
+        private MoveNodes move { get; set; } = MoveNodes.No;
 
-        //public ObservableProperty<MyPoint> positionRightClick;
-        public MyPoint positionLeftClick { get; set; } = new MyPoint();
-        private MyPoint positionMove = new MyPoint();
-        private MyPoint sumMove = new MyPoint();
-
-        private MoveNodes move = MoveNodes.No;
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            Keyboard.Focus(this);
-        }
         public ViewNodesCanvas()
         {
             InitializeComponent();
             SetupBinding();
             SetupEvents();
-            SetupCommands();
-          
+            SetupCommands();    
+            
         }
-
         #region Setup Binding
-        private void SetupBinding()
-        {
-           
-            //positionRightClick.ObservableForProperty
-            this.WhenActivated(disposable =>
+            private void SetupBinding()
             {
-                this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
-                this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
-                this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
-            });
-        }
+                this.WhenActivated(disposable =>
+                {
+                    this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
+                    this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
+                    this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+                });
+            }
         #endregion Setup Binding
 
         #region Setup Commands
@@ -94,12 +84,15 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
+                var positionLeftClickObservable = this.ObservableForProperty(x => x.positionLeftClick).Select(x => x.Value);
+                var positionRightClickObservable = this.ObservableForProperty(x => x.positionRightClick).Select(x => x.Value);
                 this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
                 this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
                 this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
-                var positionLeftClickParam = this.ObservableForProperty(x => x.positionLeftClick).Select(x => x.Value);
-                this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickParam);
-                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickParam);
+
+                this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
+                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);
+                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
                 this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
 
             });
@@ -107,23 +100,25 @@ namespace StateMachineNodeEditor.View
         #endregion Setup Commands
 
         #region Setup Events
-        private void SetupEvents()
-        {
-            this.WhenActivated(disposable =>
+            private void SetupEvents()
             {
-                this.Events().MouseLeftButtonDown.Subscribe(e => OnMouseLeftDown(e));
-                this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftUp(e));
-                this.Events().MouseRightButtonDown.Subscribe(e => OnMouseRightDown(e));
-                this.Events().MouseRightButtonUp.Subscribe(e => OnMouseRightUp(e));
-                this.Events().MouseDown.Subscribe(e => OnMouseDown(e));
-                this.Events().MouseUp.Subscribe(e => OnMouseUp(e));
-                this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
+                this.WhenActivated(disposable =>
+                {
+                    this.Events().MouseLeftButtonDown.Subscribe(e => OnEventMouseLeftDown(e));
+                    this.Events().MouseLeftButtonUp.Subscribe(e => OnEventMouseLeftUp(e));
+                    this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e));
+                    this.Events().MouseRightButtonUp.Subscribe(e => OnEventMouseRightUp(e));
+                    this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e));
+                    this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e));
+                    this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e));
+                    this.Events().DragOver.Subscribe(e => OnEventDragOver(e));
 
-                //Эти события срабатывают раньше команд
-                this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnMouseLeftDown(e));
-            });
-        }
-        private void OnMouseLeftDown(MouseButtonEventArgs e)
+                    //Эти события срабатывают раньше команд
+                    this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e));
+                    this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e));
+                });
+            }
+        private void OnEventMouseLeftDown(MouseButtonEventArgs e)
         {
             if (Mouse.Captured == null)
             {
@@ -131,11 +126,12 @@ namespace StateMachineNodeEditor.View
                 this.CaptureMouse();
                 Keyboard.Focus(this);
             }
-            positionLeftClick.FromPoint(e.GetPosition(this.Grid));
+     
             //if (this.IsMouseCaptured)
             //    ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
         }
-            private void OnMouseLeftUp(MouseButtonEventArgs e)
+        
+        private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {
             if (move == MoveNodes.No)
                 return;
@@ -147,26 +143,24 @@ namespace StateMachineNodeEditor.View
             move = MoveNodes.No;
             sumMove.Clear();
         }
-        private void OnMouseRightDown(MouseButtonEventArgs e)
+        private void OnEventMouseRightDown(MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
-            //positionRightClick.Value
-            positionRightClick.FromPoint(e.GetPosition(this.Grid));
         }
-        private void OnMouseRightUp(MouseButtonEventArgs e)
+        private void OnEventMouseRightUp(MouseButtonEventArgs e)
         {
         }
-        private void OnMouseDown(MouseButtonEventArgs e)
+        private void OnEventMouseDown(MouseButtonEventArgs e)
         {
         }           
-        private void OnMouseUp(MouseButtonEventArgs e)
+        private void OnEventMouseUp(MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
-            positionMove = null;
+            positionMove.Clear();
             Keyboard.Focus(this);
        
         }
-        private void OnMouseMove(MouseButtonEventArgs e)
+        private void OnEventMouseMove(MouseEventArgs e)
         {
             if (Mouse.Captured == null)
                 return;
@@ -179,29 +173,42 @@ namespace StateMachineNodeEditor.View
             
             if (this.IsMouseCaptured)
             {
-                //ViewModelNodesCanvas.CommandSimpleMoveAllNode.Execute(delta);
+                ViewModel.CommandPartMoveAllNode.Execute(delta);
                 move = MoveNodes.MoveAll;
             }
             else
             {
-                //ViewModelNodesCanvas.CommandSimpleMoveAllSelectedNode.Execute(delta);
+                ViewModel.CommandPartMoveAllSelectedNode.Execute(delta);
                 move = MoveNodes.MoveSelected;
             }
         }
+        private void OnEventDragOver(DragEventArgs e)
+        {
+            this.ViewModel.CurrentConnect.EndPoint.Set(e.GetPosition(Grid));
+        }
 
+        private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            positionLeftClick.Set(e.GetPosition(this.Grid));
+        }
+        private void OnEventPreviewMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            positionRightClick.Set(e.GetPosition(this.Grid));
+        }
+
+        #endregion Setup Events
         private MyPoint GetDeltaMove()
         {
-            MyPoint CurrentPosition = MyPoint.MyPointFromPoint(Mouse.GetPosition(this.Grid));
+            MyPoint CurrentPosition = new MyPoint(Mouse.GetPosition(this.Grid));
             MyPoint result = new MyPoint();
 
-            if (positionMove.IsClear)
+            if (!positionMove.IsClear)
             {
                 result = CurrentPosition - positionMove;
             }
             positionMove = CurrentPosition;
             return result;
         }
-        #endregion Setup Events
 
     }
 }

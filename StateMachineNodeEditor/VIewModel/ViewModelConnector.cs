@@ -67,10 +67,31 @@ namespace StateMachineNodeEditor.ViewModel
         public ViewModelConnector(ViewModelNode viewModelNode)
         {
             Node = viewModelNode;
+            SetupCommands();
         }
         #region Commands
+        public SimpleCommand CommandDrag { get; set; }
+        public SimpleCommand CommandDrop { get; set; }
 
+        public SimpleCommand CommandSetAsCurrent { get; set; }
+
+        private void SetupCommands()
+        {
+            CommandDrag = new SimpleCommand(this, Drag);
+            CommandDrop = new SimpleCommand(this, Drop);
+        }
         //public 
         #endregion Commands
+
+        private void Drag()
+        {
+            //Node.NodesCanvas.CurrentConnect.StartPoint.Set(this.Position);
+            Node.NodesCanvas.CurrentConnect.FromConnector = this;
+        }
+        private void Drop()
+        {
+           
+            //this.Node.
+        }
     }
 }

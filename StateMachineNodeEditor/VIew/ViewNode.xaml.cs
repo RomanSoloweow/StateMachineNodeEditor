@@ -49,10 +49,11 @@ namespace StateMachineNodeEditor.View
         public ViewNode()
         {
             InitializeComponent();
-            SetupProperties();
+            SetupBinding();
             SetupEvents();
         }
-        private void SetupProperties()
+        #region Setup Binding
+        private void SetupBinding()
         {
             this.WhenActivated(disposable =>
             {
@@ -98,25 +99,27 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Transitions, x => x.Transitions.ItemsSource);
             });
         }
+        #endregion Setup Binding
         #region Events
         private void SetupEvents()
         {
             this.WhenActivated(disposable =>
             {
-                this.Events().MouseLeftButtonDown.Subscribe(e => OnMouseLeftDown(e));
+                this.Events().MouseLeftButtonDown.Subscribe(e => OnMouseLeftDowns(e));
                 this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftUp(e));
                 this.Events().MouseRightButtonDown.Subscribe(e => OnMouseRightDown(e));
                 this.Events().MouseRightButtonUp.Subscribe(e => OnMouseRightUp(e));
-                this.Events().MouseDown.Subscribe(e => OnMouseDown(e));
-                this.Events().MouseUp.Subscribe(e => OnMouseUp(e));
+                this.Events().MouseDown.Subscribe(e => OnMouseDowns(e));
+                this.Events().MouseUp.Subscribe(e => OnMouseUps(e));
                 this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
                 this.ButtonCollapse.Events().Click.Subscribe(_ => OnCollapse());
-
+               
             });
         }
-        private void OnMouseLeftDown(MouseButtonEventArgs e)
+        private void OnMouseLeftDowns(MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
+            e.Handled = true;
         }
         private void OnMouseLeftUp(MouseButtonEventArgs e)
         {
@@ -128,7 +131,7 @@ namespace StateMachineNodeEditor.View
         private void OnMouseRightUp(MouseButtonEventArgs e)
         {
         }
-        private void OnMouseDown(MouseButtonEventArgs e)
+        private void OnMouseDowns(MouseButtonEventArgs e)
         {
             if (Mouse.Captured == null)
             {
@@ -137,8 +140,9 @@ namespace StateMachineNodeEditor.View
                 Keyboard.Focus(this);
                 //ViewModelNode.CommandSelect.Execute(true);
             }
+            e.Handled = true;
         }
-        private void OnMouseUp(MouseButtonEventArgs e)
+        private void OnMouseUps(MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
         }
@@ -151,7 +155,6 @@ namespace StateMachineNodeEditor.View
             bool visible = (this.Rotate.Angle != 0);
             this.Rotate.Angle = visible ? 0:180;
             ViewModel.CommandCollapse.Execute(visible);
-
         }
         #endregion Events
     }

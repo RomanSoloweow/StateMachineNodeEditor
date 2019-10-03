@@ -44,31 +44,48 @@ namespace StateMachineNodeEditor.View
         public ViewLeftConnector()
         {
             InitializeComponent();
+            SetupBinding();
+        }
+       
+        #region SetupBinding
+            private void SetupBinding()
+            {
+                this.WhenActivated(disposable =>
+                {
+                    // Имя перехода ( вводится в узле)
+                    this.Bind(this.ViewModel, x => x.Name, x => x.Text.Text);
+
+                    // Доступно ли имя перехода для редактирования
+                    this.Bind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
+
+                    // Доступен ли переход для создания соединия
+                    this.Bind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
+
+                    // Цвет рамки, вокруг перехода
+                    this.Bind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
+
+                    // Цвет перехода
+                    this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
+
+                    // Отображается ли переход
+                    this.Bind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
+
+                    // При изменении размера, позиции или zoom узла
+                    this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
+
+                });
+        }
+        #endregion SetupBinding
+
+        #region SetupEvents
+        private void SetupEvents()
+        {
             this.WhenActivated(disposable =>
             {
-                // Имя перехода ( вводится в узле)
-                this.Bind(this.ViewModel, x => x.Name, x => x.Text.Text);
-
-                // Доступно ли имя перехода для редактирования
-                this.Bind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
-
-                // Доступен ли переход для создания соединия
-                this.Bind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
-
-                // Цвет рамки, вокруг перехода
-                this.Bind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
-
-                // Цвет перехода
-                this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
-
-                // Отображается ли переход
-                this.Bind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
-
-                // При изменении размера, позиции или zoom узла
-                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x=>x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
-
+                this.Form.Events().Drop.Subscribe(_=> OnEventDrop());
             });
         }
+        #endregion SetupEvents
         void UpdatePosition()
         {
             // Координата центра
@@ -81,6 +98,14 @@ namespace StateMachineNodeEditor.View
             Point Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
 
             this.ViewModel.Position.Set(Position);
+        }
+
+        private void OnEventDrop()
+        {
+            this.ViewModel.CommandDrop.Execute();
+            DataObject data = new DataObject();
+            data.SetData("Node", this.ViewModel.Node);
+            DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
         }
     }
 }

@@ -43,6 +43,11 @@ namespace StateMachineNodeEditor.Helpers
         {
             FromPoint(point);
         }
+        public MyPoint(MyPoint point)
+        {
+            this.Set(point);
+        }
+
 
         /// <summary>
         /// Точка находится в начале координат (0,0)

@@ -63,6 +63,11 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public bool? TransitionsVisible { get; set; } = true;
 
         /// <summary>
+        /// Может ли быть удален
+        /// </summary>
+        [Reactive] public bool CanBeDelete { get; set; } = true;
+
+        /// <summary>
         /// Вход для соединения с этим узлом
         /// </summary>
         public ViewModelConnector Input;
@@ -93,7 +98,7 @@ namespace StateMachineNodeEditor.ViewModel
             SetupConnectors();
             SetupCommands();
 
-            this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
+            //this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
         }
 
 
@@ -133,7 +138,7 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommandWithParameter <MyPoint> CommandMove{ get; set; }
         public SimpleCommandWithParameter <object> CommandCollapse { get; set; }
 
-        public void SetupCommands()
+        private void SetupCommands()
         {
             CommandSelect = new SimpleCommandWithParameter<object>(this, Select);
             CommandMove  = new SimpleCommandWithParameter<MyPoint>(this, Move);
@@ -141,7 +146,7 @@ namespace StateMachineNodeEditor.ViewModel
         }
 
         #endregion Commands
-        public void Collapse(object obj)
+        private void Collapse(object obj)
         {
             bool value = (bool)obj;
             Output.Visible = !value;
@@ -151,22 +156,21 @@ namespace StateMachineNodeEditor.ViewModel
                 TransitionsVisible = null ;
 
         }
-        public void Select(object selectOne)
+        private void Select(object selectOne)
         {
             this.Selected = true;
             this.BorderBrush = Brushes.Red;
             //bool selectOnlyOne = false;
             //bool.TryParse(parameters.ToString(), out selectOnlyOne);
         }
-        public void Move(MyPoint delta)
+        private void Move(MyPoint delta)
         {
             Point1 += delta;
         }
 
-        public void UpdatePoint2()
+        private void UpdatePoint2()
         {
             Point2.Set(Point1.X + Size.Width, Point1.Y + Size.Height);
         }
-
     }
 }

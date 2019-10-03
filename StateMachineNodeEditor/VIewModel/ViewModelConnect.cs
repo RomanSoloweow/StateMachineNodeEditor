@@ -11,6 +11,9 @@ using ReactiveUI.Wpf;
 using DynamicData;
 using System.Windows;
 using System.Windows.Media;
+using DynamicData.Binding;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 
 namespace StateMachineNodeEditor.ViewModel
 {
@@ -44,21 +47,33 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Элемент, из которого выходит линия
         /// </summary>
-        public ViewModelConnector FromConnector;
+        [Reactive] public ViewModelConnector FromConnector { get; set; }
 
         /// <summary>
         /// Элемент, в который приходит линия
         /// </summary>
-        public ViewModelConnector ToConnector;
+        [Reactive]  public ViewModelConnector ToConnector { get; set; }
 
-        public ViewModelConnect(ViewModelConnector fromConnector)
+        public ViewModelConnect()
         {
-            FromConnector = fromConnector;
-            this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => Update());
+            this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(newPosition => StartPoint.Set(newPosition));
             this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(value => StartPoint.Set(value));
+            this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => UpdateMedium());
             this.WhenAnyValue(x => x.ToConnector.Position.Value).Subscribe(value => EndPoint.Set(value));
+            this.WhenAnyValue(x => x.FromConnector).Where(x=>x!=null).Subscribe(fromConnector=>StartPoint.Set(fromConnector.Position));
+            this.WhenAnyValue(x => x.ToConnector).Where(x => x!= null).Subscribe(toConnector => EndPoint.Set(toConnector.Position));
+            SetupCommands();
         }
-        private void Update()
+        #region Setup Commands
+        private void SetupCommands()
+        {
+        }
+        #endregion Setup Commands
+        private void Sets(ViewModelConnector viewModelConnector)
+        {
+            StartPoint.Set(viewModelConnector.Position);
+        }
+        private void UpdateMedium()
         {
             MyPoint different = EndPoint - StartPoint;
             Point1.Set(StartPoint.X + 3 * different.X / 8, StartPoint.Y + 1 * different.Y / 8);
