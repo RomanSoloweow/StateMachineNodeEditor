@@ -52,27 +52,27 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Элемент, в который приходит линия
         /// </summary>
-        [Reactive]  public ViewModelConnector ToConnector { get; set; }
+        [Reactive] public ViewModelConnector ToConnector { get; set; }
 
-        public ViewModelConnect()
-        {
+        public ViewModelConnect(ViewModelConnector fromConnector)
+        {        
             this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(newPosition => StartPoint.Set(newPosition));
             this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(value => StartPoint.Set(value));
             this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => UpdateMedium());
             this.WhenAnyValue(x => x.ToConnector.Position.Value).Subscribe(value => EndPoint.Set(value));
-            this.WhenAnyValue(x => x.FromConnector).Where(x=>x!=null).Subscribe(fromConnector=>StartPoint.Set(fromConnector.Position));
-            this.WhenAnyValue(x => x.ToConnector).Where(x => x!= null).Subscribe(toConnector => EndPoint.Set(toConnector.Position));
-            SetupCommands();
+            this.WhenAnyValue(x => x.FromConnector).Where(x=>x!=null).Subscribe(fromconnector=>StartPoint.Set(fromconnector.Position));
+            this.WhenAnyValue(x => x.ToConnector).Where(x =>x!= null).Subscribe(toConnector => EndPoint.Set(toConnector.Position));
+
+            //this.WhenAnyValue(x => x.FromConnector).Where(x => x == null).Subscribe(_ => { StartPoint.Clear(); });
+            //this.WhenAnyValue(x => x.ToConnector).Where(x => x == null).Subscribe(_ => { EndPoint.Clear(); SetupCommands(); });
+            FromConnector = fromConnector;
+            //SetupCommands();
         }
         #region Setup Commands
         private void SetupCommands()
         {
         }
         #endregion Setup Commands
-        private void Sets(ViewModelConnector viewModelConnector)
-        {
-            StartPoint.Set(viewModelConnector.Position);
-        }
         private void UpdateMedium()
         {
             MyPoint different = EndPoint - StartPoint;

@@ -57,12 +57,12 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Узел, которому принадлежит переход
         /// </summary>
-        public ViewModelNode Node { get; set; }
+        [Reactive] public ViewModelNode Node { get; set; }
 
         /// <summary>
         /// Соединение, которое связанно с этим переходом
         /// </summary>
-        public ViewModelConnect Connect { get; set; }
+        [Reactive] public ViewModelConnect Connect { get; set; }
 
         public ViewModelConnector(ViewModelNode viewModelNode)
         {
@@ -72,26 +72,36 @@ namespace StateMachineNodeEditor.ViewModel
         #region Commands
         public SimpleCommand CommandDrag { get; set; }
         public SimpleCommand CommandDrop { get; set; }
-
-        public SimpleCommand CommandSetAsCurrent { get; set; }
+        public SimpleCommand CommandCheckDrop { get; set; }
 
         private void SetupCommands()
         {
             CommandDrag = new SimpleCommand(this, Drag);
             CommandDrop = new SimpleCommand(this, Drop);
+            CommandCheckDrop = new SimpleCommand(this, CheckDrop);
         }
-        //public 
         #endregion Commands
 
         private void Drag()
         {
-            //Node.NodesCanvas.CurrentConnect.StartPoint.Set(this.Position);
-            Node.NodesCanvas.CurrentConnect.FromConnector = this;
+            Node.NodesCanvas.CommandAddFreeConnect.Execute(this);
         }
+
         private void Drop()
         {
-           
-            //this.Node.
+            if(Node.NodesCanvas.CurrentConnect.FromConnector.Node!=this.Node)
+                Node.NodesCanvas.CurrentConnect.ToConnector = this;
+        }
+        private void CheckDrop()
+        {
+            if(Node.NodesCanvas.CurrentConnect.ToConnector==null)
+            {
+                Node.NodesCanvas.CommandDeleteFreeConnect.Execute();              
+            }
+            else
+            {
+                Node.CommandAddEmptyConnector.Execute();
+            }
         }
     }
 }

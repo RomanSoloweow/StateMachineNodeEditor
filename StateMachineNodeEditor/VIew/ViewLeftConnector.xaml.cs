@@ -45,6 +45,7 @@ namespace StateMachineNodeEditor.View
         {
             InitializeComponent();
             SetupBinding();
+            SetupEvents();
         }
        
         #region SetupBinding
@@ -82,14 +83,19 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().Drop.Subscribe(_=> OnEventDrop());
+                this.Form.Events().Drop.Subscribe(_ => OnEventDrop());
             });
         }
         #endregion SetupEvents
+
+        private void OnEventDrop()
+        {
+            this.ViewModel.CommandDrop.Execute();
+        }
         void UpdatePosition()
         {
             // Координата центра
-            Point InputCenter = Form.TranslatePoint(new Point(Form.Width, Form.Height / 2), this);
+            Point InputCenter = Form.TranslatePoint(new Point(Form.Width/2, Form.Height/2), this);
 
             //Ищем Canvas
             ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
@@ -98,14 +104,6 @@ namespace StateMachineNodeEditor.View
             Point Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
 
             this.ViewModel.Position.Set(Position);
-        }
-
-        private void OnEventDrop()
-        {
-            this.ViewModel.CommandDrop.Execute();
-            DataObject data = new DataObject();
-            data.SetData("Node", this.ViewModel.Node);
-            DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
         }
     }
 }

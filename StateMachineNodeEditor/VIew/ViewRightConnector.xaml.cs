@@ -48,31 +48,7 @@ namespace StateMachineNodeEditor.View
             SetupBinding();
             SetupEvents();
         }
-        void UpdatePosition()
-        {
-            Point Position;
-            var name = this.Name;
-            var t = this.Visibility;
-            //Если отображается
-            if (this.IsVisible)
-            {
-                // Координата центра
-                Point InputCenter = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
 
-                //Ищем Canvas
-                ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
-
-                //Получаем позицию центру на канвасе
-                Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
-            }
-            else
-            {
-                //Позиция выхода
-                Position = this.ViewModel.Node.Output.Position.Value;
-            }
-
-            this.ViewModel.Position.Set(Position);
-        }
 
         #region SetupBinding
         private void SetupBinding()
@@ -119,7 +95,33 @@ namespace StateMachineNodeEditor.View
             DataObject data = new DataObject();
             data.SetData("Node", this.ViewModel.Node);        
             DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+            this.ViewModel.CommandCheckDrop.Execute();
         }
-     
+        void UpdatePosition()
+        {
+            Point Position;
+            var name = this.Name;
+            var t = this.Visibility;
+            //Если отображается
+            if (this.IsVisible)
+            {
+                // Координата центра
+                Point InputCenter = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
+
+                //Ищем Canvas
+                ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
+
+                //Получаем позицию центру на канвасе
+                Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
+            }
+            else
+            {
+                //Позиция выхода
+                Position = this.ViewModel.Node.Output.Position.Value;
+            }
+
+            this.ViewModel.Position.Set(Position);
+        }
+
     }
 }

@@ -41,16 +41,6 @@ namespace StateMachineNodeEditor.View
             set { ViewModel = (ViewModelConnect)value; }
         }
         #endregion ViewModel
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-          
-        }
-        protected override void OnMouseEnter(MouseEventArgs e)
-        {
-            base.OnMouseEnter(e);
-            this.ViewModel.EndPoint += 20;
-        }
         public ViewConnect()
         {
             InitializeComponent();

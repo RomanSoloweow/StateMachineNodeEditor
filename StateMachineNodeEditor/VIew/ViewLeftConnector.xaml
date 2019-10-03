@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d"            
              x:Name="LeftConnector"
-             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-6,0,0,0"  >
+             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-6,0,0,0" AllowDrop="True"  >
     <Grid x:Name="grid" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

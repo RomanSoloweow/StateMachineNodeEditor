@@ -122,6 +122,7 @@ namespace StateMachineNodeEditor.View
             ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
 
             ViewModel.Point2.Set(e.GetPosition(NodesCanvas));
+            e.Handled = true;
 
         }
         private void OnMouseLeftButtonUp(MouseEventArgs e)

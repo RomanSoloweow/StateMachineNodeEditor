@@ -29,14 +29,52 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public bool? Visible { get; set; } = false;
 
         /// <summary>
-        /// Точка левого верхнего угла
+        /// Точка левого верхнего угла без учета отражений
         /// </summary>
         [Reactive] public MyPoint Point1 { get; set; } = new MyPoint();
 
         /// <summary>
-        /// Точка нижнего правого угла
+        /// Точка нижнего правого угла без учета отражений
         /// </summary>
         [Reactive] public MyPoint Point2 { get; set; } = new MyPoint();
+
+
+        /// <summary>
+        /// Точка левого верхнего угла c учетом отражений
+        /// </summary>
+        public MyPoint Point1WithScale {
+            get
+            {
+                double X = Point1.X;
+                double Y = Point1.Y;
+
+                if (Scale.ScaleX< 0)
+                    X-= Size.Width;
+                if (Scale.ScaleY < 0)
+                    Y -= Size.Height;
+
+                return new MyPoint(X,Y);
+            }
+        }
+
+        /// <summary>
+        /// Точка левого верхнего угла c учетом отражений
+        /// </summary>
+        public MyPoint Point2WithScale
+        {
+            get
+            {
+                double X = Point1.X;
+                double Y = Point1.Y;
+
+                if (Scale.ScaleX > 0)
+                    X += Size.Width;
+                if (Scale.ScaleY > 0)
+                    Y += Size.Height;
+
+                return new MyPoint(X, Y);
+            }
+        }
 
         /// <summary>
         /// Масштаб

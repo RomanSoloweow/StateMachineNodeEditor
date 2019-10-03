@@ -125,6 +125,8 @@ namespace StateMachineNodeEditor.View
                 Keyboard.ClearFocus();
                 this.CaptureMouse();
                 Keyboard.Focus(this);
+
+                this.ViewModel.CommandUnSelectAll.Execute();
             }
      
             //if (this.IsMouseCaptured)
@@ -169,8 +171,7 @@ namespace StateMachineNodeEditor.View
             if (delta.IsClear)
                 return;
 
-            sumMove += delta;    
-            
+            sumMove += delta;
             if (this.IsMouseCaptured)
             {
                 ViewModel.CommandPartMoveAllNode.Execute(delta);
@@ -184,7 +185,9 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventDragOver(DragEventArgs e)
         {
-            this.ViewModel.CurrentConnect.EndPoint.Set(e.GetPosition(Grid));
+            MyPoint point = new MyPoint(e.GetPosition(Grid));
+            point -= 2;
+            this.ViewModel.CurrentConnect.EndPoint.Set(point);
         }
 
         private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)

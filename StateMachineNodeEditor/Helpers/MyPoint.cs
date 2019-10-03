@@ -80,6 +80,18 @@ namespace StateMachineNodeEditor.Helpers
         }
 
         /// <summary>
+        /// Сложение координат двух точек
+        /// </summary>
+        /// <param name="point">Вторая точка MyPoint</param>
+        /// <returns>MyPoint с результатом суммы</returns>
+        public MyPoint Add(double x = 0, double y = 0)
+        {
+            Value = new Point(this.X+x, this.Y+y);
+            return this;
+        }
+
+
+        /// <summary>
         /// Установить координаты текущей точки
         /// </summary>
         /// <param name="x">Координата X</param>

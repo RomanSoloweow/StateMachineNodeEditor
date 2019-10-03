@@ -15,7 +15,7 @@ using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
 using DynamicData.Binding;
-
+using System.Reactive.Linq;
 namespace StateMachineNodeEditor.ViewModel
 {
     /// <summary>
@@ -24,8 +24,6 @@ namespace StateMachineNodeEditor.ViewModel
     public class ViewModelNode:ReactiveObject, IValidatableViewModel
     {
         public ValidationContext ValidationContext { get; } = new ValidationContext();
-
-
         /// <summary>
         /// Точка левого верхнего угла
         /// </summary>
@@ -45,7 +43,6 @@ namespace StateMachineNodeEditor.ViewModel
         /// Название узла (Указано в шапке)
         /// </summary>
         [Reactive] public string Name { get; set; }
-
 
         /// <summary>
         /// Флаг того, что узел выбран
@@ -70,37 +67,38 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Вход для соединения с этим узлом
         /// </summary>
-        public ViewModelConnector Input;
+        [Reactive] public ViewModelConnector Input { get; set; }
 
         /// <summary>
         /// Выход ( используется, когда список переходов свернут )
         /// </summary>
-        public ViewModelConnector Output;
-
-        /// <summary>
-        /// Список переходов
-        /// </summary>
-        public IObservableCollection<ViewModelConnector> Transitions = new ObservableCollectionExtended<ViewModelConnector>();
+        [Reactive] public ViewModelConnector Output { get; set; }
 
         /// <summary>
         /// Текущий переход, из которого можно создать соединение
         /// </summary>
-        public ViewModelConnector CurrentConnector;
+        [Reactive] public ViewModelConnector CurrentConnector { get; set; }
 
         /// <summary>
         /// Канвас, которому принадлежит узел
         /// </summary>
-        public ViewModelNodesCanvas NodesCanvas;
+        [Reactive] public ViewModelNodesCanvas NodesCanvas { get; set; }
+
+        /// <summary>
+        /// Список переходов
+        /// </summary>
+        public IObservableCollection<ViewModelConnector> Transitions { get; set; } = new ObservableCollectionExtended<ViewModelConnector>();
+
+        
 
         public ViewModelNode(ViewModelNodesCanvas nodesCanvas)
         {
             NodesCanvas = nodesCanvas;
+            this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.BorderBrush = value ? Brushes.Red:null; });
+            this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
             SetupConnectors();
             SetupCommands();
-
-            //this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
         }
-
 
         #region Connectors
         private void SetupConnectors()
@@ -116,33 +114,20 @@ namespace StateMachineNodeEditor.ViewModel
             };
             AddEmptyConnector();
         }
-        private ViewModelConnector AddEmptyConnector()
-        {
-            if (CurrentConnector != null)
-            {
-                CurrentConnector.TextEnable = true;
-                CurrentConnector.FormEnable = false;
-                CurrentConnector.Name = "Transition_" + Transitions.Count.ToString();
-            }
-            CurrentConnector = new ViewModelConnector(this)
-            {
-                TextEnable = false
-            };
-            Transitions.Insert(0, CurrentConnector);
-            return CurrentConnector;
-        }
         #endregion Connectors
 
         #region Commands
-        public SimpleCommandWithParameter <object> CommandSelect { get; set; }
+        public SimpleCommand CommandSelect { get; set; }
         public SimpleCommandWithParameter <MyPoint> CommandMove{ get; set; }
         public SimpleCommandWithParameter <object> CommandCollapse { get; set; }
+        public SimpleCommand CommandAddEmptyConnector { get; set; }
 
         private void SetupCommands()
         {
-            CommandSelect = new SimpleCommandWithParameter<object>(this, Select);
+            CommandSelect = new SimpleCommand(this, Select);
             CommandMove  = new SimpleCommandWithParameter<MyPoint>(this, Move);
             CommandCollapse = new SimpleCommandWithParameter<object>(this, Collapse);
+            CommandAddEmptyConnector = new SimpleCommand(this, AddEmptyConnector);
         }
 
         #endregion Commands
@@ -156,12 +141,13 @@ namespace StateMachineNodeEditor.ViewModel
                 TransitionsVisible = null ;
 
         }
-        private void Select(object selectOne)
-        {
-            this.Selected = true;
-            this.BorderBrush = Brushes.Red;
-            //bool selectOnlyOne = false;
-            //bool.TryParse(parameters.ToString(), out selectOnlyOne);
+        private void Select()
+        {     
+            if (Selected != true)
+            {
+                NodesCanvas.CommandUnSelectAll.Execute();
+                this.Selected = true;
+            }
         }
         private void Move(MyPoint delta)
         {
@@ -171,6 +157,20 @@ namespace StateMachineNodeEditor.ViewModel
         private void UpdatePoint2()
         {
             Point2.Set(Point1.X + Size.Width, Point1.Y + Size.Height);
+        }
+        private void AddEmptyConnector()
+        {
+            if (CurrentConnector != null)
+            {
+                CurrentConnector.TextEnable = true;
+                CurrentConnector.FormEnable = false;
+                CurrentConnector.Name = "Transition_" + Transitions.Count.ToString();
+            }
+            CurrentConnector = new ViewModelConnector(this)
+            {
+                TextEnable = false
+            };
+            Transitions.Insert(0, CurrentConnector);
         }
     }
 }
