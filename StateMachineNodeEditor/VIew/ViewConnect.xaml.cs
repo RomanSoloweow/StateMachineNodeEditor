@@ -60,6 +60,8 @@ namespace StateMachineNodeEditor.View
 
                 // Точка, в которую приходит линия
                 this.Bind(this.ViewModel, x => x.EndPoint.Value, x => x.BezierSegment.Point3);
+
+                this.Bind(this.ViewModel, x => x.StrokeDashArray, x => x.Path.StrokeDashArray);
             });
         }
     }

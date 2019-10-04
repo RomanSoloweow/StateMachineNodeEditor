@@ -86,7 +86,6 @@ namespace StateMachineNodeEditor.View
                 //Размеры
                 this.WhenAnyValue(v => v.Border.ActualWidth, v => v.Border.ActualHeight, (width, height) => new Size(width, height))
                      .BindTo(this, v => v.ViewModel.Size);
-                this.WhenAnyValue(v => v.Border.ActualWidth, v => v.Border.ActualHeight).Subscribe(_ => Console.WriteLine(this.ViewModel.Name + " Size = " + this.ViewModel.Size));
 
                 //Вход для соединения с этим узлом
               this.Bind(this.ViewModel, x => x.Input, x => x.Input.ViewModel);

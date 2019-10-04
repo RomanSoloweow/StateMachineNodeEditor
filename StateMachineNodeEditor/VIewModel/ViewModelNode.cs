@@ -52,7 +52,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Цвет рамки вокруг узла
         /// </summary>
-        [Reactive] public Brush BorderBrush { get; set; } = null;
+        [Reactive] public Brush BorderBrush { get; set; } = Brushes.LightGray;
 
         /// <summary>
         /// Отображаются ли переходы
@@ -94,7 +94,7 @@ namespace StateMachineNodeEditor.ViewModel
         public ViewModelNode(ViewModelNodesCanvas nodesCanvas)
         {
             NodesCanvas = nodesCanvas;
-            this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.BorderBrush = value ? Brushes.Red:null; });
+            this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.BorderBrush = value ? Brushes.Red:Brushes.LightGray; });
             this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
             SetupConnectors();
             SetupCommands();

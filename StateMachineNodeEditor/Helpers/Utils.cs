@@ -25,12 +25,7 @@ namespace StateMachineNodeEditor.Helpers
             bool par2 = a2.X > b1.X; //первый перед вторым
             bool par3 = a1.Y > b2.Y; //первый под вторым
             bool par4 = a2.Y > b1.Y; //второй под первым
-                                     //если хоть одно условие выполняется - прямоугольники пересекаются
-
-            Console.WriteLine("par1 = " + par1);
-            Console.WriteLine("par2 = " + par2);
-            Console.WriteLine("par3 = " + par3);
-            Console.WriteLine("par4 = " + par4);
+            //если хоть одно условие выполняется - прямоугольники не пересекаются
             return !(par1 || par2 || par3 || par4);
         }
     }
