@@ -137,12 +137,13 @@ namespace StateMachineNodeEditor.View
             if (move == MoveNodes.No)
                 return;
 
-            //if (move == MoveNodes.MoveAll)
-                //ViewModelNodesCanvas.CommandMoveAllNode.Execute(sumMove);
-            //else
-                //ViewModelNodesCanvas.CommandMoveAllSelectedNode.Execute(sumMove);
+            if (move == MoveNodes.MoveAll)
+                this.ViewModel.CommandFullMoveAllNode.Execute(sumMove);
+            else if (move == MoveNodes.MoveSelected)
+                this.ViewModel.CommandFullMoveAllSelectedNode.Execute(sumMove);
+
             move = MoveNodes.No;
-            sumMove.Clear();
+            sumMove = new MyPoint();
         }
         private void OnEventMouseRightDown(MouseButtonEventArgs e)
         {
@@ -159,7 +160,6 @@ namespace StateMachineNodeEditor.View
             this.ReleaseMouseCapture();
             positionMove.Clear();
             Keyboard.Focus(this);
-       
         }
         private void OnEventMouseMove(MouseEventArgs e)
         {

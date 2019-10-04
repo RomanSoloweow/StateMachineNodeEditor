@@ -79,6 +79,7 @@ namespace StateMachineNodeEditor.ViewModel
         private void FromConnectChanged()
         {
             StartPoint.Set(FromConnector.Position);
+            
         }
         private void ToConnectChanged()
         {

@@ -18,7 +18,7 @@ using ReactiveUI;
 using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
-
+using System.Reactive.Linq;
 namespace StateMachineNodeEditor.View
 {
     /// <summary>
@@ -99,7 +99,8 @@ namespace StateMachineNodeEditor.View
 
             //Ищем Canvas
             ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
-
+            if (NodesCanvas == null)
+                return;
             //Получаем позицию центру на канвасе
             Point Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
 

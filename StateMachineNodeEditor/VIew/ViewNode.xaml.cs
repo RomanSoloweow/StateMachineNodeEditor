@@ -120,7 +120,6 @@ namespace StateMachineNodeEditor.View
         {
             Keyboard.Focus(this);
             this.ViewModel.CommandSelect.Execute(true);
-            e.Handled = true;
         }
         private void OnMouseLeftUp(MouseButtonEventArgs e)
         {
@@ -139,7 +138,6 @@ namespace StateMachineNodeEditor.View
                 Keyboard.ClearFocus();
                 this.CaptureMouse();
                 Keyboard.Focus(this);
-                //ViewModelNode.CommandSelect.Execute(true);
             }
             e.Handled = true;
         }

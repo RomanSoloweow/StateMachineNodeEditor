@@ -83,8 +83,9 @@ namespace StateMachineNodeEditor.Helpers
         /// <param name="parameter"> Параметр команды </param>
         public  void Execute(object parameter)
         {
+            
             //Запоминаем параметр ( чтобы можно было егоже передать в отмену)
-            Parameters = parameter as TypeParameter;
+            Parameters = (parameter as TypeParameter);
 
             //Выполняем команду и запоминаем результат ( чтобы можно было выполнить отмену именно для этого результата)
             Result = this._execute(Parameters, Result) as TypeResult;
@@ -135,7 +136,7 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> execute)
+        private Command(object owner, Func<TypeParameter, TypeResult, TypeResult> execute)
         {
             Owner = owner;
             _execute = execute;

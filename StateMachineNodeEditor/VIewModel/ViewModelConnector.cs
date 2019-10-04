@@ -84,7 +84,8 @@ namespace StateMachineNodeEditor.ViewModel
 
         private void Drag()
         {
-            Node.NodesCanvas.CommandAddFreeConnect.Execute(this);
+            Node.NodesCanvas.CommandAddConnect.Execute(this);
+            //FromConnector.Connect = this;
         }
 
         private void Drop()

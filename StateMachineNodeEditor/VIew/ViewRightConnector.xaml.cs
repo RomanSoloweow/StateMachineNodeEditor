@@ -84,18 +84,19 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().MouseLeftButtonDown.Subscribe(_ => OnEventDrag());
+                this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventDrag(e));
             });
         }
         #endregion SetupEvents
 
-        private void OnEventDrag()
+        private void OnEventDrag(MouseButtonEventArgs e)
         {
             this.ViewModel.CommandDrag.Execute();
             DataObject data = new DataObject();
             data.SetData("Node", this.ViewModel.Node);        
             DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
             this.ViewModel.CommandCheckDrop.Execute();
+            e.Handled = true;
         }
         void UpdatePosition()
         {

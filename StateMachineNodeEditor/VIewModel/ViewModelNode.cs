@@ -170,6 +170,7 @@ namespace StateMachineNodeEditor.ViewModel
                 CurrentConnector.TextEnable = true;
                 CurrentConnector.FormEnable = false;
                 CurrentConnector.Name = "Transition_" + Transitions.Count.ToString();
+                //NodesCanvas.CommandAddConnect.Execute(CurrentConnector.Connect);
             }
             CurrentConnector = new ViewModelConnector(this)
             {

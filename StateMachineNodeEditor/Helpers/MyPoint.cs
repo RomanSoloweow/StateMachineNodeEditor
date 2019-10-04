@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System;
 using System.Windows;
 
 namespace StateMachineNodeEditor.Helpers
@@ -66,6 +67,16 @@ namespace StateMachineNodeEditor.Helpers
         public void Clear()
         {
             Value = new Point();
+        }
+
+        /// <summary>
+        /// Отразить координаты
+        /// </summary>
+        /// <param name="onX">Отразить по X (По умолчанию true) </param>
+        /// <param name="onY">Отразить по Y (По умолчанию true) </param>
+        public void Mirror(bool onX=true, bool onY=true)
+        {
+            Value = new Point(onX?-this.X: this.X, onY ? -this.Y : this.Y);
         }
 
         /// <summary>
@@ -144,6 +155,16 @@ namespace StateMachineNodeEditor.Helpers
             Set(point);
             return this;
         }
+
+        /// <summary>
+        /// Возаращает копию текущего объекта
+        /// </summary>
+        /// <returns>Копия</returns>
+        public MyPoint Copy()
+        {
+            return new MyPoint(this);
+        }
+
 
         #region Static Methods
 
