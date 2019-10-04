@@ -44,11 +44,13 @@ namespace StateMachineNodeEditor.View
             set { ViewModel = (ViewModelNode)value; }
         }
         #endregion ViewModel
+
         public ViewNode()
         {
             InitializeComponent();
             SetupBinding();
             SetupEvents();
+            SetupCommands();
         }
         #region Setup Binding
         private void SetupBinding()
@@ -98,7 +100,7 @@ namespace StateMachineNodeEditor.View
             });
         }
         #endregion Setup Binding
-        #region Events
+        #region Setup Events
         private void SetupEvents()
         {
             this.WhenActivated(disposable =>
@@ -117,7 +119,7 @@ namespace StateMachineNodeEditor.View
         private void OnMouseLeftDowns(MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
-            this.ViewModel.CommandSelect.Execute();
+            this.ViewModel.CommandSelect.Execute(true);
             e.Handled = true;
         }
         private void OnMouseLeftUp(MouseButtonEventArgs e)
@@ -155,6 +157,15 @@ namespace StateMachineNodeEditor.View
             this.Rotate.Angle = visible ? 0:180;
             ViewModel.CommandCollapse.Execute(visible);
         }
-        #endregion Events
+        #endregion Setup Events
+        #region Setup Commands
+        private void SetupCommands()
+        {
+            this.WhenActivated(disposable =>
+            {
+                this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect);
+            });
+        }
+        #endregion Setup Commands
     }
 }

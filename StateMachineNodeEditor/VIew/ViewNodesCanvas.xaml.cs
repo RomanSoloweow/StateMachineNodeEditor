@@ -86,9 +86,8 @@ namespace StateMachineNodeEditor.View
             {
                 var positionLeftClickObservable = this.ObservableForProperty(x => x.positionLeftClick).Select(x => x.Value);
                 var positionRightClickObservable = this.ObservableForProperty(x => x.positionRightClick).Select(x => x.Value);
-                this.OneWayBind(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo.Command);
-                this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
-                this.OneWayBind(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo.Command);
+                this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo);
+                this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo);
 
                 this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);

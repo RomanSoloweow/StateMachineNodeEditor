@@ -117,14 +117,14 @@ namespace StateMachineNodeEditor.ViewModel
         #endregion Connectors
 
         #region Commands
-        public SimpleCommand CommandSelect { get; set; }
+        public SimpleCommandWithParameter<object> CommandSelect { get; set; }
         public SimpleCommandWithParameter <MyPoint> CommandMove{ get; set; }
         public SimpleCommandWithParameter <object> CommandCollapse { get; set; }
         public SimpleCommand CommandAddEmptyConnector { get; set; }
 
         private void SetupCommands()
         {
-            CommandSelect = new SimpleCommand(this, Select);
+            CommandSelect = new SimpleCommandWithParameter<object>(this, Select);
             CommandMove  = new SimpleCommandWithParameter<MyPoint>(this, Move);
             CommandCollapse = new SimpleCommandWithParameter<object>(this, Collapse);
             CommandAddEmptyConnector = new SimpleCommand(this, AddEmptyConnector);
@@ -141,8 +141,13 @@ namespace StateMachineNodeEditor.ViewModel
                 TransitionsVisible = null ;
 
         }
-        private void Select()
-        {     
+        private void Select(object obj=null)
+        {
+            if (obj == null)
+            {
+                this.Selected=!this.Selected;
+                return;
+            }
             if (Selected != true)
             {
                 NodesCanvas.CommandUnSelectAll.Execute();
