@@ -62,6 +62,8 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.EndPoint.Value, x => x.BezierSegment.Point3);
 
                 this.Bind(this.ViewModel, x => x.StrokeDashArray, x => x.Path.StrokeDashArray);
+
+                this.Bind(this.ViewModel, x => x.StrokeThickness, x => x.Path.StrokeThickness);
             });
         }
     }

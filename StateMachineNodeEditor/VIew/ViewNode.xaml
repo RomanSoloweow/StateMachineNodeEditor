@@ -4,16 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
-             mc:Ignorable="d" 
-              RenderTransformOrigin="0.5,0.5">
-    <UserControl.RenderTransform>
-        <TransformGroup>
-            <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1"/>
-            <SkewTransform/>
-            <RotateTransform/>
-            <TranslateTransform x:Name="Translate" X="0" Y="0"/>
-        </TransformGroup>
-    </UserControl.RenderTransform>
+             mc:Ignorable="d" Focusable="True" AllowDrop="True">
     <Grid>
         <Border x:Name="Border" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1"   HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="80" Background="#FF2D2D2D" >
             <StackPanel Margin="0,0,0,5">
@@ -53,6 +44,14 @@
             </StackPanel>
         </Border>
     </Grid>
+    <UserControl.RenderTransform>
+        <TransformGroup x:Name="TransformGroup">
+            <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
+            <SkewTransform/>
+            <RotateTransform Angle="0" />
+            <TranslateTransform x:Name="Translate"/>
+        </TransformGroup>
+    </UserControl.RenderTransform>
     <UserControl.InputBindings>
         <MouseBinding x:Name="BindingSelect" Gesture="Ctrl+LeftClick" />
     </UserControl.InputBindings>

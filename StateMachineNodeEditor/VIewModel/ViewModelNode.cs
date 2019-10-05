@@ -57,7 +57,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Отображаются ли переходы
         /// </summary>
-        [Reactive] public bool? TransitionsVisible { get; set; } = true;
+        [Reactive] public bool TransitionsVisible { get; set; } = true;
 
         /// <summary>
         /// Может ли быть удален
@@ -110,7 +110,7 @@ namespace StateMachineNodeEditor.ViewModel
             Output = new ViewModelConnector(this)
             {
                 Name = "Output",
-                Visible = null
+                //Visible = null
             };
             AddEmptyConnector();
         }
@@ -120,7 +120,12 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommandWithParameter<object> CommandSelect { get; set; }
         public SimpleCommandWithParameter <MyPoint> CommandMove{ get; set; }
         public SimpleCommandWithParameter <object> CommandCollapse { get; set; }
+        public SimpleCommandWithParameter<ViewModelConnector> CommandAddConnector { get; set; }
+        public SimpleCommandWithParameter<ViewModelConnector> CommandDeleteConnector { get; set; }
+      
         public SimpleCommand CommandAddEmptyConnector { get; set; }
+      
+
 
         private void SetupCommands()
         {
@@ -128,6 +133,8 @@ namespace StateMachineNodeEditor.ViewModel
             CommandMove  = new SimpleCommandWithParameter<MyPoint>(this, Move);
             CommandCollapse = new SimpleCommandWithParameter<object>(this, Collapse);
             CommandAddEmptyConnector = new SimpleCommand(this, AddEmptyConnector);
+            CommandAddConnector = new SimpleCommandWithParameter<ViewModelConnector>(this, AddConnector);
+            CommandDeleteConnector = new SimpleCommandWithParameter<ViewModelConnector>(this, DeleteConnector);
         }
 
         #endregion Commands
@@ -137,9 +144,17 @@ namespace StateMachineNodeEditor.ViewModel
             Output.Visible = !value;
             if (value)
                 TransitionsVisible = value;
-            else
-                TransitionsVisible = null ;
+            //else
+            //    TransitionsVisible = null ;
 
+        }
+        private void AddConnector(ViewModelConnector connector)
+        {
+            Transitions.Add(connector);
+        }
+        private void DeleteConnector(ViewModelConnector connector)
+        {
+            Transitions.Remove(connector);
         }
         private void Select(object obj=null)
         {
@@ -156,6 +171,7 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void Move(MyPoint delta)
         {
+            //delta /= NodesCanvas.Scale.Value;
             Point1 += delta;
         }
 

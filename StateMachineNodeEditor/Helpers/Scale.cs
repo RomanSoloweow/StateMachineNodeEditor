@@ -1,13 +1,15 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System;
+using System.Reactive.Linq;
 namespace StateMachineNodeEditor.Helpers
 {
-    public class Scale:ReactiveObject
+    public class Scale : ReactiveObject
     {
         [Reactive] public MyPoint Scales { get; set; } = new MyPoint(1, 1);
         [Reactive] public MyPoint Center { get; set; } = new MyPoint();
 
-        [Reactive] public double Value { get; set; } = 1;
+        [Reactive] public double Value { get; set; } = 1.0;
 
         public double ScaleX
         {
@@ -27,5 +29,9 @@ namespace StateMachineNodeEditor.Helpers
             get { return Center.Y; }
         }
 
+        public Scale()
+        {
+            this.WhenAnyValue(x => x.Value).Subscribe(value=>Scales.Set(value,value));
+        }
     }
 }

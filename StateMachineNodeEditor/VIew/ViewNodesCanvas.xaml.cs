@@ -88,6 +88,7 @@ namespace StateMachineNodeEditor.View
                 var positionRightClickObservable = this.ObservableForProperty(x => x.positionRightClick).Select(x => x.Value);
                 this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo);
                 this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo);
+                this.BindCommand(this.ViewModel, x => x.CommandSelectAll, x => x.BindingSelectAll);
 
                 this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);
@@ -110,6 +111,7 @@ namespace StateMachineNodeEditor.View
                     this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e));
                     this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e));
                     this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e));
+                    this.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e));
                     this.Events().DragOver.Subscribe(e => OnEventDragOver(e));
 
                     //Эти события срабатывают раньше команд
@@ -154,7 +156,11 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventMouseDown(MouseButtonEventArgs e)
         {
-        }           
+        }
+        private void OnEventMouseWheel(MouseWheelEventArgs e)
+        {
+            this.ViewModel.CommandZoom.Execute(e.Delta);
+        }
         private void OnEventMouseUp(MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();

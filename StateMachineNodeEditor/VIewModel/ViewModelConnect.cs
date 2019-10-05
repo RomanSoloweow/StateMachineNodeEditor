@@ -56,14 +56,16 @@ namespace StateMachineNodeEditor.ViewModel
 
         [Reactive] public DoubleCollection StrokeDashArray { get; set; } = new DoubleCollection() { 10, 3 };
 
+        [Reactive] public double StrokeThickness { get; set; } = 1;
+
         public ViewModelConnect(ViewModelConnector fromConnector)
         {        
-            this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(newPosition => StartPoint.Set(newPosition));
             this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(value => StartPoint.Set(value));
             this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => UpdateMedium());
             this.WhenAnyValue(x => x.ToConnector.Position.Value).Subscribe(value => EndPoint.Set(value));
             this.WhenAnyValue(x => x.FromConnector).Where(x=>x!=null).Subscribe(_=> FromConnectChanged());
             this.WhenAnyValue(x => x.ToConnector).Where(x =>x!= null).Subscribe(_=> ToConnectChanged());
+            this.WhenAnyValue(x => x.FromConnector.Node.NodesCanvas.Scale.Value).Subscribe(value => StrokeThickness = value);
 
             //this.WhenAnyValue(x => x.FromConnector).Where(x => x == null).Subscribe(_ => { StartPoint.Clear(); });
             //this.WhenAnyValue(x => x.ToConnector).Where(x => x == null).Subscribe(_ => { EndPoint.Clear(); SetupCommands(); });

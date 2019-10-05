@@ -37,7 +37,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Отображается ли переход
         /// </summary>
-        [Reactive] public bool? Visible { get; set; } = true;
+        [Reactive] public bool Visible { get; set; } = true;
 
         /// <summary>
         /// Доступен ли переход для создания соединия
@@ -73,18 +73,29 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandDrag { get; set; }
         public SimpleCommand CommandDrop { get; set; }
         public SimpleCommand CommandCheckDrop { get; set; }
-
+        public SimpleCommand CommandAdd { get; set; }
+        public SimpleCommand CommandDelete { get; set; }
         private void SetupCommands()
         {
             CommandDrag = new SimpleCommand(this, Drag);
             CommandDrop = new SimpleCommand(this, Drop);
             CommandCheckDrop = new SimpleCommand(this, CheckDrop);
+            CommandAdd = new SimpleCommand(this, Add);
+            CommandDelete = new SimpleCommand(this, Delete);
         }
         #endregion Commands
-
+        private void Add()
+        {
+            Node.CommandAddConnector.Execute(this);
+        }
+        private void Delete()
+        {
+            Node.CommandDeleteConnector.Execute(this);
+        }
+        
         private void Drag()
         {
-            Node.NodesCanvas.CommandAddConnect.Execute(this);
+            Node.NodesCanvas.CommandAddFreeConnect.Execute(this);
             //FromConnector.Connect = this;
         }
 
@@ -102,6 +113,7 @@ namespace StateMachineNodeEditor.ViewModel
             else
             {
                 Node.CommandAddEmptyConnector.Execute();
+                Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
             }
         }
     }
