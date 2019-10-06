@@ -74,7 +74,12 @@ namespace StateMachineNodeEditor.View
                 {
                     this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
                     this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
-                    this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+                    //Масштаб по оси X
+                    this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
+
+                    //Масштаб по оси Y
+                    this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
+                    //this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
                 });
             }
         #endregion Setup Binding

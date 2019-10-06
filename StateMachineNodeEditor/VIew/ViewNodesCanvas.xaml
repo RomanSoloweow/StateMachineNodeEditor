@@ -36,6 +36,14 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Grid.RenderTransform>
+            <TransformGroup x:Name="TransformGroup">
+                <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
+                <SkewTransform/>
+                <RotateTransform Angle="0" />
+                <TranslateTransform x:Name="Translate"/>
+            </TransformGroup>
+        </Grid.RenderTransform>
     </Grid>
     <UserControl.ContextMenu >
         <ContextMenu>
