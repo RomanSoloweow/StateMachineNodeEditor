@@ -37,7 +37,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Отображается ли переход
         /// </summary>
-        [Reactive] public bool Visible { get; set; } = true;
+        [Reactive] public bool? Visible { get; set; } = true;
 
         /// <summary>
         /// Доступен ли переход для создания соединия

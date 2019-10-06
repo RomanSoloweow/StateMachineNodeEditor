@@ -26,7 +26,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Отображается ли выделение
         /// </summary>
-        [Reactive] public bool Visible { get; set; } = false;
+        [Reactive] public bool? Visible { get; set; } = false;
 
         /// <summary>
         /// Точка левого верхнего угла без учета отражений

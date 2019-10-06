@@ -5,11 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d" 
-             Focusable="True" AllowDrop="True" ClipToBounds="True" RenderTransformOrigin="0 0">
+             Focusable="True" AllowDrop="True" ClipToBounds="True" >
     
-    <Grid x:Name="Grid" Background="#FF141414">
+    <Canvas x:Name="Grid" Background="#FF141414" >
         <local:ViewSelector x:Name="Selector"  Panel.ZIndex="999"/>
         <ItemsControl x:Name="Nodes" >
+            <ItemsControl.RenderTransform>
+                <TransformGroup x:Name="TransformGroup">
+                    <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
+                    <SkewTransform/>
+                    <RotateTransform Angle="0" />
+                    <TranslateTransform x:Name="Translate"/>
+                </TransformGroup>
+            </ItemsControl.RenderTransform>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid Background="{x:Null}">
@@ -36,15 +44,8 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Grid.RenderTransform>
-            <TransformGroup x:Name="TransformGroup">
-                <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
-                <SkewTransform/>
-                <RotateTransform Angle="0" />
-                <TranslateTransform x:Name="Translate"/>
-            </TransformGroup>
-        </Grid.RenderTransform>
-    </Grid>
+       
+    </Canvas>
     <UserControl.ContextMenu >
         <ContextMenu>
             <MenuItem Header="Add" x:Name="ItemAddNode" InputGestureText="Ctrl + N" />

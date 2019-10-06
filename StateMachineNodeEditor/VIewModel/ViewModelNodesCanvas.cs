@@ -164,7 +164,7 @@ namespace StateMachineNodeEditor.ViewModel
             if (result == null)
             {
                 MyPoint myPoint = parameter.Copy();
-                //myPoint /= Scale.Value;
+                myPoint /= Scale.Value;
                 newNode = new ViewModelNode(this)
                 {
                     Name = "State " + Nodes.Count.ToString(),

@@ -101,8 +101,6 @@ namespace StateMachineNodeEditor.View
         void UpdatePosition()
         {
             Point Position;
-            var name = this.Name;
-            var t = this.Visibility;
             //Если отображается
             if (this.IsVisible)
             {

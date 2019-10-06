@@ -69,19 +69,6 @@ namespace StateMachineNodeEditor.View
                 //Позиция Y от левого верхнего угла
                 this.Bind(this.ViewModel, x => x.Point1.Y, x => x.Translate.Y);
 
-                //Масштаб по оси X
-                this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Scales.Value.X, x => x.Scale.ScaleX);
-
-                //Масштаб по оси Y
-                this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
-
-                ////Точка масштабирования, координата X
-                //this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Center.Value.X, x => x.Scale.CenterX);
-
-                ////Точка масштабирования, координата Y
-                //this.OneWayBind(this.ViewModel, x => x.NodesCanvas.Scale.Center.Value.Y, x => x.Scale.CenterY);
-
-
                 //Отображаются ли переходы
                 this.Bind(this.ViewModel, x => x.TransitionsVisible, x => x.Transitions.Visibility);
 

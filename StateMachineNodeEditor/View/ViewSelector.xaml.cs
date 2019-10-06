@@ -127,8 +127,7 @@ namespace StateMachineNodeEditor.View
         }
         private void OnMouseLeftButtonUp(MouseEventArgs e)
         {
-            //this.ViewModel.Visible = null;
-
+            this.ViewModel.Visible = null;
         }
         #endregion Setup Events
 

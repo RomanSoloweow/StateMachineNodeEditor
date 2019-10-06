@@ -57,7 +57,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Отображаются ли переходы
         /// </summary>
-        [Reactive] public bool TransitionsVisible { get; set; } = true;
+        [Reactive] public bool? TransitionsVisible { get; set; } = true;
 
         /// <summary>
         /// Может ли быть удален
@@ -110,7 +110,7 @@ namespace StateMachineNodeEditor.ViewModel
             Output = new ViewModelConnector(this)
             {
                 Name = "Output",
-                //Visible = null
+                Visible = null
             };
             AddEmptyConnector();
         }
@@ -144,8 +144,8 @@ namespace StateMachineNodeEditor.ViewModel
             Output.Visible = !value;
             if (value)
                 TransitionsVisible = value;
-            //else
-            //    TransitionsVisible = null ;
+            else
+               TransitionsVisible = null ;
 
         }
         private void AddConnector(ViewModelConnector connector)
@@ -172,7 +172,7 @@ namespace StateMachineNodeEditor.ViewModel
         private void Move(MyPoint delta)
         {
             //delta /= NodesCanvas.Scale.Value;
-            Point1 += delta;
+            Point1 += delta/NodesCanvas.Scale.Value;
         }
 
         private void UpdatePoint2()

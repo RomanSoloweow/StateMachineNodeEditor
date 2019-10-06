@@ -64,8 +64,7 @@ namespace StateMachineNodeEditor.View
             InitializeComponent();
             SetupBinding();
             SetupEvents();
-            SetupCommands();    
-            
+            SetupCommands();
         }
         #region Setup Binding
             private void SetupBinding()
@@ -73,13 +72,15 @@ namespace StateMachineNodeEditor.View
                 this.WhenActivated(disposable =>
                 {
                     this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
-                    this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
+                    this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);      
+                    
                     //Масштаб по оси X
                     this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
 
                     //Масштаб по оси Y
                     this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
-                    //this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+
+                    this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
                 });
             }
         #endregion Setup Binding
@@ -122,6 +123,8 @@ namespace StateMachineNodeEditor.View
                     //Эти события срабатывают раньше команд
                     this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e));
                     this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e));
+
+                    this.WhenAnyValue(x => x.ViewModel.Scale.Value).Subscribe(value => { this.Grid.Height/= value; this.Grid.Width /= value;  });
                 });
             }
         private void OnEventMouseLeftDown(MouseButtonEventArgs e)
