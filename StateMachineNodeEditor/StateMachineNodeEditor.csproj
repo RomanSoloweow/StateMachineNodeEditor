@@ -238,6 +238,9 @@
       <DependentUpon>Connect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Old Version\OtherClass\Transforms.cs" />
+    <Compile Include="Test.xaml.cs">
+      <DependentUpon>Test.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ViewModelConnect.cs" />
     <Compile Include="ViewModel\ViewModelConnector.cs" />
     <Compile Include="ViewModel\ViewModelNode.cs" />
@@ -314,6 +317,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\SelectorStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Test.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
