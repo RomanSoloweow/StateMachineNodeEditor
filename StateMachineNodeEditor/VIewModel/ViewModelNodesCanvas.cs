@@ -182,13 +182,20 @@ namespace StateMachineNodeEditor.ViewModel
         private void Zoom(object delta)
         {
             int Delta = (int)delta;
+            //bool DeltaIsZero = (Delta == 0);
+            //bool DeltaMax = ((Delta > 0) && (Scale.Value > ScaleMax));
+            //bool DeltaMin = ((Delta < 0) && (Scale.Value < ScaleMin));
+            //if (DeltaIsZero || DeltaMax || DeltaMin)
+            //    return;
+
+            //Scale.Value += (Delta > 0) ? Scales : -Scales;
+
             bool DeltaIsZero = (Delta == 0);
-            bool DeltaMax = ((Delta > 0) && (Scale.Value > ScaleMax));
-            bool DeltaMin = ((Delta < 0) && (Scale.Value < ScaleMin));
+            bool DeltaMax = ((Delta > 0) && (Scale.Value > 5));
+            bool DeltaMin = ((Delta < 0) && (Scale.Value < 2));
             if (DeltaIsZero || DeltaMax || DeltaMin)
                 return;
-
-            Scale.Value += (Delta > 0) ? Scales : -Scales;
+            Scale.Value += (Delta > 0) ? 1 : -1;
         }
         private void SelectorIntersect()
         {

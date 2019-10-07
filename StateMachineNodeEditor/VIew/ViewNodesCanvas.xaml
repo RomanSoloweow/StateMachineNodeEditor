@@ -6,18 +6,20 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d" 
              Focusable="True" AllowDrop="True" ClipToBounds="True" >
-    
-    <Canvas x:Name="Grid" Background="#FF141414" >
-        <local:ViewSelector x:Name="Selector"  Panel.ZIndex="999"/>
+    <ScrollViewer x:Name="ScrollViewer" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Visible" >
+        <Canvas x:Name="Grid" Background="#FF141414">
+            <Line X1="0" Y1="0" X2="1000" Y2="1000" Stroke="Red" />
+            <Line X1="1000" Y1="0" X2="0" Y2="1000" Stroke="Red" />
+            <!--<local:ViewSelector x:Name="Selector"  Panel.ZIndex="999"/>-->
         <ItemsControl x:Name="Nodes" >
-            <ItemsControl.RenderTransform>
+            <!--<ItemsControl.RenderTransform>
                 <TransformGroup x:Name="TransformGroup">
                     <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
                     <SkewTransform/>
                     <RotateTransform Angle="0" />
                     <TranslateTransform x:Name="Translate"/>
                 </TransformGroup>
-            </ItemsControl.RenderTransform>
+            </ItemsControl.RenderTransform>-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid Background="{x:Null}">
@@ -44,8 +46,16 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-       
-    </Canvas>
+            <Canvas.RenderTransform>
+                <TransformGroup x:Name="TransformGroup">
+                    <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
+                    <SkewTransform/>
+                    <RotateTransform Angle="0" />
+                    <TranslateTransform x:Name="Translate"/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+        </Canvas>
+    </ScrollViewer>
     <UserControl.ContextMenu >
         <ContextMenu>
             <MenuItem Header="Add" x:Name="ItemAddNode" InputGestureText="Ctrl + N" />

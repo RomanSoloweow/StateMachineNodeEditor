@@ -80,7 +80,12 @@ namespace StateMachineNodeEditor.View
                     //Масштаб по оси Y
                     this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
-                    this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+                    this.OneWayBind(this.ViewModel, x => x.Scale.Center.Value.X, x => x.Scale.CenterX);
+
+                    //Масштаб по оси Y
+                    this.OneWayBind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
+
+                    //this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
                 });
             }
         #endregion Setup Binding
@@ -110,6 +115,11 @@ namespace StateMachineNodeEditor.View
             {
                 this.WhenActivated(disposable =>
                 {
+                    this.Grid.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e));
+
+
+
+
                     this.Events().MouseLeftButtonDown.Subscribe(e => OnEventMouseLeftDown(e));
                     this.Events().MouseLeftButtonUp.Subscribe(e => OnEventMouseLeftUp(e));
                     this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e));
@@ -168,6 +178,7 @@ namespace StateMachineNodeEditor.View
         private void OnEventMouseWheel(MouseWheelEventArgs e)
         {
             this.ViewModel.CommandZoom.Execute(e.Delta);
+            this.ViewModel.Scale.Center.Set(e.GetPosition(this.Grid));
         }
         private void OnEventMouseUp(MouseButtonEventArgs e)
         {

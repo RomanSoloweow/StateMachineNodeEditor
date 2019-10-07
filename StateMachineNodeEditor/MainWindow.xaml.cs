@@ -18,12 +18,12 @@ namespace StateMachineNodeEditor
             InitializeComponent();
 
 
-            this.grid.Children.Add(new Test());
-            //ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
-            //{
-            //    ViewModel = new ViewModel.ViewModelNodesCanvas()
-            //};
-            //this.grid.Children.Add(viewNodesCanvas);
+            //this.grid.Children.Add(new Test());
+            ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
+            {
+                ViewModel = new ViewModel.ViewModelNodesCanvas()
+            };
+            this.grid.Children.Add(viewNodesCanvas);
 
             //ViewConnect viewConnect = new ViewConnect()
             //{
