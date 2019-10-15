@@ -95,6 +95,7 @@ namespace StateMachineNodeEditor.View
                 this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo);
                 this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo);
                 this.BindCommand(this.ViewModel, x => x.CommandSelectAll, x => x.BindingSelectAll);
+                this.BindCommand(this.ViewModel, x => x.CommandDeleteSelectedNode, x => x.BindingDeleteNode);
 
                 this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);

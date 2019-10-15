@@ -15,6 +15,7 @@ using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
 
+
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelConnector: ReactiveObject
@@ -95,7 +96,7 @@ namespace StateMachineNodeEditor.ViewModel
         
         private void Drag()
         {
-            Node.NodesCanvas.CommandAddFreeConnect.Execute(this);
+            Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
             //FromConnector.Connect = this;
         }
 

@@ -50,7 +50,7 @@ namespace StateMachineNodeEditor.ViewModel
 
         public SimpleCommandWithParameter<ViewModelConnector> CommandAddFreeConnect { get; set; }
         public Command<ViewModelConnect, ViewModelConnect> CommandAddConnect { get; set; }
-
+        
 
         //public Command CommandCopy { get; set; }
         //public Command CommandPaste { get; set; }
@@ -66,7 +66,8 @@ namespace StateMachineNodeEditor.ViewModel
         public Command<MyPoint, List<ViewModelNode>> CommandFullMoveAllNode { get; set; }
         public Command<MyPoint, List<ViewModelNode>> CommandFullMoveAllSelectedNode { get; set; }
         public Command<MyPoint, ViewModelNode> CommandAddNode { get; set; }
-        public Command<MyPoint, ViewModelNode> CommandDeleteNode { get; set; }
+        //public Command<MyPoint, ViewModelNode> CommandDeleteNode { get; set; }
+        public Command<List<ViewModelNode>, List<ViewModelNode>> CommandDeleteSelectedNode { get; set; }
 
         public double ScaleMax = 5;
         public double ScaleMin = 0.1;
@@ -98,7 +99,7 @@ namespace StateMachineNodeEditor.ViewModel
             CommandFullMoveAllSelectedNode = new Command<MyPoint, List<ViewModelNode>>(this, FullMoveAllSelectedNode, UnFullMoveAllSelectedNode);
             CommandAddNode = new Command<MyPoint, ViewModelNode>(this, AddNode, DeleteNode);
             CommandAddConnect = new Command<ViewModelConnect, ViewModelConnect>(this, AddConnect, DeleteConnect);
-
+            CommandDeleteSelectedNode = new Command<List<ViewModelNode>, List<ViewModelNode>>(this, DeleteSelectedNode, UnDeleteSelectedNode);
         }
 
         #endregion Setup Commands
@@ -221,6 +222,20 @@ namespace StateMachineNodeEditor.ViewModel
         private void DeleteFreeConnect()
         {
             Connects.Remove(CurrentConnect);
+        }
+        private List<ViewModelNode> DeleteSelectedNode(List<ViewModelNode> parameter, List<ViewModelNode> result)
+        {
+            if (result == null)
+            {
+                result = Nodes.Where(x => x.Selected).ToList();
+            }
+            Nodes.RemoveMany(result);
+            return result;
+        }
+        private List<ViewModelNode> UnDeleteSelectedNode(List<ViewModelNode> parameter, List<ViewModelNode> result)
+        {
+            Nodes.Add(result);
+            return result;
         }
     }
 }

@@ -212,6 +212,9 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\Command.cs" />
     <Compile Include="Helpers\ConverterBoolAndVisibility.cs" />
+    <Compile Include="Helpers\IEqualityComparerForBool.cs" />
+    <Compile Include="Helpers\IEqualityComparerPoint.cs" />
+    <Compile Include="Helpers\IEqualityComparerSize.cs" />
     <Compile Include="Helpers\UndoRedoForCommand.cs" />
     <Compile Include="Helpers\MyPoint.cs" />
     <Compile Include="Helpers\Scale.cs" />
