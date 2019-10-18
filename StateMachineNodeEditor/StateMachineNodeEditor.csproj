@@ -213,7 +213,7 @@
     <Compile Include="Helpers\SimpleCommandWithParameter.cs" />
     <Compile Include="Helpers\Translate.cs" />
     <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="Styles\WindowResize.cs" />
+    <Compile Include="Styles\CustomWindow.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>
     </Compile>
@@ -280,6 +280,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\HeaderButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\NodeBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -312,7 +316,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\Window.xaml">
+    <Page Include="Styles\CustomWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

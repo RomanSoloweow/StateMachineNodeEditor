@@ -8,16 +8,15 @@ namespace StateMachineNodeEditor
 {
     public partial class MainWindow : Window
     {
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-        }
         public MainWindow()
         {
 
             InitializeComponent();
-            MainMenu.PreviewMouseLeftButtonDown += MainMenuMouseLeftButtonDown;
-            MainMenu.PreviewMouseDoubleClick+= MainMenuMouseDoubleClick;
+            Header.PreviewMouseLeftButtonDown += HeaderClick;
+            ButtonClose.Click += ButtonCloseClick;
+            ButtonMin.Click += ButtonMinClick;
+            ButtonMax.Click += ButtonMaxClick;
+            //Header.PreviewMouseDoubleClick += MainMenuMouseDoubleClick;
             //ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
             //{
             //    ViewModel = new ViewModel.ViewModelNodesCanvas()
@@ -49,22 +48,54 @@ namespace StateMachineNodeEditor
             //this.grid.Children.Add(viewConnect);
             //this.grid.Children.Add(new Canvas());
         }
-        private void MainMenuMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+
+        void StateNormalMaximaze()
         {
-            if (e.OriginalSource is Border)
+            this.WindowState = this.WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+        }
+        void ButtonCloseClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        void ButtonMinClick(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+        void ButtonMaxClick(object sender, RoutedEventArgs e)
+        {
+            StateNormalMaximaze();
+        }
+        
+        private void HeaderClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is DockPanel)
             {
-                this.DragMove();
+                if (e.ClickCount == 1)
+                {
+
+                    if (this.WindowState == WindowState.Maximized)
+                    {
+                        var point = PointToScreen(e.MouseDevice.GetPosition(this));
+
+                        if (point.X <= RestoreBounds.Width / 2)
+                            Left = 0;
+                        else if (point.X >= RestoreBounds.Width)
+                            Left = point.X - (RestoreBounds.Width - (this.ActualWidth - point.X));
+                        else
+                            Left = point.X - (RestoreBounds.Width / 2);
+
+                        Top = point.Y - (((FrameworkElement)sender).ActualHeight / 2);
+                        WindowState = WindowState.Normal;
+                    }
+
+                    this.DragMove();
+                }
+                else
+                {
+                    StateNormalMaximaze();  
+                }
                 e.Handled = true;
             }
         }
-        private void MainMenuMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource is Border)
-            {
-
-            }
-        }
     }
-
-    
 }
