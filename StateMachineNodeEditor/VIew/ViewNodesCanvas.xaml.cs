@@ -21,6 +21,8 @@ using StateMachineNodeEditor.ViewModel;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using DynamicData.Binding;
+using Splat;
+using System.Reflection;
 
 namespace StateMachineNodeEditor.View
 {
@@ -53,15 +55,18 @@ namespace StateMachineNodeEditor.View
         }
         #endregion ViewModel
 
-        private MyPoint positionRightClick { get; set ; } = new MyPoint();
-        private MyPoint positionLeftClick { get; set; } = new MyPoint();
-        private MyPoint positionMove { get; set; } = new MyPoint();
-        private MyPoint sumMove { get; set; } = new MyPoint();
-        private MoveNodes move { get; set; } = MoveNodes.No;
+        private MyPoint PositionRightClick { get; set ; } = new MyPoint();
+        private MyPoint PositionLeftClick { get; set; } = new MyPoint();
+        private MyPoint PositionMove { get; set; } = new MyPoint();
+        private MyPoint SumMove { get; set; } = new MyPoint();
+        private MoveNodes Move { get; set; } = MoveNodes.No;
 
         public ViewNodesCanvas()
         {
             InitializeComponent();
+            Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
+            Locator.CurrentMutable.RegisterConstant(new ConverterBoolAndVisibility(), typeof(IBindingTypeConverter));
+            ViewModel = new ViewModelNodesCanvas();
             SetupBinding();
             SetupEvents();
             SetupCommands();
@@ -90,8 +95,8 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                var positionLeftClickObservable = this.ObservableForProperty(x => x.positionLeftClick).Select(x => x.Value);
-                var positionRightClickObservable = this.ObservableForProperty(x => x.positionRightClick).Select(x => x.Value);
+                var positionLeftClickObservable = this.ObservableForProperty(x => x.PositionLeftClick).Select(x => x.Value);
+                var positionRightClickObservable = this.ObservableForProperty(x => x.PositionRightClick).Select(x => x.Value);
                 this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo);
                 this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo);
                 this.BindCommand(this.ViewModel, x => x.CommandSelectAll, x => x.BindingSelectAll);
@@ -145,16 +150,16 @@ namespace StateMachineNodeEditor.View
         
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {
-            if (move == MoveNodes.No)
+            if (Move == MoveNodes.No)
                 return;
 
-            if (move == MoveNodes.MoveAll)
-                this.ViewModel.CommandFullMoveAllNode.Execute(sumMove);
-            else if (move == MoveNodes.MoveSelected)
-                this.ViewModel.CommandFullMoveAllSelectedNode.Execute(sumMove);
+            if (Move == MoveNodes.MoveAll)
+                this.ViewModel.CommandFullMoveAllNode.Execute(SumMove);
+            else if (Move == MoveNodes.MoveSelected)
+                this.ViewModel.CommandFullMoveAllSelectedNode.Execute(SumMove);
 
-            move = MoveNodes.No;
-            sumMove = new MyPoint();
+            Move = MoveNodes.No;
+            SumMove = new MyPoint();
         }
         private void OnEventMouseRightDown(MouseButtonEventArgs e)
         {
@@ -173,7 +178,7 @@ namespace StateMachineNodeEditor.View
         private void OnEventMouseUp(MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
-            positionMove.Clear();
+            PositionMove.Clear();
             Keyboard.Focus(this);
         }
         private void OnEventMouseMove(MouseEventArgs e)
@@ -185,16 +190,16 @@ namespace StateMachineNodeEditor.View
             if (delta.IsClear)
                 return;
 
-            sumMove += delta;
+            SumMove += delta;
             if (this.IsMouseCaptured)
             {
                 ViewModel.CommandPartMoveAllNode.Execute(delta);
-                move = MoveNodes.MoveAll;
+                Move = MoveNodes.MoveAll;
             }
             else
             {
                 ViewModel.CommandPartMoveAllSelectedNode.Execute(delta);
-                move = MoveNodes.MoveSelected;
+                Move = MoveNodes.MoveSelected;
             }
         }
         private void OnEventDragOver(DragEventArgs e)
@@ -206,11 +211,11 @@ namespace StateMachineNodeEditor.View
 
         private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            positionLeftClick.Set(e.GetPosition(this.Grid));
+            PositionLeftClick.Set(e.GetPosition(this.Grid));
         }
         private void OnEventPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {
-            positionRightClick.Set(e.GetPosition(this.Grid));
+            PositionRightClick.Set(e.GetPosition(this.Grid));
         }
 
         #endregion Setup Events
@@ -219,11 +224,11 @@ namespace StateMachineNodeEditor.View
             MyPoint CurrentPosition = new MyPoint(Mouse.GetPosition(this.Grid));
             MyPoint result = new MyPoint();
 
-            if (!positionMove.IsClear)
+            if (!PositionMove.IsClear)
             {
-                result = CurrentPosition - positionMove;
+                result = CurrentPosition - PositionMove;
             }
-            positionMove = CurrentPosition;
+            PositionMove = CurrentPosition;
             return result;
         }
 

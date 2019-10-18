@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Styles/ConnectorEllipse.xaml"/>
                 <ResourceDictionary Source="Styles/SelectorStyle.xaml"/>
                 <ResourceDictionary Source="Styles/NodeBorder.xaml"/>
+                <ResourceDictionary Source="Styles/Window.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

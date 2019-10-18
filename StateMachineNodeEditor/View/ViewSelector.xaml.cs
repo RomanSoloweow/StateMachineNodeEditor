@@ -63,7 +63,7 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Отображается ли выделение
-                this.Bind(this.ViewModel, x => x.Visible, x => x.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.Visibility);
 
                 //Ширина
                 this.Bind(this.ViewModel, x => x.Size.Width, x => x.Form.Width);

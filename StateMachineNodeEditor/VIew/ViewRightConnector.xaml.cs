@@ -71,7 +71,7 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
 
                 // Отображается ли переход
-                this.Bind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
 
                 // При изменении размера, позиции или zoom узла
                 this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
@@ -94,7 +94,7 @@ namespace StateMachineNodeEditor.View
             this.ViewModel.CommandDrag.Execute();
             DataObject data = new DataObject();
             data.SetData("Node", this.ViewModel.Node);        
-            DragDropEffects result = DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+            DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
             this.ViewModel.CommandCheckDrop.Execute();
             e.Handled = true;
         }

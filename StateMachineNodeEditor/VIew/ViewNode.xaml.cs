@@ -70,7 +70,7 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Point1.Y, x => x.Translate.Y);
 
                 //Отображаются ли переходы
-                this.Bind(this.ViewModel, x => x.TransitionsVisible, x => x.Transitions.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.TransitionsVisible, x => x.Transitions.Visibility);
 
                 //Размеры
                 this.WhenAnyValue(v => v.Border.ActualWidth, v => v.Border.ActualHeight, (width, height) => new Size(width, height))

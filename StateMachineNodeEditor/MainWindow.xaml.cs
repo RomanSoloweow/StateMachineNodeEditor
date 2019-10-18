@@ -16,14 +16,13 @@ namespace StateMachineNodeEditor
         {
 
             InitializeComponent();
-
-
-
-            ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
-            {
-                ViewModel = new ViewModel.ViewModelNodesCanvas()
-            };
-            this.grid.Children.Add(viewNodesCanvas);
+            MainMenu.PreviewMouseLeftButtonDown += MainMenuMouseLeftButtonDown;
+            MainMenu.PreviewMouseDoubleClick+= MainMenuMouseDoubleClick;
+            //ViewNodesCanvas viewNodesCanvas = new ViewNodesCanvas()
+            //{
+            //    ViewModel = new ViewModel.ViewModelNodesCanvas()
+            //};
+            //this.grid.Children.Add(viewNodesCanvas);
 
             //ViewConnect viewConnect = new ViewConnect()
             //{
@@ -50,7 +49,21 @@ namespace StateMachineNodeEditor
             //this.grid.Children.Add(viewConnect);
             //this.grid.Children.Add(new Canvas());
         }
+        private void MainMenuMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Border)
+            {
+                this.DragMove();
+                e.Handled = true;
+            }
+        }
+        private void MainMenuMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Border)
+            {
 
+            }
+        }
     }
 
     

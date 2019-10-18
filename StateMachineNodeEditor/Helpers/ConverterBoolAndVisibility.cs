@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
 using ReactiveUI;
+using Splat;
 
 namespace StateMachineNodeEditor.Helpers
 {
-    public class ConverterBoolAndVisibility:  IBindingTypeConverter
+    public class ConverterBoolAndVisibility:  IBindingTypeConverter, IEnableLogger
     {
         public int GetAffinityForObjects(Type fromType, Type toType)
         {
