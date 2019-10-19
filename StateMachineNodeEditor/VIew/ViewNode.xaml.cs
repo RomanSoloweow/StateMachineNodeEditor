@@ -58,29 +58,35 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 //BorderBrush (Рамка вокруг узла)
-                this.Bind(this.ViewModel, x => x.BorderBrush, x => x.Border.BorderBrush);
+                this.OneWayBind(this.ViewModel, x => x.BorderBrush, x => x.Border.BorderBrush);
 
                 //Name (заголовок узла)
                 this.Bind(this.ViewModel, x => x.Name, x => x.Header.Text);
 
+                //Можно ли менять заголовок
+                this.Bind(this.ViewModel, x => x.NameEnable, x => x.Header.IsEnabled);
+
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Point1.X, x => x.Translate.X);
+                this.OneWayBind(this.ViewModel, x => x.Point1.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Point1.Y, x => x.Translate.Y);
+                this.OneWayBind(this.ViewModel, x => x.Point1.Y, x => x.Translate.Y);
 
                 //Отображаются ли переходы
                 this.OneWayBind(this.ViewModel, x => x.TransitionsVisible, x => x.Transitions.Visibility);
+
+                //Отображается ли кнопка свернуть
+                this.OneWayBind(this.ViewModel, x => x.RollUpVisible, x => x.ButtonCollapse.Visibility);
 
                 //Размеры
                 this.WhenAnyValue(v => v.Border.ActualWidth, v => v.Border.ActualHeight, (width, height) => new Size(width, height))
                      .BindTo(this, v => v.ViewModel.Size);
 
                 //Вход для соединения с этим узлом
-              this.Bind(this.ViewModel, x => x.Input, x => x.Input.ViewModel);
+                 this.OneWayBind(this.ViewModel, x => x.Input, x => x.Input.ViewModel);
 
                 //Выход ( используется, когда список переходов свернут )
-                this.Bind(this.ViewModel, x => x.Output, x => x.Output.ViewModel);
+                this.OneWayBind(this.ViewModel, x => x.Output, x => x.Output.ViewModel);
 
                 //Переходы
                 this.OneWayBind(this.ViewModel, x => x.Transitions, x => x.Transitions.ItemsSource);
@@ -135,9 +141,9 @@ namespace StateMachineNodeEditor.View
         {
             this.ReleaseMouseCapture();
         }
-        private void OnEventMouseMove(MouseButtonEventArgs e)
-        {
-        }
+        //private void OnEventMouseMove(MouseButtonEventArgs e)
+        //{
+        //}
         private void OnEventMouseEnter(MouseEventArgs e)
         {
             if (this.ViewModel.Selected != true)

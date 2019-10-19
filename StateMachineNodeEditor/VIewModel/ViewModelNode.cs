@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
-using DynamicData;
 using System.Windows.Media;
 using System.Windows;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
-using ReactiveUI.Validation.Extensions;
 using DynamicData.Binding;
 using System.Reactive.Linq;
 namespace StateMachineNodeEditor.ViewModel
@@ -45,6 +37,11 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public string Name { get; set; }
 
         /// <summary>
+        /// Допен ли заголовок для редактирования
+        /// </summary>
+        [Reactive] public bool NameEnable { get; set; }
+
+        /// <summary>
         /// Флаг того, что узел выбран
         /// </summary>
         [Reactive] public bool Selected { get; set; }
@@ -58,6 +55,11 @@ namespace StateMachineNodeEditor.ViewModel
         /// Отображаются ли переходы
         /// </summary>
         [Reactive] public bool? TransitionsVisible { get; set; } = true;
+
+        /// <summary>
+        /// Отображаются ли переходы
+        /// </summary>
+        [Reactive] public bool? RollUpVisible { get; set; } = true;
 
         /// <summary>
         /// Может ли быть удален

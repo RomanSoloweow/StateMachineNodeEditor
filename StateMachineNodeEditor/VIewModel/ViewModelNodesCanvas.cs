@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
 using DynamicData;
 using DynamicData.Binding;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using System.Windows;
 
 namespace StateMachineNodeEditor.ViewModel
 {
@@ -20,7 +14,6 @@ namespace StateMachineNodeEditor.ViewModel
     {
         public IObservableCollection<ViewModelConnect> Connects = new ObservableCollectionExtended<ViewModelConnect>();
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
-
         [Reactive] public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         [Reactive] public ViewModelConnect CurrentConnect { get; set; }
         [Reactive] public ViewModelNode CurrentNode { get; set; }
@@ -30,12 +23,39 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public Scale Scale { get; set; } = new Scale();
 
-       
-
         public ViewModelNodesCanvas()
         {
-            SetupCommands();        
+            SetupCommands();
+            SetupNodes();
         }
+        #region Setup Nodes
+        private void SetupNodes()
+        {
+            ViewModelNode start = new ViewModelNode(this)
+            {
+                Name = "Start",
+                NameEnable = false, 
+                CanBeDelete = false
+               
+
+            };
+            start.Input.Visible = null;
+
+            Nodes.Add(start);
+
+            ViewModelNode end = new ViewModelNode(this)
+            {
+                Name = "End",
+                NameEnable = false,
+                CanBeDelete = false,
+                Point1 = new MyPoint(100,100)
+            };
+            end.TransitionsVisible = null;
+            end.RollUpVisible = null;
+            Nodes.Add(end);
+        }
+
+        #endregion Setup Nodes
         #region Setup Commands
         public SimpleCommand CommandRedo { get; set; }
         public SimpleCommand CommandUndo { get; set; }
@@ -103,6 +123,7 @@ namespace StateMachineNodeEditor.ViewModel
         }
 
         #endregion Setup Commands
+
         private void StartSelect(MyPoint point)
         {
             Selector.CommandStartSelect.Execute(point);
@@ -153,7 +174,7 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void PartMoveAllNode(MyPoint delta)
         {
-            Nodes.ToList().ForEach(node => node.CommandMove.Execute(delta));
+           Nodes.ToList().ForEach(node => node.CommandMove.Execute(delta));
         }
         private void PartMoveAllSelectedNode(MyPoint delta)
         {
@@ -227,7 +248,7 @@ namespace StateMachineNodeEditor.ViewModel
         {
             if (result == null)
             {
-                result = Nodes.Where(x => x.Selected).ToList();
+                result = Nodes.Where(x => x.Selected && x.CanBeDelete).ToList();
             }
             Nodes.RemoveMany(result);
             return result;

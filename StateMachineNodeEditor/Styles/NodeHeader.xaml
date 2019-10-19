@@ -24,9 +24,6 @@
                         <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Padding="14,0,10,0"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
                         </Trigger>

@@ -60,6 +60,7 @@
             <Button DockPanel.Dock="Right" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}"/>
 
         </DockPanel>
+        <!--<local:NodesCanvas Grid.Row="1"/>-->
         <View:ViewNodesCanvas x:Name="NodesCanvas" Grid.Row="1" />
         <!--<Rectangle Style="{DynamicResource Selector}" />-->
         <!--<View:ViewNodesCanvas x:Name="NodesCanvas" />-->

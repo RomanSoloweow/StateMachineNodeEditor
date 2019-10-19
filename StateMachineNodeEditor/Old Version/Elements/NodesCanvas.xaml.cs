@@ -43,11 +43,6 @@ namespace StateMachineNodeEditor
             this.MouseWheel += OnMouseWheel;
             this.MouseLeftButtonDown += OnMouseLeftDown;
             this.MouseRightButtonDown += OnMouseRightDown;
-        }
-        public NodesCanvas(UIElement _parent) : this()
-        {
-            parent = _parent;
-            //this.Background = new SolidColorBrush(Color.FromRgb(20, 20, 20));
             this.AllowDrop = true;
         }
         public void NodesChange(object sender, NotifyCollectionChangedEventArgs e)
@@ -230,15 +225,17 @@ namespace StateMachineNodeEditor
         }
         #endregion Work with Select
 
-        private List<Connect> GetConnectsWithThisNode(Node node)
-        {
-            return connects.Where(x => (x.InputConnector?.Node == node) || (x.OutputConnector?.Node == node)).ToList();
-        }
+        //private List<Connect> GetConnectsWithThisNode(Node node)
+        //{
+        //    return connects.Where(x => (x.InputConnector?.Node == node) || (x.OutputConnector?.Node == node)).ToList();
+        //}
 
         public Connect GetNewConnect(Point position)
         {
-            Connect connect = new Connect();
-            connect.Name = "Connect_" + this.connects.Count.ToString();
+            Connect connect = new Connect
+            {
+                Name = "Connect_" + this.connects.Count.ToString()
+            };
             connects.Add(connect);
             connect.StartPoint = position;
             return connect;
@@ -253,12 +250,10 @@ namespace StateMachineNodeEditor
         }
         public Node GetNewNode(Point position)
         {
-            Node node = new Node("State " + this.nodes.Count.ToString(), this);
-            node.Name = "State" + this.nodes.Count.ToString();
-            if (nodes.Count > 0)
+            Node node = new Node("State " + this.nodes.Count.ToString(), this)
             {
-                Node firstNode = nodes.First();
-            }
+                Name = "State" + this.nodes.Count.ToString()
+            };
             ForPoint.Equality(node.Manager.translate, ForPoint.Division(position, node.Manager.Zoom));
             nodes.Add(node);
             Panel.SetZIndex(node, nodes.Count());

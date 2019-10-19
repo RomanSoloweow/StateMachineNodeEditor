@@ -47,23 +47,23 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Цвет линии
-                this.Bind(this.ViewModel, x => x.Stroke, x => x.Path.Stroke);
+                this.OneWayBind(this.ViewModel, x => x.Stroke, x => x.Path.Stroke);
 
                 // Точка, из которой выходит линия
-                this.Bind(this.ViewModel, x => x.StartPoint.Value, x => x.PathFigure.StartPoint);
+                this.OneWayBind(this.ViewModel, x => x.StartPoint.Value, x => x.PathFigure.StartPoint);
 
                 // Первая промежуточная точка линии 
-                this.Bind(this.ViewModel, x => x.Point1.Value, x => x.BezierSegment.Point1);
+                this.OneWayBind(this.ViewModel, x => x.Point1.Value, x => x.BezierSegment.Point1);
 
                 // Вторая промежуточная точка линии
-                this.Bind(this.ViewModel, x => x.Point2.Value, x => x.BezierSegment.Point2);
+                this.OneWayBind(this.ViewModel, x => x.Point2.Value, x => x.BezierSegment.Point2);
 
                 // Точка, в которую приходит линия
-                this.Bind(this.ViewModel, x => x.EndPoint.Value, x => x.BezierSegment.Point3);
+                this.OneWayBind(this.ViewModel, x => x.EndPoint.Value, x => x.BezierSegment.Point3);
 
-                this.Bind(this.ViewModel, x => x.StrokeDashArray, x => x.Path.StrokeDashArray);
+                this.OneWayBind(this.ViewModel, x => x.StrokeDashArray, x => x.Path.StrokeDashArray);
 
-                this.Bind(this.ViewModel, x => x.StrokeThickness, x => x.Path.StrokeThickness);
+                this.OneWayBind(this.ViewModel, x => x.StrokeThickness, x => x.Path.StrokeThickness);
             });
         }
     }

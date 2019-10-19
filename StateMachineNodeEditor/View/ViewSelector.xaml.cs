@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,16 +7,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
-using DynamicData;
 using StateMachineNodeEditor.ViewModel;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using DynamicData.Binding;
 
 namespace StateMachineNodeEditor.View
 {
@@ -66,22 +56,22 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Visible, x => x.Visibility);
 
                 //Ширина
-                this.Bind(this.ViewModel, x => x.Size.Width, x => x.Form.Width);
+                this.OneWayBind(this.ViewModel, x => x.Size.Width, x => x.Form.Width);
 
                 //Высота
-                this.Bind(this.ViewModel, x => x.Size.Height, x => x.Form.Height);
+                this.OneWayBind(this.ViewModel, x => x.Size.Height, x => x.Form.Height);
 
                 //Позиция X от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Point1.Value.X, x => x.Translate.X);
+                this.OneWayBind(this.ViewModel, x => x.Point1.Value.X, x => x.Translate.X);
 
                 //Позиция Y от левого верхнего угла
-                this.Bind(this.ViewModel, x => x.Point1.Value.Y, x => x.Translate.Y);
+                this.OneWayBind(this.ViewModel, x => x.Point1.Value.Y, x => x.Translate.Y);
 
                 //Масштаб по оси X
-                this.Bind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
 
                 //Масштаб по оси Y
-                this.Bind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
                 ////Точка масштабирования, координата X
                 //this.Bind(this.ViewModel, x => x.Scale.Center.Value.X, x => x.Scale.CenterX);

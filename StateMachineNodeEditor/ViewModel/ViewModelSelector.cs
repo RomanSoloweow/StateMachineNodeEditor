@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
-using DynamicData;
-using System.Windows.Media;
 using System.Windows;
-using ReactiveUI.Validation.Abstractions;
-using ReactiveUI.Validation.Contexts;
-using ReactiveUI.Validation.Extensions;
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelSelector: ReactiveObject

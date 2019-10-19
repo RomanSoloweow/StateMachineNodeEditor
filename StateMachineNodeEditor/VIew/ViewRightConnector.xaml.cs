@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,11 +7,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
 
@@ -59,16 +52,16 @@ namespace StateMachineNodeEditor.View
                 this.Bind(this.ViewModel, x => x.Name, x => x.Text.Text);
 
                 // Доступно ли имя перехода для редактирования
-                this.Bind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
+                this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
 
                 // Доступен ли переход для создания соединия
-                this.Bind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
+                this.OneWayBind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
 
                 // Цвет рамки, вокруг перехода
-                this.Bind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
+                this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
 
                 // Цвет перехода
-                this.Bind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
+                this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
 
                 // Отображается ли переход
                 this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
