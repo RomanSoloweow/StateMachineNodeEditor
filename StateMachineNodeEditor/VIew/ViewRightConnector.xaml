@@ -15,7 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Style="{DynamicResource ConnectorTextBox}"/>
+        <TextBox Grid.Row="0" Grid.Column="0" Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ColorText}" Style="{DynamicResource ConnectorTextBox}"/>
         <Ellipse Grid.Row="0" Grid.Column="1"  Name="Form" Height="12" Width="12"  AllowDrop="True"  StrokeThickness="1"  Style="{DynamicResource ConnectorEllipse}"/>
     </Grid>
 </UserControl>

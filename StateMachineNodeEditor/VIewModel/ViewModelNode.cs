@@ -39,7 +39,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Допен ли заголовок для редактирования
         /// </summary>
-        [Reactive] public bool NameEnable { get; set; }
+        [Reactive] public bool NameEnable { get; set; } = true;
 
         /// <summary>
         /// Флаг того, что узел выбран
@@ -49,7 +49,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Цвет рамки вокруг узла
         /// </summary>
-        [Reactive] public Brush BorderBrush { get; set; } = Brushes.LightGray;
+        [Reactive] public Brush BorderBrush { get; set; } = Application.Current.Resources["ColorNodeBorder"] as SolidColorBrush;
 
         /// <summary>
         /// Отображаются ли переходы

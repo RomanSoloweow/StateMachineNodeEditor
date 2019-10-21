@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StateMachineNodeEditor.Styles"
+                    xmlns:uih="http://schemas.microsoft.com/netfx/2009/xaml/presentation">
+    <!--<SolidColorBrush x:Key="ColorText" Color="#F0F0F0"/>-->
+    <SolidColorBrush x:Key="ColorText" Color="LightGray"/>
+    <SolidColorBrush x:Key="ColorConnector" Color="LightGray"/>
+    <SolidColorBrush x:Key="ColorNodeBorder" Color="LightGray"/>
+    <SolidColorBrush x:Key="ColorNodeSelectedBorder" Color="Red"/>
+
+    <SolidColorBrush x:Key="ColorNodesCanvasBackground" Color="#1e1e1e"/>
+    
+    <SolidColorBrush x:Key="ColorMainWindowHeader" Color="#FF2D2D30"/>
+    
+    <SolidColorBrush x:Key="ColorMainWindowButton" Color="LightGray"/>
+    <SolidColorBrush x:Key="ColorMainWindowButtonMouseOver" Color="#A9A9A9"/>
+    <SolidColorBrush x:Key="ColorMainWindowButtonPressed" Color="#007ACC" />
+
+    <SolidColorBrush x:Key="ColorMenuBackground" Color="#1e1e1e" />
+    <SolidColorBrush x:Key="ColorMenuBorder" Color="#FF2D2D30" />
+    
+</ResourceDictionary>

@@ -147,12 +147,12 @@ namespace StateMachineNodeEditor.View
         private void OnEventMouseEnter(MouseEventArgs e)
         {
             if (this.ViewModel.Selected != true)
-                this.ViewModel.BorderBrush = Brushes.Red;
+                this.ViewModel.BorderBrush = Application.Current.Resources["ColorNodeSelectedBorder"] as SolidColorBrush;
         }
         private void OnEventMouseMouseLeave(MouseEventArgs e)
         {
             if (this.ViewModel.Selected != true)
-                this.ViewModel.BorderBrush = Brushes.LightGray;
+                this.ViewModel.BorderBrush = Application.Current.Resources["ColorNodeBorder"] as SolidColorBrush;
         }
         
 

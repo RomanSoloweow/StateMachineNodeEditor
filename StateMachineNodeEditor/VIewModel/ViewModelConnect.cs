@@ -5,6 +5,7 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using System.Windows.Media;
 using System.Reactive.Linq;
+using System.Windows;
 
 namespace StateMachineNodeEditor.ViewModel
 {
@@ -33,7 +34,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// <summary>
         /// Цвет линии
         /// </summary>
-        [Reactive] public Brush Stroke { get; set; } = Brushes.White;
+        [Reactive] public Brush Stroke { get; set; } = Application.Current.Resources["ColorConnector"] as SolidColorBrush;
 
         /// <summary>
         /// Элемент, из которого выходит линия

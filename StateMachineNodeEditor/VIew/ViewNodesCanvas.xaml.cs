@@ -12,8 +12,6 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
-using Splat;
-using System.Reflection;
 
 namespace StateMachineNodeEditor.View
 {
@@ -55,8 +53,6 @@ namespace StateMachineNodeEditor.View
         public ViewNodesCanvas()
         {
             InitializeComponent();
-            Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
-            Locator.CurrentMutable.RegisterConstant(new ConverterBoolAndVisibility(), typeof(IBindingTypeConverter));
             ViewModel = new ViewModelNodesCanvas();
             SetupBinding();
             SetupEvents();
