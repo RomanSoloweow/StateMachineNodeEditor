@@ -44,7 +44,7 @@
        
     </Canvas>
     <UserControl.ContextMenu >
-        <ContextMenu Template="{DynamicResource ContextMenu}" >
+        <ContextMenu Template="{DynamicResource ContextMenu}"  >
             <MenuItem Header="Add" x:Name="ItemAddNode" InputGestureText="Ctrl + N" Template="{DynamicResource ContextMenuItem}" />
             <MenuItem Header="Delete" x:Name="ItemDeleteNode" InputGestureText="Delete" Template="{DynamicResource ContextMenuItem}"/>
         </ContextMenu>

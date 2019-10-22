@@ -16,7 +16,7 @@
     <SolidColorBrush x:Key="ColorMainWindowButtonMouseOver" Color="#A9A9A9"/>
     <SolidColorBrush x:Key="ColorMainWindowButtonPressed" Color="#007ACC" />
 
-    <SolidColorBrush x:Key="ColorMenuBackground" Color="#1e1e1e" />
+    <SolidColorBrush x:Key="ColorMenuBackground" Color="#1b1b1b" />
     <SolidColorBrush x:Key="ColorMenuBorder" Color="#FF2D2D30" />
     
 </ResourceDictionary>
