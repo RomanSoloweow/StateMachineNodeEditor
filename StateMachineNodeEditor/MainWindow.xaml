@@ -16,20 +16,20 @@
         <DockPanel x:Name="Header" Grid.Row="0" Background="{StaticResource ColorMainWindowHeader}" >
             <Menu  DockPanel.Dock="Left"  Foreground="White" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center" Template="{DynamicResource MainMenu}" >
                 <MenuItem Header="File" Template="{DynamicResource MainMenuItem}">
-                    <MenuItem Header="New" ></MenuItem >
-                    <MenuItem Header="Open" ></MenuItem>
-                    <MenuItem Header="Save" ></MenuItem>
-                    <MenuItem Header="SaveAs..." ></MenuItem>
-                    <Separator></Separator>
-                    <MenuItem Header="Exit" ></MenuItem>
+                    <MenuItem Header="New" Template="{DynamicResource ContextMenuItem}"></MenuItem >
+                    <MenuItem Header="Open" Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <MenuItem Header="Save" Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <MenuItem Header="SaveAs..." Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <!--<Separator></Separator>-->
+                    <MenuItem Header="Exit" Template="{DynamicResource ContextMenuItem}"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Edit" Template="{DynamicResource MainMenuItem}">
-                    <MenuItem Header="Undo" ></MenuItem>
-                    <MenuItem Header="Redo" ></MenuItem>
-                    <Separator></Separator>
-                    <MenuItem Header="Cut" ></MenuItem>
-                    <MenuItem Header="Copy" ></MenuItem>
-                    <MenuItem Header="Paste" ></MenuItem>
+                    <MenuItem Header="Undo" Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <MenuItem Header="Redo" Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <!--<Separator></Separator>-->
+                    <MenuItem Header="Cut" Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <MenuItem Header="Copy" Template="{DynamicResource ContextMenuItem}"></MenuItem>
+                    <MenuItem Header="Paste" Template="{DynamicResource ContextMenuItem}"></MenuItem>
                 </MenuItem>
             </Menu>
 
