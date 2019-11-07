@@ -7,6 +7,8 @@ using ReactiveUI;
 using DynamicData;
 using DynamicData.Binding;
 using System.Reactive.Linq;
+using ReactiveUI.Validation.Abstractions;
+using ReactiveUI.Validation.Contexts;
 
 namespace StateMachineNodeEditor.ViewModel
 {
@@ -257,6 +259,11 @@ namespace StateMachineNodeEditor.ViewModel
         {
             Nodes.Add(result);
             return result;
+        }
+        public bool ValidateNodeName(string oldValue, string newValue)
+        {
+            newValue = oldValue;
+            return true;
         }
     }
 }

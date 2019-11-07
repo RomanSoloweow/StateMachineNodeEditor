@@ -252,11 +252,15 @@
     <Compile Include="Old Version\OtherClass\Transforms.cs" />
     <Compile Include="ViewModel\ViewModelConnect.cs" />
     <Compile Include="ViewModel\ViewModelConnector.cs" />
+    <Compile Include="ViewModel\ViewModelCutter.cs" />
     <Compile Include="ViewModel\ViewModelNode.cs" />
     <Compile Include="ViewModel\ViewModelNodesCanvas.cs" />
     <Compile Include="ViewModel\ViewModelSelector.cs" />
     <Compile Include="View\ViewConnect.xaml.cs">
       <DependentUpon>ViewConnect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewCutter.xaml.cs">
+      <DependentUpon>ViewCutter.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewLeftConnector.xaml.cs">
       <DependentUpon>ViewLeftConnector.xaml</DependentUpon>
@@ -361,6 +365,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ViewCutter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ViewLeftConnector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -401,6 +409,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include=".editorconfig" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

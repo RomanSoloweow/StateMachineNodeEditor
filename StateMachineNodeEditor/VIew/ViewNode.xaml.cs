@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,16 +7,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ReactiveUI.Fody.Helpers;
-using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using ReactiveUI.Wpf;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using DynamicData.Binding;
 using System.Windows.Controls.Primitives;
 
 namespace StateMachineNodeEditor.View
@@ -61,7 +51,7 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.BorderBrush, x => x.Border.BorderBrush);
 
                 //Name (заголовок узла)
-                this.Bind(this.ViewModel, x => x.Name, x => x.Header.Text);
+                this.OneWayBind(this.ViewModel, x => x.Name, x => x.Header.Text);
 
                 //Можно ли менять заголовок
                 this.Bind(this.ViewModel, x => x.NameEnable, x => x.Header.IsEnabled);
@@ -108,7 +98,7 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseEnter.Subscribe(e => OnEventMouseEnter(e));
                 this.Events().MouseLeave.Subscribe(e => OnEventMouseMouseLeave(e));
                 this.ButtonCollapse.Events().Click.Subscribe(_ => OnEventCollapse());
-
+                this.Header.Events().TextChanged.Subscribe(e => Validate(e));
                
             });
         }
@@ -116,6 +106,10 @@ namespace StateMachineNodeEditor.View
         {
             Keyboard.Focus(this);
             this.ViewModel.CommandSelect.Execute(true);
+        }
+        private void Validate(TextChangedEventArgs e)
+        {
+            Header.Text = ViewModel.Name;
         }
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {

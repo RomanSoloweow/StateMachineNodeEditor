@@ -8,12 +8,15 @@ using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
 using DynamicData.Binding;
 using System.Reactive.Linq;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
+
 namespace StateMachineNodeEditor.ViewModel
 {
     /// <summary>
     /// Отображение для узла
     /// </summary>
-    public class ViewModelNode:ReactiveObject, IValidatableViewModel
+    public class ViewModelNode : ReactiveValidationObject<ViewModelNode>
     {
         public ValidationContext ValidationContext { get; } = new ValidationContext();
         /// <summary>
@@ -91,12 +94,13 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         public IObservableCollection<ViewModelConnector> Transitions { get; set; } = new ObservableCollectionExtended<ViewModelConnector>();
 
-        
+
 
         public ViewModelNode(ViewModelNodesCanvas nodesCanvas)
         {
             NodesCanvas = nodesCanvas;
-            this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.BorderBrush = value ? Brushes.Red:Brushes.LightGray; });
+            //this.WhenAnyValue(x=>x.Name).Subscribe()
+            this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.BorderBrush = value ? Brushes.Red : Brushes.LightGray; });
             this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
             SetupConnectors();
             SetupCommands();
