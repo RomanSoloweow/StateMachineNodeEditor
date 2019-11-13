@@ -73,6 +73,8 @@ namespace StateMachineNodeEditor.View
                     this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
                     this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+
+                    this.OneWayBind(this.ViewModel, x => x.Cutter, x => x.Cutter.ViewModel);
                 });
             }
         #endregion Setup Binding
@@ -90,9 +92,13 @@ namespace StateMachineNodeEditor.View
                 this.BindCommand(this.ViewModel, x => x.CommandDeleteSelectedNode, x => x.BindingDeleteNode);
 
                 this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
+                this.BindCommand(this.ViewModel, x => x.CommandCut, x => x.BindingCut, positionLeftClickObservable);
+                
+
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
                 this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
+                this.WhenAnyValue(x => x.ViewModel.Cutter.EndPoint.Value).InvokeCommand(ViewModel.CommandCutterIntersect);
 
             });
         }
@@ -219,5 +225,9 @@ namespace StateMachineNodeEditor.View
             return result;
         }
 
+        private void BindingCut_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }

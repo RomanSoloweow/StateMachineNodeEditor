@@ -25,7 +25,28 @@ namespace StateMachineNodeEditor.ViewModel
 
         public ViewModelCutter()
         {
+            SetupCommands();
+        }
+        #region Setup Commands
+        public SimpleCommandWithParameter<MyPoint> CommandStartCut { get; set; }
+        public SimpleCommand CommandEndCut { get; set; }
+
+        private void SetupCommands()
+        {
+            CommandStartCut = new SimpleCommandWithParameter<MyPoint>(this, StartCut);
+            CommandEndCut = new SimpleCommand(this, EndCut);
+        }
+
+        private void StartCut(MyPoint point)
+        {
+            Visible = true;
+            StartPoint.Set(point);
+        }
+        private void EndCut()
+        {
 
         }
+
+        #endregion Setup Commands
     }
 }

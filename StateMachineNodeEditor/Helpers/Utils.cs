@@ -28,5 +28,14 @@ namespace StateMachineNodeEditor.Helpers
             //если хоть одно условие выполняется - прямоугольники не пересекаются
             return !(par1 || par2 || par3 || par4);
         }
+
+        public static MyPoint GetStartPointDiagonal(MyPoint a1, MyPoint b1)
+        {
+            return new MyPoint(Math.Min(a1.X, b1.X), Math.Min(a1.Y, b1.Y));
+        }
+        public static MyPoint GetEndPointDiagonal(MyPoint a1, MyPoint b1)
+        {
+            return new MyPoint(Math.Max(a1.X, b1.X), Math.Max(a1.Y, b1.Y));
+        }
     }
 }

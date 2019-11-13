@@ -17,6 +17,7 @@ namespace StateMachineNodeEditor.ViewModel
         public IObservableCollection<ViewModelConnect> Connects = new ObservableCollectionExtended<ViewModelConnect>();
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
         [Reactive] public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
+        [Reactive] public ViewModelCutter Cutter { get; set; } = new ViewModelCutter();
         [Reactive] public ViewModelConnect CurrentConnect { get; set; }
         [Reactive] public ViewModelNode CurrentNode { get; set; }
 
@@ -64,9 +65,11 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandSelectAll { get; set; }
         public SimpleCommand CommandUnSelectAll { get; set; }
         public SimpleCommand CommandSelectorIntersect { get; set; }
+        public SimpleCommand CommandCutterIntersect { get; set; }
         public SimpleCommand CommandDeleteFreeConnect { get; set; }
         public SimpleCommandWithParameter<object> CommandZoom { get; set; }
         public SimpleCommandWithParameter<MyPoint> CommandSelect { get; set; }
+        public SimpleCommandWithParameter<MyPoint> CommandCut { get; set; }
         public SimpleCommandWithParameter<MyPoint> CommandPartMoveAllNode { get; set; }
         public SimpleCommandWithParameter<MyPoint> CommandPartMoveAllSelectedNode { get; set; }
 
@@ -104,7 +107,7 @@ namespace StateMachineNodeEditor.ViewModel
             CommandSelectAll = new SimpleCommand(this, SelectedAll);
             CommandUnSelectAll = new SimpleCommand(this, UnSelectedAll);
             CommandSelectorIntersect = new SimpleCommand(this, SelectorIntersect);
-
+            CommandCutterIntersect = new SimpleCommand(this, CutterIntersect);
 
             CommandPartMoveAllNode = new SimpleCommandWithParameter<MyPoint>(this, PartMoveAllNode);          
             CommandPartMoveAllSelectedNode = new SimpleCommandWithParameter<MyPoint>(this, PartMoveAllSelectedNode);
@@ -113,7 +116,8 @@ namespace StateMachineNodeEditor.ViewModel
             //CommandAddConnect = new Command<ViewModelConnect, ViewModelConnect>(this, AddConnect, DeleteConnect);
             //CommandDeleteNode = new Command<MyPoint, ViewModelNode>(this, DeleteNode,);
             CommandSelect = new SimpleCommandWithParameter<MyPoint>(this, StartSelect);
-            
+            CommandCut = new SimpleCommandWithParameter<MyPoint>(this, StartCut);
+
             CommandAddFreeConnect = new SimpleCommandWithParameter<ViewModelConnector>(this, AddFreeConnect);
             
             CommandDeleteFreeConnect = new SimpleCommand(this, DeleteFreeConnect);
@@ -129,6 +133,10 @@ namespace StateMachineNodeEditor.ViewModel
         private void StartSelect(MyPoint point)
         {
             Selector.CommandStartSelect.Execute(point);
+        }
+        private void StartCut(MyPoint point)
+        {
+            Cutter.CommandStartCut.Execute(point);
         }
         private void SelectedAll()
         {
@@ -214,15 +222,31 @@ namespace StateMachineNodeEditor.ViewModel
 
             Scale.Value += (Delta > 0) ? Scales : -Scales;
         }
+        private void CutterIntersect()
+        {
+            MyPoint cutterStartPointDiagonal = Utils.GetStartPointDiagonal(Cutter.StartPoint, Cutter.EndPoint)/Scale.Value;
+            MyPoint cutterEndPointDiagonal = Utils.GetEndPointDiagonal(Cutter.StartPoint, Cutter.EndPoint) / Scale.Value;
+            //Console.WriteLine(cutterStartPoint.Value+" "+ cutterEndPoint.Value);
+            var t = Connects.Where(x => Utils.Intersect(Utils.GetStartPointDiagonal(x.StartPoint, x.EndPoint),
+                                                        Utils.GetEndPointDiagonal(x.StartPoint, x.EndPoint), 
+                                                        cutterStartPointDiagonal, 
+                                                        cutterEndPointDiagonal)
+                                   );
+            Console.WriteLine("ConnectsCount" + t.Count().ToString());
+
+
+        }
         private void SelectorIntersect()
         {
             MyPoint selectorPoint1 = Selector.Point1WithScale / Scale.Value;
             MyPoint selectorPoint2 = Selector.Point2WithScale / Scale.Value;
+
             foreach (ViewModelNode node in Nodes)
             {
                 node.Selected = Utils.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2);
             }
         }
+
         private void AddFreeConnect(ViewModelConnector fromConnector)
         {
             CurrentConnect = new ViewModelConnect(fromConnector);
