@@ -5,7 +5,7 @@
 - Moving and Scaling
 ![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/master/Gifs/moving%20and%20scaling.gif)
 - Undo and Redo
-![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/master/Gifs/undoRedo.gif)
+![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/master/Gifs/undo%20and%20redo.gif)
 - Collapsing and Selection for Nodes
 ![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/master/Gifs/collapsing%20and%20selection.gif)
 
