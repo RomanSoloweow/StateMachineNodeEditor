@@ -1,4 +1,6 @@
 # StateMachineNodeEditor
+ StateMachineNodeEditor is a WPF node-editor for visual work and editoring  state-machine  realized with library [StateMachine](https://github.com/RomanSoloweow/StateMachine)
+
 ## Features
 - Adding nodes and connections
 ![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/gh-pages/Gifs/adding.gif)
