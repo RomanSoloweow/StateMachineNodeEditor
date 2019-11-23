@@ -229,7 +229,7 @@
     <Compile Include="Helpers\SimpleCommand.cs" />
     <Compile Include="Helpers\SimpleCommandWithParameter.cs" />
     <Compile Include="Helpers\Translate.cs" />
-    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Helpers\MyUtils.cs" />
     <Compile Include="Styles\CustomWindow.cs" />
     <Compile Include="Old Version\Elements\NodesCanvas.xaml.cs">
       <DependentUpon>NodesCanvas.xaml</DependentUpon>

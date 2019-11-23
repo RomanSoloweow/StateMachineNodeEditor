@@ -177,7 +177,6 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void Move(MyPoint delta)
         {
-            //delta /= NodesCanvas.Scale.Value;
             Point1 += delta/NodesCanvas.Scale.Value;
         }
 

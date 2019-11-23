@@ -224,16 +224,18 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void CutterIntersect()
         {
-            MyPoint cutterStartPointDiagonal = Utils.GetStartPointDiagonal(Cutter.StartPoint, Cutter.EndPoint)/Scale.Value;
-            MyPoint cutterEndPointDiagonal = Utils.GetEndPointDiagonal(Cutter.StartPoint, Cutter.EndPoint) / Scale.Value;
-            //Console.WriteLine(cutterStartPoint.Value+" "+ cutterEndPoint.Value);
-            var t = Connects.Where(x => Utils.Intersect(Utils.GetStartPointDiagonal(x.StartPoint, x.EndPoint),
-                                                        Utils.GetEndPointDiagonal(x.StartPoint, x.EndPoint), 
-                                                        cutterStartPointDiagonal, 
-                                                        cutterEndPointDiagonal)
-                                   );
-            Console.WriteLine("ConnectsCount" + t.Count().ToString());
-
+            MyPoint cutterStartPointDiagonal = MyUtils.GetStartPointDiagonal(Cutter.StartPoint, Cutter.EndPoint)/Scale.Value;
+            MyPoint cutterEndPointDiagonal = MyUtils.GetEndPointDiagonal(Cutter.StartPoint, Cutter.EndPoint) / Scale.Value;
+            var connects = Connects.Where(x => MyUtils.Intersect(MyUtils.GetStartPointDiagonal(x.StartPoint, x.EndPoint),MyUtils.GetEndPointDiagonal(x.StartPoint, x.EndPoint), 
+                                                        cutterStartPointDiagonal, cutterEndPointDiagonal));
+            foreach (var connect in Connects)
+            {
+              connect.Selected = false;
+            }
+            foreach (var connect in connects)
+            {
+              connect.Selected = MyUtils.ComputeIntersections(connect.StartPoint, connect.Point1, connect.Point2, connect.EndPoint, Cutter.StartPoint, Cutter.EndPoint);
+            }
 
         }
         private void SelectorIntersect()
@@ -243,7 +245,7 @@ namespace StateMachineNodeEditor.ViewModel
 
             foreach (ViewModelNode node in Nodes)
             {
-                node.Selected = Utils.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2);
+                node.Selected = MyUtils.Intersect(node.Point1, node.Point2, selectorPoint1, selectorPoint2);
             }
         }
 
