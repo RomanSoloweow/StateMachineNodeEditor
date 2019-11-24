@@ -36,7 +36,6 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public Brush Stroke { get; set; } = Application.Current.Resources["ColorConnector"] as SolidColorBrush;
 
-
         /// <summary>
         /// Флаг того, что соединение выбрано
         /// </summary>
@@ -72,9 +71,12 @@ namespace StateMachineNodeEditor.ViewModel
             //SetupCommands();
         }
         #region Setup Commands
+        
         private void SetupCommands()
         {
+         
         }
+
         #endregion Setup Commands
 
         private void FromConnectChanged()

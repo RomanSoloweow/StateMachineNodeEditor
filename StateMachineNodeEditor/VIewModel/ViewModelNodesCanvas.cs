@@ -7,8 +7,6 @@ using ReactiveUI;
 using DynamicData;
 using DynamicData.Binding;
 using System.Reactive.Linq;
-using ReactiveUI.Validation.Abstractions;
-using ReactiveUI.Validation.Contexts;
 
 namespace StateMachineNodeEditor.ViewModel
 {
@@ -67,6 +65,10 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandSelectorIntersect { get; set; }
         public SimpleCommand CommandCutterIntersect { get; set; }
         public SimpleCommand CommandDeleteFreeConnect { get; set; }
+
+        public SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode,string>> CommandValidateNodeName { get; set; }
+        public SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode, string>> CommandValidateConnectName { get; set; }
+
         public SimpleCommandWithParameter<object> CommandZoom { get; set; }
         public SimpleCommandWithParameter<MyPoint> CommandSelect { get; set; }
         public SimpleCommandWithParameter<MyPoint> CommandCut { get; set; }
@@ -108,6 +110,8 @@ namespace StateMachineNodeEditor.ViewModel
             CommandUnSelectAll = new SimpleCommand(this, UnSelectedAll);
             CommandSelectorIntersect = new SimpleCommand(this, SelectorIntersect);
             CommandCutterIntersect = new SimpleCommand(this, CutterIntersect);
+            CommandValidateNodeName = new SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode, string>>(this, ValidateNodeName);
+            CommandValidateConnectName = new SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode, string>>(this, ValidateConnectName);
 
             CommandPartMoveAllNode = new SimpleCommandWithParameter<MyPoint>(this, PartMoveAllNode);          
             CommandPartMoveAllSelectedNode = new SimpleCommandWithParameter<MyPoint>(this, PartMoveAllSelectedNode);
@@ -286,10 +290,13 @@ namespace StateMachineNodeEditor.ViewModel
             Nodes.Add(result);
             return result;
         }
-        public bool ValidateNodeName(string oldValue, string newValue)
+        private void ValidateNodeName(ValidateObjectProperty<ViewModelNode, string> obj)
         {
-            newValue = oldValue;
-            return true;
+
+        }
+        private void ValidateConnectName(ValidateObjectProperty<ViewModelNode, string> obj)
+        {
+
         }
     }
 }

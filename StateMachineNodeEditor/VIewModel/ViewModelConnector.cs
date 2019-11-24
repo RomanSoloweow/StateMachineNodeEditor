@@ -53,9 +53,15 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public ViewModelConnect Connect { get; set; }
 
-        public ViewModelConnector(ViewModelNode viewModelNode)
+        /// <summary>
+        /// Канвас, которому принадлежит соединение
+        /// </summary>
+        [Reactive] public ViewModelNodesCanvas NodesCanvas { get; set; }
+
+        public ViewModelConnector(ViewModelNodesCanvas nodesCanvas, ViewModelNode viewModelNode)
         {
             Node = viewModelNode;
+            NodesCanvas = nodesCanvas;
             SetupCommands();
         }
         #region Commands
@@ -64,6 +70,10 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandCheckDrop { get; set; }
         public SimpleCommand CommandAdd { get; set; }
         public SimpleCommand CommandDelete { get; set; }
+
+        public SimpleCommandWithParameter<string> CommandValidateName { get; set; }
+
+
         private void SetupCommands()
         {
             CommandDrag = new SimpleCommand(this, Drag);
@@ -71,8 +81,14 @@ namespace StateMachineNodeEditor.ViewModel
             CommandCheckDrop = new SimpleCommand(this, CheckDrop);
             CommandAdd = new SimpleCommand(this, Add);
             CommandDelete = new SimpleCommand(this, Delete);
+
+            CommandValidateName = new SimpleCommandWithParameter<string>(this, ValidateName);
         }
         #endregion Commands
+        private void ValidateName(string newName)
+        {
+            NodesCanvas.CommandValidateConnectName.Execute(new ValidateObjectProperty<ViewModelConnector, string>(this, newName));
+        }
         private void Add()
         {
             Node.CommandAddConnector.Execute(this);

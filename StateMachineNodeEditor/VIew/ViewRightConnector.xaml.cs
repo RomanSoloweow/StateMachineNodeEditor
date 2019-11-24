@@ -11,6 +11,8 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
+using System.Reactive.Linq;
+using System.Windows.Controls.Primitives;
 
 namespace StateMachineNodeEditor.View
 {
@@ -78,19 +80,33 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventDrag(e));
+                this.Text.Events().TextChanged.Subscribe(e => Validate(e));
             });
         }
-        #endregion SetupEvents
+        private void Validate(TextChangedEventArgs e)
+        {
+            ViewModel.CommandValidateName.Execute(Text.Text);
+        }
 
+
+        /// <summary>
+        /// Событие перетаскивания соединения на круг
+        /// </summary>
+        /// <param name="e"></param>
         private void OnEventDrag(MouseButtonEventArgs e)
         {
             this.ViewModel.CommandDrag.Execute();
             DataObject data = new DataObject();
-            data.SetData("Node", this.ViewModel.Node);        
+            data.SetData("Node", this.ViewModel.Node);
             DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
             this.ViewModel.CommandCheckDrop.Execute();
             e.Handled = true;
         }
+        #endregion SetupEvents
+
+        /// <summary>
+        /// Обновить координату центра круга
+        /// </summary>
         void UpdatePosition()
         {
             Point Position;

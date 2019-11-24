@@ -109,7 +109,7 @@ namespace StateMachineNodeEditor.View
         }
         private void Validate(TextChangedEventArgs e)
         {
-            Header.Text = ViewModel.Name;
+            ViewModel.CommandValidateName.Execute(Header.Text);
         }
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {

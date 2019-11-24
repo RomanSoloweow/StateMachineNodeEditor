@@ -4,11 +4,8 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using System.Windows.Media;
 using System.Windows;
-using ReactiveUI.Validation.Abstractions;
-using ReactiveUI.Validation.Contexts;
 using DynamicData.Binding;
 using System.Reactive.Linq;
-using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
 namespace StateMachineNodeEditor.ViewModel
@@ -18,7 +15,6 @@ namespace StateMachineNodeEditor.ViewModel
     /// </summary>
     public class ViewModelNode : ReactiveValidationObject<ViewModelNode>
     {
-        public ValidationContext ValidationContext { get; } = new ValidationContext();
         /// <summary>
         /// Точка левого верхнего угла
         /// </summary>
@@ -109,11 +105,11 @@ namespace StateMachineNodeEditor.ViewModel
         #region Connectors
         private void SetupConnectors()
         {
-            Input = new ViewModelConnector(this)
+            Input = new ViewModelConnector(NodesCanvas, this)
             {
                 Name = "Input"
             };
-            Output = new ViewModelConnector(this)
+            Output = new ViewModelConnector(NodesCanvas, this)
             {
                 Name = "Output",
                 Visible = null
@@ -128,7 +124,9 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommandWithParameter <object> CommandCollapse { get; set; }
         public SimpleCommandWithParameter<ViewModelConnector> CommandAddConnector { get; set; }
         public SimpleCommandWithParameter<ViewModelConnector> CommandDeleteConnector { get; set; }
-      
+
+        public SimpleCommandWithParameter<string> CommandValidateName { get; set;}
+
         public SimpleCommand CommandAddEmptyConnector { get; set; }
       
 
@@ -179,7 +177,10 @@ namespace StateMachineNodeEditor.ViewModel
         {
             Point1 += delta/NodesCanvas.Scale.Value;
         }
-
+        private void ValidateName(string newName)
+        {
+            NodesCanvas.CommandValidateNodeName.Execute(new ValidateObjectProperty<ViewModelNode, string>(this, newName));
+        }
         private void UpdatePoint2()
         {
             Point2.Set(Point1.X + Size.Width, Point1.Y + Size.Height);
@@ -193,7 +194,7 @@ namespace StateMachineNodeEditor.ViewModel
                 CurrentConnector.Name = "Transition_" + Transitions.Count.ToString();
                 //NodesCanvas.CommandAddConnect.Execute(CurrentConnector.Connect);
             }
-            CurrentConnector = new ViewModelConnector(this)
+            CurrentConnector = new ViewModelConnector(NodesCanvas, this)
             {
                 TextEnable = false
             };
