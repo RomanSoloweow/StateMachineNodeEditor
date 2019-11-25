@@ -224,6 +224,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\CanBeMove.cs" />
     <Compile Include="Helpers\Command.cs" />
     <Compile Include="Helpers\ConverterBoolAndVisibility.cs" />
     <Compile Include="Helpers\UndoRedoForCommand.cs" />

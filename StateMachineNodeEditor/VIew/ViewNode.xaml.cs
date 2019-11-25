@@ -12,13 +12,14 @@ using DynamicData;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
+using StateMachineNodeEditor.Helpers;
 
 namespace StateMachineNodeEditor.View
 {
     /// <summary>
     /// Interaction logic for ViewNode.xaml
     /// </summary>
-    public partial class ViewNode : UserControl, IViewFor<ViewModelNode>
+    public partial class ViewNode : UserControl, IViewFor<ViewModelNode>, CanBeMove
     {
         #region ViewModel
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(nameof(ViewModel), typeof(ViewModelNode), typeof(ViewNode), new PropertyMetadata(null));
@@ -92,16 +93,28 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseLeftButtonUp.Subscribe(e => OnEventMouseLeftUp(e));
                 this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e));
                 this.Events().MouseRightButtonUp.Subscribe(e => OnEventMouseRightUp(e));
-                this.Events().MouseDown.Subscribe(e => OnEventMouseDowns(e));
-                this.Events().MouseUp.Subscribe(e => OnEventMouseUps(e));
+                this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e));
+                this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e));
                 this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
                 this.Events().MouseEnter.Subscribe(e => OnEventMouseEnter(e));
                 this.Events().MouseLeave.Subscribe(e => OnEventMouseMouseLeave(e));
+                //this.Transitions.Events().MouseLeftButtonDown.Subscribe(e => OnEventTransitionsMouseLeftDowns(e));
+                //this.Transitions.Events().MouseLeftButtonDown.Subscribe
                 this.ButtonCollapse.Events().Click.Subscribe(_ => OnEventCollapse());
                 this.Header.Events().TextChanged.Subscribe(e => Validate(e));
                
             });
         }
+        //private void OnEventTransitionsMouseLeftDowns(MouseButtonEventArgs e)
+        //{
+        //    //if (Mouse.Captured == null)
+        //    //{
+        //    //    Keyboard.ClearFocus();
+        //    //    this.CaptureMouse();
+        //    //    Keyboard.Focus(this);
+        //    //}
+        //    e.Handled = true;
+        //}
         private void OnEventMouseLeftDowns(MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
@@ -110,6 +123,8 @@ namespace StateMachineNodeEditor.View
         private void Validate(TextChangedEventArgs e)
         {
             ViewModel.CommandValidateName.Execute(Header.Text);
+            if (Header.Text != ViewModel.Name)
+                Header.Text = ViewModel.Name;
         }
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {
@@ -121,7 +136,18 @@ namespace StateMachineNodeEditor.View
         private void OnEventMouseRightUp(MouseButtonEventArgs e)
         {
         }
-        private void OnEventMouseDowns(MouseButtonEventArgs e)
+        //private void OnEventTransitionsMouseDowns(MouseButtonEventArgs e)
+        //{
+        //    if (Mouse.Captured == null)
+        //    {
+        //        Keyboard.ClearFocus();
+        //        this.CaptureMouse();
+        //        Keyboard.Focus(this);
+        //    }
+        //    e.Handled = true;
+        //}
+
+        private void OnEventMouseDown(MouseButtonEventArgs e)
         {
             if (Mouse.Captured == null)
             {
@@ -131,7 +157,7 @@ namespace StateMachineNodeEditor.View
             }
             e.Handled = true;
         }
-        private void OnEventMouseUps(MouseButtonEventArgs e)
+        private void OnEventMouseUp(MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
         }

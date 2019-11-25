@@ -238,7 +238,7 @@ namespace StateMachineNodeEditor
             }
             CurrentConnector = new Connector(this);
             CurrentConnector.text.IsEnabled = false;
-            CurrentConnector.Name = "Transition_" + Transitions.Children.Count.ToString();
+            CurrentConnector.Name = "Transition_" + nodesCanvas.connects.Count().ToString();
             CurrentConnector.form.MouseDown += NewConnect;
             this.Transitions.Children.Insert(0, CurrentConnector);
             return null;

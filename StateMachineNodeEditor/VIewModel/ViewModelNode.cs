@@ -139,6 +139,7 @@ namespace StateMachineNodeEditor.ViewModel
             CommandAddEmptyConnector = new SimpleCommand(this, AddEmptyConnector);
             CommandAddConnector = new SimpleCommandWithParameter<ViewModelConnector>(this, AddConnector);
             CommandDeleteConnector = new SimpleCommandWithParameter<ViewModelConnector>(this, DeleteConnector);
+            CommandValidateName = new SimpleCommandWithParameter<string>(this, ValidateName);
         }
 
         #endregion Commands
@@ -191,7 +192,7 @@ namespace StateMachineNodeEditor.ViewModel
             {
                 CurrentConnector.TextEnable = true;
                 CurrentConnector.FormEnable = false;
-                CurrentConnector.Name = "Transition_" + Transitions.Count.ToString();
+                CurrentConnector.Name = "Transition_" + NodesCanvas.Connects.Count.ToString();
                 //NodesCanvas.CommandAddConnect.Execute(CurrentConnector.Connect);
             }
             CurrentConnector = new ViewModelConnector(NodesCanvas, this)

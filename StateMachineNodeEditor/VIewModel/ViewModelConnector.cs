@@ -101,13 +101,14 @@ namespace StateMachineNodeEditor.ViewModel
         private void Drag()
         {
             Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
-            //FromConnector.Connect = this;
         }
 
         private void Drop()
         {
-            if(Node.NodesCanvas.CurrentConnect.FromConnector.Node!=this.Node)
+            if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)
+            {
                 Node.NodesCanvas.CurrentConnect.ToConnector = this;
+            }
         }
         private void CheckDrop()
         {
@@ -119,6 +120,7 @@ namespace StateMachineNodeEditor.ViewModel
             {
                 Node.CommandAddEmptyConnector.Execute();
                 Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
+                Node.NodesCanvas.CurrentConnect = null;
             }
         }
     }

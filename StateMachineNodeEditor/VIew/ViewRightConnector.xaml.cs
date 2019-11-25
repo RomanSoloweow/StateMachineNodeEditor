@@ -51,7 +51,7 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Имя перехода ( вводится в узле)
-                this.Bind(this.ViewModel, x => x.Name, x => x.Text.Text);
+                this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text);
 
                 // Доступно ли имя перехода для редактирования
                 this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
@@ -86,9 +86,9 @@ namespace StateMachineNodeEditor.View
         private void Validate(TextChangedEventArgs e)
         {
             ViewModel.CommandValidateName.Execute(Text.Text);
+            if (Text.Text != ViewModel.Name)
+                Text.Text = ViewModel.Name;
         }
-
-
         /// <summary>
         /// Событие перетаскивания соединения на круг
         /// </summary>

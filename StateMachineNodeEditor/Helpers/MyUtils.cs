@@ -136,6 +136,7 @@ namespace StateMachineNodeEditor.Helpers
             };
             return sortSpecial(t);
         }
+
         //основная функция
         public static bool ComputeIntersections(MyPoint bezierStartPoint, MyPoint bezierPoint1, MyPoint bezierPoint2, MyPoint bezierEndPoint, MyPoint lineStartPoint, MyPoint lineEndPoint)
         {
@@ -178,12 +179,19 @@ namespace StateMachineNodeEditor.Helpers
 
                 if (t < 0 || t > 1.0 || s < 0 || s > 1.0)
                 {
+                    Console.WriteLine("No");
                     continue;
                 }
 
                 X.Add(p);
             }
-
+            if (X.Count > 0)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Console.WriteLine(i.ToString()+"   "+r[i].ToString());
+                }
+            }
             return X.Count>0;
         }
     }

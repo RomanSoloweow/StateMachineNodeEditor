@@ -67,7 +67,7 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandDeleteFreeConnect { get; set; }
 
         public SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode,string>> CommandValidateNodeName { get; set; }
-        public SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode, string>> CommandValidateConnectName { get; set; }
+        public SimpleCommandWithParameter<ValidateObjectProperty<ViewModelConnector, string>> CommandValidateConnectName { get; set; }
 
         public SimpleCommandWithParameter<object> CommandZoom { get; set; }
         public SimpleCommandWithParameter<MyPoint> CommandSelect { get; set; }
@@ -111,7 +111,7 @@ namespace StateMachineNodeEditor.ViewModel
             CommandSelectorIntersect = new SimpleCommand(this, SelectorIntersect);
             CommandCutterIntersect = new SimpleCommand(this, CutterIntersect);
             CommandValidateNodeName = new SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode, string>>(this, ValidateNodeName);
-            CommandValidateConnectName = new SimpleCommandWithParameter<ValidateObjectProperty<ViewModelNode, string>>(this, ValidateConnectName);
+            CommandValidateConnectName = new SimpleCommandWithParameter<ValidateObjectProperty<ViewModelConnector, string>>(this, ValidateConnectName);
 
             CommandPartMoveAllNode = new SimpleCommandWithParameter<MyPoint>(this, PartMoveAllNode);          
             CommandPartMoveAllSelectedNode = new SimpleCommandWithParameter<MyPoint>(this, PartMoveAllSelectedNode);
@@ -232,13 +232,16 @@ namespace StateMachineNodeEditor.ViewModel
             MyPoint cutterEndPointDiagonal = MyUtils.GetEndPointDiagonal(Cutter.StartPoint, Cutter.EndPoint) / Scale.Value;
             var connects = Connects.Where(x => MyUtils.Intersect(MyUtils.GetStartPointDiagonal(x.StartPoint, x.EndPoint),MyUtils.GetEndPointDiagonal(x.StartPoint, x.EndPoint), 
                                                         cutterStartPointDiagonal, cutterEndPointDiagonal));
+            Console.WriteLine("connects: " + connects.Count().ToString());
             foreach (var connect in Connects)
             {
               connect.Selected = false;
             }
+
             foreach (var connect in connects)
             {
               connect.Selected = MyUtils.ComputeIntersections(connect.StartPoint, connect.Point1, connect.Point2, connect.EndPoint, Cutter.StartPoint, Cutter.EndPoint);
+                Console.WriteLine("selected: " + connect.Selected.ToString());
             }
 
         }
@@ -292,11 +295,23 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void ValidateNodeName(ValidateObjectProperty<ViewModelNode, string> obj)
         {
-
+            if (!String.IsNullOrWhiteSpace(obj.Property))
+            {
+                if (!Nodes.Any(x => x.Name == obj.Property))
+                {
+                    obj.Obj.Name = obj.Property;
+                }
+            }
         }
-        private void ValidateConnectName(ValidateObjectProperty<ViewModelNode, string> obj)
+        private void ValidateConnectName(ValidateObjectProperty<ViewModelConnector, string> obj)
         {
-
+            if (!String.IsNullOrWhiteSpace(obj.Property))
+            {
+                if (!Connects.Any( x=> x.FromConnector.Name == obj.Property))
+                {
+                    obj.Obj.Name = obj.Property;
+                }
+            }
         }
     }
 }

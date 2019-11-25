@@ -18,7 +18,7 @@ namespace StateMachineNodeEditor.View
     /// <summary>
     /// Interaction logic for ViewNodesCanvas.xaml
     /// </summary>
-    public partial class ViewNodesCanvas : UserControl,IViewFor<ViewModelNodesCanvas>
+    public partial class ViewNodesCanvas : UserControl, IViewFor<ViewModelNodesCanvas>, CanBeMove
     {
         enum MoveNodes
         {
@@ -44,7 +44,7 @@ namespace StateMachineNodeEditor.View
         }
         #endregion ViewModel
 
-        private MyPoint PositionRightClick { get; set ; } = new MyPoint();
+        private MyPoint PositionRightClick { get; set; } = new MyPoint();
         private MyPoint PositionLeftClick { get; set; } = new MyPoint();
         private MyPoint PositionMove { get; set; } = new MyPoint();
         private MyPoint SumMove { get; set; } = new MyPoint();
@@ -59,24 +59,24 @@ namespace StateMachineNodeEditor.View
             SetupCommands();
         }
         #region Setup Binding
-            private void SetupBinding()
+        private void SetupBinding()
+        {
+            this.WhenActivated(disposable =>
             {
-                this.WhenActivated(disposable =>
-                {
-                    this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
-                    this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);      
-                    
+                this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
+                this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
+
                     //Масштаб по оси X
                     this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
 
                     //Масштаб по оси Y
                     this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
-                    this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
+                this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
 
-                    this.OneWayBind(this.ViewModel, x => x.Cutter, x => x.Cutter.ViewModel);
-                });
-            }
+                this.OneWayBind(this.ViewModel, x => x.Cutter, x => x.Cutter.ViewModel);
+            });
+        }
         #endregion Setup Binding
 
         #region Setup Commands
@@ -93,7 +93,7 @@ namespace StateMachineNodeEditor.View
 
                 this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandCut, x => x.BindingCut, positionLeftClickObservable);
-                
+
 
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
@@ -105,27 +105,27 @@ namespace StateMachineNodeEditor.View
         #endregion Setup Commands
 
         #region Setup Events
-            private void SetupEvents()
+        private void SetupEvents()
+        {
+            this.WhenActivated(disposable =>
             {
-                this.WhenActivated(disposable =>
-                {
-                    this.Events().MouseLeftButtonDown.Subscribe(e => OnEventMouseLeftDown(e));
-                    this.Events().MouseLeftButtonUp.Subscribe(e => OnEventMouseLeftUp(e));
-                    this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e));
-                    this.Events().MouseRightButtonUp.Subscribe(e => OnEventMouseRightUp(e));
-                    this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e));
-                    this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e));
-                    this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e));
-                    this.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e));
-                    this.Events().DragOver.Subscribe(e => OnEventDragOver(e));
+                this.Events().MouseLeftButtonDown.Subscribe(e => OnEventMouseLeftDown(e));
+                this.Events().MouseLeftButtonUp.Subscribe(e => OnEventMouseLeftUp(e));
+                this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e));
+                this.Events().MouseRightButtonUp.Subscribe(e => OnEventMouseRightUp(e));
+                this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e));
+                this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e));
+                this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e));
+                this.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e));
+                this.Events().DragOver.Subscribe(e => OnEventDragOver(e));
 
                     //Эти события срабатывают раньше команд
                     this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e));
-                    this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e));
+                this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e));
 
-                    this.WhenAnyValue(x => x.ViewModel.Scale.Value).Subscribe(value => { this.Grid.Height/= value; this.Grid.Width /= value;  });
-                });
-            }
+                this.WhenAnyValue(x => x.ViewModel.Scale.Value).Subscribe(value => { this.Grid.Height /= value; this.Grid.Width /= value; });
+            });
+        }
         private void OnEventMouseLeftDown(MouseButtonEventArgs e)
         {
             if (Mouse.Captured == null)
@@ -136,11 +136,11 @@ namespace StateMachineNodeEditor.View
 
                 this.ViewModel.CommandUnSelectAll.Execute();
             }
-     
+
             //if (this.IsMouseCaptured)
             //    ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
         }
-        
+
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {
             if (Move == MoveNodes.No)
@@ -176,8 +176,11 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventMouseMove(MouseEventArgs e)
         {
-            if (Mouse.Captured == null)
+            //if ((Mouse.Captured == null)||(!(Mouse.Captured is CanBeMove)))
+            if (!(Mouse.Captured is CanBeMove))
                 return;
+           
+
             MyPoint delta = GetDeltaMove();
 
             if (delta.IsClear)
@@ -197,6 +200,9 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventDragOver(DragEventArgs e)
         {
+            if (this.ViewModel.CurrentConnect is null)
+                return;
+
             MyPoint point = new MyPoint(e.GetPosition(Grid));
             point -= 2;
             this.ViewModel.CurrentConnect.EndPoint.Set(point);
