@@ -98,29 +98,20 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseMove.Subscribe(e => OnMouseMove(e));
                 this.Events().MouseEnter.Subscribe(e => OnEventMouseEnter(e));
                 this.Events().MouseLeave.Subscribe(e => OnEventMouseMouseLeave(e));
-                //this.Transitions.Events().MouseLeftButtonDown.Subscribe(e => OnEventTransitionsMouseLeftDowns(e));
-                //this.Transitions.Events().MouseLeftButtonDown.Subscribe
+
                 this.ButtonCollapse.Events().Click.Subscribe(_ => OnEventCollapse());
-                this.Header.Events().TextChanged.Subscribe(e => Validate(e));
-               
+                this.Header.Events().LostFocus.Subscribe(e => Validate(e));
+
+
             });
         }
-        //private void OnEventTransitionsMouseLeftDowns(MouseButtonEventArgs e)
-        //{
-        //    //if (Mouse.Captured == null)
-        //    //{
-        //    //    Keyboard.ClearFocus();
-        //    //    this.CaptureMouse();
-        //    //    Keyboard.Focus(this);
-        //    //}
-        //    e.Handled = true;
-        //}
+
         private void OnEventMouseLeftDowns(MouseButtonEventArgs e)
         {
             Keyboard.Focus(this);
             this.ViewModel.CommandSelect.Execute(true);
         }
-        private void Validate(TextChangedEventArgs e)
+        private void Validate(RoutedEventArgs e)
         {
             ViewModel.CommandValidateName.Execute(Header.Text);
             if (Header.Text != ViewModel.Name)
@@ -136,16 +127,6 @@ namespace StateMachineNodeEditor.View
         private void OnEventMouseRightUp(MouseButtonEventArgs e)
         {
         }
-        //private void OnEventTransitionsMouseDowns(MouseButtonEventArgs e)
-        //{
-        //    if (Mouse.Captured == null)
-        //    {
-        //        Keyboard.ClearFocus();
-        //        this.CaptureMouse();
-        //        Keyboard.Focus(this);
-        //    }
-        //    e.Handled = true;
-        //}
 
         private void OnEventMouseDown(MouseButtonEventArgs e)
         {

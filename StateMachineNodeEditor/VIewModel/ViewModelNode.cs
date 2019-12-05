@@ -98,6 +98,7 @@ namespace StateMachineNodeEditor.ViewModel
             //this.WhenAnyValue(x=>x.Name).Subscribe()
             this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.BorderBrush = value ? Brushes.Red : Brushes.LightGray; });
             this.WhenAnyValue(x => x.Point1.Value, x => x.Size).Subscribe(_ => UpdatePoint2());
+
             SetupConnectors();
             SetupCommands();
         }
@@ -193,7 +194,6 @@ namespace StateMachineNodeEditor.ViewModel
                 CurrentConnector.TextEnable = true;
                 CurrentConnector.FormEnable = false;
                 CurrentConnector.Name = "Transition_" + NodesCanvas.Connects.Count.ToString();
-                //NodesCanvas.CommandAddConnect.Execute(CurrentConnector.Connect);
             }
             CurrentConnector = new ViewModelConnector(NodesCanvas, this)
             {

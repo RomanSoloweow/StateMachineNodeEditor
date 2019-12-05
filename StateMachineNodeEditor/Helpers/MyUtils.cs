@@ -43,15 +43,22 @@ namespace StateMachineNodeEditor.Helpers
         private static Point[] bezierCoeffs(MyPoint bezierStartPoint, MyPoint bezierPoint1, MyPoint bezierPoint2, MyPoint bezierEndPoint)
         {
             Point[] coeffs = new Point[4];
+            double bezierStartPointX_M_3 = bezierStartPoint.X * 3.0;
+            double bezierPoint1X_M_3 = bezierPoint1.X * 3.0;
+            double bezierPoint2X_M_3 = bezierPoint2.X * 3.0;
 
-            coeffs[0].X = -bezierStartPoint.X + 3 * bezierPoint1.X + -3 * bezierPoint2.X + bezierEndPoint.X;
-            coeffs[1].X = 3 * bezierStartPoint.X - 6 * bezierPoint1.X + 3 * bezierPoint2.X;
-            coeffs[2].X = -3 * bezierStartPoint.X + 3 * bezierPoint1.X;
+            coeffs[0].X = -bezierStartPoint.X + bezierPoint1X_M_3  - bezierPoint2X_M_3 + bezierEndPoint.X;
+            coeffs[1].X = bezierStartPointX_M_3 - 6.0 * bezierPoint1.X + bezierPoint2X_M_3;
+            coeffs[2].X = -bezierStartPointX_M_3 + bezierPoint1X_M_3;
             coeffs[3].X = bezierStartPoint.X;
 
-            coeffs[0].Y = -bezierStartPoint.Y + 3 * bezierPoint1.Y + -3 * bezierPoint2.Y + bezierEndPoint.Y;
-            coeffs[1].Y = 3 * bezierStartPoint.Y - 6 * bezierPoint1.Y + 3 * bezierPoint2.Y;
-            coeffs[2].Y = -3 * bezierStartPoint.Y + 3 * bezierPoint1.Y;
+            double bezierStartPointY_M_3 = bezierStartPoint.Y * 3.0;
+            double bezierPoint1Y_M_3 = bezierPoint1.Y * 3.0;
+            double bezierPoint2Y_M_3 = bezierPoint2.Y * 3.0;
+
+            coeffs[0].Y = -bezierStartPoint.Y + bezierPoint1Y_M_3 - bezierPoint2Y_M_3 + bezierEndPoint.Y;
+            coeffs[1].Y = bezierStartPointY_M_3 - 6.0 * bezierPoint1.Y + bezierPoint2Y_M_3;
+            coeffs[2].Y = -bezierStartPointY_M_3 + bezierPoint1Y_M_3;
             coeffs[3].Y = bezierStartPoint.Y;
 
             return coeffs;
@@ -65,28 +72,28 @@ namespace StateMachineNodeEditor.Helpers
 
             double Q, R, D, S, T, Im;
 
-            Q = (3 * B - Math.Pow(A, 2)) / 9;
-            R = (9 * A * B - 27 * C - 2 * Math.Pow(A, 3)) / 54;
-            D = Math.Pow(Q, 3) + Math.Pow(R, 2);
+            Q = (3.0 * B - Math.Pow(A, 2.0)) / 9.0;
+            R = (9.0 * A * B - 27.0 * C - 2.0 * Math.Pow(A, 3.0)) / 54.0;
+            D = Math.Pow(Q, 3.0) + Math.Pow(R, 2.0);
 
             double[] t = new double[3];
 
             if (D >= 0)
             {
                 double sqrtD = Math.Sqrt(D);//Это выражение используется несколько раз. Небольшая оптимизация
-                double _AD3 = -A / 3;//Это выражение используется несколько раз. Небольшая оптимизация
+                double _AD3 = -A / 3.0;//Это выражение используется несколько раз. Небольшая оптимизация
                 double RAsqrtD = R + sqrtD;//Это выражение используется несколько раз. Небольшая оптимизация
                 double RSsqrtD = R - sqrtD;//Это выражение используется несколько раз. Небольшая оптимизация
-                double D13 = (1 / 3);//Это выражение используется несколько раз. Небольшая оптимизация
+                double D13 = (1.0 / 3.0);//Это выражение используется несколько раз. Небольшая оптимизация
                 S = Math.Sign(RAsqrtD) * Math.Pow(Math.Abs(RAsqrtD), D13);
                 T = Math.Sign(RSsqrtD) * Math.Pow(Math.Abs(RSsqrtD), D13);
 
                 double SST = (S + T);//Это выражение используется несколько раз. Небольшая оптимизация
 
                 t[0] = _AD3 + SST;
-                t[1] = _AD3 - SST / 2;
+                t[1] = _AD3 - SST / 2.0;
                 t[2] = t[1];
-                Im = Math.Abs(Math.Sqrt(3) * (S - T) / 2);
+                Im = Math.Abs(Math.Sqrt(3.0) * (S - T) / 2.0);
 
                 if (Im != 0)
                 {
@@ -96,16 +103,16 @@ namespace StateMachineNodeEditor.Helpers
             }
             else
             {
-                double th = Math.Acos(R / Math.Sqrt(-Math.Pow(Q, 3)));
-                double sqrt_QM2 = 2 * Math.Sqrt(-Q);//Это выражение используется несколько раз. Небольшая оптимизация
-                double AD3 = A / 3; //Это выражение используется несколько раз. Небольшая оптимизация
+                double th = Math.Acos(R / Math.Sqrt(-Math.Pow(Q, 3.0)));
+                double sqrt_QM2 = 2.0 * Math.Sqrt(-Q);//Это выражение используется несколько раз. Небольшая оптимизация
+                double AD3 = A / 3.0; //Это выражение используется несколько раз. Небольшая оптимизация
 
-                double thD3 = (th / 3); //Это выражение используется несколько раз. Небольшая оптимизация
-                double PIM2D3 = (Math.PI * 2) / 3; //Это выражение используется несколько раз. Небольшая оптимизация
+                double thD3 = (th / 3.0); //Это выражение используется несколько раз. Небольшая оптимизация
+                double PIM2D3 = (Math.PI * 2.0) / 3.0; //Это выражение используется несколько раз. Небольшая оптимизация
 
                 t[0] = sqrt_QM2 * Math.Cos(thD3) - AD3;
                 t[1] = sqrt_QM2 * Math.Cos(thD3 + PIM2D3) - AD3;
-                t[2] = sqrt_QM2 * Math.Cos(thD3 + 2 * PIM2D3) - AD3;
+                t[2] = sqrt_QM2 * Math.Cos(thD3 + 2.0 * PIM2D3) - AD3;
             }
 
             for (var i = 0; i < 3; i++)
@@ -179,18 +186,10 @@ namespace StateMachineNodeEditor.Helpers
 
                 if (t < 0 || t > 1.0 || s < 0 || s > 1.0)
                 {
-                    Console.WriteLine("No");
                     continue;
                 }
 
                 X.Add(p);
-            }
-            if (X.Count > 0)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Console.WriteLine(i.ToString()+"   "+r[i].ToString());
-                }
             }
             return X.Count>0;
         }

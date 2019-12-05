@@ -76,19 +76,18 @@ namespace StateMachineNodeEditor.ViewModel
 
         private void SetupCommands()
         {
+
             CommandDrag = new SimpleCommand(this, Drag);
             CommandDrop = new SimpleCommand(this, Drop);
             CommandCheckDrop = new SimpleCommand(this, CheckDrop);
             CommandAdd = new SimpleCommand(this, Add);
             CommandDelete = new SimpleCommand(this, Delete);
 
+
             CommandValidateName = new SimpleCommandWithParameter<string>(this, ValidateName);
         }
         #endregion Commands
-        private void ValidateName(string newName)
-        {
-            NodesCanvas.CommandValidateConnectName.Execute(new ValidateObjectProperty<ViewModelConnector, string>(this, newName));
-        }
+        
         private void Add()
         {
             Node.CommandAddConnector.Execute(this);
@@ -96,8 +95,7 @@ namespace StateMachineNodeEditor.ViewModel
         private void Delete()
         {
             Node.CommandDeleteConnector.Execute(this);
-        }
-        
+        }      
         private void Drag()
         {
             Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
@@ -122,6 +120,11 @@ namespace StateMachineNodeEditor.ViewModel
                 Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
                 Node.NodesCanvas.CurrentConnect = null;
             }
+        }
+
+        private void ValidateName(string newName)
+        {
+            NodesCanvas.CommandValidateConnectName.Execute(new ValidateObjectProperty<ViewModelConnector, string>(this, newName));
         }
     }
 }

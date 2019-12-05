@@ -56,7 +56,7 @@ namespace StateMachineNodeEditor.View
             ViewModel = new ViewModelNodesCanvas();
             SetupBinding();
             SetupEvents();
-            SetupCommands();
+            BindingCommands();
         }
         #region Setup Binding
         private void SetupBinding()
@@ -80,16 +80,17 @@ namespace StateMachineNodeEditor.View
         #endregion Setup Binding
 
         #region Setup Commands
-        private void SetupCommands()
+        private void BindingCommands()
         {
             this.WhenActivated(disposable =>
             {
                 var positionLeftClickObservable = this.ObservableForProperty(x => x.PositionLeftClick).Select(x => x.Value);
                 var positionRightClickObservable = this.ObservableForProperty(x => x.PositionRightClick).Select(x => x.Value);
+
                 this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo);
                 this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo);
                 this.BindCommand(this.ViewModel, x => x.CommandSelectAll, x => x.BindingSelectAll);
-                this.BindCommand(this.ViewModel, x => x.CommandDeleteSelectedNode, x => x.BindingDeleteNode);
+                this.BindCommand(this.ViewModel, x => x.CommandDeleteSelectedNodes, x => x.BindingDeleteNode);
 
                 this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
                 this.BindCommand(this.ViewModel, x => x.CommandCut, x => x.BindingCut, positionLeftClickObservable);
@@ -229,11 +230,6 @@ namespace StateMachineNodeEditor.View
             }
             PositionMove = CurrentPosition;
             return result;
-        }
-
-        private void BindingCut_KeyDown(object sender, KeyEventArgs e)
-        {
-
         }
     }
 }

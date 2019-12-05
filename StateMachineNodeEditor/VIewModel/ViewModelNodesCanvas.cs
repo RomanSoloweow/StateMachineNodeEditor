@@ -94,7 +94,10 @@ namespace StateMachineNodeEditor.ViewModel
         public Command<MyPoint, List<ViewModelNode>> CommandFullMoveAllSelectedNode { get; set; }
         public Command<MyPoint, ViewModelNode> CommandAddNode { get; set; }
         //public Command<MyPoint, ViewModelNode> CommandDeleteNode { get; set; }
-        public Command<List<ViewModelNode>, List<ViewModelNode>> CommandDeleteSelectedNode { get; set; }
+        public Command<List<ViewModelNode>, List<ViewModelNode>> CommandDeleteSelectedNodes { get; set; }
+
+        //public Command<List<ViewModel>, List<ViewModelNode>> CommandDeleteSelectedConnects { get; set; }
+
 
         public double ScaleMax = 5;
         public double ScaleMin = 0.1;
@@ -129,7 +132,7 @@ namespace StateMachineNodeEditor.ViewModel
             CommandFullMoveAllSelectedNode = new Command<MyPoint, List<ViewModelNode>>(this, FullMoveAllSelectedNode, UnFullMoveAllSelectedNode);
             CommandAddNode = new Command<MyPoint, ViewModelNode>(this, AddNode, DeleteNode);
             CommandAddConnect = new Command<ViewModelConnect, ViewModelConnect>(this, AddConnect, DeleteConnect);
-            CommandDeleteSelectedNode = new Command<List<ViewModelNode>, List<ViewModelNode>>(this, DeleteSelectedNode, UnDeleteSelectedNode);
+            CommandDeleteSelectedNodes = new Command<List<ViewModelNode>, List<ViewModelNode>>(this, DeleteSelectedNode, UnDeleteSelectedNode);
         }
 
         #endregion Setup Commands
@@ -144,11 +147,13 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void SelectedAll()
         {
-            Nodes.ToList().ForEach(x => x.Selected = true);
+            foreach (var node in Nodes)
+            { node.Selected = true; }
         }
         private void UnSelectedAll()
         {
-            Nodes.ToList().ForEach(x => x.Selected = false);
+            foreach (var node in Nodes)
+            { node.Selected = false; }
         }
         private List<ViewModelNode> FullMoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {
@@ -188,11 +193,13 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void PartMoveAllNode(MyPoint delta)
         {
-           Nodes.ToList().ForEach(node => node.CommandMove.Execute(delta));
+            foreach (var node in Nodes)
+            { node.CommandMove.Execute(delta);}
         }
         private void PartMoveAllSelectedNode(MyPoint delta)
         {
-            Nodes.Where(x => x.Selected).ToList().ForEach(node => node.CommandMove.Execute(delta));
+            foreach (var node in Nodes.Where(x => x.Selected))
+            { node.CommandMove.Execute(delta); }
         }
         private ViewModelNode AddNode(MyPoint parameter, ViewModelNode result)
         {
@@ -232,7 +239,6 @@ namespace StateMachineNodeEditor.ViewModel
             MyPoint cutterEndPointDiagonal = MyUtils.GetEndPointDiagonal(Cutter.StartPoint, Cutter.EndPoint) / Scale.Value;
             var connects = Connects.Where(x => MyUtils.Intersect(MyUtils.GetStartPointDiagonal(x.StartPoint, x.EndPoint),MyUtils.GetEndPointDiagonal(x.StartPoint, x.EndPoint), 
                                                         cutterStartPointDiagonal, cutterEndPointDiagonal));
-            Console.WriteLine("connects: " + connects.Count().ToString());
             foreach (var connect in Connects)
             {
               connect.Selected = false;
@@ -241,7 +247,6 @@ namespace StateMachineNodeEditor.ViewModel
             foreach (var connect in connects)
             {
               connect.Selected = MyUtils.ComputeIntersections(connect.StartPoint, connect.Point1, connect.Point2, connect.EndPoint, Cutter.StartPoint, Cutter.EndPoint);
-                Console.WriteLine("selected: " + connect.Selected.ToString());
             }
 
         }

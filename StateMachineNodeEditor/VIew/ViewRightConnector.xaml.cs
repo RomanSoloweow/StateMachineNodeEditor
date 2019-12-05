@@ -80,10 +80,10 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventDrag(e));
-                this.Text.Events().TextChanged.Subscribe(e => Validate(e));
+                this.Text.Events().LostFocus.Subscribe(e => Validate(e));
             });
         }
-        private void Validate(TextChangedEventArgs e)
+        private void Validate(RoutedEventArgs e)
         {
             ViewModel.CommandValidateName.Execute(Text.Text);
             if (Text.Text != ViewModel.Name)
