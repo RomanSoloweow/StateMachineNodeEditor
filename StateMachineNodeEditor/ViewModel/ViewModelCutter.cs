@@ -46,7 +46,7 @@ namespace StateMachineNodeEditor.ViewModel
         {
 
         }
-
+        
         #endregion Setup Commands
     }
 }

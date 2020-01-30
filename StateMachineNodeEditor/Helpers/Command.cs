@@ -6,31 +6,31 @@ namespace StateMachineNodeEditor.Helpers
     /// <summary>
     /// Команда с Undo/Redo
     /// </summary>
-    /// <typeparam name="TypeParameter">Тип параметра, передаваемого для выполнения</typeparam>
-    /// <typeparam name="TypeResult">Тип результата выполнения</typeparam>
-    public class Command<TypeParameter, TypeResult> : CommandUndoRedo,ICommand, ICloneable where TypeParameter: class where  TypeResult : class
+    /// <typeparam name="TParameter">Тип параметра, передаваемого для выполнения</typeparam>
+    /// <typeparam name="TResult">Тип результата выполнения</typeparam>
+    public class Command<TParameter, TResult> : CommandUndoRedo,ICommand, ICloneable where TParameter: class where  TResult : class
     {
 
         /// <summary>
         /// Функция, которая будет вызвана при выполнении команды
         /// </summary>
-        private readonly Func<TypeParameter, TypeResult, TypeResult> _execute;
+        private readonly Func<TParameter, TResult, TResult> _execute;
 
         /// <summary>
         /// Функция отмены команды
         /// </summary>
-        private readonly Func<TypeParameter, TypeResult, TypeResult> _unExecute;
+        private readonly Func<TParameter, TResult, TResult> _unExecute;
 
         /// <summary>
         /// Параметр, который был передан в команду при выполнении
         /// </summary>
-        public  TypeParameter Parameters { get;  set; }
+        public  TParameter Parameters { get;  set; }
 
         /// <summary>
         /// Результат выполнения команды
         /// </summary>
         /// Например здесь может храниться список объектов, которые были изменены
-        public TypeResult Result { get;  set; }
+        public TResult Result { get;  set; }
 
         /// <summary>
         /// Объкт, которому принадлежит команда
@@ -51,7 +51,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <returns></returns>
         public object Clone()
         {
-            return new Command<TypeParameter, TypeResult>(Owner, _execute, _unExecute) 
+            return new Command<TParameter, TResult>(Owner, _execute, _unExecute) 
             {
                 Parameters = this.Parameters,
                 Result = this.Result
@@ -85,10 +85,10 @@ namespace StateMachineNodeEditor.Helpers
         {
             
             //Запоминаем параметр ( чтобы можно было егоже передать в отмену)
-            Parameters = (parameter as TypeParameter);
+            Parameters = (parameter as TParameter);
 
             //Выполняем команду и запоминаем результат ( чтобы можно было выполнить отмену именно для этого результата)
-            Result = this._execute(Parameters, Result) as TypeResult;
+            Result = this._execute(Parameters, Result) as TResult;
 
             //Если команду можно отменить
             if (CanUnExecute)
@@ -136,7 +136,7 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="action">Функция, которая будет вызвана при выполнении команды</param>
-        private Command(object owner, Func<TypeParameter, TypeResult, TypeResult> execute)
+        private Command(object owner, Func<TParameter, TResult, TResult> execute)
         {
             Owner = owner;
             _execute = execute;
@@ -148,7 +148,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="execute">Функция, которая будет вызвана при выполнении команды</param>
         /// <param name="unExecute">Функция, которая будет вызвана при отмене команды</param>
-        public Command(object owner, Func<TypeParameter, TypeResult, TypeResult> execute, Func<TypeParameter, TypeResult, TypeResult> unExecute) : this(owner, execute)
+        public Command(object owner, Func<TParameter, TResult, TResult> execute, Func<TParameter, TResult, TResult> unExecute) : this(owner, execute)
         {
             _unExecute = unExecute;
         }

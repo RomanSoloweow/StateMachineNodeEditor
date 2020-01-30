@@ -3,8 +3,8 @@
                     xmlns:local="clr-namespace:StateMachineNodeEditor.Styles"
                     xmlns:uih="http://schemas.microsoft.com/netfx/2009/xaml/presentation">
     <!--<SolidColorBrush x:Key="ColorText" Color="#F0F0F0"/>-->
-    <SolidColorBrush x:Key="ColorText" Color="LightGray"/>
-    <SolidColorBrush x:Key="ColorConnector" Color="LightGray"/>
+    <SolidColorBrush x:Key="ColorText" Color="White"/>
+    <SolidColorBrush x:Key="ColorConnector" Color="White"/>
     <SolidColorBrush x:Key="ColorNodeBorder" Color="LightGray"/>
     <SolidColorBrush x:Key="ColorNodeSelectedBorder" Color="Red"/>
    

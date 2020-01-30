@@ -64,19 +64,18 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
-                this.OneWayBind(this.ViewModel, x => x.CurrentConnector, x => x.Connector.ViewModel);
                 this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
+                this.OneWayBind(this.ViewModel, x => x.CurrentConnector, x => x.Connector.ViewModel);
 
-                    //Масштаб по оси X
-                    this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
+                //Масштаб по оси X
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
 
-                    //Масштаб по оси Y
-                    this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
+                //Масштаб по оси Y
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
                 this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
 
                 this.OneWayBind(this.ViewModel, x => x.Cutter, x => x.Cutter.ViewModel);
-                this.WhenAnyValue(x => x.ViewModel.CurrentConnector).Subscribe(_ => UpdateConnector());
             });
         }
         #endregion Setup Binding
@@ -102,11 +101,11 @@ namespace StateMachineNodeEditor.View
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
                 this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
                 this.WhenAnyValue(x => x.ViewModel.Cutter.EndPoint.Value).InvokeCommand(ViewModel.CommandCutterIntersect);
+                this.WhenAnyValue(x => x.ViewModel.CurrentConnector).Subscribe(_ => UpdateConnector());
 
             });
         }
         #endregion Setup Commands
-
 
         #region Setup Events
         private void SetupEvents()
@@ -213,12 +212,11 @@ namespace StateMachineNodeEditor.View
                 point -= 2;
                 this.ViewModel.CurrentConnect.EndPoint.Set(point);
             }
-            else if(this.ViewModel.CurrentConnector!=null)
+            else if (this.ViewModel.CurrentConnector != null)
             {
-              
                 MyPoint point = new MyPoint(e.GetPosition(Grid));
                 this.ViewModel.CurrentConnector.Position = new MyPoint(point);
-            } 
+            }
         }
 
         private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)

@@ -2,16 +2,17 @@
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using System.Windows.Media;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelConnector: ReactiveObject
     {
         /// <summary>
-        /// Координата самого коннектора  
+        /// Координата самого коннектора
         /// </summary>
-        [Reactive] public MyPoint Position { get; set; } = new MyPoint();
+        [Reactive]
+        public MyPoint Position { get; set; } = new MyPoint();
 
         /// <summary>
         /// Координата перехода ( нужна для создания соединения )
@@ -136,8 +137,6 @@ namespace StateMachineNodeEditor.ViewModel
                 Node.NodesCanvas.CurrentConnect = null;
             }
         }
-
-
         private void ConnectorDrag()
         {
             Node.Transitions.Remove(this);
@@ -165,7 +164,6 @@ namespace StateMachineNodeEditor.ViewModel
             //    Node.NodesCanvas.CurrentConnect = null;
             //}
         }
-
         private void ValidateName(string newName)
         {
             NodesCanvas.CommandValidateConnectName.Execute(new ValidateObjectProperty<ViewModelConnector, string>(this, newName));

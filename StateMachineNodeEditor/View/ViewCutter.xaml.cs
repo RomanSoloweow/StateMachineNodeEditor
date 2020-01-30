@@ -87,7 +87,7 @@ namespace StateMachineNodeEditor.View
         private void OnMouseMoves(MouseEventArgs e)
         {
             //Ищем Canvas
-            ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);       
+            ViewNodesCanvas NodesCanvas = MyUtils.FindParent<ViewNodesCanvas>(this);       
             ViewModel.EndPoint.Set(e.GetPosition(NodesCanvas));
             e.Handled = true;
 

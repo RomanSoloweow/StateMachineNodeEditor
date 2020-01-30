@@ -6,13 +6,13 @@ namespace StateMachineNodeEditor.Helpers
     /// <summary>
     /// Команда без Undo/Redo
     /// </summary>
-    /// <typeparam name="TypeParameter"></typeparam>
-    public class SimpleCommandWithParameter<TypeParameter>:ICommand where TypeParameter:class
+    /// <typeparam name="TParameter"></typeparam>
+    public class SimpleCommandWithParameter<TParameter>:ICommand where TParameter:class
     {
         /// <summary>
         /// Функция с параметром, которая будет вызвана при выполнении команды
         /// </summary>
-        private Action<TypeParameter> _execute;
+        private Action<TParameter> _execute;
 
         /// <summary>
         /// Объкт, которому принадлежит команда
@@ -44,7 +44,7 @@ namespace StateMachineNodeEditor.Helpers
         /// <param name="parameter"> Параметр команды </param>
         public void Execute(object parameter)
         {
-            this._execute(parameter as TypeParameter);
+            this._execute(parameter as TParameter);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace StateMachineNodeEditor.Helpers
         /// </summary>
         /// <param name="owner">Объкт, которому принадлежит команда</param>
         /// <param name="execute">Функция, которая будет вызвана при выполнении команды</param>
-        public SimpleCommandWithParameter(object owner, Action<TypeParameter> execute)
+        public SimpleCommandWithParameter(object owner, Action<TParameter> execute)
         {
             Owner = owner;
             _execute = execute;

@@ -90,7 +90,7 @@ namespace StateMachineNodeEditor.View
             Point InputCenter = Form.TranslatePoint(new Point(Form.Width/2, Form.Height/2), this);
 
             //Ищем Canvas
-            ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
+            ViewNodesCanvas NodesCanvas = MyUtils.FindParent<ViewNodesCanvas>(this);
             if (NodesCanvas == null)
                 return;
             //Получаем позицию центру на канвасе

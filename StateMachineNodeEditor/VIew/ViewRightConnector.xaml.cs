@@ -75,7 +75,7 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
 
                 // При изменении размера, позиции или zoom узла
-                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x=>x.ViewModel.Position.Value).Subscribe(_ => UpdatePositionConnectPoint());
+                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x => x.ViewModel.Position.Value).Subscribe(_ => UpdatePosition());
             });
         }
         #endregion SetupBinding
@@ -85,8 +85,8 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventFormDrag(e));
-                //this.Text.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventTextPreviewMouseLeftButtonDown(e));
+                this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventDrag(e));
+                this.Text.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventTextPreviewMouseLeftButtonDown(e));
                 this.Text.Events().LostFocus.Subscribe(e => Validate(e));
             });
         }
@@ -100,7 +100,7 @@ namespace StateMachineNodeEditor.View
         /// Событие перетаскивания соединения на круг
         /// </summary>
         /// <param name="e"></param>
-        private void OnEventFormDrag(MouseButtonEventArgs e)
+        private void OnEventDrag(MouseButtonEventArgs e)
         {
             this.ViewModel.CommandConnectPointDrag.Execute();
             DataObject data = new DataObject();
@@ -109,7 +109,6 @@ namespace StateMachineNodeEditor.View
             this.ViewModel.CommandCheckConnectPointDrop.Execute();
             e.Handled = true;
         }
-
         private void OnEventTextPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             this.ViewModel.CommandConnectorDrag.Execute();
@@ -124,7 +123,7 @@ namespace StateMachineNodeEditor.View
         /// <summary>
         /// Обновить координату центра круга
         /// </summary>
-        void UpdatePositionConnectPoint()
+        void UpdatePosition()
         {
             Point Position;
             //Если отображается

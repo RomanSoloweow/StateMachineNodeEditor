@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StateMachineNodeEditor
+namespace StateMachineNodeEditor.Helpers
 {
-    public interface ViewModelRightConnector : ViewModelConnectorInterface
+    public interface CanBeMove
     {
-
     }
 }
