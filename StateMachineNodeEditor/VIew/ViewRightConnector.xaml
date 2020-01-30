@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d" 
              x:Name="RightConnector"
-             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,-6,0">
+             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,-6,0" BorderThickness="0" AllowDrop="True">
     <Grid x:Name="grid" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -18,4 +18,12 @@
         <TextBox Grid.Row="0" Grid.Column="0" Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ColorText}" Style="{DynamicResource ConnectorTextBox}"/>
         <Ellipse Grid.Row="0" Grid.Column="1"  Name="Form" Height="12" Width="12"  AllowDrop="True"  StrokeThickness="1"  Style="{DynamicResource ConnectorEllipse}"/>
     </Grid>
+    <UserControl.RenderTransform>
+        <TransformGroup x:Name="TransformGroup">
+            <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
+            <SkewTransform/>
+            <RotateTransform Angle="0" />
+            <TranslateTransform x:Name="Translate"/>
+        </TransformGroup>
+    </UserControl.RenderTransform>
 </UserControl>

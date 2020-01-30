@@ -65,12 +65,13 @@ namespace StateMachineNodeEditor.View
             {
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
                 this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
+                this.OneWayBind(this.ViewModel, x => x.CurrentConnector, x => x.Connector.ViewModel);
 
-                    //Масштаб по оси X
-                    this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
+                //Масштаб по оси X
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
 
-                    //Масштаб по оси Y
-                    this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
+                //Масштаб по оси Y
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
 
                 this.OneWayBind(this.ViewModel, x => x.Selector, x => x.Selector.ViewModel);
 
@@ -100,6 +101,7 @@ namespace StateMachineNodeEditor.View
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
                 this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
                 this.WhenAnyValue(x => x.ViewModel.Cutter.EndPoint.Value).InvokeCommand(ViewModel.CommandCutterIntersect);
+                this.WhenAnyValue(x => x.ViewModel.CurrentConnector).Subscribe(_ => UpdateConnector());
 
             });
         }
@@ -141,7 +143,10 @@ namespace StateMachineNodeEditor.View
             //if (this.IsMouseCaptured)
             //    ViewModelNodesCanvas.CommandUnSelectAll.Execute(null);
         }
-
+        private void UpdateConnector()
+        {
+            this.Connector.Visibility = (this.ViewModel.CurrentConnector == null) ? Visibility.Collapsed : Visibility.Visible;
+        }
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {
             if (Move == MoveNodes.No)
@@ -201,12 +206,17 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventDragOver(DragEventArgs e)
         {
-            if (this.ViewModel.CurrentConnect is null)
-                return;
-
-            MyPoint point = new MyPoint(e.GetPosition(Grid));
-            point -= 2;
-            this.ViewModel.CurrentConnect.EndPoint.Set(point);
+            if (this.ViewModel.CurrentConnect != null)
+            {
+                MyPoint point = new MyPoint(e.GetPosition(Grid));
+                point -= 2;
+                this.ViewModel.CurrentConnect.EndPoint.Set(point);
+            }
+            else if (this.ViewModel.CurrentConnector != null)
+            {
+                MyPoint point = new MyPoint(e.GetPosition(Grid));
+                this.ViewModel.CurrentConnector.Position = new MyPoint(point);
+            }
         }
 
         private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)

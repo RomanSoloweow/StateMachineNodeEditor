@@ -9,9 +9,15 @@ namespace StateMachineNodeEditor.ViewModel
     public class ViewModelConnector: ReactiveObject
     {
         /// <summary>
+        /// Координата самого коннектора
+        /// </summary>
+        [Reactive]
+        public MyPoint Position { get; set; } = new MyPoint();
+
+        /// <summary>
         /// Координата перехода ( нужна для создания соединения )
         /// </summary>
-        [Reactive] public MyPoint Position { get; set; } = new MyPoint();
+        [Reactive] public MyPoint PositionConnectPoint { get; set; } = new MyPoint();
 
         /// <summary>
         /// Имя перехода ( вводится в узле)
@@ -65,9 +71,14 @@ namespace StateMachineNodeEditor.ViewModel
             SetupCommands();
         }
         #region Commands
-        public SimpleCommand CommandDrag { get; set; }
-        public SimpleCommand CommandDrop { get; set; }
-        public SimpleCommand CommandCheckDrop { get; set; }
+        public SimpleCommand CommandConnectPointDrag { get; set; }
+        public SimpleCommand CommandConnectPointDrop { get; set; }
+        public SimpleCommand CommandCheckConnectPointDrop { get; set; }
+
+        public SimpleCommand CommandConnectorDrag { get; set; }
+        public SimpleCommand CommandConnectorDrop { get; set; }
+        public SimpleCommand CommandCheckConnectorDrop { get; set; }
+
         public SimpleCommand CommandAdd { get; set; }
         public SimpleCommand CommandDelete { get; set; }
 
@@ -77,9 +88,14 @@ namespace StateMachineNodeEditor.ViewModel
         private void SetupCommands()
         {
 
-            CommandDrag = new SimpleCommand(this, Drag);
-            CommandDrop = new SimpleCommand(this, Drop);
-            CommandCheckDrop = new SimpleCommand(this, CheckDrop);
+            CommandConnectPointDrag = new SimpleCommand(this, ConnectPointDrag);
+            CommandConnectPointDrop = new SimpleCommand(this, ConnectPointDrop);
+            CommandCheckConnectPointDrop = new SimpleCommand(this, CheckConnectPointDrop);
+
+            CommandConnectorDrag = new SimpleCommand(this, ConnectorDrag);
+            CommandConnectorDrop = new SimpleCommand(this, ConnectorDrop);
+            CommandCheckConnectorDrop = new SimpleCommand(this, CheckConnectorDrop);
+
             CommandAdd = new SimpleCommand(this, Add);
             CommandDelete = new SimpleCommand(this, Delete);
 
@@ -96,19 +112,19 @@ namespace StateMachineNodeEditor.ViewModel
         {
             Node.CommandDeleteConnector.Execute(this);
         }      
-        private void Drag()
+        private void ConnectPointDrag()
         {
             Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
         }
 
-        private void Drop()
+        private void ConnectPointDrop()
         {
             if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)
             {
                 Node.NodesCanvas.CurrentConnect.ToConnector = this;
             }
         }
-        private void CheckDrop()
+        private void CheckConnectPointDrop()
         {
             if(Node.NodesCanvas.CurrentConnect.ToConnector==null)
             {
@@ -121,7 +137,33 @@ namespace StateMachineNodeEditor.ViewModel
                 Node.NodesCanvas.CurrentConnect = null;
             }
         }
+        private void ConnectorDrag()
+        {
+            Node.Transitions.Remove(this);
+            Node.NodesCanvas.CurrentConnector = this;
+            //Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
+        }
 
+        private void ConnectorDrop()
+        {
+            //if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)
+            //{
+            //    Node.NodesCanvas.CurrentConnect.ToConnector = this;
+            //}
+        }
+        private void CheckConnectorDrop()
+        {
+            //if (Node.NodesCanvas.CurrentConnect.ToConnector == null)
+            //{
+            //    Node.NodesCanvas.CommandDeleteFreeConnect.Execute();
+            //}
+            //else
+            //{
+            //    Node.CommandAddEmptyConnector.Execute();
+            //    Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
+            //    Node.NodesCanvas.CurrentConnect = null;
+            //}
+        }
         private void ValidateName(string newName)
         {
             NodesCanvas.CommandValidateConnectName.Execute(new ValidateObjectProperty<ViewModelConnector, string>(this, newName));

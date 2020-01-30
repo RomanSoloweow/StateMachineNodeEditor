@@ -62,6 +62,12 @@ namespace StateMachineNodeEditor.View
                 // Цвет рамки, вокруг перехода
                 this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
 
+                //Позиция X от левого верхнего угла
+                this.Bind(this.ViewModel, x => x.Position.X, x => x.Translate.X);
+
+                //Позиция Y от левого верхнего угла
+                this.Bind(this.ViewModel, x => x.Position.Y, x => x.Translate.Y);
+
                 // Цвет перехода
                 this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
 
@@ -69,7 +75,7 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
 
                 // При изменении размера, позиции или zoom узла
-                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
+                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x => x.ViewModel.Position.Value).Subscribe(_ => UpdatePosition());
             });
         }
         #endregion SetupBinding
@@ -80,6 +86,7 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventDrag(e));
+                this.Text.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventTextPreviewMouseLeftButtonDown(e));
                 this.Text.Events().LostFocus.Subscribe(e => Validate(e));
             });
         }
@@ -95,12 +102,21 @@ namespace StateMachineNodeEditor.View
         /// <param name="e"></param>
         private void OnEventDrag(MouseButtonEventArgs e)
         {
-            this.ViewModel.CommandDrag.Execute();
+            this.ViewModel.CommandConnectPointDrag.Execute();
             DataObject data = new DataObject();
             data.SetData("Node", this.ViewModel.Node);
             DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
-            this.ViewModel.CommandCheckDrop.Execute();
+            this.ViewModel.CommandCheckConnectPointDrop.Execute();
             e.Handled = true;
+        }
+        private void OnEventTextPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            this.ViewModel.CommandConnectorDrag.Execute();
+            DataObject data = new DataObject();
+            data.SetData("Connector", this.ViewModel);
+            DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+            //this.ViewModel.CommandConnectorDrop.Execute();
+            //e.Handled = true;
         }
         #endregion SetupEvents
 
@@ -125,10 +141,10 @@ namespace StateMachineNodeEditor.View
             else
             {
                 //Позиция выхода
-                Position = this.ViewModel.Node.Output.Position.Value;
+                Position = this.ViewModel.Node.Output.PositionConnectPoint.Value;
             }
 
-            this.ViewModel.Position.Set(Position);
+            this.ViewModel.PositionConnectPoint.Set(Position);
         }
 
     }

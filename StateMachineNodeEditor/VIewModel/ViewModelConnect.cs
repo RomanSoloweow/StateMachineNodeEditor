@@ -57,9 +57,9 @@ namespace StateMachineNodeEditor.ViewModel
 
         public ViewModelConnect(ViewModelConnector fromConnector)
         {        
-            this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(value => StartPoint.Set(value));
+            this.WhenAnyValue(x => x.FromConnector.PositionConnectPoint.Value).Subscribe(value => StartPoint.Set(value));
             this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => UpdateMedium());
-            this.WhenAnyValue(x => x.ToConnector.Position.Value).Subscribe(value => EndPoint.Set(value));
+            this.WhenAnyValue(x => x.ToConnector.PositionConnectPoint.Value).Subscribe(value => EndPoint.Set(value));
             this.WhenAnyValue(x => x.FromConnector).Where(x=>x!=null).Subscribe(_=> FromConnectChanged());
             this.WhenAnyValue(x => x.ToConnector).Where(x =>x!= null).Subscribe(_=> ToConnectChanged());
             this.WhenAnyValue(x => x.FromConnector.Node.NodesCanvas.Scale.Value).Subscribe(value => StrokeThickness = value);
@@ -81,12 +81,12 @@ namespace StateMachineNodeEditor.ViewModel
 
         private void FromConnectChanged()
         {
-            StartPoint.Set(FromConnector.Position);
+            StartPoint.Set(FromConnector.PositionConnectPoint);
             
         }
         private void ToConnectChanged()
         {
-            EndPoint.Set(ToConnector.Position);
+            EndPoint.Set(ToConnector.PositionConnectPoint);
             Selected = false;
         }
         private void UpdateMedium()
