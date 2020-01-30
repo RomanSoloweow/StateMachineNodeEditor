@@ -37,6 +37,11 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public Brush Stroke { get; set; } = Application.Current.Resources["ColorConnector"] as SolidColorBrush;
 
         /// <summary>
+        /// Флаг того, что соединение выбрано
+        /// </summary>
+        [Reactive] public bool Selected { get; set; } = true;
+
+        /// <summary>
         /// Элемент, из которого выходит линия
         /// </summary>
         [Reactive] public ViewModelConnector FromConnector { get; set; }
@@ -46,18 +51,19 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public ViewModelConnector ToConnector { get; set; }
 
-        [Reactive] public DoubleCollection StrokeDashArray { get; set; } = new DoubleCollection() { 10, 3 };
+        [Reactive] public DoubleCollection StrokeDashArray { get; set; }
 
         [Reactive] public double StrokeThickness { get; set; } = 1;
 
         public ViewModelConnect(ViewModelConnector fromConnector)
         {        
-            this.WhenAnyValue(x => x.FromConnector.Position.Value).Subscribe(value => StartPoint.Set(value));
+            this.WhenAnyValue(x => x.FromConnector.PositionConnectPoint.Value).Subscribe(value => StartPoint.Set(value));
             this.WhenAnyValue(x => x.StartPoint.Value, x => x.EndPoint.Value).Subscribe(_ => UpdateMedium());
-            this.WhenAnyValue(x => x.ToConnector.Position.Value).Subscribe(value => EndPoint.Set(value));
+            this.WhenAnyValue(x => x.ToConnector.PositionConnectPoint.Value).Subscribe(value => EndPoint.Set(value));
             this.WhenAnyValue(x => x.FromConnector).Where(x=>x!=null).Subscribe(_=> FromConnectChanged());
             this.WhenAnyValue(x => x.ToConnector).Where(x =>x!= null).Subscribe(_=> ToConnectChanged());
             this.WhenAnyValue(x => x.FromConnector.Node.NodesCanvas.Scale.Value).Subscribe(value => StrokeThickness = value);
+            this.WhenAnyValue(x => x.Selected).Subscribe(value => { this.StrokeDashArray = value? new DoubleCollection() { 10, 3 } : null;});
 
             //this.WhenAnyValue(x => x.FromConnector).Where(x => x == null).Subscribe(_ => { StartPoint.Clear(); });
             //this.WhenAnyValue(x => x.ToConnector).Where(x => x == null).Subscribe(_ => { EndPoint.Clear(); SetupCommands(); });
@@ -65,20 +71,23 @@ namespace StateMachineNodeEditor.ViewModel
             //SetupCommands();
         }
         #region Setup Commands
+        
         private void SetupCommands()
         {
+         
         }
+
         #endregion Setup Commands
 
         private void FromConnectChanged()
         {
-            StartPoint.Set(FromConnector.Position);
+            StartPoint.Set(FromConnector.PositionConnectPoint);
             
         }
         private void ToConnectChanged()
         {
-            EndPoint.Set(ToConnector.Position);
-            StrokeDashArray = null;
+            EndPoint.Set(ToConnector.PositionConnectPoint);
+            Selected = false;
         }
         private void UpdateMedium()
         {

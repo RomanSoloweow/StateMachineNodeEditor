@@ -2,16 +2,21 @@
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using System.Windows.Media;
-
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelConnector: ReactiveObject
     {
         /// <summary>
-        /// Координата перехода ( нужна для создания соединения )
+        /// Координата самого коннектора  
         /// </summary>
         [Reactive] public MyPoint Position { get; set; } = new MyPoint();
+
+        /// <summary>
+        /// Координата перехода ( нужна для создания соединения )
+        /// </summary>
+        [Reactive] public MyPoint PositionConnectPoint { get; set; } = new MyPoint();
 
         /// <summary>
         /// Имя перехода ( вводится в узле)
@@ -53,26 +58,51 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public ViewModelConnect Connect { get; set; }
 
-        public ViewModelConnector(ViewModelNode viewModelNode)
+        /// <summary>
+        /// Канвас, которому принадлежит соединение
+        /// </summary>
+        [Reactive] public ViewModelNodesCanvas NodesCanvas { get; set; }
+
+        public ViewModelConnector(ViewModelNodesCanvas nodesCanvas, ViewModelNode viewModelNode)
         {
             Node = viewModelNode;
+            NodesCanvas = nodesCanvas;
             SetupCommands();
         }
         #region Commands
-        public SimpleCommand CommandDrag { get; set; }
-        public SimpleCommand CommandDrop { get; set; }
-        public SimpleCommand CommandCheckDrop { get; set; }
+        public SimpleCommand CommandConnectPointDrag { get; set; }
+        public SimpleCommand CommandConnectPointDrop { get; set; }
+        public SimpleCommand CommandCheckConnectPointDrop { get; set; }
+
+        public SimpleCommand CommandConnectorDrag { get; set; }
+        public SimpleCommand CommandConnectorDrop { get; set; }
+        public SimpleCommand CommandCheckConnectorDrop { get; set; }
+
         public SimpleCommand CommandAdd { get; set; }
         public SimpleCommand CommandDelete { get; set; }
+
+        public SimpleCommandWithParameter<string> CommandValidateName { get; set; }
+
+
         private void SetupCommands()
         {
-            CommandDrag = new SimpleCommand(this, Drag);
-            CommandDrop = new SimpleCommand(this, Drop);
-            CommandCheckDrop = new SimpleCommand(this, CheckDrop);
+
+            CommandConnectPointDrag = new SimpleCommand(this, ConnectPointDrag);
+            CommandConnectPointDrop = new SimpleCommand(this, ConnectPointDrop);
+            CommandCheckConnectPointDrop = new SimpleCommand(this, CheckConnectPointDrop);
+
+            CommandConnectorDrag = new SimpleCommand(this, ConnectorDrag);
+            CommandConnectorDrop = new SimpleCommand(this, ConnectorDrop);
+            CommandCheckConnectorDrop = new SimpleCommand(this, CheckConnectorDrop);
+
             CommandAdd = new SimpleCommand(this, Add);
             CommandDelete = new SimpleCommand(this, Delete);
+
+
+            CommandValidateName = new SimpleCommandWithParameter<string>(this, ValidateName);
         }
         #endregion Commands
+        
         private void Add()
         {
             Node.CommandAddConnector.Execute(this);
@@ -80,20 +110,20 @@ namespace StateMachineNodeEditor.ViewModel
         private void Delete()
         {
             Node.CommandDeleteConnector.Execute(this);
-        }
-        
-        private void Drag()
+        }      
+        private void ConnectPointDrag()
         {
             Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
-            //FromConnector.Connect = this;
         }
 
-        private void Drop()
+        private void ConnectPointDrop()
         {
-            if(Node.NodesCanvas.CurrentConnect.FromConnector.Node!=this.Node)
+            if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)
+            {
                 Node.NodesCanvas.CurrentConnect.ToConnector = this;
+            }
         }
-        private void CheckDrop()
+        private void CheckConnectPointDrop()
         {
             if(Node.NodesCanvas.CurrentConnect.ToConnector==null)
             {
@@ -103,7 +133,42 @@ namespace StateMachineNodeEditor.ViewModel
             {
                 Node.CommandAddEmptyConnector.Execute();
                 Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
+                Node.NodesCanvas.CurrentConnect = null;
             }
+        }
+
+
+        private void ConnectorDrag()
+        {
+            Node.Transitions.Remove(this);
+            Node.NodesCanvas.CurrentConnector = this;
+            //Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
+        }
+
+        private void ConnectorDrop()
+        {
+            //if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)
+            //{
+            //    Node.NodesCanvas.CurrentConnect.ToConnector = this;
+            //}
+        }
+        private void CheckConnectorDrop()
+        {
+            //if (Node.NodesCanvas.CurrentConnect.ToConnector == null)
+            //{
+            //    Node.NodesCanvas.CommandDeleteFreeConnect.Execute();
+            //}
+            //else
+            //{
+            //    Node.CommandAddEmptyConnector.Execute();
+            //    Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
+            //    Node.NodesCanvas.CurrentConnect = null;
+            //}
+        }
+
+        private void ValidateName(string newName)
+        {
+            NodesCanvas.CommandValidateConnectName.Execute(new ValidateObjectProperty<ViewModelConnector, string>(this, newName));
         }
     }
 }

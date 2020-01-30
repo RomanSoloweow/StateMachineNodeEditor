@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="ColorConnector" Color="LightGray"/>
     <SolidColorBrush x:Key="ColorNodeBorder" Color="LightGray"/>
     <SolidColorBrush x:Key="ColorNodeSelectedBorder" Color="Red"/>
+   
 
     <SolidColorBrush x:Key="ColorNodesCanvasBackground" Color="#1e1e1e"/>
     

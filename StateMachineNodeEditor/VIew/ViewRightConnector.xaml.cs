@@ -11,6 +11,8 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using DynamicData;
 using StateMachineNodeEditor.ViewModel;
+using System.Reactive.Linq;
+using System.Windows.Controls.Primitives;
 
 namespace StateMachineNodeEditor.View
 {
@@ -49,7 +51,7 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Имя перехода ( вводится в узле)
-                this.Bind(this.ViewModel, x => x.Name, x => x.Text.Text);
+                this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text);
 
                 // Доступно ли имя перехода для редактирования
                 this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
@@ -60,6 +62,12 @@ namespace StateMachineNodeEditor.View
                 // Цвет рамки, вокруг перехода
                 this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
 
+                //Позиция X от левого верхнего угла
+                this.Bind(this.ViewModel, x => x.Position.X, x => x.Translate.X);
+
+                //Позиция Y от левого верхнего угла
+                this.Bind(this.ViewModel, x => x.Position.Y, x => x.Translate.Y);
+
                 // Цвет перехода
                 this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
 
@@ -67,7 +75,7 @@ namespace StateMachineNodeEditor.View
                 this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
 
                 // При изменении размера, позиции или zoom узла
-                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
+                this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x=>x.ViewModel.Position.Value).Subscribe(_ => UpdatePositionConnectPoint());
             });
         }
         #endregion SetupBinding
@@ -77,21 +85,46 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventDrag(e));
+                this.Form.Events().MouseLeftButtonDown.Subscribe(e => OnEventFormDrag(e));
+                //this.Text.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventTextPreviewMouseLeftButtonDown(e));
+                this.Text.Events().LostFocus.Subscribe(e => Validate(e));
             });
+        }
+        private void Validate(RoutedEventArgs e)
+        {
+            ViewModel.CommandValidateName.Execute(Text.Text);
+            if (Text.Text != ViewModel.Name)
+                Text.Text = ViewModel.Name;
+        }
+        /// <summary>
+        /// Событие перетаскивания соединения на круг
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnEventFormDrag(MouseButtonEventArgs e)
+        {
+            this.ViewModel.CommandConnectPointDrag.Execute();
+            DataObject data = new DataObject();
+            data.SetData("Node", this.ViewModel.Node);
+            DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+            this.ViewModel.CommandCheckConnectPointDrop.Execute();
+            e.Handled = true;
+        }
+
+        private void OnEventTextPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            this.ViewModel.CommandConnectorDrag.Execute();
+            DataObject data = new DataObject();
+            data.SetData("Connector", this.ViewModel);
+            DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+            //this.ViewModel.CommandConnectorDrop.Execute();
+            //e.Handled = true;
         }
         #endregion SetupEvents
 
-        private void OnEventDrag(MouseButtonEventArgs e)
-        {
-            this.ViewModel.CommandDrag.Execute();
-            DataObject data = new DataObject();
-            data.SetData("Node", this.ViewModel.Node);        
-            DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
-            this.ViewModel.CommandCheckDrop.Execute();
-            e.Handled = true;
-        }
-        void UpdatePosition()
+        /// <summary>
+        /// Обновить координату центра круга
+        /// </summary>
+        void UpdatePositionConnectPoint()
         {
             Point Position;
             //Если отображается
@@ -101,7 +134,7 @@ namespace StateMachineNodeEditor.View
                 Point InputCenter = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
 
                 //Ищем Canvas
-                ViewNodesCanvas NodesCanvas = Utils.FindParent<ViewNodesCanvas>(this);
+                ViewNodesCanvas NodesCanvas = MyUtils.FindParent<ViewNodesCanvas>(this);
 
                 //Получаем позицию центру на канвасе
                 Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
@@ -109,10 +142,10 @@ namespace StateMachineNodeEditor.View
             else
             {
                 //Позиция выхода
-                Position = this.ViewModel.Node.Output.Position.Value;
+                Position = this.ViewModel.Node.Output.PositionConnectPoint.Value;
             }
 
-            this.ViewModel.Position.Set(Position);
+            this.ViewModel.PositionConnectPoint.Set(Position);
         }
 
     }

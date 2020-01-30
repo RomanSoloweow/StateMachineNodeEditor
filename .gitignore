@@ -338,3 +338,9 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# File with information about thinks that need do 
+needDo.txt
+
+# File for local config
+

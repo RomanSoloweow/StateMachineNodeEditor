@@ -19,6 +19,7 @@ namespace StateMachineNodeEditor.ViewModel
         [Reactive] public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         [Reactive] public ViewModelCutter Cutter { get; set; } = new ViewModelCutter();
         [Reactive] public ViewModelConnect CurrentConnect { get; set; }
+        [Reactive] public ViewModelConnector CurrentConnector { get; set; }
         [Reactive] public ViewModelNode CurrentNode { get; set; }
 
         /// <summary>

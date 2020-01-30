@@ -82,7 +82,7 @@ namespace StateMachineNodeEditor.View
 
         private void OnEventDrop()
         {
-            this.ViewModel.CommandDrop.Execute();
+            this.ViewModel.CommandConnectPointDrop.Execute();
         }
         void UpdatePosition()
         {
@@ -96,7 +96,7 @@ namespace StateMachineNodeEditor.View
             //Получаем позицию центру на канвасе
             Point Position = this.TransformToAncestor(NodesCanvas).Transform(InputCenter);
 
-            this.ViewModel.Position.Set(Position);
+            this.ViewModel.PositionConnectPoint.Set(Position);
         }
     }
 }

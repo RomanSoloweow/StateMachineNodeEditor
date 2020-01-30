@@ -44,6 +44,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public bool NameEnable { get; set; } = true;
 
+
         /// <summary>
         /// Флаг того, что узел выбран
         /// </summary>
