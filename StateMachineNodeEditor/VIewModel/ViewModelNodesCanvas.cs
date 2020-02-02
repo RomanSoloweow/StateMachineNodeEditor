@@ -16,9 +16,13 @@ namespace StateMachineNodeEditor.ViewModel
         public IObservableCollection<ViewModelNode> Nodes = new ObservableCollectionExtended<ViewModelNode>();
         [Reactive] public ViewModelSelector Selector { get; set; } = new ViewModelSelector();
         [Reactive] public ViewModelCutter Cutter { get; set; } = new ViewModelCutter();
-        [Reactive] public ViewModelConnect CurrentConnect { get; set; }
-        [Reactive] public ViewModelConnector CurrentConnector { get; set; }
+        [Reactive] public ViewModelConnect DraggedConnect { get; set; }
+        [Reactive] public ViewModelConnector DraggedConnector { get; set; }
+        [Reactive] public ViewModelConnector ConnectorPreviewForDrop { get; set; }
         [Reactive] public ViewModelNode CurrentNode { get; set; }
+
+
+
 
         /// <summary>
         /// Масштаб 
@@ -156,6 +160,11 @@ namespace StateMachineNodeEditor.ViewModel
             foreach (var node in Nodes)
             { node.Selected = false; }
         }
+
+        public bool HasConnectorDrag()
+        {
+            return ((DraggedConnector != null) || (ConnectorPreviewForDrop != null));
+        }
         private List<ViewModelNode> FullMoveAllNode(MyPoint delta, List<ViewModelNode> nodes = null)
         {
             MyPoint myPoint = delta.Copy();
@@ -264,8 +273,8 @@ namespace StateMachineNodeEditor.ViewModel
 
         private void AddFreeConnect(ViewModelConnector fromConnector)
         {
-            CurrentConnect = new ViewModelConnect(fromConnector);
-            Connects.Add(CurrentConnect);
+            DraggedConnect = new ViewModelConnect(fromConnector);
+            Connects.Add(DraggedConnect);
         }
         private ViewModelConnect AddConnect(ViewModelConnect parameter, ViewModelConnect result)
         {
@@ -283,7 +292,7 @@ namespace StateMachineNodeEditor.ViewModel
         }
         private void DeleteFreeConnect()
         {
-            Connects.Remove(CurrentConnect);
+            Connects.Remove(DraggedConnect);
         }
         private List<ViewModelNode> DeleteSelectedNode(List<ViewModelNode> parameter, List<ViewModelNode> result)
         {

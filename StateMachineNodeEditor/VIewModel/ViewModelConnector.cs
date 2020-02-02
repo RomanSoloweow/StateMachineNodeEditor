@@ -2,6 +2,7 @@
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using System.Windows.Media;
+using System.Windows;
 
 
 namespace StateMachineNodeEditor.ViewModel
@@ -33,6 +34,11 @@ namespace StateMachineNodeEditor.ViewModel
         /// Отображается ли переход
         /// </summary>
         [Reactive] public bool? Visible { get; set; } = true;
+
+        /// <summary>
+        /// Размер узла
+        /// </summary>
+        [Reactive] public Size Size { get; set; }
 
         /// <summary>
         /// Доступен ли переход для создания соединия
@@ -71,6 +77,7 @@ namespace StateMachineNodeEditor.ViewModel
             SetupCommands();
         }
         #region Commands
+
         public SimpleCommand CommandConnectPointDrag { get; set; }
         public SimpleCommand CommandConnectPointDrop { get; set; }
         public SimpleCommand CommandCheckConnectPointDrop { get; set; }
@@ -79,10 +86,14 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommand CommandConnectorDrop { get; set; }
         public SimpleCommand CommandCheckConnectorDrop { get; set; }
 
+
         public SimpleCommand CommandAdd { get; set; }
         public SimpleCommand CommandDelete { get; set; }
 
+
+
         public SimpleCommandWithParameter<string> CommandValidateName { get; set; }
+        public SimpleCommandWithParameter<MyPoint> CommandMove { get; set; }
 
 
         private void SetupCommands()
@@ -90,6 +101,7 @@ namespace StateMachineNodeEditor.ViewModel
 
             CommandConnectPointDrag = new SimpleCommand(this, ConnectPointDrag);
             CommandConnectPointDrop = new SimpleCommand(this, ConnectPointDrop);
+
             CommandCheckConnectPointDrop = new SimpleCommand(this, CheckConnectPointDrop);
 
             CommandConnectorDrag = new SimpleCommand(this, ConnectorDrag);
@@ -98,8 +110,7 @@ namespace StateMachineNodeEditor.ViewModel
 
             CommandAdd = new SimpleCommand(this, Add);
             CommandDelete = new SimpleCommand(this, Delete);
-
-
+            CommandMove = new SimpleCommandWithParameter<MyPoint>(this, Move);
             CommandValidateName = new SimpleCommandWithParameter<string>(this, ValidateName);
         }
         #endregion Commands
@@ -116,34 +127,39 @@ namespace StateMachineNodeEditor.ViewModel
         {
             Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
         }
+        private void DragConnector(ViewModelConnector draggedConnector)
+        {
 
+        }
+        private void Move(MyPoint delta)
+        {
+            Position += delta / NodesCanvas.Scale.Value;
+        }
         private void ConnectPointDrop()
         {
-            if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)
+            if (Node.NodesCanvas.DraggedConnect.FromConnector.Node != this.Node)
             {
-                Node.NodesCanvas.CurrentConnect.ToConnector = this;
+                Node.NodesCanvas.DraggedConnect.ToConnector = this;
             }
         }
         private void CheckConnectPointDrop()
         {
-            if(Node.NodesCanvas.CurrentConnect.ToConnector==null)
+            if(Node.NodesCanvas.DraggedConnect.ToConnector==null)
             {
                 Node.NodesCanvas.CommandDeleteFreeConnect.Execute();              
             }
             else
             {
                 Node.CommandAddEmptyConnector.Execute();
-                Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.CurrentConnect);
-                Node.NodesCanvas.CurrentConnect = null;
+                Node.NodesCanvas.CommandAddConnect.Execute(Node.NodesCanvas.DraggedConnect);
+                Node.NodesCanvas.DraggedConnect = null;
             }
         }
+
         private void ConnectorDrag()
         {
-            Node.Transitions.Remove(this);
-            Node.NodesCanvas.CurrentConnector = this;
-            //Node.NodesCanvas.CommandAddFreeConnect.Execute(Node.CurrentConnector);
+            this.Node.CommandConnectorDrag.Execute(this);
         }
-
         private void ConnectorDrop()
         {
             //if (Node.NodesCanvas.CurrentConnect.FromConnector.Node != this.Node)

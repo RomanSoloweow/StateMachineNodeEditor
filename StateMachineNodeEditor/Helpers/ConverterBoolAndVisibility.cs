@@ -5,7 +5,7 @@ using Splat;
 
 namespace StateMachineNodeEditor.Helpers
 {
-    public class ConverterBoolAndVisibility:  IBindingTypeConverter, IEnableLogger
+    public class ConverterBoolAndVisibility:  IBindingTypeConverter
     {
         public int GetAffinityForObjects(Type fromType, Type toType)
         {

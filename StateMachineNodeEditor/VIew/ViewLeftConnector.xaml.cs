@@ -75,14 +75,15 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().Drop.Subscribe(_ => OnEventDrop());
+                this.Form.Events().Drop.Subscribe(e => OnEventDrop(e));
             });
         }
         #endregion SetupEvents
 
-        private void OnEventDrop()
+        private void OnEventDrop(DragEventArgs e)
         {
             this.ViewModel.CommandConnectPointDrop.Execute();
+            e.Handled = true;
         }
         void UpdatePosition()
         {

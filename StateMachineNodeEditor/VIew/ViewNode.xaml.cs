@@ -99,6 +99,11 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseEnter.Subscribe(e => OnEventMouseEnter(e));
                 this.Events().MouseLeave.Subscribe(e => OnEventMouseMouseLeave(e));
 
+                //this.Transitions.Events().DragEnter.Subscribe(e => OnEventTransitionsDragEnter(e));
+                //this.Transitions.Events().DragLeave.Subscribe(e => OnEventTransitionsDragLeave(e));
+                //this.Transitions.Events().DragOver.Subscribe(e => OnEventTransitionsDragOver(e));
+                //this.Transitions.Events().Drop.Subscribe(e => OnEventTransitionsDrop(e));
+
                 this.ButtonCollapse.Events().Click.Subscribe(_ => OnEventCollapse());
                 this.Header.Events().LostFocus.Subscribe(e => Validate(e));
 
@@ -116,6 +121,42 @@ namespace StateMachineNodeEditor.View
             ViewModel.CommandValidateName.Execute(Header.Text);
             if (Header.Text != ViewModel.Name)
                 Header.Text = ViewModel.Name;
+        }
+
+        public void OnEventTransitionsDragLeave(DragEventArgs e)
+        {
+            if (!this.ViewModel.NodesCanvas.HasConnectorDrag())
+                return;
+
+            this.ViewModel.CommandTransitionsDragLeave.Execute();
+
+            e.Handled = true;
+        }
+        public void OnEventTransitionsDragEnter(DragEventArgs e)
+        {
+            if (this.ViewModel.NodesCanvas.DraggedConnector == null)
+                return;
+
+            this.ViewModel.CommandTransitionsDragEnter.Execute();
+            e.Handled = true;
+        }
+        public void OnEventTransitionsDrop(DragEventArgs e)
+        {
+            //if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == null)
+            //    return;
+
+
+            //this.ViewModel.CommandTransitionsDrop.Execute();
+            ////e.Handled = true;
+        }
+        public void OnEventTransitionsDragOver(DragEventArgs e)
+        {
+            if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == null)
+                return;
+
+            this.ViewModel.CommandTransitionsDragOver.Execute();
+
+            e.Handled = true;
         }
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {

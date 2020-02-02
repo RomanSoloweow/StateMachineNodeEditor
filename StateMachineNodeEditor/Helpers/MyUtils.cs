@@ -7,19 +7,52 @@ namespace StateMachineNodeEditor.Helpers
 {
     public static class MyUtils
     {
-        public static T FindParent<T>(DependencyObject currentObject) where T : DependencyObject
+        public static TParent FindParent<TParent>(DependencyObject currentObject) where TParent : DependencyObject
         {
             DependencyObject foundObject = currentObject;
+            TParent result = default(TParent);
             do
             {
                 foundObject = VisualTreeHelper.GetParent(foundObject);
-                if (foundObject == null)
-                  return default(T);
-            } while (!(foundObject is T));
 
-            return (T)foundObject;
+                if (foundObject == default(DependencyObject))
+                        break;
+
+                result = foundObject as TParent;
+
+            } while (result==default(TParent));
+
+            return result;
         }
 
+        public static void FindParents<TParent1, TParent2>(DependencyObject currentObject, out  TParent1 parent1, out TParent2 parent2) where TParent1 : DependencyObject where TParent2 : DependencyObject
+        {
+            DependencyObject foundObject = currentObject;
+
+            parent1 = default(TParent1);
+            parent2 = default(TParent2);
+
+            do
+            {
+                foundObject = VisualTreeHelper.GetParent(foundObject);
+
+                if (foundObject == default(DependencyObject))
+                    break;
+
+                if(parent1== default(TParent1))
+                {
+                    parent1 = foundObject as TParent1;
+                    continue;
+                }
+
+                if(parent2==default(TParent2))
+                {
+                    parent2 = foundObject as TParent2;
+                    continue;
+                }
+
+            } while ((parent1 == default(TParent1))||(parent2 == default(TParent2)));
+        }
         public static bool Intersect(MyPoint a1, MyPoint b1, MyPoint a2, MyPoint b2)
         {
             bool par1 = a1.X > b2.X; //второй перед первым

@@ -6,16 +6,16 @@
              xmlns:local="clr-namespace:StateMachineNodeEditor.View"
              mc:Ignorable="d"            
              x:Name="LeftConnector"
-             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-6,0,0,0" AllowDrop="True"  >
-    <Grid x:Name="grid" >
+             HorizontalAlignment="Stretch" VerticalAlignment="Top"  AllowDrop="True"  >
+    <Grid x:Name="grid" Background="Red">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap"  BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ColorText}" Style="{DynamicResource ConnectorTextBox}"/>
-        <Ellipse Grid.Row="0" Grid.Column="0" Name="Form" Height="12" Width="12"   AllowDrop="True" StrokeThickness="1" Style="{DynamicResource ConnectorEllipse}" />
+        <TextBox Grid.Row="0"   Grid.Column="1" Text="Input" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap"  BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ColorText}" Style="{DynamicResource ConnectorTextBox}"/>
+        <Ellipse Grid.Row="0"  Grid.Column="0"  HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="-7,0,0,0"  Name="Form" Height="12" Width="12"   AllowDrop="True" StrokeThickness="1" Style="{DynamicResource ConnectorEllipse}" />
     </Grid>
 </UserControl>

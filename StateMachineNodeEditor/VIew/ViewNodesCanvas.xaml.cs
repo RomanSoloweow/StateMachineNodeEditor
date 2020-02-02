@@ -44,9 +44,11 @@ namespace StateMachineNodeEditor.View
         }
         #endregion ViewModel
 
+        private MyPoint PositionDragOver { get; set; } = new MyPoint();
         private MyPoint PositionRightClick { get; set; } = new MyPoint();
         private MyPoint PositionLeftClick { get; set; } = new MyPoint();
         private MyPoint PositionMove { get; set; } = new MyPoint();
+
         private MyPoint SumMove { get; set; } = new MyPoint();
         private MoveNodes Move { get; set; } = MoveNodes.No;
 
@@ -65,7 +67,7 @@ namespace StateMachineNodeEditor.View
             {
                 this.OneWayBind(this.ViewModel, x => x.Nodes, x => x.Nodes.ItemsSource);
                 this.OneWayBind(this.ViewModel, x => x.Connects, x => x.Connects.ItemsSource);
-                this.OneWayBind(this.ViewModel, x => x.CurrentConnector, x => x.Connector.ViewModel);
+                this.OneWayBind(this.ViewModel, x => x.DraggedConnector, x => x.Connector.ViewModel);
 
                 //Масштаб по оси X
                 this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
@@ -101,7 +103,7 @@ namespace StateMachineNodeEditor.View
                 this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
                 this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
                 this.WhenAnyValue(x => x.ViewModel.Cutter.EndPoint.Value).InvokeCommand(ViewModel.CommandCutterIntersect);
-                this.WhenAnyValue(x => x.ViewModel.CurrentConnector).Subscribe(_ => UpdateConnector());
+                this.WhenAnyValue(x => x.ViewModel.DraggedConnector).Subscribe(_ => UpdateConnector());
 
             });
         }
@@ -121,9 +123,10 @@ namespace StateMachineNodeEditor.View
                 this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e));
                 this.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e));
                 this.Events().DragOver.Subscribe(e => OnEventDragOver(e));
+                this.Events().DragEnter.Subscribe(e => OnEventDragEnter(e));
 
-                    //Эти события срабатывают раньше команд
-                    this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e));
+                //Эти события срабатывают раньше команд
+                this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e));
                 this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e));
 
                 this.WhenAnyValue(x => x.ViewModel.Scale.Value).Subscribe(value => { this.Grid.Height /= value; this.Grid.Width /= value; });
@@ -131,6 +134,8 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventMouseLeftDown(MouseButtonEventArgs e)
         {
+            PositionMove = new MyPoint(Mouse.GetPosition(this.Grid));
+
             if (Mouse.Captured == null)
             {
                 Keyboard.ClearFocus();
@@ -145,7 +150,7 @@ namespace StateMachineNodeEditor.View
         }
         private void UpdateConnector()
         {
-            this.Connector.Visibility = (this.ViewModel.CurrentConnector == null) ? Visibility.Collapsed : Visibility.Visible;
+            this.Connector.Visibility = (this.ViewModel.DraggedConnector == null) ? Visibility.Collapsed : Visibility.Visible;
         }
         private void OnEventMouseLeftUp(MouseButtonEventArgs e)
         {
@@ -204,19 +209,45 @@ namespace StateMachineNodeEditor.View
                 Move = MoveNodes.MoveSelected;
             }
         }
+        private void OnEventDragEnter(DragEventArgs e)
+        {
+            Console.WriteLine("NodeCanvas OnEventDragEnter ");
+            //PositionDragEnter.Set(e.GetPosition(this));
+            //if (this.ViewModel.DraggedConnector != null)
+            //{
+            //    this.ViewModel.DraggedConnector.Position.Clear();
+            //}
+        }
         private void OnEventDragOver(DragEventArgs e)
         {
-            if (this.ViewModel.CurrentConnect != null)
+            if (this.ViewModel.DraggedConnect != null)
             {
                 MyPoint point = new MyPoint(e.GetPosition(Grid));
                 point -= 2;
-                this.ViewModel.CurrentConnect.EndPoint.Set(point);
+                this.ViewModel.DraggedConnect.EndPoint.Set(point);
             }
-            else if (this.ViewModel.CurrentConnector != null)
+            else if (this.ViewModel.DraggedConnector != null)
             {
-                MyPoint point = new MyPoint(e.GetPosition(Grid));
-                this.ViewModel.CurrentConnector.Position = new MyPoint(point);
+                MyPoint point = new MyPoint(e.GetPosition(this));
+                //Console.WriteLine("OnEventDragOver " + point.ToString());
+                this.ViewModel.DraggedConnector.Position = point;
+
+                //MyPoint deltaDragOver = GetDeltaDragOver(e);
+                //this.ViewModel.DraggedConnector.Position += deltaDragOver;
+
             }
+            //else if (this.ViewModel.ConnectorPreviewForDrop != null)
+            //{
+            //    //MyPoint delta = GetDeltaMove();
+            //    //this.ViewModel.CurrentConnector.CommandMove.Execute(delta);
+            //    //+= delta / NodesCanvas.Scale.Value
+
+            //    MyPoint point = new MyPoint(e.GetPosition(Grid));
+            //    this.ViewModel.ConnectorPreviewForDrop.Position2 = new MyPoint(point);
+            //    //Console.WriteLine("NodeCanvas OnEventDragOver " + point.Value.ToString());
+            //}
+
+
         }
 
         private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -238,7 +269,22 @@ namespace StateMachineNodeEditor.View
             {
                 result = CurrentPosition - PositionMove;
             }
+
             PositionMove = CurrentPosition;
+            return result;
+        }
+        private MyPoint GetDeltaDragOver(DragEventArgs e)
+        {
+            MyPoint CurrentPosition = new MyPoint(e.GetPosition(this));
+
+            MyPoint result = new MyPoint();
+
+            if (!PositionDragOver.IsClear)
+            {
+                result = CurrentPosition - PositionDragOver;
+            }
+            PositionDragOver = CurrentPosition;
+
             return result;
         }
     }

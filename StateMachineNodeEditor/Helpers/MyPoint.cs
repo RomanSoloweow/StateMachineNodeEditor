@@ -165,6 +165,10 @@ namespace StateMachineNodeEditor.Helpers
             return new MyPoint(this);
         }
 
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
 
         #region Static Methods
 
@@ -299,6 +303,7 @@ namespace StateMachineNodeEditor.Helpers
         {
             return new MyPoint(point1.X * number, point1.Y * number);
         }
+
 
 
         #endregion Static Methods

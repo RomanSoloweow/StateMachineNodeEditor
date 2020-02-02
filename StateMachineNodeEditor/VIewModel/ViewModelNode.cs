@@ -130,8 +130,17 @@ namespace StateMachineNodeEditor.ViewModel
         public SimpleCommandWithParameter<string> CommandValidateName { get; set;}
 
         public SimpleCommand CommandAddEmptyConnector { get; set; }
-      
 
+
+        public SimpleCommand CommandTransitionsDragLeave { get; set; }
+
+        public SimpleCommand CommandTransitionsDragEnter { get; set; }
+
+        public SimpleCommand CommandTransitionsDrop { get; set; }
+
+        public SimpleCommand CommandTransitionsDragOver { get; set; }
+
+        public SimpleCommandWithParameter<ViewModelConnector> CommandConnectorDrag { get; set; }
 
         private void SetupCommands()
         {
@@ -139,9 +148,17 @@ namespace StateMachineNodeEditor.ViewModel
             CommandMove  = new SimpleCommandWithParameter<MyPoint>(this, Move);
             CommandCollapse = new SimpleCommandWithParameter<object>(this, Collapse);
             CommandAddEmptyConnector = new SimpleCommand(this, AddEmptyConnector);
+
+            CommandTransitionsDragLeave = new SimpleCommand(this, TransitionsDragLeave);
+            CommandTransitionsDragEnter = new SimpleCommand(this, TransitionsDragEnter);
+            CommandTransitionsDrop = new SimpleCommand(this, TransitionsDrop);
+            CommandTransitionsDragOver = new SimpleCommand(this, TransitionsDragOver);
+
             CommandAddConnector = new SimpleCommandWithParameter<ViewModelConnector>(this, AddConnector);
             CommandDeleteConnector = new SimpleCommandWithParameter<ViewModelConnector>(this, DeleteConnector);
             CommandValidateName = new SimpleCommandWithParameter<string>(this, ValidateName);
+
+            CommandConnectorDrag = new SimpleCommandWithParameter<ViewModelConnector>(this, ConnectorDrag);
         }
 
         #endregion Commands
@@ -175,6 +192,57 @@ namespace StateMachineNodeEditor.ViewModel
                 NodesCanvas.CommandUnSelectAll.Execute();
                 this.Selected = true;
             }
+        }
+        private void TransitionsDragLeave()
+        {
+            //if(NodesCanvas.ConnectorPreviewForDrop!=null)
+            //{
+            //    Transitions.Remove(NodesCanvas.ConnectorPreviewForDrop);
+            //    NodesCanvas.DraggedConnector = NodesCanvas.ConnectorPreviewForDrop;
+            //    NodesCanvas.ConnectorPreviewForDrop = null;
+            //}
+
+            NodesCanvas.ConnectorPreviewForDrop = null;
+            Console.WriteLine("ViewModelNode TransitionsDragLeave");
+        }
+        private void ConnectorDrag(ViewModelConnector draggedConnect)
+        {
+            NodesCanvas.ConnectorPreviewForDrop = draggedConnect;
+
+            Console.WriteLine("ViewModelNode ConnectorDrag");
+        }
+        private void TransitionsDragOver()
+        {
+            //Transitions.Remove(NodesCanvas.ConnectorPreviewForDrop);
+            //NodesCanvas.DraggedConnector = NodesCanvas.ConnectorPreviewForDrop;
+            //NodesCanvas.ConnectorPreviewForDrop = null;
+
+            Console.WriteLine("ViewModelNode TransitionsDragOver");
+        }
+        private void TransitionsDragEnter()
+        {
+
+            this.NodesCanvas.DraggedConnector.Position.Clear();
+            if ((this.Transitions.Count == 1) || (this.NodesCanvas.DraggedConnector.Position.Y > this.Transitions[1].Position.Y))
+            {
+                this.Transitions.Insert(1, this.NodesCanvas.DraggedConnector);
+            }
+            else
+            {
+                this.Transitions.Insert(2,this.NodesCanvas.DraggedConnector);
+            }
+                this.NodesCanvas.ConnectorPreviewForDrop = this.NodesCanvas.DraggedConnector;
+                this.NodesCanvas.DraggedConnector = null;
+
+                
+                this.NodesCanvas.ConnectorPreviewForDrop.Node = this;
+              
+
+            Console.WriteLine("TransitionsDragEnter" + this.NodesCanvas.ConnectorPreviewForDrop.Name + " To Node " + this.Name+ " _________________________________________________________________________________");
+        }
+        private void TransitionsDrop()
+        {
+
         }
         private void Move(MyPoint delta)
         {
