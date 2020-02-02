@@ -25,6 +25,7 @@ namespace StateMachineNodeEditor.ViewModel
         /// </summary>
         [Reactive] public string Name { get; set; }
 
+
         /// <summary>
         /// Доступно ли имя перехода для редактирования
         /// </summary>

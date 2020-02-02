@@ -48,6 +48,7 @@ namespace StateMachineNodeEditor.View
                     // Имя перехода ( вводится в узле)
                     this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text);
 
+
                     // Доступно ли имя перехода для редактирования
                     this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
 

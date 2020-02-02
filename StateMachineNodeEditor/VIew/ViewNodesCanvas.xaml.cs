@@ -211,43 +211,20 @@ namespace StateMachineNodeEditor.View
         }
         private void OnEventDragEnter(DragEventArgs e)
         {
-            Console.WriteLine("NodeCanvas OnEventDragEnter ");
-            //PositionDragEnter.Set(e.GetPosition(this));
-            //if (this.ViewModel.DraggedConnector != null)
-            //{
-            //    this.ViewModel.DraggedConnector.Position.Clear();
-            //}
+
         }
         private void OnEventDragOver(DragEventArgs e)
         {
+            MyPoint point = new MyPoint(e.GetPosition(this));
             if (this.ViewModel.DraggedConnect != null)
             {
-                MyPoint point = new MyPoint(e.GetPosition(Grid));
                 point -= 2;
                 this.ViewModel.DraggedConnect.EndPoint.Set(point);
             }
             else if (this.ViewModel.DraggedConnector != null)
             {
-                MyPoint point = new MyPoint(e.GetPosition(this));
-                //Console.WriteLine("OnEventDragOver " + point.ToString());
                 this.ViewModel.DraggedConnector.Position = point;
-
-                //MyPoint deltaDragOver = GetDeltaDragOver(e);
-                //this.ViewModel.DraggedConnector.Position += deltaDragOver;
-
             }
-            //else if (this.ViewModel.ConnectorPreviewForDrop != null)
-            //{
-            //    //MyPoint delta = GetDeltaMove();
-            //    //this.ViewModel.CurrentConnector.CommandMove.Execute(delta);
-            //    //+= delta / NodesCanvas.Scale.Value
-
-            //    MyPoint point = new MyPoint(e.GetPosition(Grid));
-            //    this.ViewModel.ConnectorPreviewForDrop.Position2 = new MyPoint(point);
-            //    //Console.WriteLine("NodeCanvas OnEventDragOver " + point.Value.ToString());
-            //}
-
-
         }
 
         private void OnEventPreviewMouseLeftButtonDown(MouseButtonEventArgs e)

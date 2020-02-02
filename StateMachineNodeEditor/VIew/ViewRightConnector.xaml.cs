@@ -107,10 +107,6 @@ namespace StateMachineNodeEditor.View
                
             });
         }
-        private void Test()
-        {
-            Console.WriteLine("Test " + this.ViewModel.Name);
-        }
         private void Validate(RoutedEventArgs e)
         {
             ViewModel.CommandValidateName.Execute(Text.Text);
@@ -155,10 +151,10 @@ namespace StateMachineNodeEditor.View
 
         private void ConnectorDrag(MouseButtonEventArgs e)
         {
-            if (string.IsNullOrEmpty(this.ViewModel.Name))
+            if (!this.ViewModel.TextEnable)
                 return;
           
-            Console.WriteLine("RightConnector ConnectorDrag");
+            //Console.WriteLine("RightConnector ConnectorDrag");
 
             this.UpdatePosition();
 
@@ -181,6 +177,7 @@ namespace StateMachineNodeEditor.View
         }
         private void ConnectorDragOver(DragEventArgs e)
         {
+
             if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == null)
                 return;
 
@@ -193,50 +190,23 @@ namespace StateMachineNodeEditor.View
             if((this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == this.ViewModel)&&(this.ViewModel.Node!=null))
             {
                 this.ViewModel.Node.Transitions.Remove(this.ViewModel.NodesCanvas.ConnectorPreviewForDrop);
-                //this.ViewModel.Node = null;
+             
                 this.ViewModel.NodesCanvas.DraggedConnector = this.ViewModel.NodesCanvas.ConnectorPreviewForDrop;
                 this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = null;
+                //this.ViewModel.Node = null;
                 //this.UpdatePosition();
 
                 return;
             }
 
             e.Handled = true;
-            Console.WriteLine("RightConnector ConnectorDragOver");
+            //Console.WriteLine("RightConnector ConnectorDragOver");
             return;
-
-       
-
-
-
-
-            this.ViewModel.Node.Transitions.Remove(this.ViewModel.NodesCanvas.ConnectorPreviewForDrop);
-        
-
-            int index = this.ViewModel.Node.Transitions.IndexOf(this.ViewModel);
-
-            if ((this.ViewModel.NodesCanvas.ConnectorPreviewForDrop.PositionConnectPoint.Y - 6) > (this.ViewModel.PositionConnectPoint.Y - 6))
-            {
-                this.ViewModel.Node.Transitions.Insert(index + 1, this.ViewModel.NodesCanvas.ConnectorPreviewForDrop);
-            }
-            else
-            {
-                this.ViewModel.Node.Transitions.Insert(index, this.ViewModel.NodesCanvas.ConnectorPreviewForDrop);
-            }
-            this.ViewModel.NodesCanvas.ConnectorPreviewForDrop.Position.Clear();
-            //this.ViewModel.NodesCanvas.DraggedConnector.Position.Clear();
-            //this.ViewModel.NodesCanvas.DraggedConnector = null;
-
-         
-
-            //ViewNode viewNode = MyUtils.FindParent<ViewNode>(this);
-            //if(viewNode!=null)
-            //    viewNode.OnEventTransitionsDragOver(e);
-
-           
         }
         private void ConnectorDragEnter(DragEventArgs e)
         {
+         
+
             if (this.ViewModel.NodesCanvas.DraggedConnector == null)
                 return;
 
@@ -247,37 +217,17 @@ namespace StateMachineNodeEditor.View
                 return;
 
 
-            Console.WriteLine("RightConnector ConnectorDragEnter");
+            //Console.WriteLine("RightConnector ConnectorDragEnter");
 
             int index = this.ViewModel.Node.Transitions.IndexOf(this.ViewModel);
-
+            if (index == -1)
+                index = 0;
             this.ViewModel.Node.Transitions.Insert(index + 1, this.ViewModel.NodesCanvas.DraggedConnector);
 
-            //if (this.ViewModel.Node.Transitions.Count > 1)
-            //{
-
-            //    int index = this.ViewModel.Node.Transitions.IndexOf(this.ViewModel);
-
-            //    if ((this.ViewModel.NodesCanvas.DraggedConnector.Position.Y) > (this.ViewModel.Position.Y))
-            //    {
-            //        this.ViewModel.Node.Transitions.Insert(index + 1, this.ViewModel.NodesCanvas.DraggedConnector);
-            //    }
-            //    else
-            //    {
-            //        this.ViewModel.Node.Transitions.Insert(index, this.ViewModel.NodesCanvas.DraggedConnector);
-            //    }
-            //}
-            //else
-            //{
-            //    this.ViewModel.Node.Transitions.Insert(1, this.ViewModel.NodesCanvas.DraggedConnector);
-            //}
             this.ViewModel.NodesCanvas.DraggedConnector.Node = this.ViewModel.Node;
             this.ViewModel.NodesCanvas.DraggedConnector.Position.Clear();
             this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = this.ViewModel.NodesCanvas.DraggedConnector;
             this.ViewModel.NodesCanvas.DraggedConnector = null;
-
-
-
 
             e.Handled = true;
         }
@@ -308,7 +258,7 @@ namespace StateMachineNodeEditor.View
             ////}
 
             e.Handled = true;
-            Console.WriteLine("RightConnector ConnectorDragLeave");
+            //Console.WriteLine("RightConnector ConnectorDragLeave");
             return;
         }
         private void ConnectorDrop(DragEventArgs e)
@@ -328,13 +278,15 @@ namespace StateMachineNodeEditor.View
         /// </summary>
         void UpdatePositionConnectPoin()
         {
-            if (this.ViewModel.Node == null)
-                return;
-            //Console.WriteLine("UpdatePositionConnectPoin "+this.ViewModel.Name);
+
+
             Point positionConnectPoint;
             //Если отображается
             if (this.IsVisible)
             {
+
+                Console.WriteLine("I use position good");
+
                 // Координата центра
                 positionConnectPoint = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
 
@@ -343,10 +295,10 @@ namespace StateMachineNodeEditor.View
 
                 //Получаем позицию центру на канвасе
                 positionConnectPoint = this.TransformToAncestor(NodesCanvas).Transform(positionConnectPoint);
-
             }
             else
             {
+                Console.WriteLine("I use position output name node:"+ this.ViewModel.Node.Name);
                 //Позиция выхода
                 positionConnectPoint = this.ViewModel.Node.Output.PositionConnectPoint.Value;
             }
