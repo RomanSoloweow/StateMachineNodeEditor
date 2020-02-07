@@ -11,6 +11,7 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
+using System.Reactive.Disposables;
 
 namespace StateMachineNodeEditor.View
 {
@@ -46,18 +47,18 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Отображается ли линия среза
-                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.Visibility).DisposeWith(disposable);
                 // Точка из которой выходит линия среза
-                this.OneWayBind(this.ViewModel, x => x.StartPoint.Value.X, x => x.Line.X1);
+                this.OneWayBind(this.ViewModel, x => x.StartPoint.Value.X, x => x.Line.X1).DisposeWith(disposable);
                 // Точка из которой выходит линия среза
-                this.OneWayBind(this.ViewModel, x => x.StartPoint.Value.Y, x => x.Line.Y1);
+                this.OneWayBind(this.ViewModel, x => x.StartPoint.Value.Y, x => x.Line.Y1).DisposeWith(disposable);
 
                 // Точка в которую приходит линия среза
-                this.OneWayBind(this.ViewModel, x => x.EndPoint.Value.X, x => x.Line.X2);
+                this.OneWayBind(this.ViewModel, x => x.EndPoint.Value.X, x => x.Line.X2).DisposeWith(disposable);
                 // Точка в которую приходит линия среза
-                this.OneWayBind(this.ViewModel, x => x.EndPoint.Value.Y, x => x.Line.Y2);
+                this.OneWayBind(this.ViewModel, x => x.EndPoint.Value.Y, x => x.Line.Y2).DisposeWith(disposable);
 
-                this.WhenAnyValue(x => x.Visibility).Subscribe(_ => Update());
+                this.WhenAnyValue(x => x.Visibility).Subscribe(_ => Update()).DisposeWith(disposable);
 
             });
         }
@@ -78,8 +79,8 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Events().MouseMove.Subscribe(e => OnMouseMoves(e));
-                this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftButtonUp(e));
+                this.Events().MouseMove.Subscribe(e => OnMouseMoves(e)).DisposeWith(disposable);
+                this.Events().MouseLeftButtonUp.Subscribe(e => OnMouseLeftButtonUp(e)).DisposeWith(disposable);
 
             });
         }

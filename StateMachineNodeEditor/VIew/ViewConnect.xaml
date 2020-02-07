@@ -10,7 +10,7 @@
         </TransformGroup>
     </UserControl.RenderTransform>
     <Grid>
-        <Path x:Name="Path" StrokeDashCap="Round" StrokeLineJoin="Round"  Panel.ZIndex="800" Stroke="{StaticResource ColorConnector}">
+        <Path x:Name="Path" StrokeDashCap="Round" StrokeLineJoin="Round" Stroke="{StaticResource ColorConnector}">
             <Path.Data>
                 <PathGeometry  x:Name="PathGeometry" >
                     <PathFigure x:Name="PathFigure"  IsClosed="False">

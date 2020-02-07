@@ -13,6 +13,7 @@ using DynamicData;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
+using System.Reactive.Disposables;
 
 namespace StateMachineNodeEditor.View
 {
@@ -50,36 +51,37 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Имя перехода ( вводится в узле)
-                this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text);
+                this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text).DisposeWith(disposable);
 
                 // Доступно ли имя перехода для редактирования
-                this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
+                this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled).DisposeWith(disposable);
 
                 // Доступен ли переход для создания соединия
-                this.OneWayBind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
+                this.OneWayBind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled).DisposeWith(disposable);
 
                 // Цвет рамки, вокруг перехода
-                this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
+                this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke).DisposeWith(disposable);
 
                 //Позиция X от левого верхнего угла
-                this.OneWayBind(this.ViewModel, x => x.Position.X, x => x.Translate.X);
+                this.OneWayBind(this.ViewModel, x => x.Position.X, x => x.Translate.X).DisposeWith(disposable);
 
                 //Позиция Y от левого верхнего угла
-                this.OneWayBind(this.ViewModel, x => x.Position.Y, x => x.Translate.Y);
+                this.OneWayBind(this.ViewModel, x => x.Position.Y, x => x.Translate.Y).DisposeWith(disposable);
 
                 //Размеры
                 this.WhenAnyValue(v => v.Grid.ActualWidth, v => v.Grid.ActualHeight, (width, height) => new Size(width, height))
-                     .BindTo(this, v => v.ViewModel.Size);
+                     .BindTo(this, v => v.ViewModel.Size).DisposeWith(disposable);
 
                 // Цвет перехода
-                this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
+                this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill).DisposeWith(disposable);
 
                 // Отображается ли переход
-                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.RightConnector.Visibility).DisposeWith(disposable);
 
                 // При изменении размера, позиции или zoom узла
-                this.WhenAnyValue( x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x =>x.ViewModel.Position).Subscribe(_ => { UpdatePositionConnectPoin(); });
-                this.WhenAnyValue(x => x.ViewModel.Node.Size).Subscribe(_ => { UpdatePosition(); });
+                this.WhenAnyValue( x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x =>x.ViewModel.Position).
+                Subscribe(_ => { UpdatePositionConnectPoin(); }).DisposeWith(disposable);
+                this.WhenAnyValue(x => x.ViewModel.Node.Size).Subscribe(_ => { UpdatePosition(); }).DisposeWith(disposable);
             });
         }
         #endregion SetupBinding
@@ -89,22 +91,22 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().MouseLeftButtonDown.Subscribe(e => ConnectDrag(e));
+                this.Form.Events().MouseLeftButtonDown.Subscribe(e => ConnectDrag(e)).DisposeWith(disposable);
 
-                this.Text.Events().LostFocus.Subscribe(e => Validate(e));
-                
-                this.Text.Events().PreviewMouseLeftButtonDown.Subscribe(e => TextDrag(e));
-                this.Text.Events().PreviewDrop.Subscribe(e => TextDrop(e));
-                this.Text.Events().PreviewDragOver.Subscribe(e => TextDragOver(e));
-                this.Text.Events().PreviewDragEnter.Subscribe(e => TextDragEnter(e));
-                this.Text.Events().PreviewDragLeave.Subscribe(e => TextDragLeave(e));
+                this.Text.Events().LostFocus.Subscribe(e => Validate(e)).DisposeWith(disposable);
 
-                this.Grid.Events().PreviewMouseLeftButtonDown.Subscribe(e => ConnectorDrag(e));
-                this.Grid.Events().PreviewDragEnter.Subscribe(e => ConnectorDragEnter(e));
-                this.Grid.Events().PreviewDragOver.Subscribe(e => ConnectorDragOver(e));              
-                this.Grid.Events().PreviewDragLeave.Subscribe(e => ConnectorDragLeave(e));
-                this.Grid.Events().PreviewDrop.Subscribe(e => ConnectorDrop(e));
-               
+                this.Text.Events().PreviewMouseLeftButtonDown.Subscribe(e => TextDrag(e)).DisposeWith(disposable);
+                this.Text.Events().PreviewDrop.Subscribe(e => TextDrop(e)).DisposeWith(disposable);
+                this.Text.Events().PreviewDragOver.Subscribe(e => TextDragOver(e)).DisposeWith(disposable);
+                this.Text.Events().PreviewDragEnter.Subscribe(e => TextDragEnter(e)).DisposeWith(disposable);
+                this.Text.Events().PreviewDragLeave.Subscribe(e => TextDragLeave(e)).DisposeWith(disposable);
+
+                this.Grid.Events().PreviewMouseLeftButtonDown.Subscribe(e => ConnectorDrag(e)).DisposeWith(disposable);
+                this.Grid.Events().PreviewDragEnter.Subscribe(e => ConnectorDragEnter(e)).DisposeWith(disposable);
+                this.Grid.Events().PreviewDragOver.Subscribe(e => ConnectorDragOver(e)).DisposeWith(disposable);
+                this.Grid.Events().PreviewDragLeave.Subscribe(e => ConnectorDragLeave(e)).DisposeWith(disposable);
+                this.Grid.Events().PreviewDrop.Subscribe(e => ConnectorDrop(e)).DisposeWith(disposable);
+
             });
         }
         private void Validate(RoutedEventArgs e)
@@ -123,6 +125,7 @@ namespace StateMachineNodeEditor.View
             this.ViewModel.CommandCheckConnectPointDrop.Execute();
             e.Handled = true;
         }
+
         private void TextDrag(MouseButtonEventArgs e)
         {
             ConnectorDrag(e);
@@ -149,64 +152,39 @@ namespace StateMachineNodeEditor.View
             e.Handled = true;
         }
 
+
         private void ConnectorDrag(MouseButtonEventArgs e)
         {
             if (!this.ViewModel.TextEnable)
                 return;
           
-            //Console.WriteLine("RightConnector ConnectorDrag");
-
             this.UpdatePosition();
-
-            if (this.ViewModel.NodesCanvas.DraggedConnector==null)
-            {        
-                this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = this.ViewModel;
-            }
-
-           
-
-            //this.ViewModel.CommandConnectorDrag.Execute();
+            this.ViewModel.CommandConnectorDrag.Execute();
             DataObject data = new DataObject();
             data.SetData("Connector", this.ViewModel);
             DragDrop.DoDragDrop(this, data, DragDropEffects.Link);
+            this.ViewModel.CommandCheckConnectorDrop.Execute();
 
-
-            //this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = null;
-            //this.ViewModel.CommandConnectorDrop.Execute();
             e.Handled = true;
         }
         private void ConnectorDragOver(DragEventArgs e)
         {
-
-            if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == null)
-                return;
-
-            if (string.IsNullOrEmpty(this.ViewModel.Name))
-                return;
-
-            if (this.ViewModel.NodesCanvas.DraggedConnector == this.ViewModel)
-                return;
-
-            if((this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == this.ViewModel)&&(this.ViewModel.Node!=null))
+            if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop != this.ViewModel)
             {
-                this.ViewModel.Node.Transitions.Remove(this.ViewModel.NodesCanvas.ConnectorPreviewForDrop);
-             
-                this.ViewModel.NodesCanvas.DraggedConnector = this.ViewModel.NodesCanvas.ConnectorPreviewForDrop;
-                this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = null;
-                //this.ViewModel.Node = null;
-                //this.UpdatePosition();
-
+                this.ViewModel.Node.Point1 += 0.0001;
                 return;
             }
+            this.UpdatePosition();
+
+            this.ViewModel.CommandConnectorDragOver.Execute();             
 
             e.Handled = true;
-            //Console.WriteLine("RightConnector ConnectorDragOver");
+
             return;
         }
         private void ConnectorDragEnter(DragEventArgs e)
         {
-         
-
+            
             if (this.ViewModel.NodesCanvas.DraggedConnector == null)
                 return;
 
@@ -216,59 +194,32 @@ namespace StateMachineNodeEditor.View
             if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == this.ViewModel)
                 return;
 
-
-            //Console.WriteLine("RightConnector ConnectorDragEnter");
-
-            int index = this.ViewModel.Node.Transitions.IndexOf(this.ViewModel);
-            if (index == -1)
-                index = 0;
-            this.ViewModel.Node.Transitions.Insert(index + 1, this.ViewModel.NodesCanvas.DraggedConnector);
-
-            this.ViewModel.NodesCanvas.DraggedConnector.Node = this.ViewModel.Node;
-            this.ViewModel.NodesCanvas.DraggedConnector.Position.Clear();
-            this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = this.ViewModel.NodesCanvas.DraggedConnector;
-            this.ViewModel.NodesCanvas.DraggedConnector = null;
-
+            this.ViewModel.CommandConnectorDragEnter.Execute();
+         
             e.Handled = true;
         }
         private void ConnectorDragLeave(DragEventArgs e)
         {
             if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == null)
                 return;
-            ////if (this.ViewModel.NodesCanvas.DraggedConnector == null)
-            ////    return;
-            //if (string.IsNullOrEmpty(this.ViewModel.Name))
-            //    return;
-
-            //if (this.ViewModel.NodesCanvas.DraggedConnector == this.ViewModel)
-            //    return;
 
             if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == this.ViewModel)
                 return;
 
-            ////if ((this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == this.ViewModel) && (this.ViewModel.Node != null))
-            ////{
-            this.ViewModel.Node.Transitions.Remove(this.ViewModel.NodesCanvas.ConnectorPreviewForDrop);
-            //this.ViewModel.Node = null;
-            this.ViewModel.NodesCanvas.DraggedConnector = this.ViewModel.NodesCanvas.ConnectorPreviewForDrop;
-            this.ViewModel.NodesCanvas.ConnectorPreviewForDrop = null;
-            //    //this.UpdatePosition();
-
-
-            ////}
+            this.ViewModel.CommandConnectorDragLeave.Execute();
 
             e.Handled = true;
-            //Console.WriteLine("RightConnector ConnectorDragLeave");
+
             return;
         }
         private void ConnectorDrop(DragEventArgs e)
         {
-            //if (!this.ViewModel.NodesCanvas.HasConnectorDrag())
-            //    return;
+            if (this.ViewModel.NodesCanvas.ConnectorPreviewForDrop == null)
+                return;
 
-            //ViewNode viewNode = MyUtils.FindParent<ViewNode>(this);
-            //if (viewNode != null)
-            //    viewNode.OnEventTransitionsDrop(e);
+            this.ViewModel.CommandConnectorDrop.Execute();
+
+            e.Handled = true;
         }
 
         #endregion SetupEvents
@@ -279,14 +230,10 @@ namespace StateMachineNodeEditor.View
         void UpdatePositionConnectPoin()
         {
 
-
-            Point positionConnectPoint;
+           Point positionConnectPoint;
             //Если отображается
             if (this.IsVisible)
             {
-
-                Console.WriteLine("I use position good");
-
                 // Координата центра
                 positionConnectPoint = Form.TranslatePoint(new Point(Form.Width / 2, Form.Height / 2), this);
 
@@ -295,10 +242,10 @@ namespace StateMachineNodeEditor.View
 
                 //Получаем позицию центру на канвасе
                 positionConnectPoint = this.TransformToAncestor(NodesCanvas).Transform(positionConnectPoint);
+
             }
             else
             {
-                Console.WriteLine("I use position output name node:"+ this.ViewModel.Node.Name);
                 //Позиция выхода
                 positionConnectPoint = this.ViewModel.Node.Output.PositionConnectPoint.Value;
             }
@@ -308,7 +255,6 @@ namespace StateMachineNodeEditor.View
 
         void UpdatePosition()
         {
-
             Point position = new Point();
 
             //Если отображается
@@ -320,7 +266,6 @@ namespace StateMachineNodeEditor.View
                 position = this.TransformToAncestor(NodesCanvas).Transform(position);
 
                 this.ViewModel.Position.Set(position);
-
             }
         }
     }

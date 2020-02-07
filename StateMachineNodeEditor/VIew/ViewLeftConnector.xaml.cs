@@ -11,6 +11,8 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
+using System.Reactive.Disposables;
+
 namespace StateMachineNodeEditor.View
 {
     /// <summary>
@@ -46,26 +48,26 @@ namespace StateMachineNodeEditor.View
                 this.WhenActivated(disposable =>
                 {
                     // Имя перехода ( вводится в узле)
-                    this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text);
+                    this.OneWayBind(this.ViewModel, x => x.Name, x => x.Text.Text).DisposeWith(disposable);
 
 
                     // Доступно ли имя перехода для редактирования
-                    this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled);
+                    this.OneWayBind(this.ViewModel, x => x.TextEnable, x => x.Text.IsEnabled).DisposeWith(disposable);
 
                     // Доступен ли переход для создания соединия
-                    this.OneWayBind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled);
+                    this.OneWayBind(this.ViewModel, x => x.FormEnable, x => x.Form.IsEnabled).DisposeWith(disposable);
 
                     // Цвет рамки, вокруг перехода
-                    this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke);
+                    this.OneWayBind(this.ViewModel, x => x.FormStroke, x => x.Form.Stroke).DisposeWith(disposable);
 
                     // Цвет перехода
-                    this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill);
+                    this.OneWayBind(this.ViewModel, x => x.FormFill, x => x.Form.Fill).DisposeWith(disposable);
 
                     // Отображается ли переход
-                    this.OneWayBind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility);
+                    this.OneWayBind(this.ViewModel, x => x.Visible, x => x.LeftConnector.Visibility).DisposeWith(disposable);
 
                     // При изменении размера, позиции или zoom узла
-                    this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition());
+                    this.WhenAnyValue(x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value).Subscribe(_ => UpdatePosition()).DisposeWith(disposable);
 
                 });
         }
@@ -76,7 +78,7 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Form.Events().Drop.Subscribe(e => OnEventDrop(e));
+                this.Form.Events().Drop.Subscribe(e => OnEventDrop(e)).DisposeWith(disposable);
             });
         }
         #endregion SetupEvents

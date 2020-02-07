@@ -230,6 +230,7 @@
     <Compile Include="Helpers\CanBeMove.cs" />
     <Compile Include="Helpers\Command.cs" />
     <Compile Include="Helpers\ConverterBoolAndVisibility.cs" />
+    <Compile Include="Helpers\SimpleCommandWithResult.cs" />
     <Compile Include="Helpers\UndoRedoForCommand.cs" />
     <Compile Include="Helpers\MyPoint.cs" />
     <Compile Include="Helpers\Scale.cs" />

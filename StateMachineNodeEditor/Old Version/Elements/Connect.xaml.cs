@@ -118,7 +118,8 @@ namespace StateMachineNodeEditor
                 newConnector.PositionChange += connect.OutputPositionChange;
                 newConnector.Node.BeforeDelete += connect.BeforeDeleteOutputConnector;
                 connect.EndPoint = newConnector.Position;
-                Panel.SetZIndex(connect, Panel.GetZIndex(newConnector.Node) - 1);
+
+                //Panel.SetZIndex(connect, Panel.GetZIndex(newConnector.Node) - 5);
             }
         }
         private void ZoomChange(object sender, RoutedEventArgs e)

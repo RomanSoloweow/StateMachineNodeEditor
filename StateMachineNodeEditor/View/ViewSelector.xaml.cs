@@ -11,6 +11,7 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
+using System.Reactive.Disposables;
 
 namespace StateMachineNodeEditor.View
 {
@@ -53,25 +54,25 @@ namespace StateMachineNodeEditor.View
             this.WhenActivated(disposable =>
             {
                 // Отображается ли выделение
-                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.Visibility);
+                this.OneWayBind(this.ViewModel, x => x.Visible, x => x.Visibility).DisposeWith(disposable);
 
                 //Ширина
-                this.OneWayBind(this.ViewModel, x => x.Size.Width, x => x.Form.Width);
+                this.OneWayBind(this.ViewModel, x => x.Size.Width, x => x.Form.Width).DisposeWith(disposable);
 
                 //Высота
-                this.OneWayBind(this.ViewModel, x => x.Size.Height, x => x.Form.Height);
+                this.OneWayBind(this.ViewModel, x => x.Size.Height, x => x.Form.Height).DisposeWith(disposable);
 
                 //Позиция X от левого верхнего угла
-                this.OneWayBind(this.ViewModel, x => x.Point1.Value.X, x => x.Translate.X);
+                this.OneWayBind(this.ViewModel, x => x.Point1.Value.X, x => x.Translate.X).DisposeWith(disposable);
 
                 //Позиция Y от левого верхнего угла
-                this.OneWayBind(this.ViewModel, x => x.Point1.Value.Y, x => x.Translate.Y);
+                this.OneWayBind(this.ViewModel, x => x.Point1.Value.Y, x => x.Translate.Y).DisposeWith(disposable);
 
                 //Масштаб по оси X
-                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX);
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.X, x => x.Scale.ScaleX).DisposeWith(disposable);
 
                 //Масштаб по оси Y
-                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY);
+                this.OneWayBind(this.ViewModel, x => x.Scale.Scales.Value.Y, x => x.Scale.ScaleY).DisposeWith(disposable);
 
                 ////Точка масштабирования, координата X
                 //this.Bind(this.ViewModel, x => x.Scale.Center.Value.X, x => x.Scale.CenterX);
@@ -80,7 +81,7 @@ namespace StateMachineNodeEditor.View
                 //this.Bind(this.ViewModel, x => x.Scale.Center.Value.Y, x => x.Scale.CenterY);
 
 
-                this.WhenAnyValue(x => x.Visibility).Subscribe(_ => Update());
+                this.WhenAnyValue(x => x.Visibility).Subscribe(_ => Update()).DisposeWith(disposable);
             });
         }
 

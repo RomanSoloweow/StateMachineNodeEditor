@@ -12,6 +12,7 @@ using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
+using System.Reactive.Disposables;
 
 namespace StateMachineNodeEditor.View
 {
@@ -90,20 +91,21 @@ namespace StateMachineNodeEditor.View
                 var positionLeftClickObservable = this.ObservableForProperty(x => x.PositionLeftClick).Select(x => x.Value);
                 var positionRightClickObservable = this.ObservableForProperty(x => x.PositionRightClick).Select(x => x.Value);
 
-                this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo);
-                this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo);
-                this.BindCommand(this.ViewModel, x => x.CommandSelectAll, x => x.BindingSelectAll);
-                this.BindCommand(this.ViewModel, x => x.CommandDeleteSelectedNodes, x => x.BindingDeleteNode);
+                this.BindCommand(this.ViewModel, x => x.CommandRedo, x => x.BindingRedo).DisposeWith(disposable);
+                this.BindCommand(this.ViewModel, x => x.CommandUndo, x => x.BindingUndo).DisposeWith(disposable);
+                this.BindCommand(this.ViewModel, x => x.CommandSelectAll, x => x.BindingSelectAll).DisposeWith(disposable);
+                this.BindCommand(this.ViewModel, x => x.CommandDeleteSelectedNodes, x => x.BindingDeleteNode).DisposeWith(disposable);
 
-                this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable);
-                this.BindCommand(this.ViewModel, x => x.CommandCut, x => x.BindingCut, positionLeftClickObservable);
+                this.BindCommand(this.ViewModel, x => x.CommandSelect, x => x.BindingSelect, positionLeftClickObservable).DisposeWith(disposable);
+                this.BindCommand(this.ViewModel, x => x.CommandCut, x => x.BindingCut, positionLeftClickObservable).DisposeWith(disposable);
 
 
-                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable);
-                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable);
-                this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect);
-                this.WhenAnyValue(x => x.ViewModel.Cutter.EndPoint.Value).InvokeCommand(ViewModel.CommandCutterIntersect);
-                this.WhenAnyValue(x => x.ViewModel.DraggedConnector).Subscribe(_ => UpdateConnector());
+
+                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.BindingAddNode, positionLeftClickObservable).DisposeWith(disposable);
+                this.BindCommand(this.ViewModel, x => x.CommandAddNode, x => x.ItemAddNode, positionRightClickObservable).DisposeWith(disposable);
+                this.WhenAnyValue(x => x.ViewModel.Selector.Size).InvokeCommand(ViewModel.CommandSelectorIntersect).DisposeWith(disposable);
+                this.WhenAnyValue(x => x.ViewModel.Cutter.EndPoint.Value).InvokeCommand(ViewModel.CommandCutterIntersect).DisposeWith(disposable);
+                this.WhenAnyValue(x => x.ViewModel.DraggedConnector).Subscribe(_ => UpdateConnector()).DisposeWith(disposable);
 
             });
         }
@@ -114,22 +116,22 @@ namespace StateMachineNodeEditor.View
         {
             this.WhenActivated(disposable =>
             {
-                this.Events().MouseLeftButtonDown.Subscribe(e => OnEventMouseLeftDown(e));
+                this.Events().MouseLeftButtonDown.Subscribe(e => OnEventMouseLeftDown(e)).DisposeWith(disposable);
                 this.Events().MouseLeftButtonUp.Subscribe(e => OnEventMouseLeftUp(e));
-                this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e));
-                this.Events().MouseRightButtonUp.Subscribe(e => OnEventMouseRightUp(e));
-                this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e));
-                this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e));
-                this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e));
-                this.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e));
-                this.Events().DragOver.Subscribe(e => OnEventDragOver(e));
-                this.Events().DragEnter.Subscribe(e => OnEventDragEnter(e));
+                this.Events().MouseRightButtonDown.Subscribe(e => OnEventMouseRightDown(e)).DisposeWith(disposable);
+                this.Events().MouseRightButtonUp.Subscribe(e => OnEventMouseRightUp(e)).DisposeWith(disposable);
+                this.Events().MouseDown.Subscribe(e => OnEventMouseDown(e)).DisposeWith(disposable);
+                this.Events().MouseUp.Subscribe(e => OnEventMouseUp(e)).DisposeWith(disposable);
+                this.Events().MouseMove.Subscribe(e => OnEventMouseMove(e)).DisposeWith(disposable);
+                this.Events().MouseWheel.Subscribe(e => OnEventMouseWheel(e)).DisposeWith(disposable);
+                this.Events().DragOver.Subscribe(e => OnEventDragOver(e)).DisposeWith(disposable);
+                this.Events().DragEnter.Subscribe(e => OnEventDragEnter(e)).DisposeWith(disposable);
 
                 //Эти события срабатывают раньше команд
-                this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e));
-                this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e));
+                this.Events().PreviewMouseLeftButtonDown.Subscribe(e => OnEventPreviewMouseLeftButtonDown(e)).DisposeWith(disposable);
+                this.Events().PreviewMouseRightButtonDown.Subscribe(e => OnEventPreviewMouseRightButtonDown(e)).DisposeWith(disposable);
 
-                this.WhenAnyValue(x => x.ViewModel.Scale.Value).Subscribe(value => { this.Grid.Height /= value; this.Grid.Width /= value; });
+                this.WhenAnyValue(x => x.ViewModel.Scale.Value).Subscribe(value => { this.Grid.Height /= value; this.Grid.Width /= value; }).DisposeWith(disposable);
             });
         }
         private void OnEventMouseLeftDown(MouseButtonEventArgs e)

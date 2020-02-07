@@ -3,6 +3,8 @@ using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
 using System.Windows;
+using System.Reactive.Linq;
+
 namespace StateMachineNodeEditor.ViewModel
 {
     public class ViewModelSelector: ReactiveObject

@@ -7,17 +7,19 @@
              mc:Ignorable="d" 
              x:Name="RightConnector"
              HorizontalAlignment="Stretch" VerticalAlignment="Top"  BorderThickness="0" AllowDrop="True">
-    <Grid x:Name="Grid" Background="Green" >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition  />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0"   HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ColorText}" Style="{DynamicResource ConnectorTextBox}"/>
-        <Ellipse Grid.Row="0" Grid.Column="1"  Margin="0,0,-7,0" HorizontalAlignment="Right" VerticalAlignment="Center"  Name="Form" Height="12" Width="12"  AllowDrop="True"  StrokeThickness="1"  Style="{DynamicResource ConnectorEllipse}" />
-    </Grid>
+    <Border x:Name="Grid" CornerRadius="5,5,5,5" Background="{DynamicResource ColorNodeBody}">
+        <Grid  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Grid.Column="0"   HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="5,0,5,3" Name="Text"  TextWrapping="NoWrap" BorderThickness="0,0,0,0"  Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ColorText}" Style="{DynamicResource ConnectorTextBox}"/>
+            <Ellipse Grid.Row="0" Grid.Column="1"  Margin="0,0,-7,0" HorizontalAlignment="Right" VerticalAlignment="Center"  Name="Form" Height="12" Width="12"  AllowDrop="True"  StrokeThickness="1"  Style="{DynamicResource ConnectorEllipse}" />
+        </Grid>
+    </Border>
     <!--<Grid x:Name="grid" Background="Green" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
