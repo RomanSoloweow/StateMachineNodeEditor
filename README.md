@@ -7,9 +7,6 @@
 - Moving and Scaling
 ![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/gh-pages/Gifs/moving%20and%20scaling.gif)
 - Undo and Redo
-<p align="center">
- <img src="https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/gh-pages/Gifs/undo%20and%20redo.gif?raw=true" alt="Sublime's custom image"/>
- </p>
+![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/gh-pages/Gifs/undo%20and%20redo.gif)
 - Collapsing and Selection for Nodes
 ![](https://github.com/RomanSoloweow/StateMachineNodeEditor/blob/gh-pages/Gifs/collapsing%20and%20selection.gif)
-
