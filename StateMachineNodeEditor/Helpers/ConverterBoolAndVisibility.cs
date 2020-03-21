@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using ReactiveUI;
-using Splat;
 
 namespace StateMachineNodeEditor.Helpers
 {

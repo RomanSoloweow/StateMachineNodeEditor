@@ -1,8 +1,6 @@
-﻿using System;
-using ReactiveUI.Fody.Helpers;
+﻿using ReactiveUI.Fody.Helpers;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using System.Windows;
 
 namespace StateMachineNodeEditor.ViewModel
 {

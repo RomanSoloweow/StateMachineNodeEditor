@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StateMachineNodeEditor"
         xmlns:View="clr-namespace:StateMachineNodeEditor.View" x:Class="StateMachineNodeEditor.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow"  d:DesignWidth="808.96" Height="738.592" BorderThickness="1" ResizeMode="CanResizeWithGrip" BorderBrush="#FF797979" Background="#FF212121" Foreground="{x:Null}" WindowStyle="None" AllowsTransparency="True" Style="{DynamicResource CustomWindow}" >
+        Title="MainWindow"  d:DesignWidth="808.96" Height="738.592" BorderThickness="1" ResizeMode="CanResizeWithGrip" BorderBrush="{DynamicResource ColorMainWindowBorder}" Background="{DynamicResource ColorMainWindowBackground}" Foreground="{x:Null}" WindowStyle="None" AllowsTransparency="True" Style="{DynamicResource CustomWindow}" >
 
     <Grid x:Name="grid" Background="Red">
         <Grid.RowDefinitions>

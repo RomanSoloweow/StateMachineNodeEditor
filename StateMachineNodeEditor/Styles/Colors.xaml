@@ -5,6 +5,7 @@
     <!--<SolidColorBrush x:Key="ColorText" Color="#F0F0F0"/>-->
     <SolidColorBrush x:Key="ColorText" Color="White"/>
     <SolidColorBrush x:Key="ColorConnector" Color="White"/>
+    
     <SolidColorBrush x:Key="ColorNodeBorder" Color="LightGray"/>
     <SolidColorBrush x:Key="ColorNodeSelectedBorder" Color="Red"/>
     <SolidColorBrush x:Key="ColorNodeBody" Color="#FF2D2D2D"/>
@@ -12,6 +13,8 @@
     <SolidColorBrush x:Key="ColorNodesCanvasBackground" Color="#1e1e1e"/>
     
     <SolidColorBrush x:Key="ColorMainWindowHeader" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="ColorMainWindowBackground" Color="#FF212121"/>
+    <SolidColorBrush x:Key="ColorMainWindowBorder" Color="#FF797979"/>
     
     <SolidColorBrush x:Key="ColorMainWindowButton" Color="LightGray"/>
     <SolidColorBrush x:Key="ColorMainWindowButtonMouseOver" Color="#A9A9A9"/>

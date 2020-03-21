@@ -53,4 +53,5 @@
     <UserControl.InputBindings>
         <MouseBinding x:Name="BindingSelect" Gesture="Ctrl+LeftClick" />
     </UserControl.InputBindings>
+    
 </UserControl>

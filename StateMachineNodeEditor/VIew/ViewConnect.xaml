@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="StateMachineNodeEditor.View.ViewConnect"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
     <UserControl.RenderTransform>
         <TransformGroup>
             <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1"/>

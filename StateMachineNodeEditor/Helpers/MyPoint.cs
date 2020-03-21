@@ -1,6 +1,5 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using System;
 using System.Windows;
 
 namespace StateMachineNodeEditor.Helpers

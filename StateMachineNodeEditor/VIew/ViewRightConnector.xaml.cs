@@ -9,7 +9,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using StateMachineNodeEditor.Helpers;
 using ReactiveUI;
-using DynamicData;
 using StateMachineNodeEditor.ViewModel;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
@@ -81,7 +80,7 @@ namespace StateMachineNodeEditor.View
                 // При изменении размера, позиции или zoom узла
                 this.WhenAnyValue( x => x.ViewModel.Node.Size, x => x.ViewModel.Node.Point1.Value, x => x.ViewModel.Node.NodesCanvas.Scale.Scales.Value, x =>x.ViewModel.Position).
                 Subscribe(_ => { UpdatePositionConnectPoin(); }).DisposeWith(disposable);
-                this.WhenAnyValue(x => x.ViewModel.Node.Size).Subscribe(_ => { UpdatePosition(); }).DisposeWith(disposable);
+                //this.WhenAnyValue(x => x.ViewModel.Node.Size).Subscribe(_ => { UpdatePosition(); }).DisposeWith(disposable);
             });
         }
         #endregion SetupBinding

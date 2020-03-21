@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using System.Windows;
 using ReactiveUI;
-using ReactiveUI.Wpf;
-using DynamicData;
-using StateMachineNodeEditor.ViewModel;
 using Splat;
 using StateMachineNodeEditor.Helpers;
+
 namespace StateMachineNodeEditor
 {
     /// <summary>

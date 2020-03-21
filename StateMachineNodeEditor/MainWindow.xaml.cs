@@ -1,9 +1,6 @@
 ﻿using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Input;
-using StateMachineNodeEditor.View;
 namespace StateMachineNodeEditor
 {
     public partial class MainWindow : Window
@@ -75,7 +72,6 @@ namespace StateMachineNodeEditor
                     if (this.WindowState == WindowState.Maximized)
                     {
                         var point = PointToScreen(e.MouseDevice.GetPosition(this));
-
                         if (point.X <= RestoreBounds.Width / 2)
                             Left = 0;
                         else if (point.X >= RestoreBounds.Width)
