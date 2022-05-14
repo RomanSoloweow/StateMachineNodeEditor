@@ -32,7 +32,7 @@ jobs:
 
     - name: .NET code metrics
       id: dotnet-code-metrics
-      uses: RomanSoloweow/StateMachineNodeEditor@main
+      uses: dotnet/samples/github-actions/DotNet.GitHubAction@main
       env:
         GREETINGS: ${{ secrets.GITHUB_TOKEN }}
       with:
