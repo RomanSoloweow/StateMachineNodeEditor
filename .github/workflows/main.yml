@@ -34,7 +34,7 @@ jobs:
       id: dotnet-code-metrics
       uses: dotnet/samples/github-actions/DotNet.GitHubAction@main
       env:
-        GREETINGS: ${{ secrets.GITHUB_TOKEN }}
+        GREETINGS: 'Hello, .NET developers!' # ${{ secrets.GITHUB_TOKEN }}
       with:
         owner: ${{ github.repository_owner }}
         name: ${{ github.repository }}
