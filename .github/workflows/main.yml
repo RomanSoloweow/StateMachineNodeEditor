@@ -5,8 +5,8 @@ on:
   push:
     branches: [ main ]
     paths:
-    - 'github-actions/DotNet.GitHubAction/**'               # run on all changes to this dir
-    - '!github-actions/DotNet.GitHubAction/CODE_METRICS.md' # ignore this file
+    - 'StateMachineNodeEditor/**'               # run on all changes to this dir
+    - '!StateMachineNodeEditor/CODE_METRICS.md' # ignore this file
   workflow_dispatch:
     inputs:
       reason:
@@ -32,9 +32,9 @@ jobs:
 
     - name: .NET code metrics
       id: dotnet-code-metrics
-      uses: dotnet/samples/github-actions/DotNet.GitHubAction@main
+      uses: RomanSoloweow/StateMachineNodeEditor@main
       env:
-        GREETINGS: 'Hello, .NET developers!' # ${{ secrets.GITHUB_TOKEN }}
+        GREETINGS: ${{ secrets.GITHUB_TOKEN }}
       with:
         owner: ${{ github.repository_owner }}
         name: ${{ github.repository }}
